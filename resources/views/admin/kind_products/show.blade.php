@@ -3,7 +3,11 @@
 @section('content')
     <h1>Вид продукту №  {{$kind_product->id}}</h1>
     <div>
-        Назва: <b>{{$kind_product->name}}</b>
+        Назва: <h3>{{$kind_product->name}}</h3>
+@foreach($sub_kind_products as $sub_kind_product)
+
+            Назва: <b>{{$sub_kind_product->name}}</b>
+        @endforeach
         <br>
         <hr>
     </div>

@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function paymentkind()
     {
-        return $this->belongsTo(PaymentKind::class);
+        return $this->belongsTo(KindPayment::class);
     }
 
     public function orders()

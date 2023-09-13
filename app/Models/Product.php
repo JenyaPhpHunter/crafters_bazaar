@@ -15,6 +15,10 @@ class Product extends Model
     {
         return $this->belongsTo(KindProduct::class);
     }
+    public function status_product()
+    {
+        return $this->belongsTo(StatusProduct::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

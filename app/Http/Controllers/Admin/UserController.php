@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use App\Models\Delivery;
-use App\Models\PaymentKind;
+use App\Models\KindPayment;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,18 +36,16 @@ class UserController extends Controller
 
     protected function create()
     {
-        return view('admin.users.create');
-    }
-//        $deliveries = Delivery::all();
-//        $payment_kinds = PaymentKind::all();
-//        $roles = Role::all();
+        $deliveries = Delivery::all();
+        $kind_payments = KindPayment::all();
+        $roles = Role::all();
 
-//        return view('admin.users.create', [
-//            "deliveries" => $deliveries,
-//            "payment_kinds" => $payment_kinds,
-//            "roles" => $roles,
-//        ]);
-//    }
+        return view('admin.users.create', [
+            "deliveries" => $deliveries,
+            "payment_kinds" => $kind_payments,
+            "roles" => $roles,
+        ]);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -79,7 +77,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect(route('admin.users.index'));
+        return redirect(route('users.index'));
     }
 
     /**
@@ -110,12 +108,12 @@ class UserController extends Controller
             throw new \Exception('User not found');
         }
         $deliveries = Delivery::pluck('name', 'id');
-        $payment_kinds = PaymentKind::pluck('name', 'id');
+        $kind_payments = KindPayment::pluck('name', 'id');
         $roles = Role::pluck('name', 'id');
         return view('admin.users.edit', [
             'user' => $user,
             "deliveries" => $deliveries,
-            "payment_kinds" => $payment_kinds,
+            "payment_kinds" => $kind_payments,
             "roles" => $roles,
         ]);
     }

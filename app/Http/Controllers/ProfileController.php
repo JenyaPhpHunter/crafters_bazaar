@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Basket;
 use App\Models\Delivery;
-use App\Models\PaymentKind;
+use App\Models\KindPayment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +27,7 @@ class ProfileController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         $deliveries = Delivery::all();
-        $payment_kinds = PaymentKind::all();
+        $payment_kinds = KindPayment::all();
         $sum_baskets_without_order = 0;
         if($baskets_without_order){
             foreach ($baskets_without_order as $basket_without_order){

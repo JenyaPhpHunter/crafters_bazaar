@@ -12,17 +12,17 @@
         </div>
     @endif
 
-    <form method="post" action="{{ route('kind_products.update', ['kind_product' => $kind_product->id]) }}">
+    <form method="post" action="{{ route('roles.update', ['role' => $role->id]) }}">
         @csrf
         @method('put')
         <label for="name">Назва</label>
         <br>
-        <input id="name" name="name" value="{{$kind_product->name}}">
+        <input id="name" name="name" value="{{$role->name}}">
         <br><br>
 
         <input type="submit" value="Зберегти">
         <span style="display: inline-block; width: 100px;"></span>
-        <a href="{{route('kind_products.index')}}">Повернутися до списку видів продукту</a>
+        <a href="{{route('roles.index')}}">Повернутися до списку ролей</a>
 
     </form>
 @endsection

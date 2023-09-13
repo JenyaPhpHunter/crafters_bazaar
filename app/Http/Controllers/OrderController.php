@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Basket;
 use App\Models\Delivery;
 use App\Models\Order;
-use App\Models\PaymentKind;
+use App\Models\KindPayment;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class OrderController extends Controller
         $user = Auth::user();
         $baskets = Basket::query()->where('user_id', $user->id)->orderBy('id', 'desc')->get();
         $deliveries = Delivery::all();
-        $payment_kinds = PaymentKind::all();
+        $payment_kinds = KindPayment::all();
 
         return view('orders.index',[
             "user" => $user,
@@ -62,7 +62,7 @@ class OrderController extends Controller
         $user = Auth::user();
         $baskets = Basket::query()->where('active',1)->where('user_id', $user->id)->get();
         $deliveries = Delivery::all();
-        $payment_kinds = PaymentKind::all();
+        $payment_kinds = KindPayment::all();
 
         return view('orders.create',[
             "user" => $user,

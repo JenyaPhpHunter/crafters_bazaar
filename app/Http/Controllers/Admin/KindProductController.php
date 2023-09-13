@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\KindProduct;
+use App\Models\SubKindProduct;
 use Illuminate\Http\Request;
 
 class KindProductController extends Controller
@@ -10,14 +12,16 @@ class KindProductController extends Controller
     public function index()
     {
         $kind_products = KindProduct::query()->with('product')->orderBy('id')->get();
-        return view('kind_products.index',[
+        $sub_kind_products = SubKindProduct::all();
+        return view('admin.kind_products.index',[
             "kind_products" => $kind_products,
+            "sub_kind_products" => $sub_kind_products,
         ]);
     }
 
     public function create()
     {
-        return view('kind_products.create');
+        return view('admin.kind_products.create');
     }
 
     public function store(Request $request)
@@ -38,8 +42,10 @@ class KindProductController extends Controller
     {
         $kind_product= KindProduct::query()->with('product')
             ->where('id',$id)->first();
-        return view('kind_products.show',[
+        $sub_kind_products = SubKindProduct::query()->where('kind_product_id',$kind_product->id)->get();
+        return view('admin.kind_products.show',[
             'kind_product' => $kind_product,
+            'sub_kind_products' => $sub_kind_products,
         ]);
     }
 
@@ -49,7 +55,7 @@ class KindProductController extends Controller
         if(!$kind_product){
             throw new \Exception('User not found');
         }
-        return view('kind_products.edit', ['kind_product' => $kind_product]);
+        return view('admin.kind_products.edit', ['kind_product' => $kind_product]);
     }
 
     public function update(Request $request, $id)

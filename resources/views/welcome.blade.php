@@ -598,7 +598,6 @@
     <!-- Product Section End -->
 
     <div class="container">
-        <a href="{{ route('admin.users.create') }}">Створити користувача</a>
 {{--        @if($user && $user->role_id < 4)--}}
 {{--            <a href="{{ route('users.index') }}">Список користувачів</a>--}}
 {{--            <br><br>--}}
@@ -611,82 +610,82 @@
 {{--            <a href="{{ route('products.index') }}">Перейти в список тогварів</a>--}}
 {{--            <br><br>--}}
 {{--        @endif--}}
-        <h1>Товари</h1>
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        <br>
-        @if(Auth::check())
-            <h1>Привіт, <span id="name">{{ $user->name }}</span>!</h1>
-            <br><br>
-            <div>
-                <a href="{{ route('showprofile', ['user' => $user->id]) }}">Особистий кабінет</a>
-                <br>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit">Вихід</button>
-                </form>
-            </div>
-        @else
-            <!-- Форма авторизації -->
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                @error('email')
-                <span class="invalid-feedback" role="alert">
-        <strong>{{ $message }}</strong>
-    </span>
-                @enderror
-
-                @error('password')
-                <span class="invalid-feedback" role="alert">
+{{--        <h1>Товари</h1>--}}
+{{--        @if (session('success'))--}}
+{{--            <div class="alert alert-success">--}}
+{{--                {{ session('success') }}--}}
+{{--            </div>--}}
+{{--        @endif--}}
+{{--        <br>--}}
+{{--        @if(Auth::check())--}}
+{{--            <h1>Привіт, <span id="name">{{ $user->name }}</span>!</h1>--}}
+{{--            <br><br>--}}
+{{--            <div>--}}
+{{--                <a href="{{ route('showprofile', ['user' => $user->id]) }}">Особистий кабінет</a>--}}
+{{--                <br>--}}
+{{--                <form method="POST" action="{{ route('logout') }}">--}}
+{{--                    @csrf--}}
+{{--                    <button type="submit">Вихід</button>--}}
+{{--                </form>--}}
+{{--            </div>--}}
+{{--        @else--}}
+{{--            <!-- Форма авторизації -->--}}
+{{--            <form method="POST" action="{{ route('login') }}">--}}
+{{--                @csrf--}}
+{{--                @error('email')--}}
+{{--                <span class="invalid-feedback" role="alert">--}}
 {{--        <strong>{{ $message }}</strong>--}}
-    </span>
-                @enderror
+{{--    </span>--}}
+{{--                @enderror--}}
 
-                <div>
-                    <div>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
-                    </div>
-                </div>
+{{--                @error('password')--}}
+{{--                <span class="invalid-feedback" role="alert">--}}
+{{--        <strong>{{ $message }}</strong>--}}
+{{--    </span>--}}
+{{--                @enderror--}}
 
-                <div>
-                    <label for="password">{{ __('Пароль') }}</label>
+{{--                <div>--}}
+{{--                    <div>--}}
+{{--                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                    <div>
-                        <input id="password" type="password" name="password" required>
-                    </div>
-                </div>
+{{--                <div>--}}
+{{--                    <label for="password">{{ __('Пароль') }}</label>--}}
 
-                <div>
-                    <div>
-                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                        <label for="remember">{{ __("Запам'ятати мене") }}</label>
-                    </div>
-                </div>
+{{--                    <div>--}}
+{{--                        <input id="password" type="password" name="password" required>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div>
-                    <div>
-                        <button type="submit">
-                            {{ __('Увійти') }}
-                        </button>
+{{--                <div>--}}
+{{--                    <div>--}}
+{{--                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>--}}
+{{--                        <label for="remember">{{ __("Запам'ятати мене") }}</label>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}">
-                                {{ __('Забули Ваш пароль?') }}
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
-            <a href="{{ route('register') }}">Зареєструватися</a>
-        @endif
-        <br>
-        @if(Auth::check())
-            <a href="{{ route('booking.basket') }}">Корзина</a>
-        @endif
-        <br><br><br>
+{{--                <div>--}}
+{{--                    <div>--}}
+{{--                        <button type="submit">--}}
+{{--                            {{ __('Увійти') }}--}}
+{{--                        </button>--}}
+
+{{--                        @if (Route::has('password.request'))--}}
+{{--                            <a href="{{ route('password.request') }}">--}}
+{{--                                {{ __('Забули Ваш пароль?') }}--}}
+{{--                            </a>--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </form>--}}
+{{--            <a href="{{ route('register') }}">Зареєструватися</a>--}}
+{{--        @endif--}}
+{{--        <br>--}}
+{{--        @if(Auth::check())--}}
+{{--            <a href="{{ route('booking.basket') }}">Корзина</a>--}}
+{{--        @endif--}}
+{{--        <br><br><br>--}}
         <!-- Пошукове вікно -->
 {{--        <form action="{{ route('search') }}" method="GET">--}}
 {{--            <input type="text" name="query" placeholder="Пошук товару за назвою">--}}

@@ -15,16 +15,16 @@ class CheckAdminRoleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // Отримати роль користувача з сесії
-        $userRole = $request->session()->get('user_role');
-
-        // Перевірити, чи має користувач необхідну роль (наприклад, role > 3)
-        if ($userRole > 3) {
-            return $next($request);
-        }
-
-        // Якщо у користувача немає відповідної ролі, перенаправити його куди завгодно
-        return redirect('/admin.users.create'); // або /dashboard
+//        // Отримати роль користувача з сесії
+//        $userRole = $request->session()->get('user_role');
+//
+//        // Перевірити, чи має користувач необхідну роль (наприклад, role > 3)
+//        if ($userRole > 3) {
+//            return $next($request);
+//        }
+//
+//        // Якщо у користувача немає відповідної ролі, перенаправити його куди завгодно
+//        return redirect('/admin.users.create'); // або /dashboard
     }
 
 }

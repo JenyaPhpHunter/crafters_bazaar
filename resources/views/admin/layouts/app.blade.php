@@ -37,20 +37,21 @@
     <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="{{ asset('js/app.js') }}" defer></script>
 
 </head>
 
 <body>
 
-@include('include.top-section')
-@include('include.header-section')
-@include('include.header-sticky-section')
-@include('include.mobile-header-section')
-@include('include.offcanvas-search-section')
-@include('include.offcanvas-wishlist-section')
-@include('include.offcanvas-cart-section')
-@include('include.offcanvas-mobile-menu-section')
+{{--@include('admin.include.top-section')--}}
+{{--@include('admin.include.header-section')--}}
+@include('admin.include.header-section', ['kind_products' => $kind_products])
+
+@include('admin.include.header-sticky-section')
+@include('admin.include.mobile-header-section')
+@include('admin.include.offcanvas-search-section')
+@include('admin.include.offcanvas-wishlist-section')
+@include('admin.include.offcanvas-cart-section')
+@include('admin.include.offcanvas-mobile-menu-section')
 
 
 <div class="offcanvas-overlay"></div>
@@ -67,18 +68,18 @@
 
             <div class="footer1-menu col">
                 <ul class="widget-menu justify-content-center">
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">Store location</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Support</a></li>
-                    <li><a href="#">Policy</a></li>
+                    <li><a href="#">Про нас</a></li>
+                    <li><a href="#">Локація магазину</a></li>
+                    <li><a href="#">Контакти</a></li>
+                    <li><a href="#">Підтримка</a></li>
+{{--                    <li><a href="#">Policy</a></li>--}}
                     <li><a href="#">FAQs</a></li>
                 </ul>
             </div>
             <div class="footer1-subscribe d-flex flex-column col">
                 <form id="mc-form" class="mc-form widget-subscibe">
-                    <input id="mc-email" autocomplete="off" type="email" placeholder="Enter your e-mail address">
-                    <button id="mc-submit" class="btn btn-dark">subscibe</button>
+                    <input id="mc-email" autocomplete="off" type="email" placeholder="Введіть Ваш e-mail">
+                    <button id="mc-submit" class="btn btn-dark">підписатися</button>
                 </form>
                 <!-- mailchimp-alerts Start -->
                 <div class="mailchimp-alerts text-centre">
