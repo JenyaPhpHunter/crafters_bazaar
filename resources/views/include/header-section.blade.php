@@ -24,7 +24,7 @@
             <!-- Header Logo Start -->
             <div class="col">
                 <div class="header-logo justify-content-center">
-                    <a href="{{ asset('index.html') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="HandmateGPT Logo"></a>
+                    <a href="{{ asset('/') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="HandmateGPT Logo"></a>
                 </div>
             </div>
             <!-- Header Logo End -->

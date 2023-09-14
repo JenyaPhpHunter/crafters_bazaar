@@ -19,7 +19,7 @@ use HasFactory;
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(AdminOrder::class);
     }
 
     public function getBasketProductsUser($user_id)

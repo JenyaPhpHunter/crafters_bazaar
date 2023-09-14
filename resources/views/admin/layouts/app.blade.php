@@ -43,8 +43,8 @@
 <body>
 
 {{--@include('admin.include.top-section')--}}
-{{--@include('admin.include.header-section')--}}
-@include('admin.include.header-section', ['kind_products' => $kind_products])
+@include('admin.include.header-section')
+{{--@include('admin.include.header-section', ['kind_products' => $kind_products])--}}
 
 @include('admin.include.header-sticky-section')
 @include('admin.include.mobile-header-section')
@@ -97,7 +97,7 @@
                 </ul>
             </div>
             <div class="footer1-copyright col">
-                <p class="copyright">&copy; 2023 learts. All Rights Reserved | <strong>(+00) 123 567990</strong> | <a href="mailto:contact@learts.com">contact@learts.com</a></p>
+                <p class="copyright">&copy; 2023 Ribalkin. All Rights Reserved | <strong>(+38) 067 3291419</strong> | <a href="mailto:contact@learts.com">jenyaphphunter@gmail.com</a></p>
             </div>
 
         </div>
@@ -223,6 +223,7 @@
                                     <td class="label"><span>Share on</span></td>
                                     <td class="va">
                                         <div class="product-share">
+                                            seo
                                             <a href="#"><i class="fab fa-facebook-f"></i></a>
                                             <a href="#"><i class="fab fa-twitter"></i></a>
                                             <a href="#"><i class="fab fa-google-plus-g"></i></a>

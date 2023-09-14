@@ -1,55 +1,59 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use App\Models\Delivery;
 use App\Models\AdminOrder;
 use App\Models\KindPayment;
 use App\Models\Product;
+use App\Models\StatusOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use App\Mail\OrderConfirmation;
 
-class OrderController extends Controller
+class AdminOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $baskets = Basket::query()->where('user_id', $user->id)->orderBy('id', 'desc')->get();
+        $status_orders_id = $request->input('status_orders');
+        $baskets = Basket::query()->orderBy('id', 'desc')->get();
+        $users = User::all();
         $deliveries = Delivery::all();
         $payment_kinds = KindPayment::all();
+        if(isset($status_orders_id)){
+            $status_orders = StatusOrder::query()->where('id',$status_orders_id)->first();
+            $orders = AdminOrder::query()->where('status_order_id', $status_orders_id)->get();
+            return view('admin.orders.index',[
+                "orders" => $orders,
+                "users" => $users,
+                "baskets" => $baskets,
+                "deliveries" => $deliveries,
+                "payment_kinds" => $payment_kinds,
+                "status_orders" => $status_orders,
+            ]);
+        } else {
+            $orders = AdminOrder::all();
+            $statuses_orders = StatusOrder::all();
 
-        return view('orders.index',[
-            "user" => $user,
-            "baskets" => $baskets,
-            "deliveries" => $deliveries,
-            "payment_kinds" => $payment_kinds,
-        ]);
-//        $user = Auth::user();
-//        $orders = Order::query()->where('user_id',$user->id)->orderBy('id', 'desc')->get();
-//        $booking = [];
-//        $user_order = User::query()->where('id',$user->id)->first();
-//        foreach ($orders as $order){
-//            $booking[] = [
-//                'order' => $order,
-//                'basket' => Basket::query()->where('order_id',$order->id)->orderBy('id', 'desc')->get(),
-//                'user' => $user_order,
-//            ];
-//        }
-//        echo "<pre>";
-//        print_r($booking);
-//        echo "</pre>";
-//        die();
-        return view('orders.index', compact('booking'));
-
+            return view('admin.orders.index',[
+                "orders" => $orders,
+                "users" => $users,
+                "baskets" => $baskets,
+                "deliveries" => $deliveries,
+                "payment_kinds" => $payment_kinds,
+                "statuses_orders" => $statuses_orders,
+            ]);
+        }
     }
 
     /**

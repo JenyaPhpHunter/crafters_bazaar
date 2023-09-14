@@ -9,14 +9,22 @@ use Illuminate\Http\Request;
 
 class SubKindProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $kind_product_id = $request->input('kind_product_id');
         $kind_products = KindProduct::all();
-        $sub_kind_products = SubKindProduct::query()->with('kind_product')->orderBy('id')->get();
-        return view('admin.sub_kind_products.index',[
-            "sub_kind_products" => $sub_kind_products,
-            "kind_products" => $kind_products,
-        ]);
+        if($kind_product_id){
+            $sub_kind_products = SubKindProduct::query()->with('kind_product')->where('kind_product_id',$kind_product_id)->orderBy('id')->get();
+            $KindProduct = KindProduct::find($kind_product_id);
+            return view('admin.sub_kind_products.index', compact('KindProduct','kind_products', 'sub_kind_products'));
+        } else {
+            $sub_kind_products = SubKindProduct::query()->with('kind_product')->orderBy('id')->get();
+            return view('admin.sub_kind_products.index', [
+                "sub_kind_products" => $sub_kind_products,
+                'kind_products' => $kind_products,
+
+            ]);
+        }
     }
 
     public function create(Request $request)

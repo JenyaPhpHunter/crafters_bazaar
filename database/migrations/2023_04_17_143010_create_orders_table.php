@@ -20,14 +20,15 @@ class CreateOrdersTable extends Migration
             $table->integer('card')->nullable();
             $table->string('city', 255);
             $table->string('address', 255);
-            $table->integer('np_address')->nullable();
+            $table->unsignedBigInteger('newposts_id')->nullable();
+            $table->foreign('newposts_id')->references('id')->on('newposts');
             $table->integer('promocode')->nullable();
             $table->decimal('pricedelivery', 12, 2)->nullable();
             $table->decimal('discounttotal', 12, 2)->nullable();
             $table->decimal('total', 12, 2)->nullable();
             $table->text('comment')->nullable();
-            $table->unsignedBigInteger('order_status_id');
-            $table->foreign('order_status_id')->references('id')->on('order_statuses');
+            $table->unsignedBigInteger('status_order_id');
+            $table->foreign('status_order_id')->references('id')->on('status_orders');
             $table->timestamps();
 
 
@@ -39,7 +40,7 @@ class CreateOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['kind_payment_id']);
-            $table->dropForeign(['order_status_id']);
+            $table->dropForeign(['status_order_id']);
         });
         Schema::dropIfExists('orders');
     }

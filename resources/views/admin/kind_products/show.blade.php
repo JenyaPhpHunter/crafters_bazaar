@@ -2,17 +2,19 @@
 
 @section('content')
     <h1>Вид продукту №  {{$kind_product->id}}</h1>
-    <div>
-        Назва: <h3>{{$kind_product->name}}</h3>
+        Назва:<h2>{{$kind_product->name}}</h2>
+    <br>
 @foreach($sub_kind_products as $sub_kind_product)
-
-            Назва: <b>{{$sub_kind_product->name}}</b>
+            Назва підвиду продуктів: <b>{{$sub_kind_product->name}}</b>
         @endforeach
         <br>
         <hr>
-    </div>
     <br>
     <a href="{{route('kind_products.index')}}">Повернутися у список видів продуктів</a>
+    <br><br><br>
+    <a href="{{ route('sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}">
+        Створити підвид продукта
+    </a>
     <br><br><br>
 {{--    @if($user->role_id == 1)--}}
         <form id="delete-form-show" method="post">

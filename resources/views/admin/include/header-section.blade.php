@@ -24,7 +24,7 @@
             <!-- Header Logo Start -->
             <div class="col">
                 <div class="header-logo justify-content-center">
-                    <a href="{{ asset('index.html') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="HandmateGPT Logo"></a>
+                    <a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Crafters bazaar"></a>
                 </div>
             </div>
             <!-- Header Logo End -->
@@ -125,115 +125,70 @@
                             @endif
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Редагування</span></a>
+                    <li class="has-children"><a href="{{ route('admin_orders.index') }}"><span class="menu-text">Замовлення</span></a>
                         <ul class="sub-menu">
-                            <li class="has-children"><a href="{{ asset('blog-right-sidebar.html') }}"><span class="menu-text">Standard Layout</span></a>
+                            @isset($orders)
+                                @foreach($statuses_orders as $status_orders)
+                                <li class="has-children"><a href="{{ route('admin_orders.index',  ['status_orders' => $status_orders->id]) }}"><span class="menu-text">{{ $status_orders->name }}</span></a>
                                 <ul class="sub-menu">
                                     <li><a href="{{ asset('blog-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>
                                     <li><a href="{{ asset('blog-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>
                                     <li><a href="{{ asset('blog-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>
                                 </ul>
                             </li>
-                            <li class="has-children"><a href="{{ asset('blog-grid-right-sidebar.html') }}"><span class="menu-text">Grid Layout</span></a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ asset('blog-grid-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-grid-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-grid-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>
-                                </ul>
-                            </li>
-                            <li class="has-children"><a href="{{ asset('blog-list-right-sidebar.html') }}"><span class="menu-text">List Layout</span></a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ asset('blog-list-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-list-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-list-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>
-                                </ul>
-                            </li>
-                            <li class="has-children"><a href="{{ asset('blog-masonry-right-sidebar.html') }}"><span class="menu-text">Masonry Layout</span></a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ asset('blog-masonry-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-masonry-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-masonry-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>
-                                </ul>
-                            </li>
-                            <li class="has-children"><a href="{{ asset('blog-details-right-sidebar.html') }}"><span class="menu-text">Single Post Layout</span></a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ asset('blog-details-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-details-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('blog-details-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>
-                                </ul>
-                            </li>
+                                @endforeach
+                            @endisset
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Види товарів</span></a>
+                    <li class="has-children"><a href="{{ route('kind_products.index') }}"><span class="menu-text">Види товарів</span></a>
                         <ul class="sub-menu">
                             <li><a href="{{ route('kind_products.create') }}"><span class="menu-text">Створити вид товару</span></a></li>
                             <li><a href="{{ route('kind_products.index') }}"><span class="menu-text">Всі види товарів</span></a></li>
                             @if(isset($kind_products))
                                 @foreach ($kind_products as $kind_product)
-                                    <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
+                                    <li><a href="{{ route('kind_products.show',  ['kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
                                 @endforeach
                             @endif
                         </ul>
                     </li>
-{{--                    <li class="has-children"><a href="#"><span class="menu-text">Підвиди товарів</span></a>--}}
-{{--                        <ul class="sub-menu">--}}
-{{--                            <li><a href="{{ route('sub_kind_products.create') }}"><span class="menu-text">Створити підвид товару</span></a></li>--}}
-{{--                            <li><a href="{{ route('sub_kind_products.index') }}"><span class="menu-text">Всі підвиди товари</span></a></li>--}}
-{{--                            @if(isset($sub_kind_products))--}}
-{{--                                @foreach ($sub_kind_products as $sub_kind_product)--}}
-{{--                                    <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>--}}
-{{--                                @endforeach--}}
-{{--                            @endif--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
                     <li class="has-children">
-                        <a href="#"><span class="menu-text">Підвиди товарів</span></a>
+                        <a href="{{ route('sub_kind_products.index') }}"><span class="menu-text">Підвиди товарів</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($kind_products))
                                 @foreach ($kind_products as $kind_product)
                                     <li>
-                                        <a href="{{ route('kind_products.index') }}" class="mega-menu-title">
+                                        <a href="{{ route('kind_products.show',  ['kind_product' => $kind_product->id]) }}" class="mega-menu-title">
                                             <span class="menu-text">{{ $kind_product->name }}</span>
                                         </a>
-                                        @if(isset($sub_kind_products))
-                                            <ul>
-                                                @foreach ($sub_kind_products as $sub_kind_product)
-                                                    @if($kind_product->id == $sub_kind_product->kind_product_id)
-                                                        <li>
-                                                        <li>
-                                                            <a href="#" onclick="createSubKindProduct({{ $kind_product->id }})">
-                                                                <span class="menu-text">Створити підвид товару</span>
-                                                            </a>
-                                                        </li>
-
-                                                        <li>
-                                                            <a href="{{ route('sub_kind_products.index', ['kind_product_id' => $kind_product->id]) }}">
-                                                                <span class="menu-text">Всі підвиди товарів</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ asset('portfolio-details.html') }}">
-                                                                <span class="menu-text">{{ $sub_kind_product->name }}</span>
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <ul>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}">
+                                                    <span class="menu-text">Створити підвид товару</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('sub_kind_products.index', ['kind_product_id' => $kind_product->id]) }}">
+                                                    <span class="menu-text">Всі підвиди товарів</span>
+                                                </a>
+                                            </li>
+                                            <hr>
+                                        @forelse ($sub_kind_products as $sub_kind_product)
+                                            @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                 <li>
-                                                    <a href="#" onclick="createSubKindProduct({{ $kind_product->id }})">
-                                                        <span class="menu-text">Створити підвид товару</span>
+                                                    <a href="{{ route('sub_kind_products.show',  ['sub_kind_product' => $sub_kind_product->id]) }}">
+                                                        <span class="menu-text">{{ $sub_kind_product->name }}</span>
                                                     </a>
                                                 </li>
-
-                                                <li>
-                                                    <a href="{{ route('sub_kind_products.index', ['kind_product_id' => $kind_product->id]) }}">
-                                                        <span class="menu-text">Всі підвиди товарів</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        @endif
+                                            @endif
+                                        @empty
+                                            <li>
+                                                <a href="{{ route('sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}">
+                                                    <span class="menu-text">Створити підвид товару</span>
+                                                </a>
+                                            </li>
+                                            <hr>
+                                        @endforelse
+                                        </ul>
                                     </li>
                                 @endforeach
                             @endif
@@ -258,28 +213,3 @@
 
 </div>
 <!-- Header Section End -->
-<script>
-    function createSubKindProduct(kindProductId) {
-        // Створення об'єкта FormData для передачі даних на сервер
-        var formData = new FormData();
-        formData.append('kind_product_id', kindProductId);
-
-        // Виконання AJAX-запиту
-        $.ajax({
-            type: 'POST', // Метод запиту (POST)
-            url: '/admin/sub_kind_products/create', // URL, на який буде відправлено запит
-            data: formData, // Дані для відправки
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                // Обробка відповіді від сервера
-                console.log('Підвид товару створено успішно.');
-                // Тут ви можете виконати додаткову логіку, яка пов'язана з успішним створенням підвиду товару
-            },
-            error: function (error) {
-                // Обробка помилок
-                console.error('Помилка при створенні підвиду товару:', error);
-            }
-        });
-    }
-</script>

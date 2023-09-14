@@ -16,5 +16,4 @@ use HasFactory;
     {
         return $this->hasMany(User::class);
     }
-
 }

@@ -2,8 +2,8 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('resources/css/styles.css') }}">
-
-    <a href="{{route('home')}}">Повернутися на головну сторінку</a>
+Не адмінка
+    <a href="{{route('welcome')}}">Повернутися на головну сторінку</a>
     <br>
     @if (session('success'))
         <div class="alert alert-success">
