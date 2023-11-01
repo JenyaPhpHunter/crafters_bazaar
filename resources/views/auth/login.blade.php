@@ -54,15 +54,17 @@
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Логін') }}
+                                    {{ __('Увійти') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Забули Ваш пароль?') }}
-                                    </a>
-                                @endif
+                                <a href="{{ route('register') }}" class="btn btn-primary2">
+                                    {{ __('Зареєструватися') }}
+                                </a>
                             </div>
+                            @if (Route::has('password.request'))
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    {{ __('Забули Ваш пароль?') }}
+                                </a>
+                            @endif
                         </div>
                     </form>
                 </div>

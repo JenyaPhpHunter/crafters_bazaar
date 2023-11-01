@@ -17,13 +17,13 @@ class CreateDeliveriesTable extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('price');
-            $table->integer('free_from')->nullable();
+//            $table->integer('price');
+            $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
         });
         DB::table('deliveries')->insert([
-            ['name' => 'Самовивіз з Нової Пошти', 'price' => '70'],
-            ['name' => 'Адресна доставка', 'price' => '100'],
+            ['name' => 'Самовивіз з Нової Пошти'],
+            ['name' => 'Адресна доставка'],
         ]);
     }
 

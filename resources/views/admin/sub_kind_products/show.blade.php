@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('admin.layouts.app')
 
 @section('content')
     <h1>Підвид продукту №  {{$sub_kind_product->id}}</h1>

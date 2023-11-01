@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use App\Models\Delivery;
 use App\Models\KindPayment;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -90,8 +91,11 @@ class UserController extends Controller
     {
         $user = User::query()->with('role')->with('delivery')->with('paymentkind')
             ->where('id',$id)->first();
-        return view('users.show',[
+        $products = Product::all();
+        return view('admin.users.show',[
             'user' => $user,
+            'products' => $products,
+            'excludeProducts' => true,
         ]);
     }
 

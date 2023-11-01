@@ -1,9 +1,6 @@
-@extends('layouts.main')
+@extends('admin.layouts.app')
 
 @section('content')
-{{--    @php--}}
-{{--        $user = session('user');--}}
-{{--    @endphp--}}
 <a href="{{route('home')}}">Повернутися на головну сторінку</a>
 <br><br>
     <h1>Додавання товару</h1>

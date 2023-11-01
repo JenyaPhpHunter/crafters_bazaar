@@ -1,0 +1,14 @@
+1) products.create/edit виділяти Назви розмірів після вибору цих розмірів.
+
+2) у header-section.blade.php не працює 
+20-а строка:                                 
+<select class="search-select select2-basic">
+    <option value="0" selected>Всі категорії</option>
+        @foreach($kind_products as $kind_product)
+    <option value="{{ $kind_product->id }}">{{ $kind_product->name }}</option>
+        @endforeach
+</select>
+
+3) при додаванні нового продукту та валідації не заповнення даних користувача перекидує на потрібну сторінку, але не підсвічує незаповненні обов'язкові поля
+
+4) Зробити кнопку додавання фото на самій фотці та одразу відображати це фото у потрібному вікні

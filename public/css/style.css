@@ -15089,3 +15089,59 @@ body.offcanvas-open .sticky-header {
     letter-spacing: 0;
   }
 }
+.warning-message {
+    margin-bottom: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #E0E0E0;
+}
+.error-highlight {
+    border: 1px solid red; /* Приклад стилізації для підсвічування червоним */
+    background-color: #ffeeee; /* Фоновий колір для виділення */
+    /* Інша стилізація за вашими потребами */
+}
+
+.file-input-label {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* Сховати стандартний input type="file" */
+input[type="file"] {
+    display: none;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.circle {
+    width: 18px;
+    height: 18px;
+    margin-right: 15px;
+    border: 1px solid #DDDDDD;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.circle.selected {
+    border: 2px solid #007BFF;
+}
+
+.product-image img {
+    width: 200px; /* Задайте потрібну ширину */
+    height: 200px; /* Задайте потрібну висоту */
+    object-fit: cover; /* Для збереження пропорцій зображення */
+}
+
+#offcanvas-cart .head {
+    text-align: center;
+    padding: 10px;
+}

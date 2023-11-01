@@ -1,4 +1,4 @@
-  @extends('layouts.main')
+  @extends('admin.layouts.app')
 
   @section('content')
       <a href="{{route('welcome')}}">Повернутися на головну сторінку</a>

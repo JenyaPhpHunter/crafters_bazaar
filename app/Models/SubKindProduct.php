@@ -10,8 +10,13 @@ class SubKindProduct extends Model
         'name'
     ];
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
     public function kind_product()
     {
         return $this->belongsTo(KindProduct::class);
     }
+
 }

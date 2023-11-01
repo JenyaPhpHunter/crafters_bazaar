@@ -33,7 +33,11 @@
             <div class="col">
                 <div class="header-tools justify-content-end">
                     <div class="header-login">
-                        <a href="{{ asset('my-account.html') }}"><i class="fal fa-user"></i></a>
+                        @if(isset($user))
+                            <a href="{{ route('admin_users.show',['admin_user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
+                        @else
+                            <a href="{{ route('login-register') }}"><i class="fal fa-user"></i>&nbsp;Увійти</a>
+                        @endif
                     </div>
                     <div class="header-search">
                         <a href="{{ asset('#offcanvas-search') }}" class="offcanvas-toggle"><i class="fal fa-search"></i></a>
@@ -109,16 +113,18 @@
                             <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">Portfolio Details</span></a></li>
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Товари</span></a>
+                    <li class="has-children"><a href="{{ route('admin_products.index') }}"><span class="menu-text">Товари</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
                                 @foreach ($statuses_products as $status_product)
                             <li>
                                 <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
                                 <ul>
-                                    <li><a href="{{ asset('elements-products.html') }}"><span class="menu-text">Product Styles</span></a></li>
-                                    <li><a href="{{ asset('elements-products-tabs.html') }}"><span class="menu-text">Product Tabs</span></a></li>
-                                    <li><a href="{{ asset('elements-product-sale-banner.html') }}"><span class="menu-text">Product & Sale Banner</span></a></li>
+                                    @foreach($products as $product)
+                                        @if($status_product->id == $product->status_product_id)
+                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-01.webp') }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </li>
                                 @endforeach
@@ -140,34 +146,34 @@
                             @endisset
                         </ul>
                     </li>
-                    <li class="has-children"><a href="{{ route('kind_products.index') }}"><span class="menu-text">Види товарів</span></a>
+                    <li class="has-children"><a href="{{ route('admin_kind_products.index') }}"><span class="menu-text">Види товарів</span></a>
                         <ul class="sub-menu">
-                            <li><a href="{{ route('kind_products.create') }}"><span class="menu-text">Створити вид товару</span></a></li>
-                            <li><a href="{{ route('kind_products.index') }}"><span class="menu-text">Всі види товарів</span></a></li>
+                            <li><a href="{{ route('admin_kind_products.create') }}"><span class="menu-text">Створити вид товару</span></a></li>
+                            <li><a href="{{ route('admin_kind_products.index') }}"><span class="menu-text">Всі види товарів</span></a></li>
                             @if(isset($kind_products))
                                 @foreach ($kind_products as $kind_product)
-                                    <li><a href="{{ route('kind_products.show',  ['kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
+                                    <li><a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
                                 @endforeach
                             @endif
                         </ul>
                     </li>
                     <li class="has-children">
-                        <a href="{{ route('sub_kind_products.index') }}"><span class="menu-text">Підвиди товарів</span></a>
+                        <a href="{{ route('admin_sub_kind_products.index') }}"><span class="menu-text">Підвиди товарів</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($kind_products))
                                 @foreach ($kind_products as $kind_product)
                                     <li>
-                                        <a href="{{ route('kind_products.show',  ['kind_product' => $kind_product->id]) }}" class="mega-menu-title">
+                                        <a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}" class="mega-menu-title">
                                             <span class="menu-text">{{ $kind_product->name }}</span>
                                         </a>
                                         <ul>
                                             <li>
-                                                <a href="{{ route('sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}">
+                                                <a href="{{ route('admin_sub_kind_products.create', ['admin_kind_product' => $kind_product->id]) }}">
                                                     <span class="menu-text">Створити підвид товару</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('sub_kind_products.index', ['kind_product_id' => $kind_product->id]) }}">
+                                                <a href="{{ route('admin_sub_kind_products.index', ['admin_kind_product' => $kind_product->id]) }}">
                                                     <span class="menu-text">Всі підвиди товарів</span>
                                                 </a>
                                             </li>
@@ -175,18 +181,12 @@
                                         @forelse ($sub_kind_products as $sub_kind_product)
                                             @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                 <li>
-                                                    <a href="{{ route('sub_kind_products.show',  ['sub_kind_product' => $sub_kind_product->id]) }}">
+                                                    <a href="{{ route('admin_sub_kind_products.show',  ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
                                                         <span class="menu-text">{{ $sub_kind_product->name }}</span>
                                                     </a>
                                                 </li>
                                             @endif
                                         @empty
-                                            <li>
-                                                <a href="{{ route('sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}">
-                                                    <span class="menu-text">Створити підвид товару</span>
-                                                </a>
-                                            </li>
-                                            <hr>
                                         @endforelse
                                         </ul>
                                     </li>
@@ -196,8 +196,8 @@
                     </li>
                     <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>
                         <ul class="sub-menu">
-                            <li><a href="{{ route('roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
-                            <li><a href="{{ route('roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
+                            <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
+                            <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
                             @if(isset($roles))
                                 @foreach ($roles as $role)
                                     <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>

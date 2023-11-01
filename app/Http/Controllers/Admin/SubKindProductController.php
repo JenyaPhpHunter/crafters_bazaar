@@ -22,7 +22,7 @@ class SubKindProductController extends Controller
             return view('admin.sub_kind_products.index', [
                 "sub_kind_products" => $sub_kind_products,
                 'kind_products' => $kind_products,
-
+                'excludeProducts' => true,
             ]);
         }
     }
@@ -37,6 +37,7 @@ class SubKindProductController extends Controller
         } else {
             return view('admin.sub_kind_products.create', [
                 'kind_products' => $kind_products,
+                'excludeProducts' => true,
             ]);
         }
     }
@@ -51,10 +52,11 @@ class SubKindProductController extends Controller
         $sub_kind_product = new SubKindProduct();
         $sub_kind_product->name = $request->post('name');
         $sub_kind_product->kind_product_id = $request->post('kind_product_id');
+        $sub_kind_product->user_id = $request->user_id;
 
         $sub_kind_product->save();
 
-        return redirect(route('sub_kind_products.index'));
+        return redirect(route('admin_sub_kind_products.index'));
     }
 
     public function show($id)
@@ -63,6 +65,7 @@ class SubKindProductController extends Controller
             ->where('id',$id)->first();
         return view('admin.sub_kind_products.show',[
             'sub_kind_product' => $sub_kind_product,
+            'excludeProducts' => true,
         ]);
     }
 
@@ -76,6 +79,7 @@ class SubKindProductController extends Controller
         return view('admin.sub_kind_products.edit', [
             'sub_kind_product' => $sub_kind_product,
             'kind_products' => $kind_products,
+            'excludeProducts' => true,
         ]);
     }
 
@@ -92,7 +96,7 @@ class SubKindProductController extends Controller
 
         $sub_kind_product->save();
 
-        return redirect( route('sub_kind_products.show', ['sub_kind_product' => $id]));
+        return redirect( route('sub_kind_products.show', ['sub_kind_product' => $id, 'excludeProducts' => true]));
     }
 
     public function destroy($id)

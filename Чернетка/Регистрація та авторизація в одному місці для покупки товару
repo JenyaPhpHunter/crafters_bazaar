@@ -1,0 +1,6 @@
+        if(empty($request->user_id)){
+            return view('auth.login-register',[
+                'includeRecommendedProducts' => true,
+                'excludeProducts' => true,
+            ]);
+        }

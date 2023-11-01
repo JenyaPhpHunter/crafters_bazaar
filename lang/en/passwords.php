@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'Ваш пароль скинуто!',
+    'sent' => 'Ми надіслали ваше посилання для зміни пароля електронною поштою!',
+    'throttled' => 'Зачекайте, перш ніж повторювати спробу.',
+    'token' => 'Цей маркер скидання пароля недійсний.',
+    'user' => "Ми не можемо знайти користувача з такою електронною адресою.",
 
 ];

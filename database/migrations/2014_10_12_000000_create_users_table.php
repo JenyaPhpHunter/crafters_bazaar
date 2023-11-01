@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('secondname')->nullable();
             $table->string('phone')->nullable();
             $table->unsignedBigInteger('role_id')->default(6);
+            $table->unsignedBigInteger('category_users_id')->default(1);
             $table->unsignedBigInteger('gender')->nullable();
             $table->date('birthday')->nullable();
             $table->string('city')->nullable();
@@ -30,12 +31,15 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('paymentkind_id')->nullable();
             $table->unsignedBigInteger('newpost_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('active')->unsigned()->default(1);
+            $table->boolean('del')->unsigned()->default(0);
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->foreign('delivery_id')->references('id')->on('deliveries')->onDelete('cascade');
-            $table->foreign('newpost_id')->references('id')->on('newposts')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('category_users_id')->references('id')->on('category_users');
+            $table->foreign('delivery_id')->references('id')->on('deliveries');
+            $table->foreign('newpost_id')->references('id')->on('newposts');
         });
     }
 
@@ -48,6 +52,7 @@ class CreateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
+            $table->dropForeign(['category_users_id']);
             $table->dropForeign(['newpost_id']);
             $table->dropForeign(['delivery_id']);
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Basket;
+use App\Models\CartItems;
 use App\Models\Delivery;
 use App\Models\AdminOrder;
 use App\Models\KindPayment;
@@ -11,7 +12,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\OrderConfirmation;
+//use App\Mail\OrderConfirmation;
+
 
 class OrderController extends Controller
 {
@@ -57,16 +59,29 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $user = Auth::user();
-        $baskets = Basket::query()->where('active',1)->where('user_id', $user->id)->get();
+        $user_id = $request->input('user_id');
+        $cartItems = CartItems::query()
+            ->join('carts', 'carts.id', '=', 'cart_items.cart_id')
+            ->where('carts.user_id', $user_id)
+            ->get();
+        $countries = [
+            'UA' => 'Україна',
+            'PL' => 'Польща',
+            'UK' => 'Англія',
+        ];
+
         $deliveries = Delivery::all();
         $payment_kinds = KindPayment::all();
-
+//        echo "<pre>";
+//        print_r($cartItems);
+//        echo "</pre>";
+//        die();
         return view('orders.create',[
-            "user" => $user,
-            "baskets" => $baskets,
+            'cartItems' => $cartItems,
+            'countries' => $countries,
+//            "user" => $user,
             "deliveries" => $deliveries,
             "payment_kinds" => $payment_kinds,
         ]);

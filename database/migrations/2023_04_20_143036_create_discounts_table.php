@@ -16,6 +16,8 @@ class CreateDiscountsTable extends Migration
             $table->integer('percent')->default(0);
             $table->integer('article')->default(0);
             $table->integer('actual')->default(0);
+            $table->boolean('active')->unsigned()->default(1);
+            $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
         });
     }

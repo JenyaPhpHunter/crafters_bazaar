@@ -17,6 +17,8 @@ class CreateKindPaymentsTable extends Migration
         Schema::create('kind_payments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('active')->unsigned()->default(1);
+            $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
         });
         DB::table('kind_payments')->insert([

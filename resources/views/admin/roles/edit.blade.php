@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('admin.layouts.app')
 
 @section('content')
     <h1>Редагування видів продукту</h1>
@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <form method="post" action="{{ route('roles.update', ['role' => $role->id]) }}">
+    <form method="post" action="{{ route('admin_roles.update', ['admin_role' => $role->id]) }}">
         @csrf
         @method('put')
         <label for="name">Назва</label>
@@ -22,7 +22,7 @@
 
         <input type="submit" value="Зберегти">
         <span style="display: inline-block; width: 100px;"></span>
-        <a href="{{route('roles.index')}}">Повернутися до списку ролей</a>
+        <a href="{{route('admin_roles.index')}}">Повернутися до списку ролей</a>
 
     </form>
 @endsection

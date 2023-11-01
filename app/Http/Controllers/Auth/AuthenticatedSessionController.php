@@ -34,17 +34,16 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $role = $user->role;
-
-            if ($role > 3) {
+            $role = $user->role_id;
+            if ($role < 5) {
                 return redirect()->intended('/admin');
             }
 
-            return redirect()->intended('/welcome');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Надані облікові дані не збігаються з нашими записами.',
         ]);
     }
 

@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('admin.layouts.app')
 
 @section('content')
     <h1>Додавання виду продукту</h1>
@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form method="post" action="{{ route('kind_products.store') }}">
+    <form method="post" action="{{ route('admin_kind_products.store') }}">
         @csrf
         <label for="name">Назва</label>
         <br>
@@ -20,7 +20,7 @@
 
         <input type="submit" value="Зберегти">
         <span style="display: inline-block; width: 100px;"></span>
-        <a href="{{route('kind_products.index')}}">Повернутися в список видів продукту</a>
+        <a href="{{route('admin_kind_products.index')}}">Повернутися в список видів продукту</a>
 
     </form>
 

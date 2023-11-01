@@ -21,7 +21,9 @@ class KindProductController extends Controller
 
     public function create()
     {
-        return view('admin.kind_products.create');
+        return view('admin.kind_products.create',[
+            'excludeProducts' => true,
+        ]);
     }
 
     public function store(Request $request)
@@ -30,12 +32,14 @@ class KindProductController extends Controller
             'name' => 'required|unique:kind_products|max:35',
         ]);
 
+
         $kind_product = new KindProduct();
         $kind_product->name = $request->post('name');
+        $kind_product->user_id = $request->user_id;
 
         $kind_product->save();
 
-        return redirect(route('kind_products.index'));
+        return redirect(route('admin_kind_products.index'));
     }
 
     public function show($id)

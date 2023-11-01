@@ -16,9 +16,14 @@ class CreateSubKindProductsTable extends Migration
         Schema::create('sub_kind_products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->unsignedBigInteger('kind_products_id');
-            $table->foreign('kind_product_id')->references('id')->on('kind_products')->onDelete('cascade');
+            $table->unsignedBigInteger('kind_product_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('active')->unsigned()->default(1);
+            $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
+
+            $table->foreign('kind_product_id')->references('id')->on('kind_products');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -29,6 +34,9 @@ class CreateSubKindProductsTable extends Migration
      */
     public function down()
     {
+        Schema::table('sub_kind_products', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
         Schema::dropIfExists('sub_kind_products');
     }
 }

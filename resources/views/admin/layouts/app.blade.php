@@ -42,17 +42,25 @@
 
 <body>
 
-{{--@include('admin.include.top-section')--}}
+@include('admin.include.topbar-section')
 @include('admin.include.header-section')
-{{--@include('admin.include.header-section', ['kind_products' => $kind_products])--}}
-
 @include('admin.include.header-sticky-section')
 @include('admin.include.mobile-header-section')
 @include('admin.include.offcanvas-search-section')
-@include('admin.include.offcanvas-wishlist-section')
-@include('admin.include.offcanvas-cart-section')
-@include('admin.include.offcanvas-mobile-menu-section')
-
+<div class="offcanvas-overlay"></div>
+@if (!isset($excludeProducts) || !$excludeProducts)
+{{--    @include('include.slider-main')--}}
+{{--    @include('admin.include.category-banner-section')--}}
+{{--    @include('admin.include.sale-banner')--}}
+{{--    @include('admin.include.product-section')--}}
+{{--    @include('admin.include.deal-day')--}}
+{{--    @include('admin.include.gallery-section')--}}
+@endif
+@yield('content')
+@if (isset($includeRecommendedProducts))
+{{--    @include('admin.include.recommended-products')--}}
+@endif
+@include('admin.include.footer')
 
 <div class="offcanvas-overlay"></div>
 

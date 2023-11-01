@@ -24,7 +24,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35',
+            'name' => 'required|unique:roles|max:35',
         ]);
 
         $roles = new Role();
@@ -32,7 +32,7 @@ class RoleController extends Controller
 
         $roles->save();
 
-        return redirect(route('roles.index'));
+        return redirect(route('admin_roles.index'));
     }
 
     public function show($id)
@@ -56,7 +56,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35',
+            'name' => 'required|unique:roles|max:35',
         ]);
 
         $role = Role::query()->where('id',$id)->first();
