@@ -6,21 +6,65 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-
                     <div class="page-title">
-                        <h1 class="title">Корзина</h1>
+                        <h1 class="title">Деталі замовлення</h1>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active">Корзина</li>
+                            <li class="breadcrumb-item active">Деталі замовлення</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
     <!-- Page Title/Header End -->
-
+    <div class="section-title2 text-center">
+        <h2 class="title">Ваше замовлення</h2>
+    </div>
+    <div class="container">
+        <div class="row learts-mb-n30">
+            <div class="col-lg-12 order-lg-2 learts-mb-30">
+                <div class="order-review">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="name"></th>
+                            <th class="name">Товар</th>
+                            <th class="total">Вартість</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php
+                            $subtotal = 0;
+                            $total = 0
+                        @endphp
+                        @foreach($cartItems as $cartItem)
+                            <tr>
+                                <td width="150"><img src="{{ asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="Product Image"></td>
+                                <td class="name"><a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}&nbsp; <strong class="quantity">×&nbsp;{{ $cartItem->quantity }}</strong></td>
+                                <td class="total"><span>{{ $cartItem->price * $cartItem->quantity }} грн</span></td>
+                                @php
+                                    $subtotal = $subtotal + $cartItem->price;
+                                    $total = $total + $cartItem->price;
+                                @endphp
+                            </tr>
+                        @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr class="subtotal">
+                            <th colspan="2">Вартість без знижки</th>
+                            <td><span>{{ $subtotal }} грн</span></td>
+                        </tr>
+                        <tr class="total">
+                            <th colspan="2">Загальна вартість</th>
+                            <td><strong><span>{{ $total }} грн</span></strong></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Checkout Section Start -->
     <div class="section section-padding">
         <div class="container">
@@ -37,162 +81,186 @@
                 </div>
             </div>
             <div class="section-title2">
-                <h2 class="title">Дані замовника</h2>
+                <h2 class="title">Ваші дані</h2>
             </div>
                 <form class="checkout-form learts-mb-50" method="post" action="{{ route('orders.store') }}">
                     @csrf
                 <div class="row">
                     <div class="col-md-6 col-12 learts-mb-20">
-                        <label for="bdFirstName">Ім'я <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdFirstName">
+                        <label for="name">Ім'я <abbr class="required">*</abbr></label>
+                        <input type="text" id="name" value="{{ $user->name ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="bdSecondName">По-батькові</label>
                         <input type="text" id="bdSecondName">
                     </div>
                     <div class="col-12 learts-mb-20">
-                        <label for="bdLastName">Прізвище <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdLastName">
-                    </div>
-                    <div class="col-12 learts-mb-20">
-                        <label for="bdCountry">Країна <abbr class="required">*</abbr></label>
-                        <select id="bdCountry" class="select2-basic">
-                            <option value="">Виберіть країну…</option>
-                            @foreach($countries as $countryCode => $countryName)
-                                <option value="{{ $countryCode }}" {{ $countryCode === 'UA' ? 'selected' : '' }}>{{ $countryName }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-12 learts-mb-20">
-                        <label for="bdTownOrCity">Населенний пункт(місто/село) <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdTownOrCity">
-                    </div>
-                    @if()
-                        <div class="col-12 learts-mb-20">
-                            <label for="bdDistrict">District <abbr class="required">*</abbr></label>
-                            <select id="bdDistrict" class="select2-basic">
-                                <option value="">Select an option…</option>
-                                <option value="BD-05">Bagerhat</option>
-                                <option value="BD-01">Bandarban</option>
-                                <option value="BD-02">Barguna</option>
-                            </select>
-                        </div>
-                    @endif
-                    <div class="col-12 learts-mb-20">
-                        <label for="bdAddress1">Вулиця <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdAddress1" placeholder="назва вулиці">
-                    </div>
-                    <div class="col-12 learts-mb-20">
-                        <label for="bdHouseNumber">№ Будинку <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdHouseNumber" placeholder="номер будинку (optional) ">
-                    </div>
-                    <div class="col-12 learts-mb-20">
-                        <label for="bdPostcode">Postcode / ZIP (optional)</label>
-                        <input type="text" id="bdPostcode">
+                        <label for="surname">Прізвище <abbr class="required">*</abbr></label>
+                        <input type="text" id="surname" value="{{ $user->surname ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-20">
-                        <label for="bdEmail">Email address <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdEmail">
+                        <label for="bdEmail">Email <abbr class="required">*</abbr></label>
+                        <input type="text" id="bdEmail" value="{{ $user->email ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-30">
-                        <label for="bdPhone">Phone <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdPhone">
+                        <label for="bdPhone">Телефон <abbr class="required">*</abbr></label>
+                        <input type="text" id="bdPhone" value="{{ $user->phone ?? '' }}">
+                    </div>
+{{--                    <div class="col-12 learts-mb-20">--}}
+{{--                        <label for="bdCountry">Країна <abbr class="required">*</abbr></label>--}}
+{{--                        <select id="bdCountry" class="select2-basic">--}}
+{{--                            <option value="">Виберіть країну…</option>--}}
+{{--                            @foreach($countries as $countryCode => $countryName)--}}
+{{--                                <option value="{{ $countryCode }}" {{ $countryCode === 'UA' ? 'selected' : '' }}>{{ $countryName }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+                    <!-- HTML для поля областей -->
+                    <label style="text-align: center; font-weight: bold; font-style: italic;">Місце доставки <abbr class="required">*</abbr></label>
+                    <div class="col-6 learts-mb-20">
+                        <input type="text" id="bdTownOrRegion" placeholder="Область">
+                        <ul id="regionList"></ul>
+                    </div>
+
+                    <!-- HTML для поля міст -->
+                    <div class="col-6 learts-mb-20">
+                        <input type="text" id="bdTownOrCity" placeholder="Населенний пункт (місто/село)">
+                        <ul id="cityList"></ul>
+                    </div>
+                    <script>
+                        // Селектор для поля областей
+                        const townOrRegionInput = document.getElementById("bdTownOrRegion");
+                        const regionList = document.getElementById("regionList");
+
+                        // Селектор для поля міст
+                        const townOrCityInput = document.getElementById("bdTownOrCity");
+                        const cityList = document.getElementById("cityList");
+
+                        // Масив областей та міст (ваші дані з бази)
+                        const regionsAndCities = <?= json_encode($arr_region_cities) ?>;
+
+                        // Функція фільтрації списку областей
+                        function filterRegions() {
+                            const searchText = townOrRegionInput.value.toLowerCase();
+                            const filteredRegions = Object.keys(regionsAndCities).filter(region => region.toLowerCase().includes(searchText));
+
+                            // Очищаємо список областей
+                            regionList.innerHTML = "";
+
+                            // Додаємо знайдені області до списку
+                            filteredRegions.forEach(region => {
+                                const li = document.createElement("li");
+                                li.textContent = region;
+                                li.addEventListener("click", () => {
+                                    townOrRegionInput.value = region;
+                                    regionList.innerHTML = ""; // Сховати список після вибору
+                                });
+                                regionList.appendChild(li);
+                            });
+                        }
+
+                        // Функція фільтрації списку міст
+                        function filterCities() {
+                            const searchText = townOrCityInput.value.toLowerCase();
+                            const selectedRegion = townOrRegionInput.value;
+                            const citiesInRegion = regionsAndCities[selectedRegion] || [];
+                            const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));
+
+                            // Очищаємо список міст
+                            cityList.innerHTML = "";
+
+                            // Додаємо знайдені міста до списку
+                            filteredCities.forEach(city => {
+                                const li = document.createElement("li");
+                                li.textContent = city;
+                                li.addEventListener("click", () => {
+                                    townOrCityInput.value = city;
+                                    cityList.innerHTML = ""; // Сховати список після вибору
+                                });
+                                cityList.appendChild(li);
+                            });
+                        }
+
+                        // Обробники подій
+                        townOrRegionInput.addEventListener("input", filterRegions);
+                        townOrCityInput.addEventListener("input", filterCities);
+
+                        document.addEventListener("click", (event) => {
+                            if (event.target !== townOrRegionInput) {
+                                regionList.innerHTML = "";
+                            }
+                            if (event.target !== townOrCityInput) {
+                                cityList.innerHTML = "";
+                            }
+                        });
+
+                    </script>
+                    <div class="col-6 learts-mb-20">
+                        <label for="bdAddress1">Вулиця</label>
+                        <input type="text" id="bdAddress1" placeholder="назва вулиці">
+                    </div>
+                    <div class="col-3 learts-mb-20">
+                        <label for="bdHouseNumber">№ Будинку</label>
+                        <input type="text" id="bdHouseNumber" placeholder="номер будинку">
+                    </div>
+                    <div class="col-3 learts-mb-20">
+                        <label for="bdApartment">№ Квартири</label>
+                        <input type="text" id="bdApartment" placeholder="номер квартири">
                     </div>
                     <div class="col-12 learts-mb-40">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Create an account?</label>
+                            <input type="checkbox" class="form-check-input" id="callMe">
+                            <label class="form-check-label" for="callMe">Передзвонити Вам?</label>
                         </div>
                     </div>
                     <div class="col-12 learts-mb-20">
-                        <label for="bdOrderNote">Order Notes (optional)</label>
-                        <textarea id="bdOrderNote" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                        <label for="bdOrderNote">Примітки до замовлення</label>
+                        <textarea id="bdOrderNote" placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки"></textarea>
                     </div>
                 </div>
-            </form>
-            <div class="section-title2 text-center">
-                <h2 class="title">Your order</h2>
-            </div>
-            <div class="row learts-mb-n30">
-                <div class="col-lg-6 order-lg-2 learts-mb-30">
-                    <div class="order-review">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th class="name">Product</th>
-                                <th class="total">Subtotal</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="name">Walnut Cutting Board&nbsp; <strong class="quantity">×&nbsp;1</strong></td>
-                                <td class="total"><span>£100.00</span></td>
-                            </tr>
-                            <tr>
-                                <td class="name">Pizza Plate Tray&nbsp; <strong class="quantity">×&nbsp;1</strong></td>
-                                <td class="total"><span>£22.00</span></td>
-                            </tr>
-                            <tr>
-                                <td class="name">Minimalist Ceramic Pot - Pearl river, Large&nbsp; <strong class="quantity">×&nbsp;1</strong></td>
-                                <td class="total"><span>£120.00</span></td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr class="subtotal">
-                                <th>Subtotal</th>
-                                <td><span>£242.00</span></td>
-                            </tr>
-                            <tr class="total">
-                                <th>Total</th>
-                                <td><strong><span>£242.00</span></strong></td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-lg-6 order-lg-1 learts-mb-30">
-                    <div class="order-payment">
-                        <div class="payment-method">
-                            <div class="accordion" id="paymentMethod">
-                                <div class="card active">
-                                    <div class="card-header">
-                                        <button data-bs-toggle="collapse" data-bs-target="#checkPayments">Check payments</button>
-                                    </div>
-                                    <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">
-                                        <div class="card-body">
-                                            <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                    <div class="col-lg-12 order-lg-1 learts-mb-30">
+                        <div class="order-payment">
+                            <div class="payment-method">
+                                <div class="accordion" id="paymentMethod">
+                                    <div class="card active">
+                                        <div class="card-header">
+                                            <button data-bs-toggle="collapse" data-bs-target="#checkPayments">Чекові платежі</button>
+                                        </div>
+                                        <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">
+                                            <div class="card-body">
+                                                <p>Будь ласка, надішліть чек на назву магазину, вулицю магазину, місто магазину, штат/округ магазину, поштовий індекс магазину.</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <button data-bs-toggle="collapse" data-bs-target="#cashkPayments">Cash on delivery </button>
-                                    </div>
-                                    <div id="cashkPayments" class="collapse" data-bs-parent="#paymentMethod">
-                                        <div class="card-body">
-                                            <p>Pay with cash upon delivery.</p>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <button data-bs-toggle="collapse" data-bs-target="#cashkPayments">Накладений платіж </button>
+                                        </div>
+                                        <div id="cashkPayments" class="collapse" data-bs-parent="#paymentMethod">
+                                            <div class="card-body">
+                                                <p>Оплата готівкою при доставці.</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <button data-bs-toggle="collapse" data-bs-target="#payPalPayments">PayPal <img src="assets/images/others/pay-2.webp" alt=""></button>
-                                    </div>
-                                    <div id="payPalPayments" class="collapse" data-bs-parent="#paymentMethod">
-                                        <div class="card-body">
-                                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <button data-bs-toggle="collapse" data-bs-target="#payPalPayments">PayPal <img src="assets/images/others/pay-2.webp" alt=""></button>
+                                        </div>
+                                        <div id="payPalPayments" class="collapse" data-bs-parent="#paymentMethod">
+                                            <div class="card-body">
+                                                <p>Оплата через PayPal; Ви можете оплатити кредитною карткою, якщо у вас немає облікового запису PayPal.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <p class="payment-note">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
-                            <button class="btn btn-dark btn-outline-hover-dark">place order</button>
+                            <div class="text-center">
+                                <p class="payment-note">Ваші особисті дані використовуватимуться для обробки вашого замовлення, підтримки вашого досвіду на цьому веб-сайті та для інших цілей, описаних у нашій політиці конфіденційності.</p>
+                                <button class="btn btn-dark btn-outline-hover-dark">Зробити замовлення</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
     <!-- Checkout Section End -->

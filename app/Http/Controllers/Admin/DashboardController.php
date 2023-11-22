@@ -20,7 +20,6 @@ class DashboardController extends Controller
     {
         $users = User::all();
         $orders = AdminOrder::all();
-        $baskets = Basket::all();
         $statuses_orders = StatusOrder::all();
         $roles = Role::all();
         $kind_products = KindProduct::all();
@@ -29,7 +28,6 @@ class DashboardController extends Controller
         return view('admin.dashboard',[
             "users" => $users,
             "orders" => $orders,
-            "baskets" => $baskets,
             "statuses_orders" => $statuses_orders,
             "roles" => $roles,
             "kind_products" => $kind_products,

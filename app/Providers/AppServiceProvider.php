@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 //use App\Models\Color;
+use App\Models\CartItems;
 use App\Models\KindProduct;
 use App\Models\AdminOrder;
 //use App\Models\Order;
@@ -12,6 +13,7 @@ use App\Models\Role;
 use App\Models\StatusOrder;
 use App\Models\StatusProduct;
 use App\Models\SubKindProduct;
+use App\Models\WishItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,6 +49,16 @@ class AppServiceProvider extends ServiceProvider
             $statuses_orders = StatusOrder::all();
             $roles = Role::all();
             $orders = AdminOrder::all();
+            if($user){
+                $cartItemsCount = CartItems::query()
+                    ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
+                    ->where('carts.user_id', $user->id)
+                    ->count();
+                $wishItemsCount = WishItems::query()->where('user_id', $user->id)->count();
+            } else {
+                $cartItemsCount = 0;
+                $wishItemsCount = 0;
+            }
             $view->with('products', $products)
                 ->with('kind_products', $kind_products)
                 ->with('sub_kind_products', $sub_kind_products)
@@ -54,6 +66,8 @@ class AppServiceProvider extends ServiceProvider
                 ->with('statuses_products', $statuses_products)
                 ->with('statuses_orders', $statuses_orders)
                 ->with('orders', $orders)
+                ->with('cartItemsCount', $cartItemsCount)
+                ->with('wishItemsCount', $wishItemsCount)
 //                ->with('sizes', $sizes)
 //                ->with('colors', $colors)
                 ->with('user', $user);

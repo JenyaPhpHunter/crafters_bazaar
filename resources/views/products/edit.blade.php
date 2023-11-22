@@ -2,15 +2,6 @@
 
 @section('content')
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div class="page-title">
         <h1 class="title">Редагування товару</h1>
         <ul class="breadcrumb">
@@ -27,43 +18,70 @@
     <div class="section section-padding border-bottom">
         <div class="row learts-mb-n40">
             <!-- Product Images Start -->
-            <div class="col-lg-6 col-12 learts-mb-40">
+            <div class="col-xl-6 col-12 learts-mb-40">
                 <div class="product-images">
-                    <button class="product-gallery-popup hintT-left" data-hint="Click to enlarge" data-images='[
-                    {"src": "{{ asset('images/product/single/1/product-zoom-1.webp') }}", "w": 700, "h": 1100},
-                    {"src": "{{ asset('images/product/single/1/product-zoom-2.webp') }}", "w": 700, "h": 1100},
-                    {"src": "{{ asset('images/product/single/1/product-zoom-3.webp') }}", "w": 700, "h": 1100},
-                    {"src": "{{ asset('images/product/single/1/product-zoom-4.webp') }}", "w": 700, "h": 1100}
-                ]'><i class="far fa-expand"></i></button>
+{{--                                <span class="product-badges">--}}
+{{--                                    <span class="hot">hot</span>--}}
+{{--                                </span>--}}
+                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='[
+                                                {"src": "{{ asset('images/product/single/4/product-zoom-1.webp') }}", "w": 700, "h": 1100},
+                                                {"src": "{{ asset('images/product/single/4/product-zoom-2.webp') }}", "w": 700, "h": 1100},
+                                                {"src": "{{ asset('images/product/single/4/product-zoom-3.webp') }}", "w": 700, "h": 1100},
+                                                {"src": "{{ asset('images/product/single/4/product-zoom-4.webp') }}", "w": 700, "h": 1100}
+                                            ]'><i class="far fa-expand"></i></button>
                     <a href="https://www.youtube.com/watch?v=1jSsy7DtYgc"
-                       class="product-video-popup video-popup hintT-left" data-hint="Click to see video"><i
+                       class="product-video-popup video-popup hintT-left" data-hint="Натисніть, щоб подивтись відео"><i
                             class="fal fa-play"></i></a>
+                    @if($photos->count() > 0)
                     <div class="product-gallery-slider">
-                        <div class="product-zoom"
-                             data-image="{{ asset('images/product/single/1/product-zoom-1.webp') }}">
-                            <img src="{{ asset('images/product/single/1/product-1.webp') }}" alt="">
-                        </div>
-                        <div class="product-zoom"
-                             data-image="{{ asset('images/product/single/1/product-zoom-2.webp') }}">
-                            <img src="{{ asset('images/product/single/1/product-2.webp') }}" alt="">
-                        </div>
-                        <div class="product-zoom"
-                             data-image="{{ asset('images/product/single/1/product-zoom-3.webp') }}">
-                            <img src="{{ asset('images/product/single/1/product-3.webp') }}" alt="">
-                        </div>
-                        <div class="product-zoom"
-                             data-image="{{ asset('images/product/single/1/product-zoom-4.webp') }}">
-                            <img src="{{ asset('images/product/single/1/product-4.webp') }}" alt="">
-                        </div>
+                            @foreach ($photos as $photo)
+                                <div class="product-zoom"
+                                     data-image="{{ asset($photo->path . '/' . $photo->filename) }}">
+                                    <img src="{{ asset($photo->path.'/'.$photo->filename) }}" alt="">
+                                </div>
+                            @endforeach
                     </div>
                     <div class="product-thumb-slider">
-                        @foreach($product->productphotos as $productphoto)
-                            1
+                        @foreach ($photos as $photo)
                             <div class="item">
-                                <img src="{{ asset($productphoto->path . '/' . $productphoto->filename) }}" alt="">
+                                <img src="{{ asset($photo->small_path . '/' . $photo->small_filename) }}" alt="">
                             </div>
                         @endforeach
                     </div>
+                    @else
+                        <div class="product-gallery-slider">
+                            <div class="product-zoom"
+                                 data-image="{{ asset('images/product/single/1/product-zoom-1.webp') }}">
+                                <img src="{{ asset('images/product/single/1/product-1.webp') }}" alt="">
+                            </div>
+                            <div class="product-zoom"
+                                 data-image="{{ asset('images/product/single/1/product-zoom-2.webp') }}">
+                                <img src="{{ asset('images/product/single/1/product-2.webp') }}" alt="">
+                            </div>
+                            <div class="product-zoom"
+                                 data-image="{{ asset('images/product/single/1/product-zoom-3.webp') }}">
+                                <img src="{{ asset('images/product/single/1/product-3.webp') }}" alt="">
+                            </div>
+                            <div class="product-zoom"
+                                 data-image="{{ asset('images/product/single/1/product-zoom-4.webp') }}">
+                                <img src="{{ asset('images/product/single/1/product-4.webp') }}" alt="">
+                            </div>
+                        </div>
+                        <div class="product-thumb-slider">
+                            <div class="item">
+                                <img src="{{ asset('images/product/single/1/product-thumb-1.webp') }}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{{ asset('images/product/single/1/product-thumb-2.webp') }}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{{ asset('images/product/single/1/product-thumb-3.webp') }}" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="{{ asset('images/product/single/1/product-thumb-4.webp') }}" alt="">
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- Product Images End -->
@@ -404,8 +422,124 @@
                 </div>
             </div>
         </div>
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 @endsection
-
-
-

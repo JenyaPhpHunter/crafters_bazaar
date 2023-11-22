@@ -15,7 +15,11 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
-        $user_id = $request->input('user_id');
+        if($request->input('user_id')){
+            $user_id = $request->input('user_id');
+        } else {
+            $user_id = request()->cookie('user_id');
+        }
         $cartItems = CartItems::query()
             ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
             ->where('carts.user_id', $user_id)
@@ -26,28 +30,26 @@ class CartController extends Controller
 
     public function addToCart(Request $request, $productId)
     {
-        if($request->input('user_id')) {
+        if ($request->input('user_id')) {
             $user_id = $request->input('user_id');
-        } else {
+        } elseif(request()->cookie('user_id') != NULL) {
+            $user_id = request()->cookie('user_id');
+        }else {
             $user = new User();
-            $user->email = Str::random(50) . 'user.com';
+            $user->email =  '@user.com';
+            $user->email = date('Ymd_His') . '_' . Str::random(10) . '@user.com';
             $user->password =  Hash::make($request->post('password'));
             $user->created_at = date("Y-m-d H:i:s");
             $user->role_id = 7;
 
             $user->save();
             // Автентифікувати користувача
-            Auth::login($user);
+//            Auth::login($user);
 
             $user_id = $user->id;
         }
         $product = Product::find($productId);
-
-        if (!$product) {
-            return redirect()->route('products.index')->with('error', 'Товар не знайдено');
-        }
-
-// Отримуємо або створюємо кошик користувача
+        // Отримуємо або створюємо кошик користувача
         $cart = Cart::firstOrNew(['user_id' => $user_id]);
         $cart->user_id = $user_id;
         $cart->active = 0;
@@ -72,22 +74,25 @@ class CartController extends Controller
             ]);
             $cartItem->save();
         }
-
-// Опціонально можна використовувати метод associate для спрощення зв'язку з об'єктом товару
+        // Опціонально можна використовувати метод associate для спрощення зв'язку з об'єктом товару
         $cartItem->product()->associate($product);
         $cartItem->save();
-//
-//        $cartItems = CartItems::query()
-//            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
-//            ->where('carts.user_id', $user_id)
-//            ->get();
 
-        return redirect()->route('carts.index')->with(['success' => 'Товар додано до корзини']);
+        return redirect()->route('carts.index')
+            ->with([
+            'success' => 'Товар додано до корзини',
+            'cartItem' => $cartItem,
+        ])
+            ->withCookie(cookie('user_id', $user_id));
     }
 
     public function clearCart(Request $request)
     {
-        $user_id = $request->input('user_id');
+        if ($request->input('user_id')) {
+            $user_id = $request->input('user_id');
+        } elseif(request()->cookie('user_id') != NULL) {
+            $user_id = request()->cookie('user_id');
+        }
         $cartItems = CartItems::query()
             ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
             ->where('carts.user_id', $user_id)

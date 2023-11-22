@@ -212,11 +212,11 @@ class ProductController extends Controller
         if(empty($sub_kind_product_obj)){
             $sub_kind_product_obj = SubKindProduct::query()->where('id',$product->sub_kind_product_id)->first();
         }
-//        $photos = ProductPhoto::query()->where('product_id', $id)->get();
-
+        $photos = ProductPhoto::query()->where('product_id', $id)->get();
 
         return view('products.edit',[
             'product' => $product,
+            'photos' => $photos,
             'user_id' => $user_id,
             'kind_product_obj' => $kind_product_obj,
             'kind_products' => $kind_products,
@@ -455,22 +455,4 @@ class ProductController extends Controller
         ]);
     }
 
-    private function uploadFiles(Request $request, $product_id)
-    {
-        $files = $request->file('product_photo');
-
-        foreach ($files as $file) {
-            $filename = $file->getClientOriginalName();
-            $ext = $file->getClientOriginalExtension();
-            $path = $file->store('uploads'); // Зберігає файл у папці "uploads".
-
-            File::create([
-                'order' => 1, // Встановіть потрібний порядок.
-                'filename' => $filename,
-                'ext' => $ext,
-                'path' => $path,
-                'product_id' => $product_id,
-            ]);
-        }
-    }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('resources/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}

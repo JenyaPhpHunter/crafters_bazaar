@@ -15,9 +15,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 //use App\Http\Controllers\SubKindProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
 
-
+echo "VAS";
+die();
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +59,7 @@ Route::prefix('admin')->group(callback: function () {
     Route::resource('admin_orders', AdminOrderController::class);
     Route::get('/admin_products/kind_products/{kind_products}', [AdminProductController::class, 'productsKind'])->name('admin_products_kind');
     Route::get('/admin_products/kind_products/{kind_products}/sub_kind_products/{sub_kind_products}', [AdminProductController::class, 'productsKindSubkind'])->name('admin_products_kind_subkind');
+    Route::get('/admin_carts/index/{admin_product}', [AdminCartController::class, 'addToCart'])->name('admin_carts.addToCart');
 });
 
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
@@ -80,6 +83,11 @@ Route::get('/carts/index', [CartController::class, 'index'])->name('carts.index'
 Route::get('/carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
 Route::delete('/carts/clear', [CartController::class, 'clearCart'])->name('carts.clearСart');
 Route::delete('/carts', [CartController::class, 'removeItem'])->name('carts.remove_item');
+Route::get('/wishlist/index', [WishController::class, 'index'])->name('wishlist.index');
+Route::get('/wishlist/index/{product}', [WishController::class, 'addToWishlist'])->name('wishlist.addToWishlist');
+Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishlist.clear');
+Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
+
 
 
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

@@ -16,16 +16,8 @@
                 <div class="header6-search">
                     <form action="#">
                         <div class="row g-0">
-                            <div class="col-auto">
-                                <select class="search-select select2-basic">
-                                    <option value="0" selected>Всі категорії</option>
-                                    @foreach($kind_products as $kind_product)
-                                        <option value="{{ $kind_product->id }}">{{ $kind_product->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                             <div class="col">
-                                <input type="text" placeholder="Search Products...">
+                                <input type="text" placeholder="Пошук товарів...">
                             </div>
                             <button type="submit"><i class="fal fa-search"></i></button>
                         </div>
@@ -55,10 +47,10 @@
                         @endisset
                     </div>
                     <div class="header-wishlist">
-                        <a href="#offcanvas-wishlist" class="offcanvas-toggle"><span class="wishlist-count">3</span><i class="fal fa-heart"></i></a>
+                        <a href="{{ route('wishlist.index') }}" class="offcanvas-toggle"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
                     <div class="header-cart">
-                        <a href="{{ route('carts.index') }}" class="offcanvas-toggle"><span class="cart-count">3</span><i class="fal fa-shopping-cart"></i></a>
+                        <a href="{{ route('carts.index') }}" class="offcanvas-toggle"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </div>

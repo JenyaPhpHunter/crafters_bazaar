@@ -26,6 +26,10 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::query()->with('kind_product')->orderBy('id', 'desc')->get();
+//        echo "<pre>";
+//        print_r($products);
+//        echo "</pre>";
+//        die();
         $kind_products = KindProduct::all();
         $sub_kind_roducts = SubKindProduct::all();
         $excludeProducts = true;

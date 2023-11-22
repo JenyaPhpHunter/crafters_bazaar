@@ -15,8 +15,8 @@
     <div class="page-title">
         <h1 class="title">Перегляд товару</h1>
         <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin_products.index') }}">Товари</a></li>
             @isset($product)
                 <li class="breadcrumb-item active">{{ $product->name }}</li>
             @endisset

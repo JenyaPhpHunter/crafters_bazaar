@@ -23,11 +23,12 @@ return new class extends Migration
             $table->string('hover_filename')->default('');
             $table->string('hover_ext',4)->default('');
             $table->string('hover_path')->default('');
-            $table->string('hover_link')->default('');
             $table->string('zoom_filename')->default('');
             $table->string('zoom_ext',4)->default('');
             $table->string('zoom_path')->default('');
-            $table->string('zoom_link')->default('');
+            $table->string('small_filename')->default('');
+            $table->string('small_ext',4)->default('');
+            $table->string('small_path')->default('');
             $table->unsignedBigInteger('product_id');
             $table->timestamps();
 

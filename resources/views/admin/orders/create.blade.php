@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('resources/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {{--    @php--}}
 {{--        $user = session('user');--}}
 {{--    @endphp--}}

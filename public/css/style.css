@@ -15145,3 +15145,45 @@ input[type="file"] {
     text-align: center;
     padding: 10px;
 }
+
+#regionList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+#regionList li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#regionList li:hover {
+    background-color: #f2f2f2;
+}
+#cityList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+#cityList li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#cityList li:hover {
+    background-color: #f2f2f2;
+}
+

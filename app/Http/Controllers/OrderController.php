@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Basket;
 use App\Models\CartItems;
+use App\Models\City;
 use App\Models\Delivery;
 use App\Models\AdminOrder;
 use App\Models\KindPayment;
@@ -62,6 +63,7 @@ class OrderController extends Controller
     public function create(Request $request)
     {
         $user_id = $request->input('user_id');
+        $user = User::find($user_id);
         $cartItems = CartItems::query()
             ->join('carts', 'carts.id', '=', 'cart_items.cart_id')
             ->where('carts.user_id', $user_id)
@@ -71,17 +73,35 @@ class OrderController extends Controller
             'PL' => 'Польща',
             'UK' => 'Англія',
         ];
+        $cities = City::all();
+        $arr_cities = [];
+        $arr_regions = [];
+        $arr_region_cities = [];
+        foreach ($cities  as $city){
+            $arr_cities[] = $city->name;
+            if(!in_array($city->region, $arr_regions)){
+                $arr_regions[] = $city->region;
+            }
+            $arr_region_cities[$city->region][] = $city->name;
+        }
+        $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
+        collator_sort($collator, $arr_regions); // Виконуємо сортування
+
+        
 
         $deliveries = Delivery::all();
         $payment_kinds = KindPayment::all();
 //        echo "<pre>";
-//        print_r($cartItems);
+//        print_r($arr_region_cities);
 //        echo "</pre>";
 //        die();
         return view('orders.create',[
             'cartItems' => $cartItems,
             'countries' => $countries,
-//            "user" => $user,
+            'arr_cities' => $arr_cities,
+            'arr_regions' => $arr_regions,
+            'arr_region_cities' => $arr_region_cities,
+            "user" => $user,
             "deliveries" => $deliveries,
             "payment_kinds" => $payment_kinds,
         ]);

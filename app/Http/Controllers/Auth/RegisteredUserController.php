@@ -63,8 +63,8 @@ class RegisteredUserController extends Controller
     public function login()
     {
         return view('auth.login-register',[
-            'includeRecommendedProducts' => true,
-            'excludeProducts' => true,
+//            'includeRecommendedProducts' => true,
+//            'excludeProducts' => true,
         ]);
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('resources/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <a href="{{route('home')}}">Повернутися на головну сторінку</a>
     <br>
