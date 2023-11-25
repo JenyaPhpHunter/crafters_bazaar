@@ -18,8 +18,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
 
-echo "VAS";
-die();
 /*
 |--------------------------------------------------------------------------
 | Web Routes
