@@ -22,6 +22,7 @@
         @endforeach
     @endisset
 
+
     @isset($sub_kind_products_kind)
         @foreach($sub_kind_products_kind as $sub_kind_product_kind)
             <a href="{{route('products_kind_subkind', ['sub_kind_products' => $sub_kind_product_kind->id])}}">{{ $sub_kind_product_kind->name }}</a>
