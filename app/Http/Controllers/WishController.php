@@ -62,7 +62,8 @@ class WishController extends Controller
             $wishItem->save();
         }
 
-        return redirect()->route('wishlist.index')->with(['success' => 'Товар додано до корзини']);
+        return redirect()->back()->with('success', 'Товар додано до улюблених');
+//        return redirect()->route('products.show')->with(['success' => 'Товар додано до улюблених']);
     }
 
     public function clear(Request $request)
@@ -112,7 +113,7 @@ class WishController extends Controller
             }
         });
         WishItems::query()->where('user_id', $user_id)->delete();
-        
+
         return redirect()->back()->with('success', 'Елементи додані до корзини');
     }
 

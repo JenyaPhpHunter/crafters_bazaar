@@ -88,23 +88,23 @@
                 <div class="row">
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="name">Ім'я <abbr class="required">*</abbr></label>
-                        <input type="text" id="name" value="{{ $user->name ?? '' }}">
+                        <input type="text" id="name" name="name" value="{{ $user->name ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="bdSecondName">По-батькові</label>
-                        <input type="text" id="bdSecondName">
+                        <input type="text" id="bdSecondName" name="secondname" value="{{ $user->secondname ?? '' }}">
                     </div>
                     <div class="col-12 learts-mb-20">
                         <label for="surname">Прізвище <abbr class="required">*</abbr></label>
-                        <input type="text" id="surname" value="{{ $user->surname ?? '' }}">
+                        <input type="text" id="surname" name="surname" value="{{ $user->surname ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="bdEmail">Email <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdEmail" value="{{ $user->email ?? '' }}">
+                        <input type="text" id="bdEmail" name="email" value="{{ $user_email ?? '' }}">
                     </div>
                     <div class="col-md-6 col-12 learts-mb-30">
                         <label for="bdPhone">Телефон <abbr class="required">*</abbr></label>
-                        <input type="text" id="bdPhone" value="{{ $user->phone ?? '' }}">
+                        <input type="text" id="bdPhone" name="phone" value="{{ $user->phone ?? '' }}">
                     </div>
 {{--                    <div class="col-12 learts-mb-20">--}}
 {{--                        <label for="bdCountry">Країна <abbr class="required">*</abbr></label>--}}
@@ -118,13 +118,13 @@
                     <!-- HTML для поля областей -->
                     <label style="text-align: center; font-weight: bold; font-style: italic;">Місце доставки <abbr class="required">*</abbr></label>
                     <div class="col-6 learts-mb-20">
-                        <input type="text" id="bdTownOrRegion" placeholder="Область">
+                        <input type="text" id="bdTownOrRegion" name="region" placeholder="Область">
                         <ul id="regionList"></ul>
                     </div>
 
                     <!-- HTML для поля міст -->
                     <div class="col-6 learts-mb-20">
-                        <input type="text" id="bdTownOrCity" placeholder="Населенний пункт (місто/село)">
+                        <input type="text" id="bdTownOrCity" name="city" placeholder="Населенний пункт (місто/село)">
                         <ul id="cityList"></ul>
                     </div>
                     <script>
@@ -137,12 +137,14 @@
                         const cityList = document.getElementById("cityList");
 
                         // Масив областей та міст (ваші дані з бази)
-                        const regionsAndCities = <?= json_encode($arr_region_cities) ?>;
+                        // Масив областей та міст (ваші дані з бази)
+                        const regionsAndCities = @json(array_values($arr_region_cities));
+                        {{--const regionsAndCities = @json($arr_region_cities);--}}
 
                         // Функція фільтрації списку областей
                         function filterRegions() {
                             const searchText = townOrRegionInput.value.toLowerCase();
-                            const filteredRegions = Object.keys(regionsAndCities).filter(region => region.toLowerCase().includes(searchText));
+                            const filteredRegions = regionsAndCities.filter(region => region.region_name.toLowerCase().includes(searchText));
 
                             // Очищаємо список областей
                             regionList.innerHTML = "";
@@ -150,9 +152,9 @@
                             // Додаємо знайдені області до списку
                             filteredRegions.forEach(region => {
                                 const li = document.createElement("li");
-                                li.textContent = region;
+                                li.textContent = region.region_name;
                                 li.addEventListener("click", () => {
-                                    townOrRegionInput.value = region;
+                                    townOrRegionInput.value = region.region_name;
                                     regionList.innerHTML = ""; // Сховати список після вибору
                                 });
                                 regionList.appendChild(li);
@@ -163,7 +165,7 @@
                         function filterCities() {
                             const searchText = townOrCityInput.value.toLowerCase();
                             const selectedRegion = townOrRegionInput.value;
-                            const citiesInRegion = regionsAndCities[selectedRegion] || [];
+                            const citiesInRegion = regionsAndCities.find(region => region.region_name === selectedRegion)?.cities || [];
                             const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));
 
                             // Очищаємо список міст
@@ -194,69 +196,136 @@
                             }
                         });
 
+                        {{--// Селектор для поля областей--}}
+                        {{--const townOrRegionInput = document.getElementById("bdTownOrRegion");--}}
+                        {{--const regionList = document.getElementById("regionList");--}}
+
+                        {{--// Селектор для поля міст--}}
+                        {{--const townOrCityInput = document.getElementById("bdTownOrCity");--}}
+                        {{--const cityList = document.getElementById("cityList");--}}
+
+                        {{--// Масив областей та міст (ваші дані з бази)--}}
+                        {{--const regionsAndCities = <?= json_encode($arr_region_cities) ?>;--}}
+
+                        {{--// Функція фільтрації списку областей--}}
+                        {{--function filterRegions() {--}}
+                        {{--    const searchText = townOrRegionInput.value.toLowerCase();--}}
+                        {{--    const filteredRegions = Object.keys(regionsAndCities).filter(region => region.toLowerCase().includes(searchText));--}}
+
+                        {{--    // Очищаємо список областей--}}
+                        {{--    regionList.innerHTML = "";--}}
+
+                        {{--    // Додаємо знайдені області до списку--}}
+                        {{--    filteredRegions.forEach(region => {--}}
+                        {{--        const li = document.createElement("li");--}}
+                        {{--        li.textContent = region;--}}
+                        {{--        li.addEventListener("click", () => {--}}
+                        {{--            townOrRegionInput.value = region;--}}
+                        {{--            regionList.innerHTML = ""; // Сховати список після вибору--}}
+                        {{--        });--}}
+                        {{--        regionList.appendChild(li);--}}
+                        {{--    });--}}
+                        {{--}--}}
+
+                        {{--// Функція фільтрації списку міст--}}
+                        {{--function filterCities() {--}}
+                        {{--    const searchText = townOrCityInput.value.toLowerCase();--}}
+                        {{--    const selectedRegion = townOrRegionInput.value;--}}
+                        {{--    const citiesInRegion = regionsAndCities[selectedRegion] || [];--}}
+                        {{--    const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));--}}
+
+                        {{--    // Очищаємо список міст--}}
+                        {{--    cityList.innerHTML = "";--}}
+
+                        {{--    // Додаємо знайдені міста до списку--}}
+                        {{--    filteredCities.forEach(city => {--}}
+                        {{--        const li = document.createElement("li");--}}
+                        {{--        li.textContent = city;--}}
+                        {{--        li.addEventListener("click", () => {--}}
+                        {{--            townOrCityInput.value = city;--}}
+                        {{--            cityList.innerHTML = ""; // Сховати список після вибору--}}
+                        {{--        });--}}
+                        {{--        cityList.appendChild(li);--}}
+                        {{--    });--}}
+                        {{--}--}}
+
+                        {{--// Обробники подій--}}
+                        {{--townOrRegionInput.addEventListener("input", filterRegions);--}}
+                        {{--townOrCityInput.addEventListener("input", filterCities);--}}
+
+                        {{--document.addEventListener("click", (event) => {--}}
+                        {{--    if (event.target !== townOrRegionInput) {--}}
+                        {{--        regionList.innerHTML = "";--}}
+                        {{--    }--}}
+                        {{--    if (event.target !== townOrCityInput) {--}}
+                        {{--        cityList.innerHTML = "";--}}
+                        {{--    }--}}
+                        {{--});--}}
+
                     </script>
                     <div class="col-6 learts-mb-20">
                         <label for="bdAddress1">Вулиця</label>
-                        <input type="text" id="bdAddress1" placeholder="назва вулиці">
+                        <input type="text" id="bdAddress1" name="street" placeholder="назва вулиці">
                     </div>
                     <div class="col-3 learts-mb-20">
                         <label for="bdHouseNumber">№ Будинку</label>
-                        <input type="text" id="bdHouseNumber" placeholder="номер будинку">
+                        <input type="text" id="bdHouseNumber" name="home" placeholder="номер будинку">
                     </div>
                     <div class="col-3 learts-mb-20">
                         <label for="bdApartment">№ Квартири</label>
-                        <input type="text" id="bdApartment" placeholder="номер квартири">
+                        <input type="text" id="bdApartment" name="apartment" placeholder="номер квартири">
                     </div>
                     <div class="col-12 learts-mb-40">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="callMe">
+                            <input type="checkbox" class="form-check-input" id="callMe" name="callMe">
                             <label class="form-check-label" for="callMe">Передзвонити Вам?</label>
                         </div>
                     </div>
                     <div class="col-12 learts-mb-20">
                         <label for="bdOrderNote">Примітки до замовлення</label>
-                        <textarea id="bdOrderNote" placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки"></textarea>
+                        <textarea id="bdOrderNote" name="bdOrderNote" placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки"></textarea>
                     </div>
                 </div>
                     <div class="col-lg-12 order-lg-1 learts-mb-30">
                         <div class="order-payment">
-                            <div class="payment-method">
-                                <div class="accordion" id="paymentMethod">
-                                    <div class="card active">
-                                        <div class="card-header">
-                                            <button data-bs-toggle="collapse" data-bs-target="#checkPayments">Чекові платежі</button>
-                                        </div>
-                                        <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">
-                                            <div class="card-body">
-                                                <p>Будь ласка, надішліть чек на назву магазину, вулицю магазину, місто магазину, штат/округ магазину, поштовий індекс магазину.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <button data-bs-toggle="collapse" data-bs-target="#cashkPayments">Накладений платіж </button>
-                                        </div>
-                                        <div id="cashkPayments" class="collapse" data-bs-parent="#paymentMethod">
-                                            <div class="card-body">
-                                                <p>Оплата готівкою при доставці.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <button data-bs-toggle="collapse" data-bs-target="#payPalPayments">PayPal <img src="assets/images/others/pay-2.webp" alt=""></button>
-                                        </div>
-                                        <div id="payPalPayments" class="collapse" data-bs-parent="#paymentMethod">
-                                            <div class="card-body">
-                                                <p>Оплата через PayPal; Ви можете оплатити кредитною карткою, якщо у вас немає облікового запису PayPal.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+{{--                            <div class="payment-method">--}}
+{{--                                <div class="accordion" id="paymentMethod">--}}
+{{--                                    <div class="card active">--}}
+{{--                                        <div class="card-header">--}}
+{{--                                            <button data-bs-toggle="collapse" data-bs-target="#checkPayments">Чекові платежі</button>--}}
+{{--                                        </div>--}}
+{{--                                        <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">--}}
+{{--                                            <div class="card-body">--}}
+{{--                                                <p>Будь ласка, надішліть чек на назву магазину, вулицю магазину, місто магазину, штат/округ магазину, поштовий індекс магазину.</p>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="card">--}}
+{{--                                        <div class="card-header">--}}
+{{--                                            <button data-bs-toggle="collapse" data-bs-target="#cashkPayments">Накладений платіж </button>--}}
+{{--                                        </div>--}}
+{{--                                        <div id="cashkPayments" class="collapse" data-bs-parent="#paymentMethod">--}}
+{{--                                            <div class="card-body">--}}
+{{--                                                <p>Оплата готівкою при доставці.</p>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="card">--}}
+{{--                                        <div class="card-header">--}}
+{{--                                            <button data-bs-toggle="collapse" data-bs-target="#payPalPayments">PayPal <img src="assets/images/others/pay-2.webp" alt=""></button>--}}
+{{--                                        </div>--}}
+{{--                                        <div id="payPalPayments" class="collapse" data-bs-parent="#paymentMethod">--}}
+{{--                                            <div class="card-body">--}}
+{{--                                                <p>Оплата через PayPal; Ви можете оплатити кредитною карткою, якщо у вас немає облікового запису PayPal.</p>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="text-center">
                                 <p class="payment-note">Ваші особисті дані використовуватимуться для обробки вашого замовлення, підтримки вашого досвіду на цьому веб-сайті та для інших цілей, описаних у нашій політиці конфіденційності.</p>
-                                <button class="btn btn-dark btn-outline-hover-dark">Зробити замовлення</button>
+{{--                                <button class="btn btn-dark btn-outline-hover-dark">Зробити замовлення</button>--}}
+                                <button class="btn btn-dark btn-outline-hover-dark" type="submit">Зробити замовлення</button>
                             </div>
                         </div>
                     </div>

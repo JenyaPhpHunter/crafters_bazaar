@@ -14,6 +14,7 @@ class CreateWishItemsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->decimal('price');
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();

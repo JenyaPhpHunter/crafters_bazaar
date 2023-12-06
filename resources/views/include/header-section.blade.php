@@ -47,10 +47,10 @@
                         @endisset
                     </div>
                     <div class="header-wishlist">
-                        <a href="{{ route('wishlist.index') }}" class="offcanvas-toggle"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
+                        <a href="{{ route('wishlist.index') }}"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
                     <div class="header-cart">
-                        <a href="{{ route('carts.index') }}" class="offcanvas-toggle"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
+                        <a href="{{ route('carts.index') }}"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </div>

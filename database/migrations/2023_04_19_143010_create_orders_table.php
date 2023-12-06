@@ -10,30 +10,30 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-//            $table->string('email', 255);
             $table->unsignedBigInteger('user_id');
-//            $table->string('phone', 255);
             $table->unsignedBigInteger('delivery_id');
             $table->unsignedBigInteger('kind_payment_id');
             $table->integer('card')->nullable();
-            $table->string('city', 255);
+            $table->unsignedBigInteger('region_id');
+            $table->unsignedBigInteger('city_id');
             $table->string('address', 255);
-            $table->unsignedBigInteger('newposts_id')->nullable();
+            $table->unsignedBigInteger('newpost_id')->nullable();
             $table->integer('promocode')->nullable();
             $table->decimal('pricedelivery', 12, 2)->nullable();
             $table->text('comment')->nullable();
-            $table->unsignedBigInteger('status_order_id');
             $table->unsignedBigInteger('cart_id');
-            $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
+            $table->unsignedBigInteger('status_order_id');
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('kind_payment_id')->references('id')->on('kind_payments');
-            $table->foreign('newposts_id')->references('id')->on('newposts');
+            $table->foreign('newpost_id')->references('id')->on('newposts');
             $table->foreign('status_order_id')->references('id')->on('status_orders');
-
+            $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
+            $table->foreign('region_id')->references('id')->on('regions');
+            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 
@@ -45,6 +45,8 @@ class CreateOrdersTable extends Migration
             $table->dropForeign(['newposts_id']);
             $table->dropForeign(['status_order_id']);
             $table->dropForeign(['cart_id']);
+            $table->dropForeign(['region_id']);
+            $table->dropForeign(['city_id']);
         });
         Schema::dropIfExists('orders');
     }

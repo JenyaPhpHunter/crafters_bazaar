@@ -9,10 +9,13 @@ use App\Models\Delivery;
 use App\Models\AdminOrder;
 use App\Models\KindPayment;
 use App\Models\Product;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+
 //use App\Mail\OrderConfirmation;
 
 
@@ -36,21 +39,7 @@ class OrderController extends Controller
             "deliveries" => $deliveries,
             "payment_kinds" => $payment_kinds,
         ]);
-//        $user = Auth::user();
-//        $orders = Order::query()->where('user_id',$user->id)->orderBy('id', 'desc')->get();
-//        $booking = [];
-//        $user_order = User::query()->where('id',$user->id)->first();
-//        foreach ($orders as $order){
-//            $booking[] = [
-//                'order' => $order,
-//                'basket' => Basket::query()->where('order_id',$order->id)->orderBy('id', 'desc')->get(),
-//                'user' => $user_order,
-//            ];
-//        }
-//        echo "<pre>";
-//        print_r($booking);
-//        echo "</pre>";
-//        die();
+
         return view('orders.index', compact('booking'));
 
     }
@@ -62,7 +51,12 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        $user_id = $request->input('user_id');
+        if ($request->input('user_id')) {
+            $user_id = $request->input('user_id');
+        } elseif (request()->cookie('user_id') != NULL) {
+            $user_id = request()->cookie('user_id');
+        }
+
         $user = User::find($user_id);
         $cartItems = CartItems::query()
             ->join('carts', 'carts.id', '=', 'cart_items.cart_id')
@@ -73,35 +67,61 @@ class OrderController extends Controller
             'PL' => 'Польща',
             'UK' => 'Англія',
         ];
+
+//        $cities = City::all();
+//        $arr_cities = [];
+//        $region_ids = [];
+//        $arr_region_cities = [];
+//
+//        foreach ($cities as $city) {
+//            $arr_cities[] = $city->name;
+//
+//            if (!in_array($city->region_id, $region_ids)) {
+//                $region_ids[] = $city->region_id;
+//                $region = Region::find($city->region_id);
+//                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
+//                $arr_region_cities[$city->region_id]['cities'][] = $city->name;
+//            } else {
+//                $arr_region_cities[$city->region_id]['cities'][] = $city->name;
+//            }
+//        }
         $cities = City::all();
         $arr_cities = [];
-        $arr_regions = [];
         $arr_region_cities = [];
-        foreach ($cities  as $city){
+
+        foreach ($cities as $city) {
             $arr_cities[] = $city->name;
-            if(!in_array($city->region, $arr_regions)){
-                $arr_regions[] = $city->region;
+
+            if (!isset($arr_region_cities[$city->region_id])) {
+                $region = Region::query()->find($city->region_id);
+                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
+                $arr_region_cities[$city->region_id]['cities'] = [];
             }
-            $arr_region_cities[$city->region][] = $city->name;
+
+            $arr_region_cities[$city->region_id]['cities'][] = $city->name;
         }
-        $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
-        collator_sort($collator, $arr_regions); // Виконуємо сортування
-
-        
-
-        $deliveries = Delivery::all();
-        $payment_kinds = KindPayment::all();
 //        echo "<pre>";
 //        print_r($arr_region_cities);
 //        echo "</pre>";
 //        die();
+        $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
+        collator_sort($collator, $arr_region_cities); // Виконуємо сортування
+
+        $deliveries = Delivery::all();
+        $payment_kinds = KindPayment::all();
+
+        $user_email = $user->email;
+        if (preg_match('/@user\.com$/', $user_email)) {
+            $user_email = '';
+        }
+
         return view('orders.create',[
             'cartItems' => $cartItems,
             'countries' => $countries,
             'arr_cities' => $arr_cities,
-            'arr_regions' => $arr_regions,
             'arr_region_cities' => $arr_region_cities,
             "user" => $user,
+            "user_email" => $user_email,
             "deliveries" => $deliveries,
             "payment_kinds" => $payment_kinds,
         ]);
@@ -115,31 +135,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-//        $validated = $request->validate([
-//            'name' => ['required', 'unique:products', 'regex:/^[^<>$%\/\\\[\]\^{|}]*$/i'],
-//            'kind_product_id' => 'required',
-//            'content' => 'required',
-//            'price' => 'required',
-//        ], $messages = [
-//            'required' => ':attribute является обязательным полем.',
-//        ]);
-        $user = Auth::user();
-        $basket = new Basket();
-        $basket = $basket->getBasketProductsUser($user->id);
-        $sum_order = 0;
-        $data_order = [];
-        foreach ($basket as $item){
-            $sum_order +=  $item->total;
-//            $product = Product::query()->where('id',$item->product_id)->first();
+        echo "<pre>";
+        print_r($request->all());
+        echo "</pre>";
+        die();
+        if ($request->input('user_id')) {
+            $user_id = $request->input('user_id');
+        } else {
+            $user_id = request()->cookie('user_id');
         }
+        $user = User::query()->where('id', $user_id)->first();
+        $user->name =  $request->post('name');
+        $user->secondname =  $request->post('secondname');
+        $user->surname =  $request->post('surname');
+        $user->email = $request->post('email');
+        $user->phone = $request->post('phone');
+        $user->region_id = $request->post('region');
+        $user->city_id = $request->post('city');
+        $user->address = $request->post('street') . $request->post('street') . $request->post('apartment');
 
-        $order = new AdminOrder();
-        $order->created_at = date("Y-m-d H:i:s");
-        $order->email = $request->post('email');
+        $user->save();
+
+        $order = new Order();
         $order->user_id =  $user->id;
-        $order->phone = $request->post('phone');
         $order->delivery_id = $request->post('delivery_id');
-        $order->paymentkind_id = $request->post('paymentkind_id');
+        $order->kind_payment_id = $request->post('kind_payment_id');
         $order->card = $request->post('card');
         $order->city = $request->post('city');
         $order->address = $request->post('address');
@@ -149,6 +169,7 @@ class OrderController extends Controller
         $order->discounttotal = $request->post('discounttotal');
         $order->total = $sum_order;
         $order->comment = $request->post('comment');
+        $order->created_at = date("Y-m-d H:i:s");
 
         $user = User::query()->where('id',$user->id)->first();
         $user->surname = $request->post('surname');

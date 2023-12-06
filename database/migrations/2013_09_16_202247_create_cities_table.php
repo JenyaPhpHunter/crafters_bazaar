@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('index');
-            $table->string('region');
+            $table->unsignedBigInteger('region_id')->nullable();
             $table->string('latitude');
             $table->string('longitude');
             $table->string('warehouse');
             $table->timestamps();
+
+            $table->foreign('region_id')->references('id')->on('regions');
         });
     }
 
@@ -32,6 +34,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('cities', function (Blueprint $table) {
+            $table->dropForeign(['region_id']);
+        });
+
         Schema::dropIfExists('cities');
     }
 };

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -34,9 +35,8 @@ class CartController extends Controller
             $user_id = $request->input('user_id');
         } elseif(request()->cookie('user_id') != NULL) {
             $user_id = request()->cookie('user_id');
-        }else {
+        } else {
             $user = new User();
-            $user->email =  '@user.com';
             $user->email = date('Ymd_His') . '_' . Str::random(10) . '@user.com';
             $user->password =  Hash::make($request->post('password'));
             $user->created_at = date("Y-m-d H:i:s");

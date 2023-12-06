@@ -78,9 +78,7 @@
                                 <h3 class="product-title">{{ $product->name }}</h3>
                                 <div class="product-price">{{ $product->price }} грн</div>
                                 <div class="product-description">
-                                    <p>Place and move your wireless Blink camera anywhere around your home both inside and out. Start off with a small system and expand to up to 10 cameras on one Blink Sync Module. Built-in motion sensor alarm. When motion detector is triggered, Wi-Fi cameras will send an alert to your smartphone.</p>
-                                    <p>The camera’s high resolution makes it perfect for landscapes and portraits and the 8 frames per second top shooting speed at full 18 Megapixel resolution allows the EOS 7D to capture the action, no matter how fast it’s happening. If you’re into travel photography, the movie function.</p>
-                                    <p>If you’re more into making videos, then you’ll find the APS-C sized sensor is a good choice for Full HD shooting. The APS-C format, whilst smaller than full-frame, is still larger than 16mm film and, as such, provides more control over depth-of-field than high-end video and film movie cameras.</p>
+                                    <p> {{ $product->content }}</p>
                                 </div>
                                 <div class="product-variations">
                                     <table>
@@ -99,7 +97,7 @@
                                     </table>
                                 </div>
                                 <div class="product-buttons">
-                                    <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Додати до улюблених"><i class="fal fa-heart"></i></a>
+                                    <a href="{{ route('wishlist.addToWishlist',['product' => $product->id]) }}" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Додати до улюблених"><i class="fal fa-heart"></i></a>
                                     <a href="{{ route('carts.addToCart',['product' => $product->id]) }}" class="btn btn-dark btn-outline-hover-dark"><i class="fal fa-shopping-cart"></i> Додати до корзини</a>
                                     <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Порівняти"><i class="fal fa-random"></i></a>
                                 </div>

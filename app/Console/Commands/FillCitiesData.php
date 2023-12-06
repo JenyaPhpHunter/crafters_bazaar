@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Region;
 use Illuminate\Console\Command;
 use App\Models\City;
 use App\Services\ApiService;
@@ -39,17 +40,27 @@ class FillCitiesData extends Command
             $city_response = $apiService->sendRequest($city_url, $city_data);
 
             $city_data = json_decode($city_response, true);
-
             if (empty($city_data['data'])) {
                 break;
             }
 
             if (isset($city_data['data']) && is_array($city_data['data'])) {
                 foreach ($city_data['data'] as $city) {
+                    $region = Region::where('name', $city['AreaDescription'])->first();
+
+                    if (!$region) {
+                        $region = new Region();
+                        $region->name = $city['AreaDescription'];
+                        $region->save();
+                        echo "Created new region: " . $region->name . " (ID: " . $region->id . ")\n";
+                    } else {
+                        echo "Found existing region: " . $region->name . " (ID: " . $region->id . ")\n";
+                    }
+
                     $newCity = new City();
                     $newCity->name = $city['Description'];
                     $newCity->index = $city['Index1'];
-                    $newCity->region = $city['AreaDescription'];
+                    $newCity->region_id = $region->id;
                     $newCity->latitude = $city['Latitude'];
                     $newCity->longitude = $city['Longitude'];
                     $newCity->warehouse = $city['Warehouse'];
