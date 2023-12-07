@@ -135,10 +135,20 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        echo "<pre>";
-        print_r($request->all());
-        echo "</pre>";
-        die();
+        $payment_kinds = KindPayment::all();
+        $paymentTypesExist = false;
+        for ($i = 1; $i <= $payment_kinds->count(); $i++) {
+            if ($request->has("payment_type_$i")) {
+                $paymentTypesExist = true;
+                break;
+            }
+        }
+        if ($paymentTypesExist) {
+
+        } elseif ($request->has('bdOrderNote')) {
+            // Логіка для обробки вибору методу оплати
+        }
+
         if ($request->input('user_id')) {
             $user_id = $request->input('user_id');
         } else {
