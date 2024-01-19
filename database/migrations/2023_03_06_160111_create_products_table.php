@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null);
             $table->text('content')->nullable()->default(null);
             $table->text('links_networks')->nullable()->default(null);
-            $table->integer('price')->nullable()->default(null);
+            $table->bigInteger('price')->nullable()->default(null);
             $table->integer('discount')->nullable()->default(null);
             $table->integer('stock_balance')->nullable()->default(1);
             $table->unsignedBigInteger('size_id')->nullable();

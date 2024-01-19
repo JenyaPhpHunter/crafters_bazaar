@@ -115,16 +115,9 @@
                         <label for="kind_product_id">Вид товару</label>
                         <br>
                         <select id="kind_product_id" name="kind_product_id">
-                            @if(isset($kind_product_obj))
-                                @foreach($kind_products as $kind_product)
-                                    <option
-                                        value="{{ $kind_product_obj->id }}" {{ $kind_product_obj->id == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
-                                @endforeach
-                            @else
-                                @foreach($kind_products as $kind_product)
-                                    <option value="{{ $kind_product->id }}" {{ $product->kind_product->id == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
-                                @endforeach
-                            @endif
+                            @foreach($kind_products as $kind_product)
+                                <option value="{{ $kind_product->id }}" {{ $product->kind_product->id == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
+                            @endforeach
                         </select>
                         <br>
                         <button type="submit" name="action" value="Додати вид товару" class="btn btn-primary3">
@@ -135,16 +128,9 @@
                         <label for="sub_kind_product_id">Підвид товару</label>
                         <br>
                         <select id="sub_kind_product_id" name="sub_kind_product_id">
-                            @if(isset($sub_kind_product_obj))
-                                @foreach($sub_kind_products as $sub_kind_product)
-                                    <option
-                                        value="{{ $sub_kind_product_obj->id }}" {{ $sub_kind_product_obj->id == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->name }}</option>
-                                @endforeach
-                            @else
-                                @foreach($sub_kind_products as $sub_kind_product)
-                                    <option value="{{ $sub_kind_product->id }}">{{ $sub_kind_product->name }}</option>
-                                @endforeach
-                            @endif
+                            @foreach($sub_kind_products as $sub_kind_product)
+                                <option value="{{ $sub_kind_product->id }}" {{ $product->sub_kind_product->id == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->name }}</option>
+                            @endforeach
                         </select>
                         <br>
                         <button type="submit" name="action" value="Додати підвид товару" class="btn btn-primary3">

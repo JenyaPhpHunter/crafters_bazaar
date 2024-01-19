@@ -54,22 +54,10 @@ class ProductController extends Controller
         if(empty($request->input('product_id'))){
             $kind_products = KindProduct::all();
             $sub_kind_products = SubKindProduct::all();
-            $kind_product_obj = null;
-            $sub_kind_product_obj = null;
-            $kind_product_id = $request->input('kind_product_id');
-            $sub_kind_product_id = $request->input('sub_kind_product_id');
-            if ($kind_product_id) {
-                $kind_product_obj = KindProduct::find($kind_product_id);
-            }
-            if ($sub_kind_product_id) {
-                $sub_kind_product_obj = SubKindProduct::find($sub_kind_product_id);
-            }
 
             return view('products.create', compact(
                 'kind_products',
                 'sub_kind_products',
-                'kind_product_obj',
-                'sub_kind_product_obj',
                 'sizes',
                 'colors',
                 'user_id',
@@ -214,28 +202,18 @@ class ProductController extends Controller
     public function edit($id, Request $request)
     {
         $user_id = $request->input('user_id');
-        $kind_product_obj = session('kind_product_obj');
-        $sub_kind_product_obj = session('sub_kind_product_obj');
         $sizes = Size::all();
         $colors = Color::all();
         $kind_products = KindProduct::all();
         $sub_kind_products = SubKindProduct::all();
         $product = Product::query()->with('kind_product')->with('productphotos')->where('id',$id)->first();
-        if(empty($kind_product_obj)){
-            $kind_product_obj = KindProduct::query()->where('id',$product->kind_product_id)->first();
-        }
-        if(empty($sub_kind_product_obj)){
-            $sub_kind_product_obj = SubKindProduct::query()->where('id',$product->sub_kind_product_id)->first();
-        }
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
 
         return view('products.edit',[
             'product' => $product,
             'photos' => $photos,
             'user_id' => $user_id,
-            'kind_product_obj' => $kind_product_obj,
             'kind_products' => $kind_products,
-            'sub_kind_product_obj' => $sub_kind_product_obj,
             'sub_kind_products' => $sub_kind_products,
             'sizes' => $sizes,
             'colors' => $colors,
@@ -275,19 +253,14 @@ class ProductController extends Controller
         $user = User::query()->where('id',$user_id)->first();
         $user->category_users_id = 3;
         $user->save();
-
         if ($action === 'Зберегти') {
             $kind_products = KindProduct::all();
             $sub_kind_products = SubKindProduct::all();
             $sizes = Size::all();
             $colors = Color::all();
-            $kind_product_obj = KindProduct::query()->where('id',$product->kind_product_id)->first();
-            $sub_kind_product_obj = SubKindProduct::query()->where('id',$product->sub_kind_product_id)->first();
 
             return redirect()->route('products.edit', ['product' => $product])
                 ->with([
-                    'kind_product_obj' => $kind_product_obj,
-                    'sub_kind_product_obj' => $sub_kind_product_obj,
                     'kind_products' => $kind_products,
                     'sub_kind_products' => $sub_kind_products,
                     'sizes' => $sizes,
@@ -302,10 +275,6 @@ class ProductController extends Controller
                 'uri' => $product->id,
             ]);
         } elseif ($action === 'Виставити на продаж') {
-//            echo "<pre>";
-//            print_r($request->all());
-//            echo "</pre>";
-//            die();
             $validated = Validator::make($request->all(), [
                 'name' => 'required',
                 'kind_product_id' => 'required',
@@ -440,6 +409,10 @@ class ProductController extends Controller
         }
         $product_id = $request->input('product_id');
         $product = Product::query()->where('id',$product_id)->first();
+        $product->kind_product_id = $kind_product->id;
+        $product->sub_kind_product_id = $sub_kind_product->id;
+
+        $product->save();
 
         return redirect()->route('products.edit', ['product' => $product])
             ->with([
