@@ -13,18 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('index');
-            $table->unsignedBigInteger('region_id')->nullable();
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('warehouse');
-            $table->timestamps();
-
-            $table->foreign('region_id')->references('id')->on('regions');
-        });
+//        Schema::create('cities', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('name');
+//            $table->string('index');
+//            $table->unsignedBigInteger('region_id')->nullable();
+//            $table->string('latitude');
+//            $table->string('longitude');
+//            $table->string('warehouse');
+//            $table->timestamps();
+//
+//            $table->foreign('region_id')->references('id')->on('regions');
+//        });
     }
 
     /**
@@ -34,10 +34,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('cities', function (Blueprint $table) {
-            $table->dropForeign(['region_id']);
-        });
-
-        Schema::dropIfExists('cities');
+//        Schema::table('cities', function (Blueprint $table) {
+//            $table->dropForeign(['region_id']);
+//        });
+//
+//        Schema::dropIfExists('cities');
     }
 };

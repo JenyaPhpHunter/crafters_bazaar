@@ -188,6 +188,9 @@
         &.outofstock {
             background-color: $heading-color;
         }
+        &.new {
+            background-color: #ef8f8d;
+        }
     }
 }
 

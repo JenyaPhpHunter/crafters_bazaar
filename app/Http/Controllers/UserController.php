@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Basket;
 use App\Models\Delivery;
 use App\Models\KindPayment;
+use App\Models\Order;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,32 +22,39 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function showSeller($id)
-    {
-        $user = User::query()->with('role')->with('delivery')->with('paymentkind')
-            ->where('id',$id)->first();
-        return view('users.show_seller',[
-            'user' => $user,
-            'excludeProducts' => true,
-        ]);
-    }
+//    public function showSeller($id)
+//    {
+//        $user = User::query()->with('role')->with('delivery')->with('paymentkind')
+//            ->where('id',$id)->first();
+//        return view('users.show_seller',[
+//            'user' => $user,
+//            'excludeProducts' => true,
+//        ]);
+//    }
 
-    public function showBuyer($id)
-    {
-        $user = User::query()->with('role')->with('delivery')->with('paymentkind')
-            ->where('id',$id)->first();
-        return view('users.show_buyer',[
-            'user' => $user,
-            'excludeProducts' => true,
-        ]);
-    }
+//    public function showBuyer($id)
+//    {
+//        $user = User::query()->with('role')->with('delivery')->with('kindpayment')
+//            ->where('id',$id)->first();
+//        return view('users.show_buyer',[
+//            'user' => $user,
+//            'excludeProducts' => true,
+//        ]);
+//    }
 
     public function show($id)
     {
-        $user = User::query()->with('role')->with('delivery')->with('paymentkind')
+        $user = User::query()->with('role')
+            ->with('delivery')
+            ->with('kindpayment')
+            ->with('region')
+            ->with('city')
             ->where('id',$id)->first();
+        $orders = Order::query()->where('user_id', $user->id)->with('status_order')->get();
+
         return view('users.show',[
             'user' => $user,
+            'orders' => $orders,
             'excludeProducts' => true,
         ]);
     }

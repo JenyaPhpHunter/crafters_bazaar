@@ -32,13 +32,7 @@
                     <div class="header-login">
                         @isset($user)
                             @if ($user->role_id != 7)
-                                @if($user->category_users_id == 2)
-                                    <a href="{{ route('users.show_seller',['user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
-                                @elseif($user->category_users_id == 3)
-                                    <a href="{{ route('users.show_buyer',['user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
-                                @elseif($user->category_users_id == 1)
-                                    <a href="{{ route('users.show',['user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
-                                @endif
+                                <a href="{{ route('users.show',['user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
                             @else
                                 <a href="{{ route('login-register') }}"><i class="fal fa-user"></i>&nbsp;Увійти</a>
                             @endif
@@ -61,63 +55,34 @@
     <!-- Site Menu Section Start -->
     <div class="site-menu-section section border-top">
         <div class="container">
-{{--            <div class="header-categories">--}}
-{{--                <button class="category-toggle"><i class="fal fa-bars"></i> Вибери категорію</button>--}}
-{{--                    <ul class="header-category-list">--}}
-{{--                        @isset($orders)--}}
-{{--                            @foreach($kind_products as $kind_product)--}}
-{{--                                <li class="has-children"><a href="{{ route('products.index',  ['kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>--}}
-{{--                                    <ul class="sub-menu">--}}
-{{--                                        <li><a href="{{ asset('blog-right-sidebar.html') }}"><span class="menu-text">Right Sidebar</span></a></li>--}}
-{{--                                        <li><a href="{{ asset('blog-left-sidebar.html') }}"><span class="menu-text">Left Sidebar</span></a></li>--}}
-{{--                                        <li><a href="{{ asset('blog-fullwidth.html') }}"><span class="menu-text">Full Width</span></a></li>--}}
-{{--                                    </ul>--}}
-{{--                                </li>--}}
-{{--                            @endforeach--}}
-{{--                        @endisset--}}
-{{--                    </ul>--}}
-{{--                <ul class="header-category-list">--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-1.webp') }}" alt=""> Knitting</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-2.webp') }}" alt=""> Sewing</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-3.webp') }}" alt=""> Holyday gifts</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-4.webp') }}" alt=""> Birthday gifts</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-5.webp') }}" alt=""> Home decor</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-6.webp') }}" alt=""> For kids & babies</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-7.webp') }}" alt=""> Garden decor</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-8.webp') }}" alt=""> Accessories</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-9.webp') }}" alt=""> Soap</a></li>--}}
-{{--                    <li><a href="#"><img src="{{ asset('images/icons/cat-icon-10.webp') }}" alt=""> Sale</a></li>--}}
-{{--                </ul>--}}
-{{--            </div>--}}
             <nav class="site-main-menu justify-content-center menu-height-60">
                 <ul>
-                    @if($user)
-                        @if($user->category_users_id == 2)
-                        <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
-                            <ul class="sub-menu mega-menu">
-                                @if(isset($statuses_products))
-                                    @foreach ($statuses_products as $status_product)
-                                        <li>
-                                            <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
-                                            <ul>
-                                                @foreach($products as $product)
-                                                    @if($status_product->id == $product->status_product_id)
-                                                        <li> <img class="mmh_img " src="{{ asset($product->path . '/' . $product->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </li>
-                        @else
-                            <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
-                        @endif
-                    @else
-                        <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
-                    @endif
-                    <li class="has-children"><a href="#"><span class="menu-text">Shop</span></a>
+                    <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
+                        <ul class="sub-menu mega-menu">
+                            @if(isset($statuses_products))
+                                @foreach ($statuses_products as $status_product)
+                                    <li>
+                                        <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                        <ul>
+                                            @foreach($products as $product)
+                                                @if($status_product->id == $product->status_product_id)
+                                                    @php
+                                                        $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                    @endphp
+                                                    @isset($selectedPhoto)
+                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                    @else
+                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                    @endisset
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </li>
+                    <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>
                                 <a href="#" class="mega-menu-title"><span class="menu-text">SHOP PAGES</span></a>
@@ -162,7 +127,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Project</span></a>
+                    <li class="has-children"><a href="#"><span class="menu-text">Марафони</span></a>
                         <ul class="sub-menu">
                             <li><a href="portfolio-3-columns.html"><span class="menu-text">Portfolio 3 Columns</span></a></li>
                             <li><a href="portfolio-4-columns.html"><span class="menu-text">Portfolio 4 Columns</span></a></li>
@@ -170,7 +135,7 @@
                             <li><a href="portfolio-details.html"><span class="menu-text">Portfolio Details</span></a></li>
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Elements</span></a>
+                    <li class="has-children"><a href="#"><span class="menu-text">Форум</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>
                                 <a href="#" class="mega-menu-title"><span class="menu-text">Column One</span></a>

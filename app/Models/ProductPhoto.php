@@ -10,7 +10,8 @@ class ProductPhoto extends Model
     use HasFactory;
 
     protected $fillable = [
-         'filename', 'ext', 'path', 'link', 'queqe',
+         'filename', 'ext', 'path', 'link', 'queqe', 'hover_filename', 'hover_ext', 'hover_path',
+         'zoom_filename', 'zoom_ext', 'zoom_path', 'small_filename', 'small_ext', 'small_path',
     ];
     public function product()
     {

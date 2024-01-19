@@ -73,7 +73,7 @@
                                 <span class="star-rating">
                                     <span class="rating-active" style="width: 80%;">ratings</span>
                                 </span>
-                                    <a href="#reviews" class="review-link">(<span class="count">2</span> customer reviews)</a>
+                                    <a href="#reviews" class="review-link">(<span class="count">2</span> відгуки покупців)</a>
                                 </div>
                                 <h3 class="product-title">{{ $product->name }}</h3>
                                 <div class="product-price">{{ $product->price }} грн</div>
@@ -88,7 +88,7 @@
                                             <td class="value">
                                                 <div class="product-quantity">
                                                     <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                                    <input type="text" class="input-qty" value="1">
+                                                    <input type="text" class="input-qty" value="{{ $product->stock_balance }}">
                                                     <span class="qty-btn plus"><i class="ti-plus"></i></span>
                                                 </div>
                                             </td>
@@ -128,8 +128,8 @@
                                             <td class="label"><span>Категорія</span></td>
                                             <td class="value">
                                                 <ul class="product-category">
-                                                    <li><a href="#">{{ $product->kind_product->name }}</a></li>
-                                                    <li><a href="#">{{ $product->sub_kind_product->name }}</a></li>
+                                                    <li><a href="{{ route('products.filter', ['categories' => [$product->kind_product->id]]) }}">{{ $product->kind_product->name }}</a></li>
+                                                    <li><a href="{{ route('products.filter', ['sub_categories' => [$product->sub_kind_product->id]]) }}">{{ $product->sub_kind_product->name }}</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -173,7 +173,7 @@
                     <div class="single-widget learts-mb-40">
                         <div class="widget-search">
                             <form action="#">
-                                <input type="text" placeholder="Search products....">
+                                <input type="text" placeholder="Пошук товару....">
                                 <button><i class="fal fa-search"></i></button>
                             </form>
                         </div>
@@ -182,22 +182,20 @@
 
                     <!-- Categories Start -->
                     <div class="single-widget learts-mb-40">
-                        <h3 class="widget-title product-filter-widget-title">Product categories</h3>
+                        <h3 class="widget-title product-filter-widget-title">Види товарів</h3>
                         <ul class="widget-list">
-                            <li><a href="#">Gift ideas</a> <span class="count">16</span></li>
-                            <li><a href="#">Home Decor</a> <span class="count">16</span></li>
-                            <li><a href="#">Kids &amp; Babies</a> <span class="count">6</span></li>
-                            <li><a href="#">Kitchen</a> <span class="count">15</span></li>
-                            <li><a href="#">Kniting &amp; Sewing</a> <span class="count">4</span></li>
-                            <li><a href="#">Pots</a> <span class="count">4</span></li>
-                            <li><a href="#">Toys</a> <span class="count">6</span></li>
+                            @foreach($kind_products as $kind_product)
+                                @if($kind_product->product)
+                                    <li><a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">{{ $kind_product->name }}</a> <span class="count">{{ $kind_product->product->count() }}</span></li>
+                                @endif
+                            @endforeach
                         </ul>
                     </div>
                     <!-- Categories End -->
 
                     <!-- Price Range Start -->
                     <div class="single-widget learts-mb-40">
-                        <h3 class="widget-title product-filter-widget-title">Filters by price</h3>
+                        <h3 class="widget-title product-filter-widget-title">Фільтрувати по вартосі</h3>
                         <div class="widget-price-range">
                             <input class="range-slider" type="text" data-min="0" data-max="350" data-from="0" data-to="350" />
                         </div>
@@ -206,54 +204,40 @@
 
                     <!-- List Product Widget Start -->
                     <div class="single-widget learts-mb-40">
-                        <h3 class="widget-title product-filter-widget-title">Products</h3>
+                        <h3 class="widget-title product-filter-widget-title">Товари</h3>
                         <ul class="widget-products">
-                            <li class="product">
-                                <div class="thumbnail">
-                                    <a href="product-details.html"><img src="{{ asset('images/product/widget-1.webp') }}" alt="List product"></a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">Walnut Cutting Board</a></h6>
-                                    <span class="price">
-                                    $100.00
-                                </span>
-                                    <div class="ratting">
-                                        <span class="rate" style="width: 80%;"></span>
+                            @foreach($featured_products as $featured_product)
+                                <li class="product">
+                                    <div class="thumbnail">
+                                        <a href="{{ route('products.show',['product' => $featured_product->id]) }}">
+                                            @php
+                                                $selectedPhoto = $featured_product->productphotos->where('queue', 1)->first();
+                                            @endphp
+                                            @isset($selectedPhoto)
+                                                <img src="{{ asset($selectedPhoto->small_path . '/' . $selectedPhoto->small_filename) }}" alt="Featured product">
+                                            @else
+                                                <img src="{{ asset('images/product/widget-1.webp') }}" alt="Featured product">
+                                            @endisset
+                                        </a>
                                     </div>
-                                </div>
-                            </li>
-                            <li class="product">
-                                <div class="thumbnail">
-                                    <a href="product-details.html"><img src="{{ asset('images/product/widget-2.webp') }}" alt="List product"></a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">Decorative Christmas Fox</a></h6>
-                                    <span class="price">
-                                    $50.00
-                                </span>
-                                    <div class="ratting">
-                                        <span class="rate" style="width: 80%;"></span>
+                                    <div class="content">
+                                        <h6 class="title"><a href="product-details.html">{{ $featured_product->name }}</a></h6>
+                                        <span class="price">
+                                                {{ $featured_product->price }} грн
+                                            </span>
+                                        <div class="ratting">
+                                            <span class="rate" style="width: 80%;"></span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li class="product">
-                                <div class="thumbnail">
-                                    <a href="product-details.html"><img src="{{ asset('images/product/widget-3.webp') }}" alt="List product"></a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">Lucky Wooden Elephant</a></h6>
-                                    <span class="price">
-                                    $35.00
-                                </span>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <!-- List Product Widget End -->
 
                     <!-- Tags Start -->
                     <div class="single-widget learts-mb-40">
-                        <h3 class="widget-title product-filter-widget-title">Product Tags</h3>
+                        <h3 class="widget-title product-filter-widget-title">Теги товарів</h3>
                         <div class="widget-tags">
                             <a href="#">handmade</a>
                             <a href="#">learts</a>
@@ -276,9 +260,9 @@
         <div class="container">
 
             <ul class="nav product-info-tab-list">
-                <li><a class="active" data-bs-toggle="tab" href="#tab-description">Description</a></li>
-                <li><a data-bs-toggle="tab" href="#tab-pwb_tab">Brand</a></li>
-                <li><a data-bs-toggle="tab" href="#tab-reviews">Reviews (2)</a></li>
+                <li><a class="active" data-bs-toggle="tab" href="#tab-description">Опис</a></li>
+                <li><a data-bs-toggle="tab" href="#tab-pwb_tab">Бренд</a></li>
+                <li><a data-bs-toggle="tab" href="#tab-reviews">Відгуки (2)</a></li>
             </ul>
             <div class="tab-content product-infor-tab-content">
                 <div class="tab-pane fade show active" id="tab-description">

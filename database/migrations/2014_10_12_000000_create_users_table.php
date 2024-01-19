@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('city_id')->nullable();
             $table->string('address')->nullable();
             $table->unsignedBigInteger('delivery_id')->nullable();
-            $table->unsignedBigInteger('paymentkind_id')->nullable();
+            $table->unsignedBigInteger('kind_payment_id')->nullable();
             $table->unsignedBigInteger('newpost_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->unsigned()->default(1);
@@ -43,6 +43,7 @@ class CreateUsersTable extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
             $table->foreign('delivery_id')->references('id')->on('deliveries');
             $table->foreign('newpost_id')->references('id')->on('newposts');
+            $table->foreign('kind_payment_id')->references('id')->on('kind_payments');
         });
     }
 
@@ -60,6 +61,7 @@ class CreateUsersTable extends Migration
             $table->dropForeign(['city_id']);
             $table->dropForeign(['newpost_id']);
             $table->dropForeign(['delivery_id']);
+            $table->dropForeign(['kind_payment_id']);
         });
 
         Schema::dropIfExists('users');

@@ -44,8 +44,8 @@
                                 <td class="name"><a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}&nbsp; <strong class="quantity">×&nbsp;{{ $cartItem->quantity }}</strong></td>
                                 <td class="total"><span>{{ $cartItem->price * $cartItem->quantity }} грн</span></td>
                                 @php
-                                    $subtotal = $subtotal + $cartItem->price;
-                                    $total = $total + $cartItem->price;
+                                    $subtotal = $subtotal + $cartItem->price * $cartItem->quantity;
+                                    $total = $total + $cartItem->price * $cartItem->quantity;
                                 @endphp
                             </tr>
                         @endforeach
@@ -84,6 +84,7 @@
                 <h2 class="title">Ваші дані</h2>
             </div>
                 <form class="checkout-form learts-mb-50" method="post" action="{{ route('orders.store') }}">
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
                     @csrf
                 <div class="row">
                     <div class="col-md-6 col-12 learts-mb-20">
@@ -106,6 +107,16 @@
                         <label for="bdPhone">Телефон <abbr class="required">*</abbr></label>
                         <input type="text" id="bdPhone" name="phone" value="{{ $user->phone ?? '' }}">
                     </div>
+                    <label style="text-align: center; font-weight: bold; font-style: italic;">Спосіб доставки <abbr class="required">*</abbr></label>
+                    <div class="col-6 learts-mb-20">
+                        @foreach($deliveries as $delivery)
+                            <input type="radio" id="deliveryType{{ $delivery->id }}" name="delivery_id" value="{{ $delivery->id }}" @if($user->delivery_id == $delivery->id) checked @endif>
+                            <label class="form-check-label" for="deliveryType{{ $delivery->id }}">
+                                {{ $delivery->name }}
+                            </label>
+                        @endforeach
+                    </div>
+
 {{--                    <div class="col-12 learts-mb-20">--}}
 {{--                        <label for="bdCountry">Країна <abbr class="required">*</abbr></label>--}}
 {{--                        <select id="bdCountry" class="select2-basic">--}}
@@ -118,13 +129,13 @@
                     <!-- HTML для поля областей -->
                     <label style="text-align: center; font-weight: bold; font-style: italic;">Місце доставки <abbr class="required">*</abbr></label>
                     <div class="col-6 learts-mb-20">
-                        <input type="text" id="bdTownOrRegion" name="region" placeholder="Область">
+                        <input type="text" id="bdTownOrRegion" name="region" placeholder="Область" @if($user->region) value="{{ $user->region->name }}" @endif>
                         <ul id="regionList"></ul>
                     </div>
 
                     <!-- HTML для поля міст -->
                     <div class="col-6 learts-mb-20">
-                        <input type="text" id="bdTownOrCity" name="city" placeholder="Населенний пункт (місто/село)">
+                        <input type="text" id="bdTownOrCity" name="city" placeholder="Населенний пункт (місто/село)"  @if($user->city) value="{{ $user->city->name }}" @endif>
                         <ul id="cityList"></ul>
                     </div>
                     <script>
@@ -197,15 +208,15 @@
                     </script>
                     <div class="col-6 learts-mb-20">
                         <label for="bdAddress1">Вулиця</label>
-                        <input type="text" id="bdAddress1" name="street" placeholder="назва вулиці">
+                        <input type="text" id="bdAddress1" name="street" placeholder="назва вулиці" value="{{ $address['street'] }}">
                     </div>
                     <div class="col-3 learts-mb-20">
                         <label for="bdHouseNumber">№ Будинку</label>
-                        <input type="text" id="bdHouseNumber" name="home" placeholder="номер будинку">
+                        <input type="text" id="bdHouseNumber" name="home" placeholder="номер будинку" value="{{ $address['home'] }}">
                     </div>
                     <div class="col-3 learts-mb-20">
                         <label for="bdApartment">№ Квартири</label>
-                        <input type="text" id="bdApartment" name="apartment" placeholder="номер квартири">
+                        <input type="text" id="bdApartment" name="apartment" placeholder="номер квартири" value="{{ $address['apartment'] }}">
                     </div>
                     <div class="col-12 learts-mb-40">
                         <div class="form-check">
@@ -222,18 +233,32 @@
                         <div class="order-payment">
                             <div class="payment-method">
                                 <div class="accordion" id="paymentMethod">
-                                    @foreach($payment_kinds as $paymeсnt_kind)
-                                        <div class="card {{--active--}}">    {{-- active відмічає всі точками --}}
-                                            <div class="card-header">
-                                                <button data-bs-toggle="collapse" data-bs-target="#checkPayments" name="payment_type_{{ $paymeсnt_kind->id }}" >{{ $paymeсnt_kind->name }}</button>
-                                            </div>
-                                            <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">
+                                    @foreach($payment_kinds as $payment_kind)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_type" id="paymentType{{ $payment_kind->id }}" value="{{ $payment_kind->id }}" {{ $payment_kind->id == $user->kind_payment_id ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="paymentType{{ $payment_kind->id }}">
+                                                {{ $payment_kind->name }}
+                                            </label>
+                                            <div id="checkPayments{{ $payment_kind->id }}" class="collapse" data-bs-parent="#paymentMethod">
                                                 <div class="card-body">
-                                                    <p>{{ $paymeсnt_kind->comment }}</p>
+                                                    <p>{{ $payment_kind->comment }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
+
+                                    {{--                                    @foreach($payment_kinds as $paymeсnt_kind)--}}
+{{--                                        <div class="card --}}{{--active--}}{{--">    --}}{{-- active відмічає всі точками --}}
+{{--                                            <div class="card-header">--}}
+{{--                                                <button data-bs-toggle="collapse" data-bs-target="#checkPayments" name="payment_type_{{ $paymeсnt_kind->id }}" >{{ $paymeсnt_kind->name }}</button>--}}
+{{--                                            </div>--}}
+{{--                                            <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">--}}
+{{--                                                <div class="card-body">--}}
+{{--                                                    <p>{{ $paymeсnt_kind->comment }}</p>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    @endforeach--}}
                                 </div>
                             </div>
                             <div class="text-center">

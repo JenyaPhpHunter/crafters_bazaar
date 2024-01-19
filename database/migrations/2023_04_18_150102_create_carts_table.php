@@ -13,7 +13,7 @@ class CreateCartsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->decimal('sum')->nullable();
-            $table->decimal('discount')->nullable();
+            $table->decimal('pricediscount')->nullable();
             $table->decimal('total')->nullable();
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);

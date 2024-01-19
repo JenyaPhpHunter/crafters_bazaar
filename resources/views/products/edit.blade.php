@@ -122,7 +122,7 @@
                                 @endforeach
                             @else
                                 @foreach($kind_products as $kind_product)
-                                    <option value="{{ $kind_product->id }}">{{ $kind_product->name }}</option>
+                                    <option value="{{ $kind_product->id }}" {{ $product->kind_product->id == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -219,7 +219,9 @@
                         </div>
                     </form>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                        <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>
+                        @isset($user_id)
+                            <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>
+                        @endisset
                         <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
                     </div>
                     <div class="product-meta">

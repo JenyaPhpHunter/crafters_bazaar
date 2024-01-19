@@ -21,13 +21,17 @@ class CreateProductsTable extends Migration
             $table->text('content')->nullable()->default(null);
             $table->text('links_networks')->nullable()->default(null);
             $table->integer('price')->nullable()->default(null);
-            $table->integer('stock_balance')->nullable()->default(null);
+            $table->integer('discount')->nullable()->default(null);
+            $table->integer('stock_balance')->nullable()->default(1);
             $table->unsignedBigInteger('size_id')->nullable();
             $table->unsignedBigInteger('color_id')->nullable();
             $table->unsignedBigInteger('status_product_id');
             $table->unsignedBigInteger('user_id');
+            $table->boolean('new')->unsigned()->default(1);
+            $table->boolean('featured')->unsigned()->default(0);
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
+            $table->dateTime('date_start')->nullable();
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable();
             $table->timestamps();
 

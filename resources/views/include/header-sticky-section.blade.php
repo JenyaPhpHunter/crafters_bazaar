@@ -1,6 +1,6 @@
 <!-- Header Sticky Section Start -->
 <div class="sticky-header header-menu-center section bg-white d-none d-xl-block">
-    <div class="container">
+{{--    <div class="container">--}}
         <div class="row align-items-center">
 
             <!-- Header Logo Start -->
@@ -15,40 +15,32 @@
             <div class="col d-none d-xl-block">
                 <nav class="site-main-menu justify-content-center menu-height-60">
                     <ul>
-                        <li class="has-children"><a href="#"><span class="menu-text">Home</span></a>
+                        <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
                             <ul class="sub-menu mega-menu">
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">HOME GROUP</span></a>
-                                    <ul>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-01.webp') }}" alt="home-01"> <a href="index.html"><span class="menu-text">Arts Propelled</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-02.webp') }}" alt="home-02"> <a href="index-2.html"><span class="menu-text">Decor Thriving</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-03.webp') }}" alt="home-03"> <a href="index-3.html"><span class="menu-text">Savvy Delight</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-04.webp') }}" alt="home-04"> <a href="index-4.html"><span class="menu-text">Perfect Escapes</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="index-2.html" class="mega-menu-title"><span class="menu-text">HOME GROUP</span></a>
-                                    <ul>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-05.webp') }}" alt="home-05"> <a href="index-5.html"><span class="menu-text">Kitchen Cozy</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-06.webp') }}" alt="home-06"> <a href="index-6.html"><span class="menu-text">Dreamy Designs</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-07.webp') }}" alt="home-07"> <a href="index-7.html"><span class="menu-text">Crispy Recipes</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-08.webp') }}" alt="home-08"> <a href="index-8.html"><span class="menu-text">Decoholic Chic</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="index-2.html" class="mega-menu-title"><span class="menu-text">HOME GROUP</span></a>
-                                    <ul>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-09.webp') }}" alt="home-9"> <a href="index-9.html"><span class="menu-text">Reblended Dish</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-10.webp') }}" alt="home-10"> <a href="index-10.html"><span class="menu-text">Craftin House</span></a></li>
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-11.webp') }}" alt="home-11"> <a href="index-11.html"><span class="menu-text">Craftswork Biz</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="menu-banner"><img src="{{ asset('images/banner/menu-banner-1.webp') }}" alt="Home Menu Banner"></a>
-                                </li>
+                                @if(isset($statuses_products))
+                                    @foreach ($statuses_products as $status_product)
+                                        <li>
+                                            <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                            <ul>
+                                                @foreach($products as $product)
+                                                    @if($status_product->id == $product->status_product_id)
+                                                        @php
+                                                            $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                        @endphp
+                                                        @isset($selectedPhoto)
+                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        @else
+                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        @endisset
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Shop</span></a>
+                        <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
                             <ul class="sub-menu mega-menu">
                                 <li>
                                     <a href="#" class="mega-menu-title"><span class="menu-text">SHOP PAGES</span></a>
@@ -93,7 +85,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Project</span></a>
+                        <li class="has-children"><a href="#"><span class="menu-text">Марафони</span></a>
                             <ul class="sub-menu">
                                 <li><a href="portfolio-3-columns.html"><span class="menu-text">Portfolio 3 Columns</span></a></li>
                                 <li><a href="portfolio-4-columns.html"><span class="menu-text">Portfolio 4 Columns</span></a></li>
@@ -101,7 +93,7 @@
                                 <li><a href="portfolio-details.html"><span class="menu-text">Portfolio Details</span></a></li>
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Elements</span></a>
+                        <li class="has-children"><a href="#"><span class="menu-text">Форум</span></a>
                             <ul class="sub-menu mega-menu">
                                 <li>
                                     <a href="#" class="mega-menu-title"><span class="menu-text">Column One</span></a>
@@ -203,7 +195,7 @@
             <!-- Header Tools End -->
 
         </div>
-    </div>
+{{--    </div>--}}
 
 </div>
 <!-- Header Sticky Section End -->

@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-//use App\Models\Color;
 use App\Models\CartItems;
 use App\Models\KindProduct;
 use App\Models\AdminOrder;
-//use App\Models\Order;
 use App\Models\Product;
 use App\Models\Role;
-//use App\Models\Size;
 use App\Models\StatusOrder;
 use App\Models\StatusProduct;
 use App\Models\SubKindProduct;
@@ -53,8 +50,23 @@ class AppServiceProvider extends ServiceProvider
                 $cartItemsCount = CartItems::query()
                     ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
                     ->where('carts.user_id', $user->id)
+                    ->where('carts.active', 1)
                     ->count();
-                $wishItemsCount = WishItems::query()->where('user_id', $user->id)->count();
+                $wishItemsCount = WishItems::query()
+                    ->where('user_id', $user->id)
+                    ->where('active', 1)
+                    ->count();
+            } elseif (request()->cookie('user_id') != NULL) {
+                $user_id = request()->cookie('user_id');
+                $cartItemsCount = CartItems::query()
+                    ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+                    ->where('carts.user_id', $user_id)
+                    ->where('carts.active', 1)
+                    ->sum('cart_items.quantity');
+                $wishItemsCount = WishItems::query()
+                    ->where('user_id', $user_id)
+                    ->where('active', 1)
+                    ->count();
             } else {
                 $cartItemsCount = 0;
                 $wishItemsCount = 0;

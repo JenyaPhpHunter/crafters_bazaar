@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductPhoto;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,13 @@ class ProductPhotoController extends Controller
                 $productPhoto->link = '';
                 $productPhoto->queue = 1;
                 $productPhoto->product_id = $product_id; // Пов'язати із продуктом
+
+                $productPhoto->save();
+
+                $count_productphoto = ProductPhoto::query()
+                    ->where('product_id', $productPhoto->product->id)
+                    ->count();
+                $productPhoto->queue = $count_productphoto;
 
                 $productPhoto->save();
 
@@ -61,7 +69,21 @@ class ProductPhotoController extends Controller
 
         // Генерувати унікальне ім'я для зменшеного зображення
         $small_name = pathinfo($productPhoto->filename, PATHINFO_FILENAME) . '_small.' . $productPhoto->ext;
-
+        if($productPhoto->queue == 2){
+            $hover_name = pathinfo($productPhoto->filename, PATHINFO_FILENAME) . '_hover.' . $productPhoto->ext;
+            $first_productphoto = ProductPhoto::query()
+                ->where('product_id', $productPhoto->product->id)
+                ->where('queue', 1)
+                ->first();
+            $first_productphoto->hover_filename = $productPhoto->filename;
+            $first_productphoto->hover_ext = $productPhoto->ext;
+            $first_productphoto->hover_path = $productPhoto->path;
+            $first_productphoto->save();
+        }
+//        echo "<pre>";
+//        print_r($productPhoto->product);
+//        echo "</pre>";
+//        die();
         // Збереження нового зображення на те саме місце з новим ім'ям
         imagejpeg($newImage, public_path('photos') . '/' . $small_name);
 

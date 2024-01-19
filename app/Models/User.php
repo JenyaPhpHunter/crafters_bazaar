@@ -62,7 +62,7 @@ class User extends Authenticatable
         return $this->belongsTo(Delivery::class);
     }
 
-    public function paymentkind()
+    public function kindpayment()
     {
         return $this->belongsTo(KindPayment::class);
     }
@@ -70,5 +70,15 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(AdminOrder::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
     }
 }

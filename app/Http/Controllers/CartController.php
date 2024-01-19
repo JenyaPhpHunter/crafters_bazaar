@@ -24,6 +24,7 @@ class CartController extends Controller
         $cartItems = CartItems::query()
             ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
             ->where('carts.user_id', $user_id)
+            ->where('carts.active', 1)
             ->get();
 
         return view('cart.index', ['cartItems' => $cartItems]);
@@ -48,11 +49,15 @@ class CartController extends Controller
 
             $user_id = $user->id;
         }
+//        echo "<pre>";
+//        print_r($user_id);
+//        echo "</pre>";
+//        die();
         $product = Product::find($productId);
         // Отримуємо або створюємо кошик користувача
-        $cart = Cart::firstOrNew(['user_id' => $user_id]);
+        $cart = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);
         $cart->user_id = $user_id;
-        $cart->active = 0;
+
         $cart->save();
 
 // Перевірка, чи товар вже є в кошику
@@ -74,6 +79,18 @@ class CartController extends Controller
             ]);
             $cartItem->save();
         }
+        $cartItems = CartItems::query()->where('cart_id', $cart->id)->get();
+        $sum = 0;
+        $pricediscount = 0;
+        foreach ($cartItems as $item){
+            $sum += $item->price * $item->quantity;
+            $pricediscount += $item->pricediscount;
+        }
+        $cart->sum = $sum;
+        $cart->pricediscount = $pricediscount;
+        $cart->total = $sum - $pricediscount;
+
+        $cart->save();
         // Опціонально можна використовувати метод associate для спрощення зв'язку з об'єктом товару
         $cartItem->product()->associate($product);
         $cartItem->save();
@@ -82,8 +99,7 @@ class CartController extends Controller
             ->with([
             'success' => 'Товар додано до корзини',
             'cartItem' => $cartItem,
-        ])
-            ->withCookie(cookie('user_id', $user_id));
+        ])->withCookie(cookie('user_id', $user_id));
     }
 
     public function clearCart(Request $request)

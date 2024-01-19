@@ -1,10 +1,7 @@
-@extends('layouts.main')
+@extends('layouts.app')
 
 @section('content')
-    {{--    @php--}}
-    {{--        $user = session('user');--}}
-    {{--    @endphp--}}
-    <a href="{{route('home')}}">Повернутися на головну сторінку</a>
+    <a href="{{route('welcome')}}">Повернутися на головну сторінку</a>
     <br><br>
     <h1>Ваш заказ № {{ $order->id }} на суму {{ $order->total }} успешно оформлен!</h1>
     <br><br><br>

@@ -16,20 +16,21 @@ return new class extends Migration
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('php_name');
             $table->string('code');
             $table->timestamps();
         });
         DB::table('colors')->insert([
-            ['name' => 'Чорний', 'code' => '#000000'],
-            ['name' => 'Білий', 'code' => '#ffffff'],
-            ['name' => 'Червоний', 'code' => '#ff0000'],
-            ['name' => 'Зелений', 'code' => '#00ff00'],
-            ['name' => 'Синій', 'code' => '#0000ff'],
-            ['name' => 'Жовтий', 'code' => '#ffff00'],
-            ['name' => 'Фіолетовий', 'code' => '#ff00ff'],
-            ['name' => 'Помаранчевий', 'code' => '#ffa500'],
-            ['name' => 'Темно-зелений', 'code' => '#008000'],
-            ['name' => 'Пурпурний', 'code' => '#800080'],
+            ['name' => 'Чорний', 'php_name' => 'Black', 'code' => '#000000'],
+            ['name' => 'Білий', 'php_name' => 'White', 'code' => '#ffffff'],
+            ['name' => 'Червоний', 'php_name' => 'Red',  'code' => '#ff0000'],
+            ['name' => 'Зелений', 'php_name' => 'Green',  'code' => '#00ff00'],
+            ['name' => 'Синій', 'php_name' => 'Blue',  'code' => '#0000ff'],
+            ['name' => 'Жовтий', 'php_name' => 'Yellow',  'code' => '#ffff00'],
+            ['name' => 'Фіолетовий', 'php_name' => 'Violet',  'code' => '#ff00ff'],
+            ['name' => 'Помаранчевий', 'php_name' => 'Orange',  'code' => '#ffa500'],
+            ['name' => 'Темно-зелений', 'php_name' => 'Dark_green',  'code' => '#008000'],
+            ['name' => 'Пурпурний', 'php_name' => 'Purple',  'code' => '#800080'],
         ]);
     }
 

@@ -10340,6 +10340,9 @@ body.offcanvas-open .sticky-header {
 .product-badges span.outofstock {
   background-color: #333333;
 }
+.product-badges span.new {
+    background-color: #ef8f8d;
+}
 
 /* Product Extra Options */
 .product-options {

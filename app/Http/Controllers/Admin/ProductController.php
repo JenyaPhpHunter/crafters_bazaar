@@ -135,7 +135,7 @@ class ProductController extends Controller
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 2;
+        $user->category_users_id = 3;
         $user->save();
 
         if ($action === 'Зберегти') {
@@ -265,7 +265,7 @@ class ProductController extends Controller
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 2;
+        $user->category_users_id = 3;
         $user->save();
 
         if ($action === 'Зберегти') {

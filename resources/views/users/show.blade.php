@@ -43,35 +43,29 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>Order</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Action</th>
+                                            <th>Замовлення</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                            <th>Всього</th>
+{{--                                            <th>Дія</th>--}}
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Aug 22, 2018</td>
-                                            <td>Pending</td>
-                                            <td>$3000</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>July 22, 2018</td>
-                                            <td>Approved</td>
-                                            <td>$200</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>June 12, 2017</td>
-                                            <td>On Hold</td>
-                                            <td>$990</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
+                                        @php
+                                            $counter = 1;
+                                        @endphp
+                                        @foreach($orders as $order)
+                                            <tr>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $counter }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->updated_at }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->status_order->name }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->sum_order }}</a></td>
+{{--                                                <td><a href="shopping-cart.html">View</a></td>--}}
+                                                @php
+                                                    $counter ++;
+                                                @endphp
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -120,10 +114,11 @@
                                     <div class="col-md-6 col-12 learts-mb-30">
                                         <h4 class="title">Адреса доставки <a href="#" class="edit-link">редагувати</a></h4>
                                         <address>
-                                            <p><strong>Alex Tuntuni</strong></p>
-                                            <p>1355 Market St, Suite 900 <br>
-                                                San Francisco, CA 94103</p>
-                                            <p>Mobile: (123) 456-7890</p>
+                                            <p><strong>{{ $user->name . ' ' . $user->secondname . ' ' . $user->surname }}</strong></p>
+                                            <p>{{ $user->region->name }}<br>
+                                            <p>{{ $user->city->name }}<br>
+                                                {{ $user->address}}</p>
+                                            <p>Телефон: {{ $user->phone }}</p>
                                         </address>
                                     </div>
                                 </div>

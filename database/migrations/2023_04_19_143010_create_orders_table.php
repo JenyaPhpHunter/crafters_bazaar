@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('pricedelivery', 12, 2)->nullable();
             $table->text('comment')->nullable();
             $table->unsignedBigInteger('cart_id');
+            $table->decimal('sum_order',12,2);
             $table->unsignedBigInteger('status_order_id');
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
@@ -42,7 +43,7 @@ class CreateOrdersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['kind_payment_id']);
-            $table->dropForeign(['newposts_id']);
+            $table->dropForeign(['newpost_id']);
             $table->dropForeign(['status_order_id']);
             $table->dropForeign(['cart_id']);
             $table->dropForeign(['region_id']);

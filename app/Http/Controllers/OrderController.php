@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Basket;
+use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\City;
 use App\Models\Delivery;
-use App\Models\AdminOrder;
 use App\Models\KindPayment;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 //use App\Mail\OrderConfirmation;
 
@@ -26,18 +30,14 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $baskets = Basket::query()->where('user_id', $user->id)->orderBy('id', 'desc')->get();
-        $deliveries = Delivery::all();
-        $payment_kinds = KindPayment::all();
+        $user_id = $request->input('user_id');
+        $orders = Order::query()->where('user_id', $user_id)->orderBy('id', 'desc')->get();
 
         return view('orders.index',[
-            "user" => $user,
-            "baskets" => $baskets,
-            "deliveries" => $deliveries,
-            "payment_kinds" => $payment_kinds,
+//            "user" => $user,
+            "orders" => $orders,
         ]);
 
         return view('orders.index', compact('booking'));
@@ -61,49 +61,25 @@ class OrderController extends Controller
         $cartItems = CartItems::query()
             ->join('carts', 'carts.id', '=', 'cart_items.cart_id')
             ->where('carts.user_id', $user_id)
+            ->where('carts.active', 1)
             ->get();
         $countries = [
             'UA' => 'Україна',
             'PL' => 'Польща',
             'UK' => 'Англія',
         ];
-
-//        $cities = City::all();
-//        $arr_cities = [];
-//        $region_ids = [];
-//        $arr_region_cities = [];
-//
-//        foreach ($cities as $city) {
-//            $arr_cities[] = $city->name;
-//
-//            if (!in_array($city->region_id, $region_ids)) {
-//                $region_ids[] = $city->region_id;
-//                $region = Region::find($city->region_id);
-//                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
-//                $arr_region_cities[$city->region_id]['cities'][] = $city->name;
-//            } else {
-//                $arr_region_cities[$city->region_id]['cities'][] = $city->name;
-//            }
-//        }
         $cities = City::all();
         $arr_cities = [];
         $arr_region_cities = [];
-
         foreach ($cities as $city) {
             $arr_cities[] = $city->name;
-
             if (!isset($arr_region_cities[$city->region_id])) {
                 $region = Region::query()->find($city->region_id);
                 $arr_region_cities[$city->region_id]['region_name'] = $region->name;
                 $arr_region_cities[$city->region_id]['cities'] = [];
             }
-
             $arr_region_cities[$city->region_id]['cities'][] = $city->name;
         }
-//        echo "<pre>";
-//        print_r($arr_region_cities);
-//        echo "</pre>";
-//        die();
         $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
         collator_sort($collator, $arr_region_cities); // Виконуємо сортування
 
@@ -115,12 +91,21 @@ class OrderController extends Controller
             $user_email = '';
         }
 
+        $addressParts = explode(', ', $user->address);
+
+        $address = [
+            'street' => $addressParts[0] ?? null,
+            'home' => $addressParts[1] ?? null,
+            'apartment' => $addressParts[2] ?? null,
+        ];
+
         return view('orders.create',[
             'cartItems' => $cartItems,
             'countries' => $countries,
             'arr_cities' => $arr_cities,
             'arr_region_cities' => $arr_region_cities,
             "user" => $user,
+            "address" => $address,
             "user_email" => $user_email,
             "deliveries" => $deliveries,
             "payment_kinds" => $payment_kinds,
@@ -135,131 +120,130 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $payment_kinds = KindPayment::all();
-        $paymentTypesExist = false;
-        for ($i = 1; $i <= $payment_kinds->count(); $i++) {
-            if ($request->has("payment_type_$i")) {
-                $paymentTypesExist = true;
-                break;
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        $old_user = $user;
+        if($request->input('email') != $user->email && $user->role_id != 7){
+            Auth::logout();
+            $user = User::query()->where('email', $request->input('email'))->first();
+            if (!$user){
+                $user = new User;
+                $user->email = $request->input('email');
+                $user->password = Str::random(10);      // TODO відправити лист з паролем + спливаюче вікно з паролем
+                $user->role_id = 6;
             }
         }
-        if ($paymentTypesExist) {
-
-        } elseif ($request->has('bdOrderNote')) {
-            // Логіка для обробки вибору методу оплати
+        if($user->role_id == 7) {
+            $old_user = $user;
+            $user = User::query()->where('email', $request->input('email'))->first();
+            if (!$user) {
+                $user = $old_user;
+                $user->email = $request->input('email');
+                $user->password = Str::random(10);   // TODO відправити лист з паролем + спливаюче вікно з паролем
+                $user->role_id = 6;
+            } else {
+                $old_user->delete();
+            }
         }
-
-        if ($request->input('user_id')) {
-            $user_id = $request->input('user_id');
-        } else {
-            $user_id = request()->cookie('user_id');
+        if($user->category_users_id == 1){
+            $user->category_users_id = 2;
         }
-        $user = User::query()->where('id', $user_id)->first();
         $user->name =  $request->post('name');
         $user->secondname =  $request->post('secondname');
         $user->surname =  $request->post('surname');
-        $user->email = $request->post('email');
         $user->phone = $request->post('phone');
-        $user->region_id = $request->post('region');
-        $user->city_id = $request->post('city');
-        $user->address = $request->post('street') . $request->post('street') . $request->post('apartment');
+        $user->delivery_id = $request->post('delivery_id');
+        $region = Region::query()->where('name',$request->input('region'))->first();
+        $city = City::query()->where('name',$request->input('city'))->where('region_id',$region->id)->first();
+        $user->region_id = $region->id;
+        $user->city_id = $city->id;
+        $user->kind_payment_id = $request->post('payment_type');
+        $user->address = $request->post('street') . ', ' . $request->post('home') . ', ' . $request->post('apartment');
+        $user->updated_at = date("Y-m-d H:i:s");
 
         $user->save();
+
+        // Автентифікувати користувача
+        Auth::login($user);
+        Cookie::queue('user_id', $user->id, 60); // 60 - це час у хвилинах, на який ви хочете встановити куку
 
         $order = new Order();
         $order->user_id =  $user->id;
         $order->delivery_id = $request->post('delivery_id');
-        $order->kind_payment_id = $request->post('kind_payment_id');
-        $order->card = $request->post('card');
-        $order->city = $request->post('city');
-        $order->address = $request->post('address');
-        $order->np_address = $request->post('np_address');
-        $order->promocode = $request->post('promocode');
-        $order->pricedelivery = $request->post('pricedelivery');
-        $order->discounttotal = $request->post('discounttotal');
-        $order->total = $sum_order;
-        $order->comment = $request->post('comment');
+        $order->kind_payment_id = $request->post('payment_type');
+//        $order->card = $request->post('card');
+        $order->region_id = $user->region_id;
+        $order->city_id = $user->city_id;
+        $order->address = $user->address;
+//        $order->newpost_id = $request->post('newpost_id');
+//        $order->promocode = $request->post('promocode');
+//        $order->pricedelivery = $request->post('pricedelivery');
+        $order->comment = $request->post('bdOrderNote');
+        $cart = Cart::query()
+            ->where('user_id', $old_user->id)
+            ->where('active', 1)
+            ->latest()  // Сортування за спаданням дати створення
+            ->first();
+        $cart->user_id = $user->id;
+        $cart->active = 0;
+
+        $cart->save();
+        $order->cart_id = $cart->id;
+        $order->sum_order = $cart->total;
+        $order->status_order_id = 1;
         $order->created_at = date("Y-m-d H:i:s");
 
-        $user = User::query()->where('id',$user->id)->first();
-        $user->surname = $request->post('surname');
-        $user->name = $request->post('name');
-        $user->secondname = $request->post('secondname');
-        $user->phone = $request->post('phone');
-        $user->city = $request->post('city');
-        $user->address = $request->post('address');
-        $user->delivery_id = $request->post('delivery_id');
-        $user->paymentkind_id = $request->post('paymentkind_id');
-
         $order->save();
-        $user->save();
-
 
 // Відправлення листа користувачу та адміністратору
         $admin_data = [
             'mail_user' => 0,
             'order' => $order->id,
-            'client' => $request->post('surname'). " " . $request->post('name'). " " .$request->post('secondname'),
-            'phone_client' => $request->post('phone'),
+            'client' => $user->surname . " " . $user->name . " " . $user->secondname,
+            'phone_client' => $user->phone,
             'city_client' => $request->post('city'),
             'address_client' => $request->post('address'),
-            'comment' => $request->post('comment'),
-            'sum_order' => $sum_order,
+            'comment' => $order->comment,
+            'sum_order' => $order->sum_order,
         ];
         $data_user = [
             'mail_user' => 1,
-            'name' => $request->post('surname'). " " . $request->post('name'). " " .$request->post('secondname'),
-            'sum_order' => $sum_order,
+            'name' => $user->surname . " " . $user->name . " " . $user->secondname,
+            'sum_order' => $order->sum_order,
         ];
-        foreach ($basket as $item) {
+        $cartitems = CartItems::query()->where('cart_id', $cart->id)->get();
+        foreach ($cartitems as $item) {
             $product = Product::find($item->product_id);
             $product_name = $product->name;
-            $data_user['basket'][] = [
+            $data_user['cart'][] = [
                 'product' => $product_name,
                 'quantity' => $item->quantity,
                 'total' => $item->total,
             ];
-            $admin_data['basket'][] = [
+            $admin_data['cart'][] = [
                     'product' => $product_name,
                     'quantity' => $item->quantity,
                     'total' => $item->total,
             ];
-            Basket::find($item->id)->update([
+            CartItems::find($item->id)->update([
                 'active' => 0,
-                'order_id' => $order->id
             ]);
         }
+//
+//        Mail::to($order->email)->send(new OrderConfirmation($data_user));
+//
+//        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
 
-//        echo "<pre>";
-//        print_r($data_user);
-//        echo "</pre>";
-//        die();
-        Mail::to($order->email)->send(new OrderConfirmation($data_user));
-
-        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
-
-        return redirect( route('orders.show', ['order' => $order->id]));
+        return redirect(route('users.show', ['user' => $user->id]).'#orders');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $user = Auth::user();
-        $order = AdminOrder::where('user_id', $user->id)->latest()->first();
+        $order = Order::query()->where('id', $id)->first();
+
         return view('orders.show', compact('order'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //

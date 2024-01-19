@@ -62,10 +62,11 @@ Route::prefix('admin')->group(callback: function () {
 
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-Route::get('/users/seller/{user}', [UserController::class, 'showSeller'])->name('users.show_seller');
-Route::get('/users/buyer/{user}', [UserController::class, 'showBuyer'])->name('users.show_buyer');
+//Route::get('/users/seller/{user}', [UserController::class, 'showSeller'])->name('users.show_seller');
+//Route::get('/users/buyer/{user}', [UserController::class, 'showBuyer'])->name('users.show_buyer');
 Route::get('/users/{user}/edit/', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
@@ -74,7 +75,6 @@ Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->nam
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
 Route::post('/products/storekindsubkind', [ProductController::class, 'storekindsubkind'])->name('products.storekindsubkind');
-Route::resource('orders', OrderController::class);
 Route::get('/products/kind_products/{kind_products}', [ProductController::class, 'productsKind'])->name('products_kind');
 Route::get('/products/sub_kind_products/{sub_kind_products}', [ProductController::class, 'productsKindSubkind'])->name('products_kind_subkind');
 Route::get('/carts/index', [CartController::class, 'index'])->name('carts.index');
@@ -85,6 +85,7 @@ Route::get('/wishlist/index', [WishController::class, 'index'])->name('wishlist.
 Route::get('/wishlist/index/{product}', [WishController::class, 'addToWishlist'])->name('wishlist.addToWishlist');
 Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishlist.clear');
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
+Route::resource('orders', OrderController::class);
 
 
 

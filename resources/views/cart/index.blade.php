@@ -42,7 +42,6 @@
                     $cost_paid = 0;
                 @endphp
                     @foreach($cartItems as $cartItem)
-                        {{ $cartItem->id }}
                         @php
                             $cost_paid += $cartItem->price*$cartItem->quantity;
                         @endphp

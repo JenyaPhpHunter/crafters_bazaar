@@ -22,11 +22,22 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::query()->with('kind_product')->with('productphotos')->orderBy('id', 'desc')->get();
+        $products = Product::query()
+            ->with('kind_product')
+            ->with('productphotos')
+            ->get();
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+
+        $products = $products->sortByDesc(function ($product) {
+            return $product->stock_balance == 0 ? -1 : $product->id;
+        });
+        $products = $products;
         $kind_products = KindProduct::all();
+        $colors = Color::all();
 //        $excludeProducts = true;
         $excludeProducts = false;
-        return view('products.index', compact('products', 'kind_products','excludeProducts'));
+
+        return view('products.index', compact('products', 'kind_products', 'colors', 'excludeProducts','featured_products'));
     }
 
     public function create(Request $request)
@@ -106,7 +117,7 @@ class ProductController extends Controller
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 2;
+        $user->category_users_id = 3;
         $user->save();
 
         if ($action === 'Зберегти') {
@@ -186,10 +197,14 @@ class ProductController extends Controller
             ->where('id',$id)
             ->first();
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
+        $kind_products = KindProduct::all();
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
 
         return view('products.show',[
             'product' => $product,
             'photos' => $photos,
+            'kind_products' => $kind_products,
+            'featured_products' => $featured_products,
             'user_id' => $user_id,
             'includeRecommendedProducts' => true,
             'excludeProducts' => true,
@@ -258,7 +273,7 @@ class ProductController extends Controller
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 2;
+        $user->category_users_id = 3;
         $user->save();
 
         if ($action === 'Зберегти') {
@@ -287,6 +302,10 @@ class ProductController extends Controller
                 'uri' => $product->id,
             ]);
         } elseif ($action === 'Виставити на продаж') {
+//            echo "<pre>";
+//            print_r($request->all());
+//            echo "</pre>";
+//            die();
             $validated = Validator::make($request->all(), [
                 'name' => 'required',
                 'kind_product_id' => 'required',
@@ -303,7 +322,6 @@ class ProductController extends Controller
                     ->withErrors($validated)
                     ->withInput();
             }
-
             $validated_user = Validator::make([
                 'name' => $user->name,
                 'email' => $user->email,
@@ -317,12 +335,10 @@ class ProductController extends Controller
             if ($validated_user->fails()) {
                 $errors = $validated_user->errors();
                 $errorFields = array_keys($errors->toArray());
-
                 return redirect()->route('users.show_seller', ['user' => $user_id])
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
-
             $product->status_product_id = 2;
 
             $product->save();
@@ -455,4 +471,170 @@ class ProductController extends Controller
         ]);
     }
 
+    public function filter(Request $request)
+    {
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
+        $sortBy = $request->input('sort_by');
+        $filterPrice = $request->input('filter_price');
+        if(isset($filterPrice)){
+            foreach ($filterPrice as $key => $value) {
+                if (strpos($value, '+') !== false) {
+                    $filterPrice[$key] = str_replace('+', PHP_INT_MAX, $value);
+                }
+            }
+        }
+        $categories = $request->input('categories');
+        $sub_categories = $request->input('sub_categories');
+        $filterColor = $request->input('filter_color');
+        $filterSearch = $request->input('search');
+
+        // Отримати всі товари
+        $products = Product::query()->get();
+
+        // Фільтрація за назвою
+        if ($filterSearch) {
+            $products = $this->filterByName($products, $filterSearch);
+        }
+
+        // Фільтрація за ціною
+        if ($filterPrice) {
+            $products = $this->filterByPrice($products, $filterPrice);
+        }
+        // Фільтрація за категоріями
+        if ($categories) {
+            $products = $this->filterByCategories($products, $categories);
+        }
+        if ($sub_categories) {
+            $products = $this->filterBySubCategories($products, $sub_categories);
+        }
+        // Фільтрація за кольором
+        if ($filterColor) {
+            $products = $this->filterByColor($products, $filterColor);
+        }
+
+        if($sortBy){
+            $products = $this->sortProducts($products, $sortBy);
+        } else {
+            $products = $products->sortByDesc(function ($product) {
+                return $product->stock_balance == 0 ? -1 : $product->id;
+            });
+        }
+
+        $kind_products = KindProduct::all();
+        $count_sorted_product = [];
+        foreach ($products as $product){
+            if(isset($count_sorted_product[$product->kind_product->id])){
+                $count_sorted_product[$product->kind_product->id]++;
+            } else {
+                $count_sorted_product[$product->kind_product->id] = 1;
+            }
+        }
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+
+        return view('products.index', [
+            'products' => $products,
+            'count_sorted_product' => $count_sorted_product,
+            'featured_products' => $featured_products,
+            'kind_products' => $kind_products,
+            'colors' => Color::all(),
+        ]);
+    }
+
+    private function filterByPrice($products, $filterPrice)
+    {
+        $allProducts = []; // Загальний масив для зберігання всіх об'єктів
+        foreach ($filterPrice as $value) {
+            list($minPrice, $maxPrice) = array_map('intval', explode(';', $value));
+            // Отримати товари за поточним діапазоном цін та додати їх до загального масиву
+            $filteredProducts = $products->filter(function ($product) use ($minPrice, $maxPrice) {
+                return $product->price >= $minPrice && $product->price <= $maxPrice;
+            });
+            $allProducts = array_merge($allProducts, $filteredProducts->all());
+        }
+        // Отримати унікальні об'єкти, використовуючи колекцію Eloquent
+        $products = collect($allProducts)->unique('id')->values();
+
+        return $products;
+    }
+
+        private function filterByCategories($products, $selectedCategories)
+    {
+        // Фільтрування товарів за категоріями
+        $products = $products->filter(function ($product) use ($selectedCategories) {
+            // Перевірка, чи у товару вказана категорія
+            if ($product->kind_product_id) {
+                // Перевірка, чи ідентифікатор категорії товару є в обраному списку категорій
+                return in_array($product->kind_product_id, $selectedCategories);
+            }
+            // Якщо товар не має вказаної категорії, можливо, ви бажаєте ігнорувати його або додати спеціальну логіку.
+            return false;
+        });
+
+        return $products;
+    }
+
+    private function filterBySubCategories($products, $selectedSubCategories)
+    {
+        $products = $products->filter(function ($product) use ($selectedSubCategories) {
+            if ($product->sub_kind_product_id) {
+                return in_array($product->sub_kind_product_id, $selectedSubCategories);
+            }
+
+            return false;
+        });
+
+        return $products;
+    }
+
+    private function filterByColor($products, $filterColor)
+    {
+        $products = $products->filter(function ($product) use ($filterColor) {
+            // Перевірка, чи у товару є колір
+            if ($product->color) {
+                // Перевірка, чи колір товару є в списку обраних кольорів
+                return in_array($product->color->php_name, $filterColor);
+            }
+            // Якщо товар не має колору, можливо, ви бажаєте ігнорувати його або додати спеціальну логіку.
+            return false;
+        });
+
+        return $products;
+    }
+
+    private function filterByName($products, $filterSearch)
+    {
+        $products = $products->filter(function ($product) use ($filterSearch) {
+            // Перевірка, чи назва товару містить значення $filterSearch (регістронезалежно)
+            return mb_stripos($product->name, $filterSearch) !== false;
+        });
+
+        return $products;
+    }
+
+
+    private function sortProducts($products, $sortBy)
+    {
+        if ($sortBy == 'newness') {
+            $products = $products->sortByDesc(function ($product) {
+                return $product->stock_balance == 0 ? -1 : $product->new;
+            });
+        } elseif ($sortBy == 'price_up') {
+            $products = $products->sortBy(function ($product) {
+                return $product->stock_balance == 0 ? PHP_INT_MAX : $product->price;
+            });
+        } elseif ($sortBy == 'price_down') {
+            $products = $products->sortByDesc(function ($product) {
+                return $product->stock_balance == 0 ? -1 : $product->price;
+            });
+        } else {
+            $products = $products->sortByDesc(function ($product) {
+                return $product->stock_balance == 0 ? -1 : $product->id;
+            });
+        }
+
+        return $products;
+    }
 }
