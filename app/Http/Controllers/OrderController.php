@@ -234,7 +234,8 @@ class OrderController extends Controller
 //
 //        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
 
-        return redirect(route('users.show', ['user' => $user->id]).'#orders');
+//        return redirect(route('users.show', ['user' => $user->id]).'#account-info');
+        return redirect(route('newPassword'))->with(['buyer']);
     }
 
     public function show($id)

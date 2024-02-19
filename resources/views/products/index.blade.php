@@ -9,7 +9,6 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-
                     <div class="page-title">
                         <h1 class="title">Shop</h1>
                         <ul class="breadcrumb">
@@ -298,13 +297,23 @@
                                                     <img src="{{ asset('images/product/s328/product-14.webp') }}" alt="Product Image">
                                                 @endisset
                                             </a>
-                                            <a href="{{ route('wishlist.addToWishlist', ['product' => $product->id]) }}" class="add-to-wishlist hintT-left" data-hint="Додати до улюблених"><i class="far fa-heart"></i></a>
+                                            <a href="#" class="add-to-wishlist hintT-left" data-hint="Додати до улюблених" data-product-id="{{ $product->id }}">
+                                                <i class="far fa-heart"></i>
+                                            </a>
                                         </div>
                                         <div class="product-info">
                                             <h6 class="title"><a href="{{ route('products.show',['product' => $product->id]) }}">{{ $product->name }}</a></h6>
                                             <span class="price">
-                                            {{ $product->price }}
-                                        </span>
+                                            {{ $product->price }} грн
+                                            </span>
+                                            @if($product->term_creation != 0)
+                                                <span class="price">
+                                                Виготовлення {{ $product->term_creation }}
+                                                    @if($product->term_creation == 1) день
+                                                    @elseif($product->term_creation > 1 && $product->term_creation < 5) дні
+                                                    @else днів @endif
+                                                </span>
+                                            @endif
                                             <div class="product-buttons">
                                                 <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top"
                                                    data-hint="Швидкий перегляд"><i class="fal fa-search"></i></a>
@@ -342,11 +351,11 @@
                                 <h3 class="widget-title product-filter-widget-title">Види товарів</h3>
                                 <ul class="widget-list">
                                     @foreach($kind_products as $kind_product)
-                                        @if($kind_product->product)
+                                        @if($kind_product->product_count > 0)
                                             <li>
                                                 <a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">
                                                     {{ $kind_product->name }}
-                                                    <span class="count">{{ $kind_product->product->count() }}</span>
+                                                    <span class="count">{{ $kind_product->product_count }}</span>
                                                 </a>
                                             </li>
                                         @endif
@@ -359,7 +368,7 @@
                             <div class="single-widget learts-mb-40">
                                 <h3 class="widget-title product-filter-widget-title">Фільтрувати по вартості</h3>
                                 <div class="widget-price-range">
-                                    <input class="range-slider" type="text" name="filter_price[range]" data-min="0" data-max="1500" data-from="0" data-to="1500" />
+                                    <input class="range-slider" type="text" name="filter_price[range]" data-min="0" data-max="150000" data-from="0" data-to="150000" />
                                 </div>
                             </div>
                             <!-- Price Range End -->

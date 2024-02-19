@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>@yield('seo_title')</title>
+{{--    <title>@yield('seo_title')</title>--}}
+    <title>Головна сторінка</title>
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,65 +32,22 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/slick.css') }}">
 
     <!-- Main Style CSS -->
-    {{--    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->--}}
+        <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <!-- JS
-============================================ -->
-
-    <!-- Vendors JS -->
-    <script src="{{ asset('js/vendor/jquery-3.4.1.min.js') }}"></script>
-    <script src="{{ asset('js/vendor/jquery-migrate-3.1.0.min.js') }}"></script>
-    <script src="{{ asset('js/vendor/modernizr-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
-
-    <!-- Plugins JS -->
-    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.nice-select.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/swiper.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/slick.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/mo.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.ajaxchimp.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.countdown.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.matchHeight-min.js') }}"></script>
-    <script src="{{ asset('js/plugins/ion.rangeSlider.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/photoswipe.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/photoswipe-ui-default.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.zoom.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/ResizeSensor.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.sticky-sidebar.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/product360.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/jquery.scrollUp.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/scrollax.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
-
-    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
-    <!-- <script src="{{ asset('js/vendor/vendor.min.js') }}"></script>
-<script src="{{ asset('js/plugins/plugins.min.js') }}"></script> -->
-
-    <!-- Main Activation JS -->
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('/js/styles.js') }}"></script>
-
 </head>
 
 <body>
 @include('admin.include.topbar-section')
 @include('admin.include.header-section')
 @include('admin.include.header-sticky-section')
-@include('admin.include.mobile-header-section')
-@include('admin.include.offcanvas-search-section')
-@include('admin.include.offcanvas-wishlist-section')
-<div class="offcanvas-overlay"></div>
+{{--@include('admin.include.mobile-header-section')--}}
+{{--@include('admin.include.offcanvas-search-section')--}}
+{{--@include('admin.include.offcanvas-wishlist-section')--}}
+{{--<div class="offcanvas-overlay"></div>--}}
 @if (!isset($excludeProducts) || !$excludeProducts)
     {{--    @include('admin.include.slider-main')--}}
     {{--    @include('admin.include.category-banner-section')--}}
@@ -105,6 +63,49 @@
     {{--    @include('admin.include.recommended-products')--}}
 @endif
 @include('admin.include.footer')
+
+
+<!-- JS
+============================================ -->
+
+<!-- Vendors JS -->
+<script src="{{ asset('js/vendor/modernizr-3.6.0.min.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ asset('js/vendor/jquery-migrate-3.1.0.min.js') }}"></script>
+<script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Plugins JS -->
+<script src="{{ asset('js/plugins/select2.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.nice-select.min.js') }}"></script>
+<script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
+<script src="{{ asset('js/plugins/swiper.min.js') }}"></script>
+<script src="{{ asset('js/plugins/slick.min.js') }}"></script>
+<script src="{{ asset('js/plugins/mo.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.ajaxchimp.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.countdown.min.js') }}"></script>
+<script src="{{ asset('js/plugins/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ asset('js/plugins/isotope.pkgd.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.matchHeight-min.js') }}"></script>
+<script src="{{ asset('js/plugins/ion.rangeSlider.min.js') }}"></script>
+<script src="{{ asset('js/plugins/photoswipe.min.js') }}"></script>
+<script src="{{ asset('js/plugins/photoswipe-ui-default.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.zoom.min.js') }}"></script>
+<script src="{{ asset('js/plugins/ResizeSensor.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.sticky-sidebar.min.js') }}"></script>
+<script src="{{ asset('js/plugins/product360.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('js/plugins/jquery.scrollUp.min.js') }}"></script>
+<script src="{{ asset('js/plugins/scrollax.min.js') }}"></script>
+<script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
+
+<!-- Use the minified version files listed below for better performance and remove the files listed above -->
+<!-- <script src="{{ asset('js/vendor/vendor.min.js') }}"></script>
+<script src="{{ asset('js/plugins/plugins.min.js') }}"></script> -->
+
+<!-- Main Activation JS -->
+<script src="{{ asset('js/main.js') }}"></script>
+{{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
+<script src="{{ asset('/js/styles.js') }}"></script>
 </body>
 
 </html>

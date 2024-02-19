@@ -227,7 +227,7 @@
         skin: "learts",
         hide_min_max: true,
         type: 'double',
-        prefix: "$",
+        postfix: "грн",
     });
 
     /*--
@@ -263,6 +263,7 @@
                 offset = $this.offset(),
                 width = $this.width(),
                 height = $this.height(),
+                productId = $this.data('product-id'), // Отримуємо id товару з data-атрибута
                 coords = {
                     x: offset.left + width / 2,
                     y: offset.top + height / 2
@@ -271,9 +272,11 @@
                 e.preventDefault();
                 $this.addClass('wishlist-added').find('i').removeClass('far').addClass('fas');
                 burst.tune(coords).replay();
+                window.location.href = "/wishlist/index/" + productId;
             }
         });
     })();
+
 
     /*--
         Parallax
@@ -709,7 +712,7 @@
             feed.run();
         })
     }
-    
+
     /*--
         CountDown
     -----------------------------------*/
@@ -755,7 +758,7 @@
             var newVal = parseFloat(oldValue) + 1;
         } else {
             // Don't allow decrementing below zero
-            if (oldValue > 1) {
+            if (oldValue > 0) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
                 newVal = 1;

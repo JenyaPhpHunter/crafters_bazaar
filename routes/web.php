@@ -39,17 +39,18 @@ use Illuminate\Support\Facades\Route;
 //    return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+//Route::middleware('auth')->group(function () {
+//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//});
 
 Route::prefix('admin')->group(callback: function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('admin_users', AdminUserController::class);
     Route::resource('admin_roles', RoleController::class);
     Route::resource('admin_products', AdminProductController::class);
+    Route::get('/admin_products/send_for_sale/{admin_product}', [AdminProductController::class, 'sendForSale'])->name('admin_product_send_for_sale');
     Route::get('/admin_products/{uri}/create-kind-subkind', [AdminProductController::class, 'createkindsubkind'])->name('admin.products.createkindsubkind');
     Route::post('/admin_products/storekindsubkind', [AdminProductController::class, 'storekindsubkind'])->name('admin.products.storekindsubkind');
     Route::resource('admin_kind_products', AdminKindProductController::class);
@@ -57,7 +58,7 @@ Route::prefix('admin')->group(callback: function () {
     Route::resource('admin_orders', AdminOrderController::class);
     Route::get('/admin_products/kind_products/{kind_products}', [AdminProductController::class, 'productsKind'])->name('admin_products_kind');
     Route::get('/admin_products/kind_products/{kind_products}/sub_kind_products/{sub_kind_products}', [AdminProductController::class, 'productsKindSubkind'])->name('admin_products_kind_subkind');
-    Route::get('/admin_carts/index/{admin_product}', [AdminCartController::class, 'addToCart'])->name('admin_carts.addToCart');
+//    Route::get('/admin_carts/index/{admin_product}', [AdminCartController::class, 'addToCart'])->name('admin_carts.addToCart');
 });
 
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
@@ -71,12 +72,14 @@ Route::get('/products/create', [ProductController::class, 'create'])->name('prod
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+//Route::post('/products/{product}', [ProductController::class, 'putupforsale'])->name('products.putupforsale');
 Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
 Route::post('/products/storekindsubkind', [ProductController::class, 'storekindsubkind'])->name('products.storekindsubkind');
 Route::get('/products/kind_products/{kind_products}', [ProductController::class, 'productsKind'])->name('products_kind');
 Route::get('/products/sub_kind_products/{sub_kind_products}', [ProductController::class, 'productsKindSubkind'])->name('products_kind_subkind');
+Route::delete('/products', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/carts/index', [CartController::class, 'index'])->name('carts.index');
 Route::get('/carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
 Route::delete('/carts/clear', [CartController::class, 'clearCart'])->name('carts.clearСart');

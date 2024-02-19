@@ -58,21 +58,37 @@
             <nav class="site-main-menu justify-content-center menu-height-60">
                 <ul>
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
+                        @if(isset($kind_products))
+                            <ul class="sub-menu">
+                            @foreach($kind_products as $kind_product)
+                                <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
+                                    <ul class="sub-menu">
+                                        @foreach($sub_kind_products as $sub_kind_product)
+                                            <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                    @if(!empty($user_products))
+                    <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Мої товари</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
                                 @foreach ($statuses_products as $status_product)
                                     <li>
                                         <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
                                         <ul>
-                                            @foreach($products as $product)
-                                                @if($status_product->id == $product->status_product_id)
+                                            @foreach($user_products as $user_product)
+                                                @if($status_product->id == $user_product->status_product_id)
                                                     @php
-                                                        $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                        $selectedPhoto = $user_product->productphotos->where('queue', 1)->first();
                                                     @endphp
                                                     @isset($selectedPhoto)
-                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
                                                     @else
-                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
                                                     @endisset
                                                 @endif
                                             @endforeach
@@ -81,6 +97,7 @@
                                 @endforeach
                             @endif
                         </ul>
+                        @endif
                     </li>
                     <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
                         <ul class="sub-menu mega-menu">

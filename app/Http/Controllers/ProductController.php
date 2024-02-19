@@ -23,30 +23,54 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::query()
+            ->where('status_product_id',3)
             ->with('kind_product')
             ->with('productphotos')
             ->get();
-        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+        $featured_products = Product::query()->where('status_product_id',3)->with('productphotos')->where('featured',1)->get();
 
         $products = $products->sortByDesc(function ($product) {
             return $product->stock_balance == 0 ? -1 : $product->id;
         });
-        $products = $products;
-        $kind_products = KindProduct::all();
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', 3)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
         $colors = Color::all();
 //        $excludeProducts = true;
         $excludeProducts = false;
 
-        return view('products.index', compact('products', 'kind_products', 'colors', 'excludeProducts','featured_products'));
+        return view('products.index',
+            compact(
+            'products',
+            'kind_products',
+            'colors',
+            'excludeProducts',
+            'featured_products'
+        )
+        );
     }
 
     public function create(Request $request)
     {
         $user_id = $request->user_id;
+        if(!empty($request->input('kind_product_id'))){
+            $selected_kind_product_id = $request->input('kind_product_id');
+        } else {
+            $selected_kind_product_id = 1;
+        }
+        if(!empty($request->input('sub_kind_product_id'))){
+            $selected_sub_kind_product_id = $request->input('sub_kind_product_id');
+        } else {
+            $selected_sub_kind_product_id = 1;
+        }
         if(empty($user_id)){
             return view('auth.login',[
                 'includeRecommendedProducts' => true,
                 'excludeProducts' => true,
+                'createProduct' => 'createProduct',
             ]);
         }
         $sizes = Size::all();
@@ -56,7 +80,9 @@ class ProductController extends Controller
             $sub_kind_products = SubKindProduct::all();
 
             return view('products.create', compact(
+                'selected_kind_product_id',
                 'kind_products',
+                'selected_sub_kind_product_id',
                 'sub_kind_products',
                 'sizes',
                 'colors',
@@ -87,6 +113,7 @@ class ProductController extends Controller
         $product->stock_balance = $request->input('stock_balance');
         $product->size_id = $request->input('selected_size');
         $product->color_id = $request->input('color');
+        $product->term_creation = $request->input('term_creation');
         $product->status_product_id = 1;
         $product->user_id = $request->input('user_id');
         $product->active = 0;
@@ -184,6 +211,11 @@ class ProductController extends Controller
             ->with('user')
             ->where('id',$id)
             ->first();
+        if($user_id == $product->user_id){
+            $creator = true;
+        } else {
+            $creator = false;
+        }
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
@@ -193,7 +225,8 @@ class ProductController extends Controller
             'photos' => $photos,
             'kind_products' => $kind_products,
             'featured_products' => $featured_products,
-            'user_id' => $user_id,
+//            'user_id' => $user_id,
+            'creator' => $creator,
             'includeRecommendedProducts' => true,
             'excludeProducts' => true,
         ]);
@@ -230,21 +263,23 @@ class ProductController extends Controller
         if(!$product){
             throw new \Exception('Product not found');
         }
-        $product->name = $request->post('name');
-        $product->kind_product_id = $request->post('kind_product_id');
-        $product->sub_kind_product_id = $request->post('sub_kind_product_id');
-        $product->content = $request->post('content');
-        $product->price = $request->post('price');
-        $product->stock_balance = $request->post('stock_balance');
-        $product->size_id = $request->post('selected_size');
-        $product->color_id = $request->post('product_color');
-        $product->status_product_id = 1;
-        $product->user_id = $user_id;
-        $product->active = 0;
-        $product->updated_at = date("Y-m-d H:i:s");
+        if ($action !== 'Виставити на продаж з перегляду') {
+            $product->name = $request->post('name');
+            $product->kind_product_id = $request->post('kind_product_id');
+            $product->sub_kind_product_id = $request->post('sub_kind_product_id');
+            $product->content = $request->post('content');
+            $product->price = $request->post('price');
+            $product->stock_balance = $request->post('stock_balance');
+            $product->size_id = $request->post('selected_size');
+            $product->color_id = $request->post('product_color');
+            $product->term_creation = $request->input('term_creation');
+            $product->status_product_id = 1;
+            $product->user_id = $user_id;
+            $product->active = 0;
+            $product->updated_at = date("Y-m-d H:i:s");
 
-        $product->save();
-
+            $product->save();
+        }
         if($request->product_photo){
             $product_photo = new ProductPhotoController();
             $product_photo->upload($request, $product->id);
@@ -274,7 +309,7 @@ class ProductController extends Controller
                 'product' => $product,
                 'uri' => $product->id,
             ]);
-        } elseif ($action === 'Виставити на продаж') {
+        } elseif ($action === 'Виставити на продаж' || $action === 'Виставити на продаж з перегляду') {
             $validated = Validator::make($request->all(), [
                 'name' => 'required',
                 'kind_product_id' => 'required',
@@ -285,7 +320,6 @@ class ProductController extends Controller
                 'selected_size' => 'required',
                 'product_color' => 'required',
             ]);
-
             if ($validated->fails()) {
                 return redirect()->route('products.edit', ['product' => $id])
                     ->withErrors($validated)
@@ -423,10 +457,34 @@ class ProductController extends Controller
 
     public function productsKind($kind)
     {
-        $products = Product::query()->with('kind_product')->where('kind_product_id',$kind)->get();
-        $sub_kind_products_kind = SubKindProduct::query()->where('kind_product_id',$kind)->get();
+        $products = Product::query()
+            ->where('status_product_id',3)
+            ->with('kind_product')
+            ->where('kind_product_id',$kind)
+            ->get();
+        $sub_kind_products_kind = SubKindProduct::query()
+            ->where('status_product_id',3)
+            ->where('kind_product_id',$kind)
+            ->get();
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', 3)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
+        $sub_kind_products = SubKindProduct::all();
+        $colors = Color::all();
+        $featured_products = Product::query()
+            ->where('status_product_id',3)
+            ->with('productphotos')
+            ->where('featured',1)
+            ->get();
         return view('products.index',[
             'products' => $products,
+            'kind_products' => $kind_products,
+            'sub_kind_products' => $sub_kind_products,
+            'colors' => $colors,
+            'featured_products' => $featured_products,
             'sub_kind_products_kind' => $sub_kind_products_kind,
             'excludeProducts' => true,
         ]);
@@ -434,12 +492,30 @@ class ProductController extends Controller
     public function productsKindSubkind($subkind)
     {
         $products = Product::query()
+            ->where('status_product_id',3)
             ->with('kind_product')
             ->with('sub_kind_product')
             ->where('sub_kind_product_id',$subkind)
             ->get();
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', 3)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
+        $sub_kind_products = SubKindProduct::all();
+        $colors = Color::all();
+        $featured_products = Product::query()
+            ->where('status_product_id',3)
+            ->with('productphotos')
+            ->where('featured',1)
+            ->get();
         return view('products.index',[
             'products' => $products,
+            'kind_products' => $kind_products,
+            'sub_kind_products' => $sub_kind_products,
+            'colors' => $colors,
+            'featured_products' => $featured_products,
             'excludeProducts' => true,
         ]);
     }
@@ -465,7 +541,7 @@ class ProductController extends Controller
         $filterSearch = $request->input('search');
 
         // Отримати всі товари
-        $products = Product::query()->get();
+        $products = Product::query()->where('status_product_id',3)->get();
 
         // Фільтрація за назвою
         if ($filterSearch) {
@@ -505,7 +581,11 @@ class ProductController extends Controller
                 $count_sorted_product[$product->kind_product->id] = 1;
             }
         }
-        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+        $featured_products = Product::query()
+            ->where('status_product_id',3)
+            ->with('productphotos')
+            ->where('featured',1)
+            ->get();
 
         return view('products.index', [
             'products' => $products,

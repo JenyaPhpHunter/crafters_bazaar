@@ -10,7 +10,7 @@ class KindProduct extends Model
         'name'
     ];
 
-    public function product()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }

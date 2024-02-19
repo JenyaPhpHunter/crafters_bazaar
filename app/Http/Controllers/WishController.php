@@ -31,7 +31,7 @@ class WishController extends Controller
             $user_id = $request->input('user_id');
         } else {
             $user = new User();
-            $user->email = Str::random(50) . 'user.com';
+            $user->email = Str::random(50) . '@user.com';
             $user->password =  Hash::make($request->post('password'));
             $user->created_at = date("Y-m-d H:i:s");
             $user->role_id = 7;
@@ -89,7 +89,7 @@ class WishController extends Controller
             // Отримуємо або створюємо кошик користувача
             $cart = Cart::firstOrNew(['user_id' => $user_id]);
             $cart->user_id = $user_id;
-            $cart->active = 0;
+            $cart->active = 1;
             $cart->save();
 
             // Перевірка, чи товар вже є в кошику
@@ -113,8 +113,13 @@ class WishController extends Controller
             }
         });
         WishItems::query()->where('user_id', $user_id)->delete();
-
-        return redirect()->back()->with('success', 'Елементи додані до корзини');
+        $cartItems = CartItems::query()
+            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
+            ->where('carts.user_id', $user_id)
+            ->where('carts.active', 1)
+            ->get();
+        return view('cart.index', compact('cartItems'))->with('success', 'Елементи додані до корзини');
+//        return redirect()->back()->with('success', 'Елементи додані до корзини');
     }
 
     public function removeItem(Request $request)

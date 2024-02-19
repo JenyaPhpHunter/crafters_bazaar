@@ -31,7 +31,13 @@
                         <div class="tab-pane fade show active" id="dashboad">
                             <div class="myaccount-content dashboad">
                                 <p>Вітаю, <strong>{{ $user->name }} !</strong></p>
-                                <p>На інформаційній панелі свого облікового запису ви можете переглядати свої <span>останні замовлення</span>, керувати Вашими <span>адресами доставки</span>, а також <span>редагувати пароль і дані облікового запису</span>.</p>
+                                <p>На інформаційній панелі свого облікового запису ви можете переглядати свої
+                                    <span><a href="#orders">останні замовлення</a></span>,
+                                    керувати Вашими
+                                    <span><a href="#address">адресами доставки</a></span>,
+                                    а також
+                                    <span><a href="#account-info">редагувати пароль і дані облікового запису</a></span>.
+                                </p>
                             </div>
                         </div>
                         <!-- Single Tab Content End -->
@@ -114,11 +120,19 @@
                                     <div class="col-md-6 col-12 learts-mb-30">
                                         <h4 class="title">Адреса доставки <a href="#" class="edit-link">редагувати</a></h4>
                                         <address>
-                                            <p><strong>{{ $user->name . ' ' . $user->secondname . ' ' . $user->surname }}</strong></p>
-                                            <p>{{ $user->region->name }}<br>
-                                            <p>{{ $user->city->name }}<br>
-                                                {{ $user->address}}</p>
-                                            <p>Телефон: {{ $user->phone }}</p>
+                                            <p><strong>{{ isset($user->name) ? $user->name : '' }} {{ isset($user->secondname) ? $user->secondname : '' }} {{ isset($user->surname) ? $user->surname : '' }}</strong></p>
+                                            @isset($user->region))
+                                                <p>{{ $user->region->name }}<br>
+                                            @endisset
+                                            @isset($user->city)
+                                                <p>{{ $user->city->name }}<br>
+                                            @endisset
+                                            @isset($user->address)
+                                                {{ $user->address }}</p>
+                                            @endisset
+                                            @isset($user->phone)
+                                                <p>Телефон: {{ $user->phone }}</p>
+                                            @endisset
                                         </address>
                                     </div>
                                 </div>
@@ -156,11 +170,6 @@
                                                     <input type="email" id="email" value={{ $user->email }} readonly>
                                                 </div>
                                             </div>
-                                            {{--                                            <div class="col-12 learts-mb-30">--}}
-                                            {{--                                                <label for="display-name">Display Name <abbr class="required">*</abbr></label>--}}
-                                            {{--                                                <input type="text" id="display-name" value="didiv91396">--}}
-                                            {{--                                                <p>This will be how your name will be displayed in the account section and in reviews</p>--}}
-                                            {{--                                            </div>--}}
                                             <div class="col-12 learts-mb-30 learts-mt-30">
                                                 <fieldset>
                                                     <legend>Зміна паролю</legend>
@@ -195,19 +204,38 @@
         </div>
     </div>
     <!-- My Account Section End -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Отримати ідентифікатор вкладки з URL
+        // Функція для активації вкладки згідно ідентифікатора в URL
+        function activateTabFromHash() {
             var hash = window.location.hash;
-
-            // Перевірити, чи існує вкладка з таким ідентифікатором
             if ($(hash).length) {
-                // Активувати вкладку та здійснити плавний перехід
                 $('.myaccount-tab-list a[href="' + hash + '"]').tab('show');
             }
+        }
+
+        // Викликати функцію після завантаження сторінки
+        document.addEventListener('DOMContentLoaded', function() {
+            activateTabFromHash();
+        });
+
+        // Викликати функцію при зміні хеша в URL
+        window.addEventListener('hashchange', function() {
+            activateTabFromHash();
         });
     </script>
+
+{{--    <script>--}}
+{{--        $(document).ready(function () {--}}
+{{--            // Отримати ідентифікатор вкладки з URL--}}
+{{--            var hash = window.location.hash;--}}
+
+{{--            // Перевірити, чи існує вкладка з таким ідентифікатором--}}
+{{--            if ($(hash).length) {--}}
+{{--                // Активувати вкладку та здійснити плавний перехід--}}
+{{--                $('.myaccount-tab-list a[href="' + hash + '"]').tab('show');--}}
+{{--            }--}}
+{{--        });--}}
+{{--    </script>--}}
 @endsection
 
 

@@ -32,15 +32,21 @@ class AuthenticatedSessionController extends Controller
 //
 //        return redirect()->intended(RouteServiceProvider::HOME);
         $credentials = $request->only('email', 'password');
-
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $role = $user->role_id;
             if ($role < 5) {
-                return redirect()->intended('/admin');
+                if($request->input('createProduct') == 'createProducts'){
+                    return redirect()->route('admin.products.create');
+                } else {
+                    return redirect()->intended('/admin');
+                }
             }
-
-            return redirect()->intended('/');
+            if($request->input('createProduct') == 'createProduct'){
+                return redirect()->route('products.create');
+            } else {
+                return redirect()->intended(RouteServiceProvider::HOME);
+            }
         }
 
         return back()->withErrors([

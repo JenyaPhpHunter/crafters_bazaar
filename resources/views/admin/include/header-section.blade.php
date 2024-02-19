@@ -43,10 +43,10 @@
                         <a href="{{ asset('#offcanvas-search') }}" class="offcanvas-toggle"><i class="fal fa-search"></i></a>
                     </div>
                     <div class="header-wishlist">
-                        <a href="{{ asset('#offcanvas-wishlist') }}" class="offcanvas-toggle"><span class="wishlist-count">3</span><i class="fal fa-heart"></i></a>
+                        <a href="{{ route('wishlist.index') }}"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
                     <div class="header-cart">
-                        <a href="{{ asset('#offcanvas-cart') }}" class="offcanvas-toggle"><span class="cart-count">3</span><i class="fal fa-shopping-cart"></i></a>
+                        <a href="{{ route('carts.index') }}"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </div>
@@ -117,16 +117,23 @@
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
                                 @foreach ($statuses_products as $status_product)
-                            <li>
-                                <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
-                                <ul>
-                                    @foreach($products as $product)
-                                        @if($status_product->id == $product->status_product_id)
-                                        <li> <img class="mmh_img " src="{{ asset('images/demo/menu/home-01.webp') }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            </li>
+                                    <li>
+                                        <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                        <ul>
+                                            @foreach($products as $product)
+                                                @if($status_product->id == $product->status_product_id)
+                                                    @php
+                                                        $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                    @endphp
+                                                    @isset($selectedPhoto)
+                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                    @else
+                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                    @endisset
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
                                 @endforeach
                             @endif
                         </ul>

@@ -9,8 +9,8 @@
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
+                        <input type="hidden" name="createProduct" value="{{ $createProduct }}">
                         @csrf
-
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
 
@@ -53,10 +53,10 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary2">
                                     {{ __('Увійти') }}
                                 </button>
-                                <a href="{{ route('register') }}" class="btn btn-primary2">
+                                <a href="{{ route('register') }}" class="btn btn-primary">
                                     {{ __('Зареєструватись') }}
                                 </a>
                             </div>

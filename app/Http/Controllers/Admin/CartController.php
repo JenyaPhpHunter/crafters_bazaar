@@ -31,7 +31,7 @@ class CartController extends Controller
             $user_id = $request->input('user_id');
         } else {
             $user = new User();
-            $user->email = Str::random(50) . 'user.com';
+            $user->email = Str::random(50) . '@user.com';
             $user->password =  Hash::make($request->post('password'));
             $user->created_at = date("Y-m-d H:i:s");
             $user->role_id = 7;

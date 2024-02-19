@@ -1110,7 +1110,7 @@ body.homepage-bg1.offcanvas-open {
   visibility: visible !important;
 }
 .irs--learts .irs .irs-single::before {
-  content: "Price: ";
+  content: "Вартість: ";
 }
 .irs--learts .irs-bar {
   top: 0;

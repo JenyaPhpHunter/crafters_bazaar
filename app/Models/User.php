@@ -52,11 +52,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function basketItems()
-    {
-        return $this->hasMany(Basket::class);
-    }
-
     public function delivery()
     {
         return $this->belongsTo(Delivery::class);

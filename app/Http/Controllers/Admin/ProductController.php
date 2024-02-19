@@ -25,15 +25,24 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::query()->with('kind_product')->orderBy('id', 'desc')->get();
+        $products = Product::query()
+            ->with('kind_product')
+            ->with('productphotos')
+            ->get();
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+
+        $products = $products->sortByDesc(function ($product) {
+            return $product->stock_balance == 0 ? -1 : $product->id;
+        });
 //        echo "<pre>";
-//        print_r($products);
+//        print_r(count($products));
 //        echo "</pre>";
 //        die();
         $kind_products = KindProduct::all();
-        $sub_kind_roducts = SubKindProduct::all();
+        $colors = Color::all();
         $excludeProducts = true;
-        return view('admin.products.index', compact('products', 'kind_products', 'sub_kind_roducts','excludeProducts'));
+
+        return view('admin.products.index', compact('products', 'kind_products', 'colors', 'excludeProducts','featured_products'));
     }
 
     public function create(Request $request)
@@ -93,10 +102,14 @@ class ProductController extends Controller
             ->where('id',$id)
             ->first();
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
+        $kind_products = KindProduct::all();
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
 
         return view('admin.products.show',[
             'product' => $product,
             'photos' => $photos,
+            'kind_products' => $kind_products,
+            'featured_products' => $featured_products,
             'user_id' => $user_id,
             'includeRecommendedProducts' => false,
             'excludeProducts' => true,
@@ -463,5 +476,20 @@ class ProductController extends Controller
             'products' => $products,
             'excludeProducts' => true,
         ]);
+    }
+
+    public function sendForSale($product, Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $product = Product::query()->where('id',$product)->first();
+
+        $product->status_product_id = 3;
+        $product->admin_id = $user_id;
+        $product->date_start_sale = date("Y-m-d H:i:s");
+
+        $product->save();
+        // email продавцю про виставлення на продаж його товару
+
+        return redirect()->route('admin_products.index');
     }
 }

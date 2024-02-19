@@ -12,6 +12,9 @@
             @endisset
         </ul>
     </div>
+    @isset($product)
+        <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
+    @endisset
     <!-- Page Title/Header End -->
 
     <!-- Single Products Section Start -->
@@ -138,13 +141,28 @@
                         </button>
                         <br><br>
 
-                        <label for="quantity">Кількість</label>
+                        <label for="quantity">Кількість виробів в наявності</label>
                         <div class="product-quantity">
                             <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                            <input type="text" class="input-qty" name="stock_balance"
-                                   value="{{ $product->stock_balance }}">
+                            <input type="text" class="input-qty" name="stock_balance" id="stockBalance" value={{ $product->stock_balance }}>
                             <span class="qty-btn plus"><i class="ti-plus"></i></span>
                         </div>
+                        <br><br>
+
+                        <label for="quantity">Можу виробити цей товар ще</label>
+                        <input type="checkbox" id="canProduce" name="can_produce">
+
+                        {{--                        <div id="termCreationBlock" style="display: none;">--}}
+                        <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
+                        <div id="termCreationBlock">
+                            <div class="product-quantity">
+                                <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                <input type="text" class="input-qty" name="term_creation" value={{ $product->term_creation }}>
+                                <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                            </div>
+                        </div>
+                        <br>
+
                         <div class="product-variations">
                             <table>
                                 <tbody>

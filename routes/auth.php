@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-Route::middleware('guest')->group(function () {
+//Route::middleware('guest')->group(function () {
+Route::middleware([])->group(function () {
 
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 
@@ -31,9 +32,6 @@ Route::middleware('guest')->group(function () {
                 ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
-    Route::get('login-register', [RegisteredUserController::class, 'login'])
-        ->name('login-register');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
@@ -48,7 +46,12 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+Route::get('login-register', [RegisteredUserController::class, 'login'])
+    ->name('login-register');
+
 Route::middleware('auth')->group(function () {
+    Route::post('new-password', [NewPasswordController::class, 'store'])->name('newPassword');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

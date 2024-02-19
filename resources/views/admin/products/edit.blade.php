@@ -21,6 +21,9 @@
         @endisset
         </ul>
     </div>
+    @isset($product)
+        <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
+    @endisset
     <!-- Page Title/Header End -->
 
     <div class="section section-fluid section-padding border-bottom">

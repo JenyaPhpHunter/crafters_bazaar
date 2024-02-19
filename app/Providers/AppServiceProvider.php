@@ -42,6 +42,12 @@ class AppServiceProvider extends ServiceProvider
             $sub_kind_products = SubKindProduct::all();
 //            $sizes = Size::all();
 //            $colors = Color::all();
+            if($user){
+                $user_products = Product::query()->where('user_id', $user->id)->get();
+            } else {
+                $user_products = [];
+            }
+
             $statuses_products = StatusProduct::all();
             $statuses_orders = StatusOrder::all();
             $roles = Role::all();
@@ -80,6 +86,7 @@ class AppServiceProvider extends ServiceProvider
                 ->with('orders', $orders)
                 ->with('cartItemsCount', $cartItemsCount)
                 ->with('wishItemsCount', $wishItemsCount)
+                ->with('user_products', $user_products)
 //                ->with('sizes', $sizes)
 //                ->with('colors', $colors)
                 ->with('user', $user);

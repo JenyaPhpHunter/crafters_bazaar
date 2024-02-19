@@ -104,18 +104,13 @@
                         <br>
 
                         <select id="kind_product_id" name="kind_product_id">
-{{--                            @if(isset($kind_product_obj))--}}
-{{--                                @foreach($kind_products as $kind_product)--}}
-{{--                                    <option--}}
-{{--                                        value="{{ $kind_product_obj->id }}" {{ $kind_product_obj->id == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>--}}
-{{--                                @endforeach--}}
-{{--                            @else--}}
-                                @foreach($kind_products as $kind_product)
-                                    <option value="{{ $kind_product->id }}">{{ $kind_product->name }}</option>
-                                @endforeach
-{{--                            @endif--}}
+                            @foreach($kind_products as $kind_product)
+                                <option value="{{ $kind_product->id }}" {{ $selected_kind_product_id == $kind_product->id ? 'selected' : '' }}>
+                                    {{ $kind_product->name }}
+                                </option>
+                            @endforeach
                         </select>
-                        <br>
+                        <br><br>
                         <button type="submit" name="action" value="Додати вид товару" class="btn btn-primary3">
                             <i class="fab fa-galactic-republic"></i> Додати вид товару
                         </button>
@@ -125,21 +120,64 @@
                         <br>
                         <select id="sub_kind_product_id" name="sub_kind_product_id">
                             @foreach($sub_kind_products as $sub_kind_product)
-                                <option value="{{ $sub_kind_product->id }}">{{ $sub_kind_product->name }}</option>
+                                <option value="{{ $sub_kind_product->id }}" {{ $selected_sub_kind_product_id == $sub_kind_product->id ? 'selected' : '' }}>
+                                    {{ $sub_kind_product->name }}
+                                </option>
+{{--                                <option value="{{ $sub_kind_product->id }}">{{ $sub_kind_product->name }}</option>--}}
                             @endforeach
                         </select>
-                        <br>
+                        <br><br>
                         <button type="submit" name="action" value="Додати підвид товару" class="btn btn-primary3">
                             <i class="fab fa-galactic-republic"></i> Додати відвид товару
                         </button>
                         <br><br>
 
-                        <label for="quantity">Кількість</label>
+                        <label for="quantity">Кількість виробів в наявності</label>
                         <div class="product-quantity">
                             <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                            <input type="text" class="input-qty" name="stock_balance" value="1">
+                            <input type="text" class="input-qty" name="stock_balance" id="stockBalance" value="1">
                             <span class="qty-btn plus"><i class="ti-plus"></i></span>
                         </div>
+                        <br><br>
+
+                        <label for="quantity">Можу виробити цей товар ще</label>
+                        <input type="checkbox" id="canProduce" name="can_produce">
+
+{{--                        <div id="termCreationBlock" style="display: none;">--}}
+                        <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
+                        <div id="termCreationBlock">
+                            <div class="product-quantity">
+                                <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                <input type="text" class="input-qty" name="term_creation" value="0">
+                                <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                            </div>
+                        </div>
+                        <br>
+{{--                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--}}
+                        <script>
+                            $(function () {
+                                // Отримання посилання на елементи
+                                let stockBalanceInput = $("#stockBalance");
+                                let canProduceCheckbox = $("#canProduce");
+                                let termCreationBlock = $("#termCreationBlock");
+
+                                // Функція для оновлення стану елементів залежно від значення "Кількість виробів в наявності"
+                                function updateElementsState() {
+                                    let stockBalanceValue = parseInt(stockBalanceInput.val());
+
+                                    // Відмітити галочку, якщо "Кількість виробів в наявності" дорівнює 0
+                                    canProduceCheckbox.prop("checked", stockBalanceValue === 0);
+
+                                    // Показати або приховати блок "Кількість днів для виготовлення і відправки" залежно від галочки
+                                    termCreationBlock.toggle(canProduceCheckbox.prop("checked"));
+                                }
+
+                                // Виклик функції під час завантаження сторінки та при зміні значення "Кількість виробів в наявності"
+                                updateElementsState();
+                                stockBalanceInput.change(updateElementsState);
+                            });
+
+                        </script>
                         <div class="product-variations">
                             <table>
                                 <tbody>
@@ -159,9 +197,6 @@
                                 <tr>
                                     <td class="label"><span>Колір</span></td>
                                     <td class="value">
-                                        <style>
-
-                                        </style>
                                         @foreach($colors as $key => $color)
                                             <div
                                                 class="circle"
@@ -185,7 +220,7 @@
                             <i class="fas fa-image"></i> <span id="file-label">Виберіть фото</span>
                         </label>
                         <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
-
+                        <br><br>
                         <div class="product-buttons">
                             <button type="submit" name="action" value="Виставити на продаж"
                                     class="btn btn-dark btn-outline-hover-dark">

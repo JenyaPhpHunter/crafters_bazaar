@@ -27,9 +27,18 @@
                 <div class="product">
                     <div class="product-thumb">
                         <span class="product-badges">
-                            <span class="outofstock"><i class="fal fa-frown"></i></span>
-                            <span class="hot">hot</span>
-                            <span class="onsale">-13%</span>
+                            @if($wishitem->product->new == 1)
+                                <span class="new">new</span>
+                            @endif
+                            @if($wishitem->product->stock_balance == 0)
+                                <span class="outofstock"><i class="fal fa-frown"></i></span>
+                            @endif
+                            @if($wishitem->product->discount != 0)
+                                <span class="onsale">-10%</span>
+                            @endif
+                            @if($wishitem->product->featured != 0)
+                                <span class="hot">hot</span>
+                            @endif
                         </span>
                         <a href="{{ route('products.show', ['product' => $wishitem->product->id]) }}" class="image">
                             <img
@@ -78,14 +87,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <form method="post" action="{{ route('wishlist.toCart') }}" id="wishlistToCartForm">
+                    <form method="POST" action="{{ route('wishlist.toCart') }}" id="wishlistToCartForm">
                         @csrf
                         <button type="submit" class="btn btn-outline-success float-start">Додати все у корзину</button>
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <form method="post" action="{{ route('wishlist.clear') }}" id="clearWishlistForm">
+                    <form method="POST" action="{{ route('wishlist.clear') }}" id="clearWishlistForm">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger float-end">Очистити список бажань</button>
                     </form>
                 </div>

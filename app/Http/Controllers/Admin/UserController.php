@@ -89,7 +89,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::query()->with('role')->with('delivery')->with('paymentkind')
+        $user = User::query()->with('role')->with('delivery')->with('kindpayment')
             ->where('id',$id)->first();
         $products = Product::all();
         return view('admin.users.show',[

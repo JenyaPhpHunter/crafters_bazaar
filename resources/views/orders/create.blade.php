@@ -40,7 +40,11 @@
                         @endphp
                         @foreach($cartItems as $cartItem)
                             <tr>
-                                <td width="150"><img src="{{ asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="Product Image"></td>
+                                @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
+                                    <td width="150"><img src="{{ asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="Product Image"></td>
+                                @else
+                                    <td></td>
+                                @endif
                                 <td class="name"><a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}&nbsp; <strong class="quantity">×&nbsp;{{ $cartItem->quantity }}</strong></td>
                                 <td class="total"><span>{{ $cartItem->price * $cartItem->quantity }} грн</span></td>
                                 @php
@@ -83,9 +87,9 @@
             <div class="section-title2">
                 <h2 class="title">Ваші дані</h2>
             </div>
-                <form class="checkout-form learts-mb-50" method="post" action="{{ route('orders.store') }}">
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
-                    @csrf
+            <form class="checkout-form learts-mb-50" method="post" action="{{ route('orders.store') }}">
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                @csrf
                 <div class="row">
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="name">Ім'я <abbr class="required">*</abbr></label>
@@ -108,24 +112,14 @@
                         <input type="text" id="bdPhone" name="phone" value="{{ $user->phone ?? '' }}">
                     </div>
                     <label style="text-align: center; font-weight: bold; font-style: italic;">Спосіб доставки <abbr class="required">*</abbr></label>
-                    <div class="col-6 learts-mb-20">
-                        @foreach($deliveries as $delivery)
-                            <input type="radio" id="deliveryType{{ $delivery->id }}" name="delivery_id" value="{{ $delivery->id }}" @if($user->delivery_id == $delivery->id) checked @endif>
+                    @foreach($deliveries as $delivery)
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="deliveryType{{ $delivery->id }}" name="delivery_id" value="{{ $delivery->id }}" @if($user->delivery_id == $delivery->id) checked @endif class="form-check-input">
                             <label class="form-check-label" for="deliveryType{{ $delivery->id }}">
                                 {{ $delivery->name }}
                             </label>
-                        @endforeach
-                    </div>
-
-{{--                    <div class="col-12 learts-mb-20">--}}
-{{--                        <label for="bdCountry">Країна <abbr class="required">*</abbr></label>--}}
-{{--                        <select id="bdCountry" class="select2-basic">--}}
-{{--                            <option value="">Виберіть країну…</option>--}}
-{{--                            @foreach($countries as $countryCode => $countryName)--}}
-{{--                                <option value="{{ $countryCode }}" {{ $countryCode === 'UA' ? 'selected' : '' }}>{{ $countryName }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
+                        </div>
+                    @endforeach
                     <!-- HTML для поля областей -->
                     <label style="text-align: center; font-weight: bold; font-style: italic;">Місце доставки <abbr class="required">*</abbr></label>
                     <div class="col-6 learts-mb-20">
@@ -229,164 +223,33 @@
                         <textarea id="bdOrderNote" name="bdOrderNote" placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки"></textarea>
                     </div>
                 </div>
-                    <div class="col-lg-12 order-lg-1 learts-mb-30">
-                        <div class="order-payment">
-                            <div class="payment-method">
-                                <div class="accordion" id="paymentMethod">
-                                    @foreach($payment_kinds as $payment_kind)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="payment_type" id="paymentType{{ $payment_kind->id }}" value="{{ $payment_kind->id }}" {{ $payment_kind->id == $user->kind_payment_id ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="paymentType{{ $payment_kind->id }}">
-                                                {{ $payment_kind->name }}
-                                            </label>
-                                            <div id="checkPayments{{ $payment_kind->id }}" class="collapse" data-bs-parent="#paymentMethod">
-                                                <div class="card-body">
-                                                    <p>{{ $payment_kind->comment }}</p>
-                                                </div>
+                <div class="col-lg-12 order-lg-1 learts-mb-30">
+                    <div class="order-payment">
+                        <div class="payment-method">
+                            <div class="accordion" id="paymentMethod">
+                                @foreach($payment_kinds as $payment_kind)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_type" id="paymentType{{ $payment_kind->id }}" value="{{ $payment_kind->id }}" {{ $payment_kind->id == $user->kind_payment_id ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="paymentType{{ $payment_kind->id }}">
+                                            {{ $payment_kind->name }}
+                                        </label>
+                                        <div id="checkPayments{{ $payment_kind->id }}" class="collapse" data-bs-parent="#paymentMethod">
+                                            <div class="card-body">
+                                                <p>{{ $payment_kind->comment }}</p>
                                             </div>
                                         </div>
-                                    @endforeach
-
-                                    {{--                                    @foreach($payment_kinds as $paymeсnt_kind)--}}
-{{--                                        <div class="card --}}{{--active--}}{{--">    --}}{{-- active відмічає всі точками --}}
-{{--                                            <div class="card-header">--}}
-{{--                                                <button data-bs-toggle="collapse" data-bs-target="#checkPayments" name="payment_type_{{ $paymeсnt_kind->id }}" >{{ $paymeсnt_kind->name }}</button>--}}
-{{--                                            </div>--}}
-{{--                                            <div id="checkPayments" class="collapse show" data-bs-parent="#paymentMethod">--}}
-{{--                                                <div class="card-body">--}}
-{{--                                                    <p>{{ $paymeсnt_kind->comment }}</p>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    @endforeach--}}
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <p class="payment-note">Ваші особисті дані використовуватимуться для обробки вашого замовлення, підтримки вашого досвіду на цьому веб-сайті та для інших цілей, описаних у нашій політиці конфіденційності.</p>
-                                <button class="btn btn-dark btn-outline-hover-dark" type="submit">Зробити замовлення</button>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
+                        <div class="text-center">
+                            <p class="payment-note">Ваші особисті дані використовуватимуться для обробки вашого замовлення, підтримки вашого досвіду на цьому веб-сайті та для інших цілей, описаних у нашій політиці конфіденційності.</p>
+                            <button class="btn btn-dark btn-outline-hover-dark" type="submit">Зробити замовлення</button>
+                        </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
     <!-- Checkout Section End -->
-
-{{--<a href="{{route('home')}}">Повернутися на головну сторінку</a>--}}
-{{--<br><br>--}}
-{{--    <h1>Оформлення замовлення</h1>--}}
-{{--    @if ($errors->any())--}}
-{{--        <div class="alert alert-danger">--}}
-{{--            <ul>--}}
-{{--                @foreach ($errors->all() as $error)--}}
-{{--                    <li>{{ $error }}</li>--}}
-{{--                @endforeach--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    @endif--}}
-{{--    <form method="post" action="{{ route('orders.store') }}">--}}
-{{--        @csrf--}}
-{{--        <label for="surname">Прізвище</label>--}}
-{{--        <br>--}}
-{{--        <input id="surname" name="surname" value="{{ $user->surname ?? '' }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="name">Ім'я</label>--}}
-{{--        <br>--}}
-{{--        <input id="name" name="name" value="{{ $user->name ?? '' }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="secondname">По батькові</label>--}}
-{{--        <br>--}}
-{{--        <input id="secondname" name="secondname" value="{{ $user->secondname ?? '' }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="phone">Телефон</label>--}}
-{{--        <br>--}}
-{{--        <input id="phone" name="phone" type="tel" pattern="[0-9]+" value="{{ $user->phone ?? '' }}" required>--}}
-{{--        <br><br>--}}
-
-{{--        <label for="email">Email</label>--}}
-{{--        <br>--}}
-{{--        <input id="email" name="email" value="{{ $user->email }}" autofocus readonly>--}}
-{{--        <br><br>--}}
-
-{{--        <label for="delivery_id">Спосіб доставки</label>--}}
-{{--        <br>--}}
-{{--        <select id="delivery_id" name="delivery_id">--}}
-{{--            @foreach($deliveries as $delivery)--}}
-{{--                @if(!empty($user->delivery_id))--}}
-{{--                    <option value="{{ $delivery->id }}" {{ $user->delivery_id == $delivery->id ? 'selected' : '' }}>--}}
-{{--                        {{ $user->delivery_id == $delivery->id ? $user->delivery->name : $delivery->name }}--}}
-{{--                    </option>--}}
-{{--                @else--}}
-{{--                    <option value="{{ $delivery->id }}">{{ $delivery->name }}</option>--}}
-{{--                @endif--}}
-{{--            @endforeach--}}
-{{--        </select>--}}
-{{--        <br><br>--}}
-
-{{--        <label for="city">Місто</label>--}}
-{{--        <br>--}}
-{{--        <input id="city" name="city" value="{{ $user->city ?? '' }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="address">Адреса</label>--}}
-{{--        <br>--}}
-{{--        <input id="address" name="address" value="{{ $user->address ?? '' }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="paymentkind_id">Спосіб оплати</label>--}}
-{{--        <br>--}}
-{{--        <select id="paymentkind_id" name="paymentkind_id">--}}
-{{--            @foreach($payment_kinds as $payment_kind)--}}
-{{--                @if(!empty($user->paymentkind_id))--}}
-{{--                    <option value="{{ $payment_kind->id }}" {{ $user->paymentkind_id == $payment_kind->id ? 'selected' : '' }}>--}}
-{{--                        {{ $user->paymentkind_id == $payment_kind->id ? $user->paymentKind->name : $payment_kind->name }}--}}
-{{--                    </option>--}}
-{{--                @else--}}
-{{--                    <option value="{{ $payment_kind->id }}">{{ $payment_kind->name }}</option>--}}
-{{--                @endif--}}
-{{--            @endforeach--}}
-{{--        </select>--}}
-{{--        <br><br>--}}
-
-{{--        <label for="comment">Коментар до замовлення</label>--}}
-{{--        <br>--}}
-{{--        <textarea id="comment" name="comment" rows="10" cols="50"></textarea>--}}
-{{--        <br><br>--}}
-{{--@php--}}
-{{--$total = 0;--}}
-{{--@endphp--}}
-{{--        @foreach($baskets as $basket)--}}
-{{--            @php--}}
-{{--                $total = $total + $basket->sum;--}}
-{{--            @endphp--}}
-{{--            <hr>--}}
-{{--            <div class="product-image">--}}
-{{--                <img src="{{ asset($basket->product->image_path) }}" alt="Фото сумки">--}}
-{{--            </div>--}}
-
-{{--        <label for="name_product">Назва</label>--}}
-{{--        <br>--}}
-{{--        <input id="name_product" name="name_product" value="{{ $basket->product->name }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="quantity">Кількість</label>--}}
-{{--        <br>--}}
-{{--        <input id="quantity" name="quantity" value="{{ $basket->quantity }}">--}}
-{{--        <br><br>--}}
-
-{{--        <label for="sum">Сума</label>--}}
-{{--        <br>--}}
-{{--        <input id="sum" name="sum" value="{{ $basket->sum }}">--}}
-{{--        <br><br>--}}
-{{--        @endforeach--}}
-{{--        <h2>Разом до сплати = {{$total}}</h2>--}}
-{{--        <br><br>--}}
-
-{{--        <input type="submit" value="Відправити замовлення">--}}
-{{--        <span style="display: inline-block; width: 100px;"></span>--}}
-{{--    </form>--}}
-
 @endsection
