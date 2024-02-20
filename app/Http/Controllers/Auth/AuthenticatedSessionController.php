@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 //
 //        return redirect()->intended(RouteServiceProvider::HOME);
         $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $user = Auth::user();
             $role = $user->role_id;
             if ($role < 5) {
