@@ -1,12 +1,12 @@
-<!-- Header Sticky Section Start -->
-<div class="sticky-header header-menu-center section bg-white d-none d-xl-block">
-{{--    <div class="container">--}}
+<!-- Header Section Start -->
+<div class="sticky-header section bg-white section-fluid d-none d-xl-block">
+    <div class="container">
         <div class="row align-items-center">
 
             <!-- Header Logo Start -->
-            <div class="col">
+            <div class="col-xl-auto col">
                 <div class="header-logo">
-                    <a href="index.html"><img src="{{ asset('images/logo/logo-2.webp') }}" alt="Learts Logo"></a>
+                    <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo-2.webp') }}" alt="Crafters bazaar"></a>
                 </div>
             </div>
             <!-- Header Logo End -->
@@ -165,7 +165,6 @@
             <div class="col-auto">
                 <div class="header-tools justify-content-end">
                     <div class="header-login">
-{{--                        <a href="my-account.html"><i class="fal fa-user"></i></a>--}}
                         @if(isset($user))
                             <a href="{{ route('users.show',['user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
                         @else
@@ -176,7 +175,6 @@
                         <a href="#offcanvas-search" class="offcanvas-toggle"><i class="fal fa-search"></i></a>
                     </div>
                     <div class="header-wishlist">
-{{--                        <a href="{{ route('wishlist.index') }}" class="offcanvas-toggle"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>--}}
                         <a href="{{ route('wishlist.index') }}"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
                     <div class="header-cart">
@@ -196,7 +194,6 @@
             <!-- Header Tools End -->
 
         </div>
-{{--    </div>--}}
-
+    </div>
 </div>
 <!-- Header Sticky Section End -->

@@ -153,12 +153,16 @@
                                     $selectedCategories = $_GET['categories'];
                                 }
                                 ?>
-                                @foreach($kind_products as $kind_product)
-                                    @if($kind_product->product)
+                                @foreach($all_kind_products as $kind_product)
+                                    @if($kind_product->products)
                                         <li>
-                                            <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}" id="category_{{ $kind_product->id }}" {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>
+                                            <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}"
+                                                   id="category_{{ $kind_product->id }}"
+                                                {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>
                                             &nbsp;
-                                            <label for="category_{{ $kind_product->id }}"><a href="#">{{ $kind_product->name }}</a> <span class="count">{{ $kind_product->product->count() }}</span></label>
+                                            <label for="category_{{ $kind_product->id }}">
+                                                <a href="#">{{ $kind_product->name }}</a> <span class="count">{{ count($kind_product->products) }}</span>
+                                            </label>
                                         </li>
                                     @endif
                                 @endforeach

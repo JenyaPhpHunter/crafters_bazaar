@@ -61,6 +61,64 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                <br><br><br>
+                                <div>
+                                    <!-- Chat Start -->
+                                    @foreach($dialogs_with_answers as $dialog)
+                                        <div class="comment-container">
+                                            <div class="comment {{ $dialog->user_id != $creator ? 'comment-left' : 'comment-right' }}">
+                                                @if($dialog->answer_to)
+                                                    Відповідь на {{ $dialog->answerTo->comment }}
+                                                @endif
+                                                {{ $dialog->user->name }}: <br>
+                                                {{ $dialog->comment }}
+                                                <button class="reply-button" data-dialog-id="{{ $dialog->id }}">
+                                                    <i class="fas fa-reply"></i> Відповісти
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('.reply-button').click(function() {
+                                                var dialogId = $(this).data('dialog-id');
+                                                var commentText = $(this).closest('.comment-container').find('.comment').text();
+                                                $('#dialogId').val(dialogId);
+                                                $('#commentText').text(commentText);
+                                                $('#replyModal').modal('show');
+                                            });
+
+                                            // Обробник події для кнопки закриття модального вікна
+                                            $('#replyModal').on('hidden.bs.modal', function (e) {
+                                                $('#replyTextarea').val(''); // Очистити вміст поля відповіді
+                                            });
+                                        });
+                                    </script>
+
+                                    <!-- Модальне вікно -->
+                                    <div class="modal" id="replyModal">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Відповісти на коментар</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="commentText"></div> <!-- Додати блок для відображення тексту коментаря -->
+                                                    <form id="replyForm" method="post" action="{{ route('products.sendquestion', ['product' => $product->id]) }}">
+                                                        @csrf <!-- Додати токен CSRF -->
+                                                        <input type="hidden" id="dialogId" name="dialogId" value="">
+                                                        <textarea id="replyTextarea" name="replyText" rows="4" cols="50"></textarea>
+                                                        <button type="submit" class="btn btn-primary">Відправити</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Chat End -->
+                                </div>
                             </div>
                         </div>
                         <!-- Product Images End -->
@@ -105,7 +163,6 @@
                                             </tr>
                                         @endif
                                         </tbody>
-
                                     </table>
                                 </div>
                                 <div class="product-buttons">
@@ -115,6 +172,7 @@
                                 </div>
                                 <div class="product-brands">
                                     <span class="title">Автор товару</span>
+                                    {{ $product->user->name }}
                                     <div class="brands">
                                         <a href="#"><img src="{{ asset('images/brands/brand-4.webp')}}" alt=""></a>
                                     </div>
@@ -130,6 +188,46 @@
                                                onclick="document.getElementById('delete-form-show').submit(); return false;">Видалити</a>
                                         </form>
                                     </div>
+                                @endif
+                                @if($product->status_product_id == 3 && $user_id != $creator)
+                                    <div id="questionContainer">
+                                        <button id="askAuthorBtn" class="btn btn-info" data-product-id="{{ $product->id }}">Запитати автора</button>
+                                    </div>
+                                    <br><br>
+                                    <div id="questionField" style="display: none;">
+                                        <form id="submitQuestionForm" method="post" action="{{ route('products.sendquestion', ['product' => $product->id]) }}">
+                                            <textarea id="questionTextarea" name="questionText" rows="4" cols="50" style="border: 1px solid #000;"></textarea>
+                                            <br><br>
+                                            @csrf
+                                            <button id="submitQuestionBtn" class="btn btn-primary">Запитати</button>
+                                        </form>
+                                        <button id="cancelQuestionBtn" class="btn btn-secondary">Відмінити</button>
+                                    </div>
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                                    <script>
+                                        $(document).ready(function(){
+                                            $("#askAuthorBtn").click(function(){
+                                                // При нажатии на кнопку "Запитати автора"
+                                                @auth
+                                                $("#questionContainer").hide();  // Скрыть контейнер кнопки "Запитати автора"
+                                                $("#questionField").show();      // Показать текстовое поле
+                                                @else
+                                                // Если пользователь не аутентифицирован, перенаправить его на страницу входа с передачей product_id
+                                                // Получить значение product_id
+                                                var product_id = $(this).data('product-id');
+                                                window.location.href = '/login?sendquestion=sendquestion&product_id=' + product_id;
+                                                @endauth
+                                            });
+
+                                            $("#cancelQuestionBtn").click(function(){
+                                                // При нажатии на кнопку "Відмінити"
+                                                $("#questionField").hide();      // Скрыть текстовое поле
+                                                $("#questionContainer").show();  // Показать контейнер кнопки "Запитати автора"
+                                            });
+                                        });
+                                    </script>
+                                @endif
+                                @if($creator && $product->status_product_id == 1)
                                     <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
                                         @csrf
                                         @method('put')
@@ -185,7 +283,6 @@
                             </div>
                         </div>
                         <!-- Product Summery End -->
-
                     </div>
                 </div>
 

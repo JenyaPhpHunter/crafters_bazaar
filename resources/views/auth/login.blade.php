@@ -6,10 +6,18 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Авторизація') }}</div>
-
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
-                        <input type="hidden" name="createProduct" value="{{ $createProduct }}">
+                        @unless(empty($createProduct))
+                            <input type="hidden" name="createProduct" value="{{ $createProduct }}">
+                        @endunless
+                        @unless(empty($sendquestion))
+                            <div class="alert alert-warning" role="alert">
+                                Перш ніж задати питання, будь ласка, увійдіть в додаток або зареєструйтесь.
+                            </div>
+                            <input type="hidden" name="sendquestion" value="{{ $sendquestion }}">
+                            <input type="hidden" name="product_id" value="{{ $product_id }}">
+                        @endunless
                         @csrf
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
@@ -54,6 +62,7 @@
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary2">
+
                                     {{ __('Увійти') }}
                                 </button>
                                 <a href="{{ route('register') }}" class="btn btn-primary">

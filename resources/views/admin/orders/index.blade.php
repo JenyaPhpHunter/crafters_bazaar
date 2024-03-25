@@ -1,23 +1,12 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
+{{--    <link rel="stylesheet" href="{{ asset('css/style.css') }}">--}}
         <a href="{{route('dashboard')}}">Повернутися на головну сторінку</a>
         <br><br>
         <a href="{{route('admin_orders.create')}}"> Створити замовлення</a>
         <br><br>
-        <a href="{{route('admin_orders.index')}}"> Показати всі замовлення</a>
-        <br><br>
+
         @isset($statuses_orders)
         @foreach($statuses_orders as $status)
             <a href="{{ route('admin_orders.index',  ['status_orders' => $status->id]) }}"> Показати замовлення зі статусом {{ $status->name }}</a>
@@ -31,18 +20,18 @@
         {{--            <input type="text" name="query" placeholder="Пошук товару за назвою">--}}
         {{--            <button type="submit">Знайти</button>--}}
         {{--        </form>--}}
-            @forelse($orders as $order)
+
                 <div class="order">
                     <table class="table">
                         <thead>
                         <tr>
                             <th>Замовлення №</th>
-                            <th>Email користувача</th>
-                            <th>Телефон користувача</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
                             <th>Спосіб доставки</th>
                             <th>Спосіб оплати</th>
-                            <th>Місто доставки</th>
-                            <th>Адреса доставки</th>
+                            <th>Місто</th>
+                            <th>Адреса</th>
                             <th>Адреса нової пошти</th>
                             <th>Промокод</th>
                             <th>Вартість доставки</th>
@@ -54,31 +43,30 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($orders as $order)
+                        @forelse($orders as $order)
                             <tr>
-                                <td>{{ $order->id }}</td>
-                                <td>{{ $order->user->email }}</td>
-                                <td>{{ $order->user->phone }}</td>
-                                <td>{{ $order->delivery->name }}</td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->id }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->user->email }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->user->phone }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->delivery->name }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->kind_payment->name }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->city->name }}</a></td>
+                                <td><a href="{{ route('admin_orders.show', ['admin_order' => $order->id]) }}">{{ $order->address }}</a></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ $order->comment }}</td>
+                                <td>{{ $order->created_at }}</td>
+                                <td>{{ $order->updated_at }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <h2>Відсутні</h2>
+                        @endforelse
                         </tbody>
                     </table>
-{{--                    <p>Категорія: {{ $basket->product->kind_product->name }}</p>--}}
-{{--                    <p>Кількість: {{ $basket->quantity }}</p>--}}
-{{--                    <p>Вартість: {{ $basket->sum }}--}}
-{{--                        @if($basket->sum != $basket->total)--}}
-{{--                            замість {{ $basket->total }}--}}
-{{--                            Ваша знижка = {{ $basket->discount }}--}}
-{{--                        @endif--}}
-{{--                    </p>--}}
-{{--                    <div class="product-image">--}}
-{{--                        <img src="{{ asset($basket->product->image_path) }}" alt="Фото сумки">--}}
-{{--                    </div>--}}
                 </div>
-            @empty
-            <h2>Відсутні</h2>
-            @endforelse
 {{--    </div>--}}
 @endsection
 

@@ -9,23 +9,30 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['baskettmp_created', 'name', 'phone', 'email', 'delivery', 'paymentkind', 'card', 'shop',
-        'city', 'address', 'np_address', 'user', 'promocode', 'sum', 'pricedelivery', 'discount', 'discounttotal',
-        'quantity', 'total', 'textdelivery',
-    ];
+    protected $fillable = ['card', 'address', 'promocode', 'pricedelivery', 'comment','sum_order'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function basket()
+    public function delivery()
     {
-        return $this->belongsTo(Basket::class);
+        return $this->belongsTo(Delivery::class);
+    }
+
+    public function kind_payment()
+    {
+        return $this->belongsTo(KindPayment::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function status_order()
     {
-        return $this->belongsTo(StatusProduct::class);
+        return $this->belongsTo(StatusOrder::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewProductMail;
 use App\Models\Color;
+use App\Models\Dialog;
 use App\Models\KindProduct;
 use App\Models\Product;
 use App\Models\ProductPhoto;
@@ -39,12 +40,13 @@ class ProductController extends Controller
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
         $colors = Color::all();
-//        $excludeProducts = true;
+        $all_kind_products = KindProduct::query()->with('products')->get();
         $excludeProducts = false;
 
         return view('products.index',
             compact(
             'products',
+            'all_kind_products',
             'kind_products',
             'colors',
             'excludeProducts',
@@ -211,11 +213,33 @@ class ProductController extends Controller
             ->with('user')
             ->where('id',$id)
             ->first();
-        if($user_id == $product->user_id){
-            $creator = true;
-        } else {
-            $creator = false;
+
+        $dialogs = Dialog::where('product_id', $id)
+            ->with('user')
+            ->orderByRaw('CASE WHEN answer_to IS NULL THEN 1 ELSE 0 END, answer_to')
+            ->get();
+
+        $dialogs_with_answers = [];
+        foreach ($dialogs as $dialog) {
+            if ($dialog->answer_to) {
+                $question = Dialog::find($dialog->answer_to);
+                if ($question) {
+                    if (!isset($dialogs_with_answers[$question->id])) {
+                        // Додати питання до масиву
+                        $dialogs_with_answers[$question->id] = $question;
+                    }
+                    // Додати відповідь на це питання до масиву
+                    $dialogs_with_answers[$dialog->id] = $dialog;
+                }
+            } else {
+                // Якщо немає відповіді, просто додайте питання до масиву
+                if (!isset($dialogs_with_answers[$dialog->id])) {
+                    $dialogs_with_answers[$dialog->id] = $dialog;
+                }
+            }
         }
+
+        $creator = $product->user_id;
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
@@ -225,8 +249,10 @@ class ProductController extends Controller
             'photos' => $photos,
             'kind_products' => $kind_products,
             'featured_products' => $featured_products,
-//            'user_id' => $user_id,
+            'dialogs' => $dialogs,
+            'dialogs_with_answers' => $dialogs_with_answers,
             'creator' => $creator,
+            'user_id' => $user_id,
             'includeRecommendedProducts' => true,
             'excludeProducts' => true,
         ]);
@@ -572,15 +598,22 @@ class ProductController extends Controller
             });
         }
 
-        $kind_products = KindProduct::all();
-        $count_sorted_product = [];
-        foreach ($products as $product){
-            if(isset($count_sorted_product[$product->kind_product->id])){
-                $count_sorted_product[$product->kind_product->id]++;
-            } else {
-                $count_sorted_product[$product->kind_product->id] = 1;
-            }
-        }
+        $all_kind_products = KindProduct::all();
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', 3)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
+
+//        $count_sorted_product = [];
+//        foreach ($products as $product){
+//            if(isset($count_sorted_product[$product->kind_product->id])){
+//                $count_sorted_product[$product->kind_product->id]++;
+//            } else {
+//                $count_sorted_product[$product->kind_product->id] = 1;
+//            }
+//        }
         $featured_products = Product::query()
             ->where('status_product_id',3)
             ->with('productphotos')
@@ -589,8 +622,9 @@ class ProductController extends Controller
 
         return view('products.index', [
             'products' => $products,
-            'count_sorted_product' => $count_sorted_product,
+//            'count_sorted_product' => $count_sorted_product,
             'featured_products' => $featured_products,
+            'all_kind_products' => $all_kind_products,
             'kind_products' => $kind_products,
             'colors' => Color::all(),
         ]);
@@ -667,7 +701,6 @@ class ProductController extends Controller
         return $products;
     }
 
-
     private function sortProducts($products, $sortBy)
     {
         if ($sortBy == 'newness') {
@@ -689,5 +722,84 @@ class ProductController extends Controller
         }
 
         return $products;
+    }
+
+    function sendquestion(Request $request, $product_id)
+    {
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
+        $user_id = $request->user_id;
+        if (! empty($request->input('questionText'))){
+            $questionText = $request->input('questionText');
+        }
+        if (! empty($request->input('replyText'))){
+            $replyText = $request->input('replyText');
+            $replyDialogId = $request->input('dialogId');
+
+        }
+        if(empty($user_id)){
+            return view('auth.login',[
+                'includeRecommendedProducts' => true,
+                'excludeProducts' => true,
+                'sendquestion' => 'sendquestion',
+                'product_id' => $product_id,
+            ]);
+        }
+//        $lastQueue = Dialog::query()
+//            ->select('queue')
+//            ->where('product_id', $product_id)
+//            ->where('queue', 'LIKE', '%.0000000000')
+//            ->orderBy('id', 'desc')
+//            ->value('queue');
+
+        $dialog = new Dialog();
+        $dialog->type = 'show_product';
+        $dialog->product_id = $product_id;
+        if (isset($questionText)) {
+            $dialog->comment = $questionText;
+            $dialog->queue = 1;
+//            $dialog->queue = $lastQueue ? $lastQueue + 1 : 1;
+        }
+        if (isset($replyText)) {
+            $replyDialog = Dialog::find($replyDialogId);
+            $dialog->comment = $replyText;
+//            $next_queue_reply = Dialog::query()
+//                ->where('queue', '>',$replyDialog->queue)
+//                ->where('queue', '<',$replyDialog->queue + 1)
+//                ->get();
+//            $all_queue = [];
+//            foreach ($next_queue_reply as $item){
+//                $all_queue[] = $item->queue;
+//            }
+//            $queue = $replyDialog->queue;
+//            $is_int = $queue == intval($queue); // Перевірка на ціле число
+//            if ($is_int){
+//                $increment = 0.00001;
+//            } else {
+//                $increment = 0.0000000001;
+//            }
+//            $queue = $replyDialog->queue + $increment;
+//            while (in_array($queue, $all_queue)){
+//                $queue += $increment;
+//            }
+
+//            $dialog->queue = $queue;
+            $dialog->queue = 1;
+            $dialog->answer_to = $replyDialog->id;
+        }
+        $dialog->user_id = $user_id;
+        $dialog->created_at = now();
+
+        $dialog->save();
+//        echo "<pre>";
+//        print_r($dialog);
+//        echo "</pre>";
+//        die();
+        $product = Product::query()->where('id', $product_id)->first();
+        return redirect( route('products.show', [
+            'product' => $product,
+        ]));
     }
 }

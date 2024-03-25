@@ -109,12 +109,14 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/slick.css') }}">
 
     <!-- Main Style CSS -->
-    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->
+{{--    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->--}}
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+{{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
 </head>
 
 <body>

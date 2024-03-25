@@ -72,6 +72,12 @@
                                     <li><a href="{{ asset('shop-fullwidth.html') }}"><span class="menu-text">Shop Fullwidth No Sidebar</span></a></li>
                                     <li><a href="{{ asset('shop-fullwidth-left-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Left Sidebar</span></a></li>
                                     <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
+                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
                                 </ul>
                             </li>
                             <li>
@@ -118,7 +124,7 @@
                             @if(isset($statuses_products))
                                 @foreach ($statuses_products as $status_product)
                                     <li>
-                                        <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                        <a href="{{ route('admin_products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
                                         <ul>
                                             @foreach($products as $product)
                                                 @if($status_product->id == $product->status_product_id)
@@ -201,17 +207,19 @@
                             @endif
                         </ul>
                     </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>
-                        <ul class="sub-menu">
-                            <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
-                            <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
-                            @if(isset($roles))
-                                @foreach ($roles as $role)
-                                    <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </li>
+                    @if($user->role_id == 1)
+                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
+                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
+                                @if(isset($roles))
+                                    @foreach ($roles as $role)
+                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
             </nav>
         </div>

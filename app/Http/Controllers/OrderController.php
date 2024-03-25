@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 //use App\Mail\OrderConfirmation;
@@ -120,6 +121,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = Validator::make($request->all(), [
+            'name' => 'required',
+            'surname' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'delivery_id' => 'required',
+            'region' => 'required',
+            'city' => 'required',
+            'street' => 'required',
+            'home' => 'required',
+            'payment_type' => 'required',
+        ], [], [
+            'name' => 'Ім\'я',
+            'surname' => '\'Прізвище\'',
+            'email' => '\'Електронна пошта\'',
+            'phone' => '\'телефон\'',
+            'region' => '\'Регіон\'',
+            'city' => '\'місто\'',
+            'home' => '\'номер будинку\'',
+            'street' => '\'вулиця\'',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withErrors($validated)->withInput();
+        }
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
         $old_user = $user;
@@ -234,15 +260,25 @@ class OrderController extends Controller
 //
 //        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
 
-//        return redirect(route('users.show', ['user' => $user->id]).'#account-info');
-        return redirect(route('newPassword'))->with(['buyer']);
+        if($user->role_id < 5){
+            return redirect(route('admin_users.show', ['admin_user' => $user->id]).'#orders');
+        } else {
+            return redirect(route('users.show', ['user' => $user->id]).'#orders');
+        }
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
+        $user_id = $request->input('user_id');
+        $cartItems = CartItems::query()
+            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
+            ->where('carts.user_id', $user_id)
+            ->where('carts.active', 1)
+            ->get();
+
         $order = Order::query()->where('id', $id)->first();
 
-        return view('orders.show', compact('order'));
+        return view('orders.show', compact('order', 'cartItems'));
     }
 
     public function edit($id)

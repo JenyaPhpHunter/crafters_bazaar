@@ -16,9 +16,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.login');
+        if($request->input('sendquestion') == 'sendquestion'){
+            $sendquestion = true;
+            $product_id = $request->input('product_id');
+            return view('auth.login', [
+                'sendquestion' => $sendquestion,
+                'product_id' => $product_id,
+            ]);
+        } else {
+            $sendquestion = false;
+            return view('auth.login', [
+                'sendquestion' => $sendquestion,
+            ]);
+        }
     }
 
     /**
@@ -26,6 +38,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
 //        $request->authenticate();
 //
 //        $request->session()->regenerate();
@@ -42,8 +58,10 @@ class AuthenticatedSessionController extends Controller
                     return redirect()->intended('/admin');
                 }
             }
-            if($request->input('createProduct') == 'createProduct'){
+            if($request->input('createProduct')){
                 return redirect()->route('products.create');
+            } elseif(! empty($request->input('sendquestion'))) {
+                return redirect()->route('products.show',['product' => $request->input('product_id')]);
             } else {
                 return redirect()->intended(RouteServiceProvider::HOME);
             }

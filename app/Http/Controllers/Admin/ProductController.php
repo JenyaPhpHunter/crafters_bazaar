@@ -28,21 +28,33 @@ class ProductController extends Controller
         $products = Product::query()
             ->with('kind_product')
             ->with('productphotos')
+            ->where('status_product_id', 3)
             ->get();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
 
         $products = $products->sortByDesc(function ($product) {
             return $product->stock_balance == 0 ? -1 : $product->id;
         });
-//        echo "<pre>";
-//        print_r(count($products));
-//        echo "</pre>";
-//        die();
-        $kind_products = KindProduct::all();
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', 3)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
         $colors = Color::all();
+        $all_kind_products = KindProduct::all();
         $excludeProducts = true;
 
-        return view('admin.products.index', compact('products', 'kind_products', 'colors', 'excludeProducts','featured_products'));
+        return view('admin.products.index',
+            compact(
+                'products',
+                'kind_products',
+                'all_kind_products',
+                'colors',
+                'excludeProducts',
+                'featured_products'
+            )
+        );
     }
 
     public function create(Request $request)
@@ -492,4 +504,62 @@ class ProductController extends Controller
 
         return redirect()->route('admin_products.index');
     }
+
+    public function filter(Request $request)
+    {
+        $filterStatus = $request->input('status_product');
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
+
+        // Отримати всі товари
+        $products = Product::query()->get();
+
+//         Фільтрація за статусом товару
+        if ($filterStatus) {
+            $products = $this->filterByStatus($products, $filterStatus);
+        }
+
+//        if($sortBy){
+//            $products = $this->sortProducts($products, $sortBy);
+//        } else {
+//            $products = $products->sortByDesc(function ($product) {
+//                return $product->stock_balance == 0 ? -1 : $product->id;
+//            });
+//        }
+        $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+
+        $products = $products->sortByDesc(function ($product) {
+            return $product->stock_balance == 0 ? -1 : $product->id;
+        });
+        $kind_products = KindProduct::query()
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->where('products.status_product_id', '=', $filterStatus)
+            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.name')
+            ->get();
+        $colors = Color::all();
+        $all_kind_products = KindProduct::all();
+
+        return view('admin.products.index', [
+            'products' => $products,
+            'featured_products' => $featured_products,
+            'all_kind_products' => $all_kind_products,
+            'kind_products' => $kind_products,
+            'colors' => $colors,
+        ]);
+    }
+
+    private function filterByStatus($products, $filterStatus)
+    {
+        $products = $products->filter(function ($product) use ($filterStatus) {
+            // Перевірка, чи статус продукту співпадає з вказаним $filterStatus
+            return $product->status_product_id == $filterStatus;
+        });
+
+        return $products;
+    }
+
+
 }

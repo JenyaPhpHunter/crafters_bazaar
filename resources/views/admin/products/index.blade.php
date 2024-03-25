@@ -12,7 +12,7 @@
                     <div class="page-title">
                         <h1 class="title">Shop</h1>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active">Товари</li>
                         </ul>
                     </div>
@@ -46,12 +46,12 @@
                             <li>
                                 <div class="product-sorting">
                                     <select class="nice-select" id="sortProducts">
-                                        <option value="{{ route('products.filter', ['sort_by' => 'menu_order'] + request()->except('sort_by')) }}" selected="selected">Сортування за замовчуванням</option>
-                                        <option value="{{ route('products.filter', ['sort_by' => 'popularity'] + request()->except('sort_by')) }}">Сортування за популярністю</option>
-                                        <option value="{{ route('products.filter', ['sort_by' => 'rating'] + request()->except('sort_by')) }}">Сортування за середньою оцінкою</option>
-                                        <option value="{{ route('products.filter', ['sort_by' => 'newness'] + request()->except('sort_by')) }}">Сортування за новизною</option>
-                                        <option value="{{ route('products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Сортування за ціною: від низької до високої</option>
-                                        <option value="{{ route('products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Сортування за ціною: від високої до низької</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'menu_order'] + request()->except('sort_by')) }}" selected="selected">Сортування за замовчуванням</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'popularity'] + request()->except('sort_by')) }}">Сортування за популярністю</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'rating'] + request()->except('sort_by')) }}">Сортування за середньою оцінкою</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'newness'] + request()->except('sort_by')) }}">Сортування за новизною</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Сортування за ціною: від низької до високої</option>
+                                        <option value="{{ route('admin_products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Сортування за ціною: від високої до низької</option>
                                     </select>
                                 </div>
                             </li>
@@ -82,7 +82,7 @@
         <!-- Shop Toolbar End -->
 
         <!-- Product Filter Start -->
-        <form action="{{ route('products.filter') }}" method="GET" id="filterForm">
+        <form action="{{ route('admin_products.filter') }}" method="GET" id="filterForm">
             <input type="hidden" name="sort_by" value="1">
 
             <!-- Product Filter Start -->
@@ -94,11 +94,11 @@
                         <div class="col learts-mb-30">
                             <h3 class="widget-title product-filter-widget-title">Сортувати за</h3>
                             <ul class="widget-list product-filter-widget customScroll">
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'popularity'] + request()->except('sort_by')) }}">Популярність</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'rating'] + request()->except('sort_by')) }}">Середня оцінка</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'newness'] + request()->except('sort_by')) }}">Новизна</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Ціна: від низької до високої</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Ціна: від високої до низької</a></li>
+                                <li><a href="{{ route('admin_products.filter', ['sort_by' => 'popularity'] + request()->except('sort_by')) }}">Популярність</a></li>
+                                <li><a href="{{ route('admin_products.filter', ['sort_by' => 'rating'] + request()->except('sort_by')) }}">Середня оцінка</a></li>
+                                <li><a href="{{ route('admin_products.filter', ['sort_by' => 'newness'] + request()->except('sort_by')) }}">Новизна</a></li>
+                                <li><a href="{{ route('admin_products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Ціна: від низької до високої</a></li>
+                                <li><a href="{{ route('admin_products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Ціна: від високої до низької</a></li>
                             </ul>
                         </div>
                         <!-- Sort by End -->
@@ -116,27 +116,27 @@
                                 <li>
                                     <input type="checkbox" name="filter_price[all]" value="all" id="price_all" {{ in_array('all', $selectedPriceFilters) ? 'checked' : '' }}>
                                     &nbsp;
-                                    <a href="{{ route('products.filter', ['filter_price' => 'all']) }}">Всі</a>
+                                    <a href="{{ route('admin_products.filter', ['filter_price' => 'all']) }}">Всі</a>
                                 </li>
                                 <li>
                                     <input type="checkbox" name="filter_price[0_10]" value="0;10" id="price_0_10" {{ in_array('0_10', $selectedPriceFilters) ? 'checked' : '' }}>
                                     &nbsp;
-                                    <a href="{{ route('products.filter', ['filter_price' => '0;10']) }}"><span class="amount"><span class="cur-symbol"></span>0 грн</span> - <span class="amount"><span class="cur-symbol"></span>10 грн</span></a>
+                                    <a href="{{ route('admin_products.filter', ['filter_price' => '0;10']) }}"><span class="amount"><span class="cur-symbol"></span>0 грн</span> - <span class="amount"><span class="cur-symbol"></span>10 грн</span></a>
                                 </li>
                                 <li>
                                     <input type="checkbox" name="filter_price[10_100]" value="10;100" id="price_10_100" {{ in_array('10_100', $selectedPriceFilters) ? 'checked' : '' }}>
                                     &nbsp;
-                                    <a href="{{ route('products.filter', ['filter_price' => '10;100']) }}"><span class="amount"><span class="cur-symbol"></span>10 грн</span> - <span class="amount"><span class="cur-symbol"></span>100 грн</span></a>
+                                    <a href="{{ route('admin_products.filter', ['filter_price' => '10;100']) }}"><span class="amount"><span class="cur-symbol"></span>10 грн</span> - <span class="amount"><span class="cur-symbol"></span>100 грн</span></a>
                                 </li>
                                 <li>
                                     <input type="checkbox" name="filter_price[100_1000]" value="100;1000" id="price_100_1000" {{ in_array('100_1000', $selectedPriceFilters) ? 'checked' : '' }}>
                                     &nbsp;
-                                    <a href="{{ route('products.filter', ['filter_price' => '100;1000']) }}"><span class="amount"><span class="cur-symbol"></span>100 грн</span> - <span class="amount"><span class="cur-symbol"></span>1000 грн</span></a>
+                                    <a href="{{ route('admin_products.filter', ['filter_price' => '100;1000']) }}"><span class="amount"><span class="cur-symbol"></span>100 грн</span> - <span class="amount"><span class="cur-symbol"></span>1000 грн</span></a>
                                 </li>
                                 <li>
                                     <input type="checkbox" name="filter_price[more_1000]" value="1000;+" id="price_more_1000" {{ in_array('more_1000', $selectedPriceFilters) ? 'checked' : '' }}>
                                     &nbsp;
-                                    <a href="{{ route('products.filter', ['filter_price' => '1000;+']) }}"><span class="amount"><span class="cur-symbol"></span>1000 грн</span> +</a>
+                                    <a href="{{ route('admin_products.filter', ['filter_price' => '1000;+']) }}"><span class="amount"><span class="cur-symbol"></span>1000 грн</span> +</a>
                                 </li>
                             </ul>
                         </div>
@@ -152,7 +152,7 @@
                                     $selectedCategories = $_GET['categories'];
                                 }
                                 ?>
-                                @foreach($kind_products as $kind_product)
+                                @foreach($all_kind_products as $kind_product)
                                     @if($kind_product->product)
                                         <li>
                                             <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}" id="category_{{ $kind_product->id }}" {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>
@@ -350,11 +350,11 @@
                                 <h3 class="widget-title product-filter-widget-title">Види товарів</h3>
                                 <ul class="widget-list">
                                     @foreach($kind_products as $kind_product)
-                                        @if($kind_product->product)
+                                        @if($kind_product->product_count > 0)
                                             <li>
                                                 <a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">
                                                     {{ $kind_product->name }}
-                                                    <span class="count">{{ $kind_product->product->count() }}</span>
+                                                    <span class="count">{{ $kind_product->product_count }}</span>
                                                 </a>
                                             </li>
                                         @endif

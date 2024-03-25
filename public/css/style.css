@@ -15190,3 +15190,25 @@ input[type="file"] {
     background-color: #f2f2f2;
 }
 
+.comment-container {
+    clear: both;
+    margin-bottom: 10px; /* Простір між коментарями */
+}
+
+.comment {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.comment-left {
+    float: left;
+    margin-right: 50%; /* Зміщення вліво */
+}
+
+.comment-right {
+    float: right;
+    margin-left: 50%; /* Зміщення вправо */
+}
+

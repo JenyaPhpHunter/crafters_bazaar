@@ -72,7 +72,7 @@
                             </ul>
                         @endif
                     </li>
-                    @if(!empty($user_products))
+                    @if($user_products->count() > 0)
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Мої товари</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
@@ -97,8 +97,8 @@
                                 @endforeach
                             @endif
                         </ul>
-                        @endif
                     </li>
+                    @endif
                     <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>

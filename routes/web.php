@@ -1,19 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KindProductController as AdminKindProductController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubKindProductController as AdminSubKindProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
-//use App\Http\Controllers\KindProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
-//use App\Http\Controllers\SubKindProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +47,7 @@ Route::prefix('admin')->group(callback: function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('admin_users', AdminUserController::class);
     Route::resource('admin_roles', RoleController::class);
+    Route::get('/admin_products/filter', [AdminProductController::class, 'filter'])->name('admin_products.filter');
     Route::resource('admin_products', AdminProductController::class);
     Route::get('/admin_products/send_for_sale/{admin_product}', [AdminProductController::class, 'sendForSale'])->name('admin_product_send_for_sale');
     Route::get('/admin_products/{uri}/create-kind-subkind', [AdminProductController::class, 'createkindsubkind'])->name('admin.products.createkindsubkind');
@@ -58,21 +57,18 @@ Route::prefix('admin')->group(callback: function () {
     Route::resource('admin_orders', AdminOrderController::class);
     Route::get('/admin_products/kind_products/{kind_products}', [AdminProductController::class, 'productsKind'])->name('admin_products_kind');
     Route::get('/admin_products/kind_products/{kind_products}/sub_kind_products/{sub_kind_products}', [AdminProductController::class, 'productsKindSubkind'])->name('admin_products_kind_subkind');
-//    Route::get('/admin_carts/index/{admin_product}', [AdminCartController::class, 'addToCart'])->name('admin_carts.addToCart');
 });
 
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-//Route::get('/users/seller/{user}', [UserController::class, 'showSeller'])->name('users.show_seller');
-//Route::get('/users/buyer/{user}', [UserController::class, 'showBuyer'])->name('users.show_buyer');
 Route::get('/users/{user}/edit/', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
+Route::post('products/sendquestion/{product}', [ProductController::class, 'sendquestion'])->name('products.sendquestion');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-//Route::post('/products/{product}', [ProductController::class, 'putupforsale'])->name('products.putupforsale');
 Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');

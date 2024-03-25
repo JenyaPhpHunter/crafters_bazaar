@@ -40,12 +40,10 @@ class AppServiceProvider extends ServiceProvider
             $products = Product::all();
             $kind_products = KindProduct::all();
             $sub_kind_products = SubKindProduct::all();
-//            $sizes = Size::all();
-//            $colors = Color::all();
             if($user){
                 $user_products = Product::query()->where('user_id', $user->id)->get();
             } else {
-                $user_products = [];
+                $user_products = collect();
             }
 
             $statuses_products = StatusProduct::all();
@@ -87,8 +85,6 @@ class AppServiceProvider extends ServiceProvider
                 ->with('cartItemsCount', $cartItemsCount)
                 ->with('wishItemsCount', $wishItemsCount)
                 ->with('user_products', $user_products)
-//                ->with('sizes', $sizes)
-//                ->with('colors', $colors)
                 ->with('user', $user);
         });
     }
