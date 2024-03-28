@@ -47,6 +47,12 @@
                         <a href="{{ route('carts.index') }}"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
                     </div>
                 </div>
+                <br>
+                <div class="header-status">
+                    <a href="{{ route('order.status') }}">
+                        <p><i class="fa fa-truck"></i>Статус замовлення</p>
+                    </a>
+                </div>
             </div>
             <!-- Header Tools End -->
         </div>
@@ -217,9 +223,6 @@
                     </li>
                 </ul>
             </nav>
-            <div class="header-call">
-                <p><i class="fa fa-phone"></i> 067 329 14 19</p>
-            </div>
         </div>
     </div>
     <!-- Site Menu Section End -->

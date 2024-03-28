@@ -2,12 +2,13 @@
 
 @section('content')
 
+    <!-- Page Title/Header Start -->
     <div class="page-title">
         <h1 class="title">Редагування товару</h1>
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
-            @isset($product)
+            @isset($product->name)
                 <li class="breadcrumb-item active">{{ $product->name }}</li>
             @endisset
         </ul>
@@ -21,7 +22,7 @@
     <div class="section section-padding border-bottom">
         <div class="row learts-mb-n40">
             <!-- Product Images Start -->
-            <div class="col-xl-6 col-12 learts-mb-40">
+            <div class="col-lg-6 col-12 learts-mb-40">
                 <div class="product-images">
 {{--                                <span class="product-badges">--}}
 {{--                                    <span class="hot">hot</span>--}}
@@ -95,7 +96,7 @@
                     <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('put')
-                        <input type="hidden" id="selectedColor" name="product_color" value="{{ $product->color_id }}">
+                        <input type="hidden" id="selectedColor" name="color" value="">
 
                         <label for="name">Назва</label>
                         <br>
@@ -162,6 +163,31 @@
                             </div>
                         </div>
                         <br>
+
+                        <script>
+                            $(function () {
+                                // Отримання посилання на елементи
+                                let stockBalanceInput = $("#stockBalance");
+                                let canProduceCheckbox = $("#canProduce");
+                                let termCreationBlock = $("#termCreationBlock");
+
+                                // Функція для оновлення стану елементів залежно від значення "Кількість виробів в наявності"
+                                function updateElementsState() {
+                                    let stockBalanceValue = parseInt(stockBalanceInput.val());
+
+                                    // Відмітити галочку, якщо "Кількість виробів в наявності" дорівнює 0
+                                    canProduceCheckbox.prop("checked", stockBalanceValue === 0);
+
+                                    // Показати або приховати блок "Кількість днів для виготовлення і відправки" залежно від галочки
+                                    termCreationBlock.toggle(canProduceCheckbox.prop("checked"));
+                                }
+
+                                // Виклик функції під час завантаження сторінки та при зміні значення "Кількість виробів в наявності"
+                                updateElementsState();
+                                stockBalanceInput.change(updateElementsState);
+                            });
+
+                        </script>
 
                         <div class="product-variations">
                             <table>
@@ -429,123 +455,123 @@
             </div>
         </div>
         <!-- Slides wrapper with overflow:hidden. -->
-        <div class="pswp__scroll-wrap">
+{{--        <div class="pswp__scroll-wrap">--}}
 
             <!-- Container that holds slides.
             PhotoSwipe keeps only 3 of them in the DOM to save memory.
             Don't modify these 3 pswp__item elements, data is added later on. -->
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-            </div>
+{{--            <div class="pswp__container">--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--            </div>--}}
 
             <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-            <div class="pswp__ui pswp__ui--hidden">
+{{--            <div class="pswp__ui pswp__ui--hidden">--}}
 
-                <div class="pswp__top-bar">
+{{--                <div class="pswp__top-bar">--}}
 
-                    <!--  Controls are self-explanatory. Order can be changed. -->
+{{--                    <!--  Controls are self-explanatory. Order can be changed. -->--}}
 
-                    <div class="pswp__counter"></div>
+{{--                    <div class="pswp__counter"></div>--}}
 
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+{{--                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>--}}
 
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
+{{--                    <button class="pswp__button pswp__button--share" title="Share"></button>--}}
 
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+{{--                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>--}}
 
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+{{--                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>--}}
 
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                            <div class="pswp__preloader__cut">
-                                <div class="pswp__preloader__donut"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{--                    <div class="pswp__preloader">--}}
+{{--                        <div class="pswp__preloader__icn">--}}
+{{--                            <div class="pswp__preloader__cut">--}}
+{{--                                <div class="pswp__preloader__donut"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div>
-                </div>
+{{--                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">--}}
+{{--                    <div class="pswp__share-tooltip"></div>--}}
+{{--                </div>--}}
 
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
+{{--                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">--}}
+{{--                </button>--}}
 
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
+{{--                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">--}}
+{{--                </button>--}}
 
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
+{{--                <div class="pswp__caption">--}}
+{{--                    <div class="pswp__caption__center"></div>--}}
+{{--                </div>--}}
 
-            </div>
+{{--            </div>--}}
 
-        </div>
-    </div>
+{{--        </div>--}}
+{{--    </div>--}}
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+{{--    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">--}}
 
-        <!-- Background of PhotoSwipe.
-         It's a separate element as animating opacity is faster than rgba(). -->
-        <div class="pswp__bg"></div>
+{{--        <!-- Background of PhotoSwipe.--}}
+{{--         It's a separate element as animating opacity is faster than rgba(). -->--}}
+{{--        <div class="pswp__bg"></div>--}}
 
-        <!-- Slides wrapper with overflow:hidden. -->
-        <div class="pswp__scroll-wrap">
+{{--        <!-- Slides wrapper with overflow:hidden. -->--}}
+{{--        <div class="pswp__scroll-wrap">--}}
 
-            <!-- Container that holds slides.
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-            </div>
+{{--            <!-- Container that holds slides.--}}
+{{--            PhotoSwipe keeps only 3 of them in the DOM to save memory.--}}
+{{--            Don't modify these 3 pswp__item elements, data is added later on. -->--}}
+{{--            <div class="pswp__container">--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--                <div class="pswp__item"></div>--}}
+{{--            </div>--}}
 
-            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-            <div class="pswp__ui pswp__ui--hidden">
+{{--            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->--}}
+{{--            <div class="pswp__ui pswp__ui--hidden">--}}
 
-                <div class="pswp__top-bar">
+{{--                <div class="pswp__top-bar">--}}
 
-                    <!--  Controls are self-explanatory. Order can be changed. -->
+{{--                    <!--  Controls are self-explanatory. Order can be changed. -->--}}
 
-                    <div class="pswp__counter"></div>
+{{--                    <div class="pswp__counter"></div>--}}
 
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+{{--                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>--}}
 
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
+{{--                    <button class="pswp__button pswp__button--share" title="Share"></button>--}}
 
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+{{--                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>--}}
 
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+{{--                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>--}}
 
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                            <div class="pswp__preloader__cut">
-                                <div class="pswp__preloader__donut"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{--                    <div class="pswp__preloader">--}}
+{{--                        <div class="pswp__preloader__icn">--}}
+{{--                            <div class="pswp__preloader__cut">--}}
+{{--                                <div class="pswp__preloader__donut"></div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div>
-                </div>
+{{--                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">--}}
+{{--                    <div class="pswp__share-tooltip"></div>--}}
+{{--                </div>--}}
 
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
+{{--                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">--}}
+{{--                </button>--}}
 
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
+{{--                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">--}}
+{{--                </button>--}}
 
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
+{{--                <div class="pswp__caption">--}}
+{{--                    <div class="pswp__caption__center"></div>--}}
+{{--                </div>--}}
 
-            </div>
+{{--            </div>--}}
 
-        </div>
+{{--        </div>--}}
 
-    </div>
+{{--    </div>--}}
 @endsection

@@ -489,8 +489,10 @@ class ProductController extends Controller
             ->where('kind_product_id',$kind)
             ->get();
         $sub_kind_products_kind = SubKindProduct::query()
+            ->join('kind_products', 'sub_kind_products.id', '=', 'kind_products.id')
+            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
             ->where('status_product_id',3)
-            ->where('kind_product_id',$kind)
+            ->where('sub_kind_products.kind_product_id',$kind)
             ->get();
         $kind_products = KindProduct::query()
             ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
@@ -498,6 +500,7 @@ class ProductController extends Controller
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
+        $all_kind_products = KindProduct::all();
         $sub_kind_products = SubKindProduct::all();
         $colors = Color::all();
         $featured_products = Product::query()
@@ -508,6 +511,7 @@ class ProductController extends Controller
         return view('products.index',[
             'products' => $products,
             'kind_products' => $kind_products,
+            'all_kind_products' => $all_kind_products,
             'sub_kind_products' => $sub_kind_products,
             'colors' => $colors,
             'featured_products' => $featured_products,

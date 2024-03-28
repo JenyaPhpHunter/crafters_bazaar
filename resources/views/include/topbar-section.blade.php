@@ -5,13 +5,13 @@
             <div class="col d-none d-md-block">
                 <div class="topbar-menu">
                     <ul>
+                        <li><a href="#"><i class="fa fa-phone"></i> 067 329 14 19</a></li>
                         <li><a href="#"><i class="fa fa-map-marker-alt"></i>Локація магазину</a></li>
-                        <li><a href="#"><i class="fa fa-truck"></i>Статус замовлення</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col d-md-none d-lg-block">
-                <p class="text-center my-2">Безкоштовна доставкапри замовленні від 1000 евро!</p>
+                <p class="text-center my-2">Безкоштовна доставка при замовленні від 1000 евро!</p>
             </div>
 
             <!-- Header Language & Currency Start -->

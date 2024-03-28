@@ -11,7 +11,7 @@
                     <div class="page-title">
                         <h1 class="title">Ваше замовлення</h1>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
                             <li class="breadcrumb-item active">Ваше замовлення</li>
                         </ul>
                     </div>

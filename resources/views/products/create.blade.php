@@ -2,22 +2,13 @@
 
 @section('content')
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <!-- Page Title/Header Start -->
     <div class="page-title">
         <h1 class="title">Створення товару</h1>
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
-            @isset($product)
+            @isset($product->name)
                 <li class="breadcrumb-item active">{{ $product->name }}</li>
             @endisset
         </ul>
@@ -30,7 +21,7 @@
             <!-- Product Images Start -->
             <div class="col-lg-6 col-12 learts-mb-40">
                 <div class="product-images">
-                    <button class="product-gallery-popup hintT-left" data-hint="Click to enlarge" data-images='[
+                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='[
                         {"src": "{{ asset('images/product/single/1/product-zoom-1.webp') }}", "w": 700, "h": 1100},
                         {"src": "{{ asset('images/product/single/1/product-zoom-2.webp') }}", "w": 700, "h": 1100},
                         {"src": "{{ asset('images/product/single/1/product-zoom-3.webp') }}", "w": 700, "h": 1100},
@@ -153,7 +144,7 @@
                             </div>
                         </div>
                         <br>
-{{--                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--}}
+
                         <script>
                             $(function () {
                                 // Отримання посилання на елементи
@@ -233,7 +224,9 @@
                         </div>
                     </form>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                        <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>
+                        @isset($user_id)
+                            <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>
+                        @endisset
                         <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
                     </div>
                     <div class="product-meta">
