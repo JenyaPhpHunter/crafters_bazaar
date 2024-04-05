@@ -84,8 +84,8 @@ Route::get('/wishlist/index', [WishController::class, 'index'])->name('wishlist.
 Route::get('/wishlist/index/{product}', [WishController::class, 'addToWishlist'])->name('wishlist.addToWishlist');
 Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishlist.clear');
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
+Route::get('/orders/status', [OrderController::class, 'status'])->name('orders.status');
 Route::resource('orders', OrderController::class);
-
 
 
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

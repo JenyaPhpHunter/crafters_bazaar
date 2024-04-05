@@ -267,13 +267,14 @@ class OrderController extends Controller
         }
     }
 
-    public function show($id, Request $request)
+    public function show($id)
     {
-        $user_id = $request->input('user_id');
+//        $user_id = $request->input('user_id');
+
         $cartItems = CartItems::query()
-            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
-            ->where('carts.user_id', $user_id)
-            ->where('carts.active', 1)
+            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+            ->join('orders', 'carts.id', '=', 'orders.cart_id')
+            ->where('orders.id', $id)
             ->get();
 
         $order = Order::query()->where('id', $id)->first();
@@ -298,6 +299,16 @@ class OrderController extends Controller
         //
     }
 
+    public function status(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $orders = Order::query()
+            ->with('cart.cartitems') // Додати зв'язок cart_items до моделі Cart
+            ->where('user_id', $user_id)
+            ->get();
+
+        return view('orders.status', ['orders' => $orders]);
+    }
     /**
      * Remove the specified resource from storage.
      *

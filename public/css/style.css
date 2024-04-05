@@ -15212,3 +15212,38 @@ input[type="file"] {
     margin-left: 50%; /* Зміщення вправо */
 }
 
+/*!* Order Table *!*/
+.order-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.order-table .order-divider td {
+    border-top: none;
+    border-bottom: none;
+}
+
+.order-table .order-total td {
+    border-left: none; /* Відсутній лівий бордер */
+    border-right: none; /* Відсутній правий бордер */
+    border-top: none; /* Відсутня верхня границя */
+    border-bottom: 1px solid #000; /* Бордер знизу */
+}
+
+.order-table tbody tr td.thumbnail {
+    width: 110px;
+    min-width: 110px;
+}
+.order-table tbody tr td.thumbnail a {
+    display: block;
+}
+
+.order-table tbody tr td.order {
+    text-align: center; /* Центрування тексту */
+    vertical-align: middle; /* Вертикальне центрування */
+}
+
+.bold-text {
+    font-weight: bold;
+}
+

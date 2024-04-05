@@ -35,4 +35,9 @@ class Order extends Model
     {
         return $this->belongsTo(StatusOrder::class);
     }
+
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+    }
 }

@@ -49,7 +49,7 @@
                 </div>
                 <br>
                 <div class="header-status">
-                    <a href="{{ route('order.status') }}">
+                    <a href="{{ route('orders.status') }}">
                         <p><i class="fa fa-truck"></i>Статус замовлення</p>
                     </a>
                 </div>
