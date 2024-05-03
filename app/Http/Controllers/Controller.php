@@ -10,4 +10,19 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected function see($item)
+    {
+        echo "<pre>";
+        print_r($item);
+        echo "</pre>";
+    }
+    protected function seedie($item)
+    {
+        echo "<pre>";
+        print_r($item);
+        echo "</pre>";
+        die();
+    }
+
 }

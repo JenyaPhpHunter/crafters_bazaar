@@ -33,6 +33,7 @@
                 <th class="price" rowspan="2">Вартість</th>
                 <th class="quantity" rowspan="2">Кількість</th>
                 <th class="subtotal" rowspan="2">Загалом</th>
+                <th class="subtotal" rowspan="2">Статус замовлення</th>
             </tr>
             </thead>
             <tbody>
@@ -63,16 +64,17 @@
                             </div>
                         </td>
                         <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}</span></td>
+                        <td class="status-order"><span>{{ $order->status_order->name }}</span></td>
                     </tr>
                     @php
                         $cost_paid += $cartItem->price * $cartItem->quantity;
                     @endphp
                 @endforeach
                 <tr class="order-divider">
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                 </tr>
                 <tr class="order-total">
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                     <td class="subtotal"><span class="bold-text">Загалом: {{ $cost_paid }}</span></td>
                     <td colspan="2"></td>
                 </tr>

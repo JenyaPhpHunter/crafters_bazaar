@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\CartItems;
+use App\Models\ForumCategory;
+use App\Models\ForumSubCategory;
 use App\Models\KindProduct;
 use App\Models\AdminOrder;
 use App\Models\Product;
@@ -75,6 +77,8 @@ class AppServiceProvider extends ServiceProvider
                 $cartItemsCount = 0;
                 $wishItemsCount = 0;
             }
+            $forum_categories = ForumCategory::query()->with('forum_sub_categories')->get();
+//            $forum_sub_categories = ForumSubCategory::all();
             $view->with('products', $products)
                 ->with('kind_products', $kind_products)
                 ->with('sub_kind_products', $sub_kind_products)
@@ -85,7 +89,9 @@ class AppServiceProvider extends ServiceProvider
                 ->with('cartItemsCount', $cartItemsCount)
                 ->with('wishItemsCount', $wishItemsCount)
                 ->with('user_products', $user_products)
-                ->with('user', $user);
+                ->with('user', $user)
+                ->with('categories', $forum_categories);
+//                ->with('sub_categories', $forum_sub_categories);
         });
     }
 }

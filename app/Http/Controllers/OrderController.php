@@ -304,6 +304,7 @@ class OrderController extends Controller
         $user_id = $request->input('user_id');
         $orders = Order::query()
             ->with('cart.cartitems') // Додати зв'язок cart_items до моделі Cart
+            ->with('status_order')
             ->where('user_id', $user_id)
             ->get();
 

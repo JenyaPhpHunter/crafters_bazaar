@@ -94,39 +94,44 @@
                             </ul>
                         </li>
                         <li class="has-children"><a href="#"><span class="menu-text">Форум</span></a>
-                            <ul class="sub-menu mega-menu">
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">Column One</span></a>
-                                    <ul>
-                                        <li><a href="elements-products.html"><span class="menu-text">Product Styles</span></a></li>
-                                        <li><a href="elements-products-tabs.html"><span class="menu-text">Product Tabs</span></a></li>
-                                        <li><a href="elements-product-sale-banner.html"><span class="menu-text">Product & Sale Banner</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">Column Two</span></a>
-                                    <ul>
-                                        <li><a href="elements-category-banner.html"><span class="menu-text">Category Banner</span></a></li>
-                                        <li><a href="elements-team.html"><span class="menu-text">Team Member</span></a></li>
-                                        <li><a href="elements-testimonials.html"><span class="menu-text">Testimonials</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">Column Three</span></a>
-                                    <ul>
-                                        <li><a href="elements-gallery.html"><span class="menu-text">Gallery</span></a></li>
-                                        <li><a href="elements-map.html"><span class="menu-text">Google Map</span></a></li>
-                                        <li><a href="elements-icon-box.html"><span class="menu-text">Icon Box</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">Column Four</span></a>
-                                    <ul>
-                                        <li><a href="elements-buttons.html"><span class="menu-text">Buttons</span></a></li>
-                                        <li><a href="elements-faq.html"><span class="menu-text">FAQs / Toggles</span></a></li>
-                                        <li><a href="elements-brands.html"><span class="menu-text">Brands</span></a></li>
-                                    </ul>
-                                </li>
+                            <ul class="sub-menu">
+                                <li class="has-children"><a href="{{ route('forum_categories.index') }}"><span class="menu-text">Всі категорії</span></a>
+                                <li class="has-children"><a href="{{ route('forum_sub_categories.index') }}"><span class="menu-text">Всі підкатегорії</span></a>
+                                <li class="has-children"><a href="{{ route('forum_topics.index') }}"><span class="menu-text">Всі теми</span></a>
+                                @isset($categories)
+                                    @foreach($categories as $category)
+                                        <li class="has-children">
+                                            <a href="{{ route('forum_categories.show', ['forum_category' => $category->id]) }}">
+                                                <span class="menu-text">{{ $category->name }}</span>
+                                            </a>
+                                            <ul class="sub-menu">
+                                                @php
+                                                    $counter = 0;
+                                                @endphp
+                                                @forelse ($category->forum_sub_categories as $sub_category)
+                                                    @if($category->id == $sub_category->forum_category_id)
+                                                        @php
+                                                            $counter++;
+                                                        @endphp
+                                                        <li>
+                                                            <a href="{{ route('forum_sub_categories.show', ['forum_sub_category' => $sub_category->id]) }}">
+                                                                <span class="menu-text">{{ $sub_category->name }}</span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                                @if($counter == 0)
+                                                    <li>
+                                                        <a href="{{ route('forum_sub_categories.create', ['category_id' => $category->id]) }}">
+                                                            <span class="menu-text">Додати першу підкатегорію в категорію {{ $category->name }}</span>
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endisset
                             </ul>
                         </li>
                         <li class="has-children"><a href="{{ route('products.create') }}"><span class="menu-text">Додати свій товар</span></a>

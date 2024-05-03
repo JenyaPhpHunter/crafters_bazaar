@@ -85,10 +85,15 @@ class SubKindProductController extends Controller
 
     public function update(Request $request, $id)
     {
+//        $validated = $request->validate([
+//            'name' => 'required|unique:kind_products|max:35',
+//            'kind_product_id' => 'required',
+//        ]);
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35',
+            'name' => 'required|unique:sub_kind_products,name,'.$id,
             'kind_product_id' => 'required',
         ]);
+
 
         $sub_kind_product = SubKindProduct::query()->where('id',$id)->first();
         $sub_kind_product->name = $request->post('name');

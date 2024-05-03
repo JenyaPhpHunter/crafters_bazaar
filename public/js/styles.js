@@ -45,3 +45,19 @@ function selectSize(sizeLink) {
     // Тепер ви можете зберегти це значення у прихованому полі або використовувати його інакше в вашій формі
 }
 
+// у списку категорій форума при наведенні відображає підкатегорії
+    document.addEventListener('DOMContentLoaded', function() {
+    var categoryContainers = document.querySelectorAll('.category-container');
+
+    categoryContainers.forEach(function(container) {
+    container.addEventListener('click', function() {
+    var categoryId = container.id.split('-')[1];
+    var subcategories = document.getElementById('subcategories-' + categoryId);
+    if (subcategories.classList.contains('subcategories-visible')) {
+    subcategories.classList.remove('subcategories-visible');
+} else {
+    subcategories.classList.add('subcategories-visible');
+}
+});
+});
+});

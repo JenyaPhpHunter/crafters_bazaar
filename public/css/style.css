@@ -15243,6 +15243,30 @@ input[type="file"] {
     vertical-align: middle; /* Вертикальне центрування */
 }
 
+.category-container {
+    display: flex;
+    align-items: center;
+}
+
+.subcategories {
+    margin-left: 20px; /* Відступ від лівого краю */
+    display: none; /* Початково ховаємо підкатегорії */
+}
+
+.subcategories-visible {
+    display: block; /* Відображаємо підкатегорії */
+}
+
+.category-container:hover .subcategories {
+    display: block; /* При наведенні відображаємо підкатегорії */
+}
+
+.subcategory-item {
+    display: flex;
+    justify-content: space-between; /* Рівномірне розподілення елементів */
+    align-items: center;
+}
+
 .bold-text {
     font-weight: bold;
 }

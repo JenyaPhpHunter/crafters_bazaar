@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <form method="post" action="{{ route('sub_kind_products.update', ['sub_kind_product' => $sub_kind_product->id]) }}">
+    <form method="post" action="{{ route('admin_sub_kind_products.update', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
         @csrf
         @method('put')
         <label for="name">Назва</label>
@@ -31,7 +31,7 @@
 
         <input type="submit" value="Зберегти">
         <span style="display: inline-block; width: 100px;"></span>
-        <a href="{{route('kind_products.index')}}">Повернутися до списку підвидів продукту</a>
+        <a href="{{route('admin_kind_products.index')}}">Повернутися до списку підвидів продукту</a>
 
     </form>
 @endsection

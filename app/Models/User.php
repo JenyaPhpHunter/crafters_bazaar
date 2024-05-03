@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Region::class);
     }
+
+    public function forum_posts()
+    {
+        return $this->hasMany(ForumPost::class);
+    }
 }
