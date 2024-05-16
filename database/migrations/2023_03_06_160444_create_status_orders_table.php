@@ -15,7 +15,7 @@ class CreateStatusOrdersTable extends Migration
     {
         Schema::create('status_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->string('name', 255)->comment("Назва статусу замовлення");
             $table->timestamps();
         });
         DB::table('status_orders')->insert([

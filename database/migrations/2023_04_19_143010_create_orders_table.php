@@ -10,20 +10,20 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('delivery_id');
-            $table->unsignedBigInteger('kind_payment_id');
-            $table->integer('card')->nullable();
-            $table->unsignedBigInteger('region_id');
-            $table->unsignedBigInteger('city_id');
-            $table->string('address', 255);
-            $table->unsignedBigInteger('newpost_id')->nullable();
-            $table->integer('promocode')->nullable();
-            $table->decimal('pricedelivery', 12, 2)->nullable();
-            $table->text('comment')->nullable();
-            $table->unsignedBigInteger('cart_id');
-            $table->decimal('sum_order',12,2);
-            $table->unsignedBigInteger('status_order_id');
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->unsignedBigInteger('delivery_id')->comment("Id виду доставки");
+            $table->unsignedBigInteger('kind_payment_id')->comment("Id виду оплати");
+            $table->integer('card')->nullable()->comment("карта"); // ??
+            $table->unsignedBigInteger('region_id')->comment("Id області");
+            $table->unsignedBigInteger('city_id')->comment("Id міста");
+            $table->string('address', 255)->comment("Адреса");
+            $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
+            $table->integer('promocode')->nullable()->comment("Промокод");
+            $table->decimal('pricedelivery', 12, 2)->nullable()->comment("Вартсіть доставки");
+            $table->text('comment')->nullable()->comment("коментар замовлення");
+            $table->unsignedBigInteger('cart_id')->comment("Id корзини");
+            $table->decimal('sum_order',12,2)->comment("сума замовлення");
+            $table->unsignedBigInteger('status_order_id')->comment("Статус замовлення");
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();

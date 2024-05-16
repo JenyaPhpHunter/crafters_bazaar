@@ -15,7 +15,7 @@ return new class extends Migration
     {
 //        Schema::create('regions', function (Blueprint $table) {
 //            $table->id();
-//            $table->string('name');
+//            $table->string('name')->comment("Назва області");
 //            $table->timestamps();
 //        });
     }

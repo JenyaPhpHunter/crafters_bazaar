@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->unsignedBigInteger('forum_topic_id');
-            $table->foreign('forum_topic_id')->references('id')->on('forum_topics')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('answer_to')->nullable(); // Тип поля answer_to тепер nullable
-            $table->foreign('answer_to')->references('id')->on('forum_posts')->onDelete('set null'); // Затриманий зовнішній ключ
+            $table->string('content')->comment('Контент поста');
+            $table->unsignedBigInteger('forum_topic_id')->comment('Id теми форума');
+            $table->unsignedBigInteger('user_id')->comment('Id користувача');
+            $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на пост Id');
             $table->timestamps();
+
+            $table->foreign('forum_topic_id')->references('id')->on('forum_topics')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('answer_to')->references('id')->on('forum_posts')->onDelete('set null'); // Затриманий зовнішній ключ
         });
     }
 
