@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('php_name');
-            $table->string('code');
+            $table->string('name')->comment("Назва кольору");
+            $table->string('php_name')->comment("Назва кольору на англійській мові");
+            $table->string('code')->comment("Код кольору");
             $table->timestamps();
         });
         DB::table('colors')->insert([

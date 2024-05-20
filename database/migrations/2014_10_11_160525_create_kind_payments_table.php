@@ -16,8 +16,8 @@ class CreateKindPaymentsTable extends Migration
     {
         Schema::create('kind_payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('comment');
+            $table->string('name')->comment("Назва виду оплати");
+            $table->string('comment')->comment("Коментар до оплати");
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();

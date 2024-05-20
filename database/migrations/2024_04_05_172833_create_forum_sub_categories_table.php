@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('forum_sub_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('forum_category_id');
-            $table->foreign('forum_category_id')->references('id')->on('forum_categories')->onDelete('cascade');
+            $table->string('name')->comment('Назва підкатегорії форума');
+            $table->unsignedBigInteger('forum_category_id')->comment('Id категорії форума');
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
+
+            $table->foreign('forum_category_id')->references('id')->on('forum_categories')->onDelete('cascade');
         });
     }
 

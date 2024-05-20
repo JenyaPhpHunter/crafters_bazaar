@@ -15,10 +15,10 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->text('comment');
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedTinyInteger('rating');
+            $table->text('comment')->comment("Коментар");
+            $table->unsignedBigInteger('product_id')->comment("Id товару");
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->enum('rating', ['1', '2', '3', '4', '5'])->nullable()->comment("рейтинг");
             $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
 

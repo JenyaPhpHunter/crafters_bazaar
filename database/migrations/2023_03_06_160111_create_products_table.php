@@ -15,25 +15,25 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->nullable()->default(null);
-            $table->unsignedBigInteger('kind_product_id')->nullable()->default(null);
-            $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null);
-            $table->text('content')->nullable()->default(null);
-            $table->text('links_networks')->nullable()->default(null);
-            $table->bigInteger('price')->nullable()->default(null);
-            $table->integer('discount')->nullable()->default(null);
-            $table->integer('stock_balance')->nullable()->default(1);
-            $table->unsignedBigInteger('size_id')->nullable();
-            $table->unsignedBigInteger('color_id')->nullable();
-            $table->integer('term_creation')->nullable()->default(null);
-            $table->unsignedBigInteger('status_product_id');
-            $table->unsignedBigInteger('user_id');
-            $table->boolean('new')->unsigned()->default(1);
-            $table->boolean('featured')->unsigned()->default(0);
+            $table->string('name', 255)->nullable()->default(null)->comment("Назва товару");
+            $table->unsignedBigInteger('kind_product_id')->nullable()->default(null)->comment("Id виду товару");
+            $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null)->comment("Id підвиду товару");
+            $table->text('content')->nullable()->default(null)->comment("Коментар до товару");
+            $table->text('links_networks')->nullable()->default(null)->comment("Посилання на товар");
+            $table->bigInteger('price')->nullable()->default(null)->comment("Вартість");
+            $table->integer('discount')->nullable()->default(null)->comment("Знижка");
+            $table->integer('stock_balance')->nullable()->default(1)->comment("Залишок на складі");
+            $table->unsignedBigInteger('size_id')->nullable()->comment("Id розміру");
+            $table->unsignedBigInteger('color_id')->nullable()->comment("Id кольору");
+            $table->integer('term_creation')->nullable()->default(null)->comment("строк виготовлення");
+            $table->unsignedBigInteger('status_product_id')->comment("Статус товару");
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->boolean('new')->unsigned()->default(1)->comment("Новий");
+            $table->boolean('featured')->unsigned()->default(0)->comment("Рекомендований");
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
-            $table->dateTime('date_start_sale')->nullable();
-            $table->unsignedBigInteger('admin_id')->unsigned()->nullable();
+            $table->dateTime('date_start_sale')->nullable()->comment("Дата початку продажу");
+            $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
             $table->timestamps();
 
             $table->foreign('kind_product_id')->references('id')->on('kind_products');
