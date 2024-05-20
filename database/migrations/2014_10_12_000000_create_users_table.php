@@ -15,22 +15,22 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('name')->nullable();
-            $table->string('surname')->nullable();
-            $table->string('secondname')->nullable();
-            $table->string('phone')->nullable();
-            $table->unsignedBigInteger('role_id')->default(7);
-            $table->unsignedBigInteger('category_users_id')->default(1);
-            $table->unsignedBigInteger('gender')->nullable();
-            $table->date('birthday')->nullable();
-            $table->unsignedBigInteger('region_id')->nullable();
-            $table->unsignedBigInteger('city_id')->nullable();
-            $table->string('address')->nullable();
-            $table->unsignedBigInteger('delivery_id')->nullable();
-            $table->unsignedBigInteger('kind_payment_id')->nullable();
-            $table->unsignedBigInteger('newpost_id')->nullable();
+            $table->string('email')->unique()->comment("Email");
+            $table->string('password')->comment("Пароль");
+            $table->string('name')->nullable()->comment("Ім'я");
+            $table->string('surname')->nullable()->comment("Прізвище");
+            $table->string('secondname')->nullable()->comment("По-батькові");
+            $table->string('phone')->nullable()->comment("телефон");
+            $table->unsignedBigInteger('role_id')->default(7)->comment("Id ролі користувача");
+            $table->unsignedBigInteger('category_users_id')->default(1)->comment("Id категорії користувача");
+            $table->unsignedBigInteger('gender')->nullable()->comment("Стать користувача");
+            $table->date('birthday')->nullable()->comment("День народження");
+            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
+            $table->unsignedBigInteger('city_id')->nullable()->comment("Id міста");
+            $table->string('address')->nullable()->comment("Адреса");
+            $table->unsignedBigInteger('delivery_id')->nullable()->comment("Id виду доставки");
+            $table->unsignedBigInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
+            $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);

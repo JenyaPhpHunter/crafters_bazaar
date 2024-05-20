@@ -16,7 +16,7 @@ class CreateStatusProductsTable extends Migration
     {
         Schema::create('status_products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->comment("Назва статусу товару");
             $table->timestamps();
         });
         DB::table('status_products')->insert([
