@@ -1,22 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="offcanvas-overlay"></div>
-
     <!-- Page Title/Header Start -->
-    <div class="page-title-section section" data-bg-image="{{ asset('images/bg/page-title-1.webp') }}">
+    <div class="page-title-section section">
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <div class="page-title">
-                        <h1 class="title">ФОРУМ</h1>
-                        <ul class="breadcrumb">
+                    <div class="page-title" style="display: flex; align-items: center; justify-content: space-between;">
+                        <h1 class="title" style="margin-bottom: 0;">ФОРУМ</h1>
+                        <a class="btn btn-primary2" href="{{ route('forum_categories.create') }}" style="margin-left: 20px;">Створити категорію</a>
+                    </div>
+                    <div class="breadcrumb-container" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+                        <ul class="breadcrumb" style="margin-bottom: 0;">
                             <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('forum_categories.index') }}">Категорії</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('forum_sub_categories.index') }}">Підкатегорії</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('forum_topics.index') }}">Теми</a></li>
                         </ul>
+                        <a class="btn btn-primary2" href="{{ route('forum_sub_categories.create') }}" style="margin-left: 20px;">Створити підкатегорію</a>
                     </div>
                 </div>
             </div>
@@ -26,11 +27,6 @@
 
     <div class="section section-padding pt-0">
         <div class="section section-fluid learts-mt-70">
-            <div style="text-align: right;">
-                <a class="btn btn-primary2 mr-3" href="{{ route('forum_categories.create') }}">Створити категорію</a>
-                <br><br>
-                <a class="btn btn-primary2 mr-3" href="{{ route('forum_sub_categories.create') }}">Створити підкатегорію</a>
-            </div>
             <div class="container">
                 <div class="row learts-mb-n50">
                     <div class="col-lg-9 col-12 learts-mb-50">
@@ -38,11 +34,21 @@
                             <div class="category-container" id="category-{{ $category->id }}">
                                 <!-- Контейнер для категорії та карандаша -->
                                 <span>{{ $category->name }}</span> <!-- Категорія -->
-                                @if($user->role_id < 4)
-                                    <a href="{{ route('forum_categories.edit', ['forum_category' => $category->id]) }}">
-                                        <i class="fas fa-pencil-alt"></i> <!-- Карандаш -->
-                                    </a>
-                                @endif
+                                @isset($user)
+                                    @can('edit', $category)
+                                        <a href="{{ route('forum_categories.edit', ['forum_category' => $category->id]) }}">
+                                            <i class="fas fa-pencil-alt"></i> <!-- Карандаш -->
+                                        </a>
+                                    @endcan
+                                @endisset
+
+{{--                            @isset($user)--}}
+{{--                                @if($user->role_id < 4)--}}
+{{--                                    <a href="{{ route('forum_categories.edit', ['forum_category' => $category->id]) }}">--}}
+{{--                                        <i class="fas fa-pencil-alt"></i> <!-- Карандаш -->--}}
+{{--                                    </a>--}}
+{{--                                @endif--}}
+{{--                                @endisset--}}
                                 <!-- Підкатегорії -->
                                 <div class="subcategories" id="subcategories-{{ $category->id }}">
                                     @foreach($category->forum_sub_categories as $subcategory)
@@ -50,11 +56,13 @@
                                             <a href="{{ route('forum_sub_categories.show', ['forum_sub_category' => $subcategory->id]) }}">
                                                 <span>{{ $subcategory->name }}</span>
                                             </a>
+                                            @isset($user)
                                             @if($user->role_id < 4)
                                                 <a href="{{ route('forum_sub_categories.edit', ['forum_sub_category' => $subcategory->id]) }}">
                                                     <i class="fas fa-pencil-alt"></i> <!-- Карандаш -->
                                                 </a>
                                             @endif
+                                            @endisset
                                         </div>
                                     @endforeach
                                 </div>

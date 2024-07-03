@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <body>
+
     <!-- Page Title/Header Start -->
-    <div class="page-title-section section" data-bg-image="{{ asset('images/bg/page-title-1.webp') }}">
+    <div class="page-title-section section">
         <div class="container">
             <div class="row">
                 <div class="col">
                     <div class="page-title">
-                        <h1 class="title">Перегляд товару</h1>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>

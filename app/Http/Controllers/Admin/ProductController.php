@@ -10,7 +10,6 @@ use App\Models\Color;
 use App\Models\KindProduct;
 use App\Models\Product;
 use App\Models\ProductPhoto;
-use App\Models\Size;
 use App\Models\SubKindProduct;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -62,11 +61,10 @@ class ProductController extends Controller
         $user_id = $request->user_id;
         if(empty($user_id)){
             return view('auth.login',[
-                'includeRecommendedProducts' => true,
-                'excludeProducts' => true,
+//                'includeRecommendedProducts' => true,
+//                'excludeProducts' => true,
             ]);
         }
-        $sizes = Size::all();
         $colors = Color::all();
         if(empty($request->input('product_id'))){
             $kind_products = KindProduct::all();
@@ -87,7 +85,6 @@ class ProductController extends Controller
                 'sub_kind_products',
                 'kind_product_obj',
                 'sub_kind_product_obj',
-                'sizes',
                 'colors',
                 'user_id',
             ))->with(['includeRecommendedProducts' => false, 'excludeProducts' => true]);
@@ -95,7 +92,6 @@ class ProductController extends Controller
             $product_id = $request->input('product_id');
             return redirect( route('admin.products.createkindsubkind', [
                 'product_id' => $product_id,
-                'sizes' => $sizes,
                 'colors' => $colors,
                 'user_id' => $user_id,
             ]));
@@ -107,7 +103,6 @@ class ProductController extends Controller
         $user_id = $request->input('user_id');
         $product = Product::query()
             ->with('kind_product')
-            ->with('size')
             ->with('color')
             ->with('status_product')
             ->with('user')
@@ -140,7 +135,6 @@ class ProductController extends Controller
         $product->content = $request->input('content');
         $product->price = $request->input('price');
         $product->stock_balance = $request->input('stock_balance');
-        $product->size_id = $request->input('selected_size');
         $product->color_id = $request->input('color');
         $product->status_product_id = 1;
         $product->user_id = $request->input('user_id');
@@ -164,7 +158,7 @@ class ProductController extends Controller
         $user->save();
 
         if ($action === 'Зберегти') {
-            return redirect()->route('admin.products.edit', ['admin_product' => $product]);
+            return redirect()->route('admin_products.edit', ['admin_product' => $product]);
         } elseif ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
 
             return redirect()->route('admin.products.createkindsubkind', [
@@ -179,7 +173,6 @@ class ProductController extends Controller
                 'content' => 'required',
                 'price' => 'required',
                 'stock_balance' => 'required',
-                'selected_size' => 'required',
                 'color' => 'required',
             ]);
             if ($validated->fails()) {
@@ -220,7 +213,6 @@ class ProductController extends Controller
 
             return redirect( route('admin.products.show', [
                 'admin_product' => $product,
-                'sizes',
                 'colors',
                 'includeRecommendedProducts' => true,
                 'excludeProducts' => true,
@@ -233,7 +225,6 @@ class ProductController extends Controller
         $user_id = $request->input('user_id');
         $kind_product_obj = session('kind_product_obj');
         $sub_kind_product_obj = session('sub_kind_product_obj');
-        $sizes = Size::all();
         $colors = Color::all();
         $kind_products = KindProduct::all();
         $sub_kind_products = SubKindProduct::all();
@@ -254,7 +245,6 @@ class ProductController extends Controller
             'kind_products' => $kind_products,
             'sub_kind_product_obj' => $sub_kind_product_obj,
             'sub_kind_products' => $sub_kind_products,
-            'sizes' => $sizes,
             'colors' => $colors,
             'includeRecommendedProducts' => false,
             'excludeProducts' => true,
@@ -275,7 +265,6 @@ class ProductController extends Controller
         $product->content = $request->post('content');
         $product->price = $request->post('price');
         $product->stock_balance = $request->post('stock_balance');
-        $product->size_id = $request->post('selected_size');
         $product->color_id = $request->post('product_color');
         $product->status_product_id = 1;
         $product->user_id = $user_id;
@@ -296,7 +285,6 @@ class ProductController extends Controller
         if ($action === 'Зберегти') {
             $kind_products = KindProduct::all();
             $sub_kind_products = SubKindProduct::all();
-            $sizes = Size::all();
             $colors = Color::all();
             $kind_product_obj = KindProduct::query()->where('id',$product->kind_product_id)->first();
             $sub_kind_product_obj = SubKindProduct::query()->where('id',$product->sub_kind_product_id)->first();
@@ -307,9 +295,8 @@ class ProductController extends Controller
                     'sub_kind_product_obj' => $sub_kind_product_obj,
                     'kind_products' => $kind_products,
                     'sub_kind_products' => $sub_kind_products,
-                    'sizes' => $sizes,
                     'colors' => $colors,
-                    'includeRecommendedProducts' => true,
+//                    'includeRecommendedProducts' => true,
                     'excludeProducts' => true,
                 ]);
         } elseif ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
@@ -326,7 +313,6 @@ class ProductController extends Controller
                 'content' => 'required',
                 'price' => 'required',
                 'stock_balance' => 'required',
-                'selected_size' => 'required',
                 'product_color' => 'required',
             ]);
 
@@ -369,7 +355,6 @@ class ProductController extends Controller
 
             return redirect( route('admin.products.show', [
                 'admin_product' => $product,
-                'sizes',
                 'colors',
                 'includeRecommendedProducts' => false,
                 'excludeProducts' => true,
@@ -508,10 +493,6 @@ class ProductController extends Controller
     public function filter(Request $request)
     {
         $filterStatus = $request->input('status_product');
-//        echo "<pre>";
-//        print_r($request->all());
-//        echo "</pre>";
-//        die();
 
         // Отримати всі товари
         $products = Product::query()->get();
@@ -520,14 +501,7 @@ class ProductController extends Controller
         if ($filterStatus) {
             $products = $this->filterByStatus($products, $filterStatus);
         }
-
-//        if($sortBy){
-//            $products = $this->sortProducts($products, $sortBy);
-//        } else {
-//            $products = $products->sortByDesc(function ($product) {
-//                return $product->stock_balance == 0 ? -1 : $product->id;
-//            });
-//        }
+        
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
 
         $products = $products->sortByDesc(function ($product) {

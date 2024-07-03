@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Головна сторінка</title>
-    <meta name="robots" content="noindex, follow" />
+    <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon -->
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/slick.css') }}">
 
     <!-- Main Style CSS -->
-{{--    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->--}}
+    {{--    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->--}}
 
     <!-- Use the minified version files listed below for better performance and remove the files listed above -->
     <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
@@ -41,29 +41,47 @@
 </head>
 
 <body>
-
 @include('include.topbar-section')
 @include('include.header-section')
 @include('include.header-sticky-section')
-{{--@include('include.mobile-header-section')--}}
-{{--@include('include.offcanvas-search-section')--}}
-{{--@include('include.offcanvas-wishlist-section')--}}
-{{--<div class="offcanvas-overlay"></div>--}}
-@if (!isset($excludeProducts) || !$excludeProducts)
-{{--    @include('include.slider-main')--}}
-{{--    @include('include.category-banner-section')--}}
-{{--    @include('include.sale-banner')--}}
-{{--    @include('include.product-section')--}}
-{{--    @include('include.deal-day')--}}
-{{--    @include('include.list-product-section')--}}
-{{--    @include('include.products-list')--}}
-{{--    @include('include.gallery-section')--}}
-@endif
+@include('include.mobile-header-section')
+@include('include.offcanvas-search-section')
+@include('include.offcanvas-wishlist-section')
+<div class="offcanvas-overlay"></div>
+@isset($includeSliderMain)
+    @include($user && $user->role_id < 5 ? 'admin.include.slider-main' : 'include.slider-main')
+@endisset
+@isset($includeFeatureSection)
+    @include($user && $user->role_id < 5 ? 'admin.include.feature-section' : 'include.feature-section')
+@endisset
+@isset($includeCategoryBannerSection)
+    @include($user && $user->role_id < 5 ? 'admin.include.category-banner-section' : 'include.category-banner-section')
+@endisset
+@isset($includeSaleBanner)
+    @include($user && $user->role_id < 5 ? 'admin.include.sale-banner' : 'include.sale-banner')
+@endisset
+@isset($includeProductSection)
+    @include($user && $user->role_id < 5 ? 'admin.include.product-section' : 'include.product-section')
+@endisset
+@isset($includeDealDay)
+    @include($user && $user->role_id < 5 ? 'admin.include.deal-day' : 'include.deal-day')
+@endisset
+@isset($includeListProductSection)
+    @include($user && $user->role_id < 5 ? 'admin.include.list-product-section' : 'include.list-product-section')
+@endisset
+@isset($includeInstagramSection)
+    @include($user && $user->role_id < 5 ? 'admin.include.instagram-section' : 'include.instagram-section')
+@endisset
+@isset($includeRecommendedProducts)
+    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')
+@endisset
+
 @yield('content')
-@if (isset($includeRecommendedProducts))
-{{--    @include('include.recommended-products')--}}
-@endif
 @include('include.footer')
+
+<!-- BEGIN: Page JS-->
+@yield('page-script')
+<!-- END: Page JS-->
 
 <!-- JS
 ============================================ -->

@@ -20,11 +20,6 @@ use HasFactory;
         return $this->belongsTo(User::class);
     }
 
-    public function basket()
-    {
-        return $this->belongsTo(Basket::class);
-    }
-
     public function status_order()
     {
         return $this->belongsTo(StatusProduct::class);

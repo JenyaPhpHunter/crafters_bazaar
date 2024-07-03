@@ -1,25 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="offcanvas-overlay"></div>
+    <!-- Page Title/Header Start -->
+    <div class="page-title-section section">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="page-title">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Корзина</li>
+                        </ul>
+                    </div>
 
-<!-- Page Title/Header Start -->
-<div class="page-title-section section" data-bg-image="{{asset('images/bg/page-title-1.webp') }}">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="page-title">
-                    <h1 class="title">Корзина</h1>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item active">Корзина</li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Page Title/Header End -->
+    <!-- Page Title/Header End -->
 
 <!-- Shopping Cart Section Start -->
 <div class="section section-padding">
@@ -30,7 +28,7 @@
             <table class="cart-wishlist-table table">
                 <thead>
                 <tr>
-                    <th class="name" colspan="2">Товар</th>
+                    <th class="name" colspan="2" style="text-align: center;">Товар</th>
                     <th class="price">Вартість</th>
                     <th class="quantity">Кількість</th>
                     <th class="subtotal">Загалом</th>
@@ -47,8 +45,7 @@
                         @endphp
                         <tr>
                             @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
-                                <td class="thumbnail"><a href="product-details.html"><img src="{{asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
-                            @else
+                                <td class="thumbnail"><a href="{{ route('products.show',['product' => $cartItem->product->id]) }}"><img src="{{asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
                                 <td></td>
                             @endif
                             <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a></td>
@@ -60,12 +57,8 @@
                                 <span class="qty-btn plus"><i class="ti-plus"></i></span>
                             </div>
                         </td>
-                        <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}</span></td>
-{{--                            <td>--}}
-{{--                                <a href="#" class="btn delete-cart-item" data-id="{{ $cartItem->id }}">×</a>--}}
-{{--                            </td>--}}
+                        <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}грн</span></td>
                                     <td class="remove"><a href="{{ route('carts.remove_item',['cart_item' => $cartItem->id]) }}" class="btn">×</a></td>
-{{--                                <a href="{{ route('carts.clearСart') }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $cartItem->id }}').submit();">Видалити з корзини</a>--}}
                         </tr>
                     @endforeach
                 </tbody>

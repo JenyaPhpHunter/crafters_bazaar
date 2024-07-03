@@ -18,9 +18,23 @@ class RolePolicy
     {
         //
     }
-    public function isAdmin($user)
+    public function isUser($user)
     {
-        return $user->role > 3; // Перевіряємо, чи має користувач роль, вищу ніж 3
+        return $user->role > 4;
     }
 
+    public function isSeller($user)
+    {
+        return $user->role == 4;
+    }
+
+    public function isРead($user)
+    {
+        return $user->role == 3;
+    }
+
+    public function isAdmin($user)
+    {
+        return $user->role < 3;
+    }
 }

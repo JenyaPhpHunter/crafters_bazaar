@@ -11,13 +11,14 @@
             </div>
             <!-- Header Logo End -->
 
+
             <!-- Header Search Start -->
             <div class="col">
                 <div class="header6-search">
-                    <form action="#">
+                    <form action="{{ route('products.filter') }}" method="GET">
                         <div class="row g-0">
                             <div class="col">
-                                <input type="text" placeholder="Пошук товарів...">
+                                <input type="text" name="search" placeholder="Пошук товарів...">
                             </div>
                             <button type="submit"><i class="fal fa-search"></i></button>
                         </div>
@@ -48,11 +49,13 @@
                     </div>
                 </div>
                 <br>
+                @isset($user)
                 <div class="header-status">
                     <a href="{{ route('orders.status') }}">
                         <p><i class="fa fa-truck"></i>Статус замовлення</p>
                     </a>
                 </div>
+                @endisset
             </div>
             <!-- Header Tools End -->
         </div>
@@ -64,46 +67,48 @@
             <nav class="site-main-menu justify-content-center menu-height-60">
                 <ul>
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
-                        @if(isset($kind_products))
+                        @if(isset($header_kind_products))
                             <ul class="sub-menu">
-                            @foreach($kind_products as $kind_product)
+                            @foreach($header_kind_products as $kind_product)
                                 <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
                                     <ul class="sub-menu">
-                                        @foreach($sub_kind_products as $sub_kind_product)
-                                            <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
-                                        @endforeach
+                                        @if(!empty($kind_product->sub_kind_products))
+                                            @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                                                <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                 </li>
                             @endforeach
                             </ul>
                         @endif
                     </li>
-                    @if($user_products->count() > 0)
-                    <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Мої товари</span></a>
-                        <ul class="sub-menu mega-menu">
-                            @if(isset($statuses_products))
-                                @foreach ($statuses_products as $status_product)
-                                    <li>
-                                        <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
-                                        <ul>
-                                            @foreach($user_products as $user_product)
-                                                @if($status_product->id == $user_product->status_product_id)
-                                                    @php
-                                                        $selectedPhoto = $user_product->productphotos->where('queue', 1)->first();
-                                                    @endphp
-                                                    @isset($selectedPhoto)
-                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
-                                                    @else
-                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
-                                                    @endisset
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </li>
+                    @if(isset($user_products) && $user_products->count() > 0)
+                        <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Мої товари</span></a>
+                            <ul class="sub-menu mega-menu">
+                                @if(isset($statuses_products))
+                                    @foreach ($statuses_products as $status_product)
+                                        <li>
+                                            <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                            <ul>
+                                                @foreach($user_products as $user_product)
+                                                    @if($status_product->id == $user_product->status_product_id)
+                                                        @php
+                                                            $selectedPhoto = $user_product->productphotos->where('queue', 1)->first();
+                                                        @endphp
+                                                        @isset($selectedPhoto)
+                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
+                                                        @else
+                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
+                                                        @endisset
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
                     @endif
                     <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
                         <ul class="sub-menu mega-menu">
@@ -201,14 +206,14 @@
                     </li>
                     <li class="has-children"><a href="{{ route('products.create') }}"><span class="menu-text">Додати свій товар</span></a>
                         <ul class="sub-menu">
-                            @isset($kind_products)
-                                @foreach($kind_products as $kind_product)
+                            @isset($header_kind_products)
+                                @foreach($header_kind_products as $kind_product)
                                     <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
                                         <ul class="sub-menu">
                                             @php
                                                 $counter = 0;
                                             @endphp
-                                            @forelse ($sub_kind_products as $sub_kind_product)
+                                            @forelse ($kind_product->sub_kind_products as $sub_kind_product)
                                                 @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                     @php
                                                         $counter++;
@@ -234,3 +239,12 @@
 
 </div>
 <!-- Header Section End -->
+
+<div class="clearfix">
+    @foreach($title_list as $item)
+        <div class="img-container" style="background-color:#bbb">
+            <a href="{{ route('products.show', ['product' => $item->id]) }}"><img
+                    src="{{ asset('photos/' . $item->productphotos[0]->filename) }}" alt="Product Image"></a>
+        </div>
+    @endforeach
+</div>

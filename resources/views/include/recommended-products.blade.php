@@ -128,11 +128,6 @@
                                 <li style="background-color: #374140;">color two</li>
                                 <li style="background-color: #8ea1b2;">color three</li>
                             </ul>
-                            <ul class="sizes">
-                                <li>Large</li>
-                                <li>Medium</li>
-                                <li>Small</li>
-                            </ul>
                         </div>
                     </div>
                     <div class="product-info">
@@ -214,11 +209,6 @@
                             <ul class="colors">
                                 <li style="background-color: #000000;">color one</li>
                                 <li style="background-color: #b2483c;">color two</li>
-                            </ul>
-                            <ul class="sizes">
-                                <li>Large</li>
-                                <li>Medium</li>
-                                <li>Small</li>
                             </ul>
                         </div>
                     </div>

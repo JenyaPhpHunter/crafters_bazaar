@@ -33,7 +33,6 @@ class DashboardController extends Controller
             "kind_products" => $kind_products,
             "sub_kind_products" => $sub_kind_products,
             "products" => $products,
-            'excludeProducts' => true,
         ]);
     }
 }

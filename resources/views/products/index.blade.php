@@ -2,21 +2,17 @@
 
 @section('content')
 
-    <div class="offcanvas-overlay"></div>
-
     <!-- Page Title/Header Start -->
-    <div class="page-title-section section" data-bg-image="{{ asset('images/bg/page-title-1.webp') }}">
+    <div class="page-title-section section">
         <div class="container">
             <div class="row">
                 <div class="col">
                     <div class="page-title">
-                        <h1 class="title">Shop</h1>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
                             <li class="breadcrumb-item active">Товари</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -56,15 +52,6 @@
                                     </select>
                                 </div>
                             </li>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    var sortSelect = document.getElementById('sortProducts');
-                                    sortSelect.onchange = function () {
-                                        var selectedSort = sortSelect.value;
-                                        window.location.href = selectedSort;
-                                    };
-                                });
-                            </script>
                             <li>
                                 <div class="product-column-toggle d-none d-xl-flex">
                                     <button class="toggle hintT-top" data-hint="5 Column" data-column="5"><i class="ti-layout-grid4-alt"></i></button>
@@ -153,7 +140,7 @@
                                     $selectedCategories = $_GET['categories'];
                                 }
                                 ?>
-                                @foreach($all_kind_products as $kind_product)
+                                @foreach($kind_products as $kind_product)
                                     @if($kind_product->products)
                                         <li>
                                             <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}"
@@ -211,51 +198,6 @@
                 </div>
             </div>
         </form>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Отримати елементи чекбоксів
-                var checkboxes = document.querySelectorAll('input[type=checkbox]');
-
-                // Додати обробник подій для кожного чекбокса
-                checkboxes.forEach(function (checkbox) {
-                    checkbox.addEventListener('change', saveFilters);
-                });
-
-                // Перевірити наявність збережених фільтрів та застосувати їх
-                restoreFilters();
-            });
-
-            // Функція для збереження вибраних фільтрів
-            function saveFilters() {
-                var selectedFilters = {};
-
-                // Отримати значення вибраних чекбоксів
-                var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-                checkboxes.forEach(function (checkbox) {
-                    selectedFilters[checkbox.name] = checkbox.value;
-                });
-
-                // Зберегти вибрані фільтри у локальному сховищі
-                localStorage.setItem('selectedFilters', JSON.stringify(selectedFilters));
-            }
-
-            // Функція для відновлення збережених фільтрів
-            function restoreFilters() {
-                var selectedFilters = localStorage.getItem('selectedFilters');
-
-                if (selectedFilters) {
-                    selectedFilters = JSON.parse(selectedFilters);
-
-                    // Встановити стан чекбоксів відповідно до збережених фільтрів
-                    for (var name in selectedFilters) {
-                        var checkbox = document.querySelector('input[name="' + name + '"][value="' + selectedFilters[name] + '"]');
-                        if (checkbox) {
-                            checkbox.checked = true;
-                        }
-                    }
-                }
-            }
-        </script>
 
         <!-- Product Filter End -->
         <div class="section section-fluid learts-mt-70">
@@ -372,7 +314,7 @@
                             <div class="single-widget learts-mb-40">
                                 <h3 class="widget-title product-filter-widget-title">Фільтрувати по вартості</h3>
                                 <div class="widget-price-range">
-                                    <input class="range-slider" type="text" name="filter_price[range]" data-min="0" data-max="150000" data-from="0" data-to="150000" />
+                                    <input class="range-slider" type="text" name="filter_price[range]" data-min="0" data-max="50000" data-from="0" data-to="50000" />
                                 </div>
                             </div>
                             <!-- Price Range End -->
@@ -404,7 +346,7 @@
                                                 </a>
                                             </div>
                                             <div class="content">
-                                                <h6 class="title"><a href="product-details.html">{{ $featured_product->name }}</a></h6>
+                                                <h6 class="title"><a href="{{ route('products.show',['product' => $featured_product->id]) }}">{{ $featured_product->name }}</a></h6>
                                                 <span class="price">
                                                 {{ $featured_product->price }} грн
                                             </span>
@@ -431,37 +373,91 @@
                             </div>
                             <!-- Tags End -->
                     </div>
-
                 </div>
             </div>
         </div>
     <!-- Shop Products Section End -->
-        <script>
-            function applyFilters() {
-                document.getElementById('filterForm').submit();
-            }
-            function applysecondFilters() {
-                document.getElementById('rightfilterForm').submit();
-            }
-            function resetFilters() {
-                // Скидаємо збережені фільтри у локальному сховищі
-                localStorage.removeItem('selectedFilters');
 
-                // Знаходимо всі чекбокси та скидаємо їх стан
-                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = false;
+@endsection
+
+@section('page-script')
+            <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                    var sortSelect = document.getElementById('sortProducts');
+                    sortSelect.onchange = function () {
+                    var selectedSort = sortSelect.value;
+                    window.location.href = selectedSort;
+                };
+                });
+                    document.addEventListener('DOMContentLoaded', function () {
+                    // Отримати елементи чекбоксів
+                    var checkboxes = document.querySelectorAll('input[type=checkbox]');
+
+                    // Додати обробник подій для кожного чекбокса
+                    checkboxes.forEach(function (checkbox) {
+                    checkbox.addEventListener('change', saveFilters);
                 });
 
-                // Знаходимо скрите поле та встановлюємо в нього значення сортування, якщо воно існує
-                const sortField = document.querySelector('input[name="sort_by"]');
-                @isset($sort_by)
-                    sortField.value = "{{ $sort_by }}"; // Встановіть значення змінної сортування
-                @endisset
+                    // Перевірити наявність збережених фільтрів та застосувати їх
+                    restoreFilters();
+                });
 
-                // Отримуємо форму та відправляємо її, щоб оновити сторінку без фільтрів
-                const form = document.getElementById('filterForm');
-                form.submit();
-            }
-        </script>
+                    // Функція для збереження вибраних фільтрів
+                    function saveFilters() {
+                    var selectedFilters = {};
+
+                    // Отримати значення вибраних чекбоксів
+                    var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+                    checkboxes.forEach(function (checkbox) {
+                    selectedFilters[checkbox.name] = checkbox.value;
+                });
+
+                    // Зберегти вибрані фільтри у локальному сховищі
+                    localStorage.setItem('selectedFilters', JSON.stringify(selectedFilters));
+                }
+
+                    // Функція для відновлення збережених фільтрів
+                    function restoreFilters() {
+                    var selectedFilters = localStorage.getItem('selectedFilters');
+
+                    if (selectedFilters) {
+                    selectedFilters = JSON.parse(selectedFilters);
+
+                    // Встановити стан чекбоксів відповідно до збережених фільтрів
+                    for (var name in selectedFilters) {
+                    var checkbox = document.querySelector('input[name="' + name + '"][value="' + selectedFilters[name] + '"]');
+                    if (checkbox) {
+                    checkbox.checked = true;
+                }
+                }
+                }
+                }
+
+                function applyFilters() {
+                    document.getElementById('filterForm').submit();
+                }
+                function applysecondFilters() {
+                    document.getElementById('rightfilterForm').submit();
+                }
+                function resetFilters() {
+                    // Скидаємо збережені фільтри у локальному сховищі
+                    localStorage.removeItem('selectedFilters');
+
+                    // Знаходимо всі чекбокси та скидаємо їх стан
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+
+                    // Знаходимо скрите поле та встановлюємо в нього значення сортування, якщо воно існує
+                    const sortField = document.querySelector('input[name="sort_by"]');
+                    @isset($sort_by)
+                        sortField.value = "{{ $sort_by }}"; // Встановіть значення змінної сортування
+                    @endisset
+
+                    // Отримуємо форму та відправляємо її, щоб оновити сторінку без фільтрів
+                    const form = document.getElementById('filterForm');
+                    form.submit();
+                }
+            </script>
 @endsection

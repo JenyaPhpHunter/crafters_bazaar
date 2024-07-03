@@ -501,39 +501,6 @@
                             <table>
                                 <tbody>
                                 <tr>
-                                    <td class="label"><span>Розмір</span></td>
-                                    <td class="value">
-                                        <div class="product-sizes">
-                                            @foreach($sizes as $size)
-                                                @php
-                                                    $isSelected = $product->size_id === $size->id;
-                                                @endphp
-                                                <a href="#" data-size-id="{{ $size->id }}" onclick="selectSize(this); return false;" class="{{ $isSelected ? 'selected' : '' }}">
-                                                    {{ $size->name }}
-                                                </a>
-                                            @endforeach
-                                            <input type="hidden" name="selected_size" id="selected_size" value="{{ $product->size_id }}">
-
-                                            <script>
-                                                function selectSize(sizeLink) {
-                                                    // Знімаємо виділення з усіх розмірів
-                                                    var sizeLinks = document.querySelectorAll('.product-sizes a');
-                                                    var sizeId = sizeLink.getAttribute('data-size-id');
-                                                    sizeLinks.forEach(function (link) {
-                                                        link.classList.remove('selected');
-                                                    });
-
-                                                    // Виділяємо обраний розмір
-                                                    sizeLink.classList.add('selected');
-                                                    document.getElementById('selected_size').value = sizeId;
-
-                                                    // Тепер ви можете зберегти це значення у прихованому полі або використовувати його інакше в вашій формі
-                                                }
-                                            </script>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td class="label"><span>Колір</span></td>
                                     <td class="value">
                                         <style>
@@ -700,10 +667,6 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
-                                    <tr>
-                                        <td>Size</td>
-                                        <td>Large, Medium, Small</td>
-                                    </tr>
                                     <tr>
                                         <td>Color</td>
                                         <td>Black, White</td>

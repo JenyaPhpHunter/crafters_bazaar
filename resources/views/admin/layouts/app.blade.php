@@ -41,27 +41,43 @@
 </head>
 
 <body>
-@include('admin.include.topbar-section')
+
+@include('include.topbar-section')
 @include('admin.include.header-section')
 @include('admin.include.header-sticky-section')
-{{--@include('admin.include.mobile-header-section')--}}
-{{--@include('admin.include.offcanvas-search-section')--}}
-{{--@include('admin.include.offcanvas-wishlist-section')--}}
-{{--<div class="offcanvas-overlay"></div>--}}
-@if (!isset($excludeProducts) || !$excludeProducts)
-    {{--    @include('admin.include.slider-main')--}}
-    {{--    @include('admin.include.category-banner-section')--}}
-    {{--    @include('admin.include.sale-banner')--}}
-    {{--    @include('admin.include.product-section')--}}
-    {{--    @include('admin.include.deal-day')--}}
-    {{--    @include('admin.include.list-product-section')--}}
-    {{--    @include('admin.include.products-list')--}}
-    {{--    @include('admin.include.gallery-section')--}}
-@endif
+@include('admin.include.mobile-header-section')
+@include('admin.include.offcanvas-search-section')
+@include('admin.include.offcanvas-wishlist-section')
+<div class="offcanvas-overlay"></div>
+@isset($includeSliderMain)
+    @include('admin.include.slider-main')
+@endisset
+@isset($includeFeatureSection)
+    @include('admin.include.feature-section')
+@endisset
+@isset($includeCategoryBannerSection)
+    @include('admin.include.category-banner-section')
+@endisset
+@isset($includeSaleBanner)
+    @include('admin.include.sale-banner')
+@endisset
+@isset($includeProductSection)
+    @include('admin.include.product-section')
+@endisset
+@isset($includeDealDay)
+    @include('admin.include.deal-day')
+@endisset
+@isset($includeListProductSection)
+    @include('admin.include.list-product-section')
+@endisset
+@isset($includeInstagramSection)
+    @include('admin.include.instagram-section')
+@endisset
+@isset($includeRecommendedProducts)
+    @include('admin.include.recommended-products')
+@endisset
+
 @yield('content')
-@if (isset($includeRecommendedProducts))
-    {{--    @include('admin.include.recommended-products')--}}
-@endif
 @include('admin.include.footer')
 
 

@@ -49,10 +49,7 @@ class CartController extends Controller
 
             $user_id = $user->id;
         }
-//        echo "<pre>";
-//        print_r($user_id);
-//        echo "</pre>";
-//        die();
+
         $product = Product::find($productId);
         // Отримуємо або створюємо кошик користувача
         $cart = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);

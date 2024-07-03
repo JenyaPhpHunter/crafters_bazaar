@@ -8236,8 +8236,27 @@ body.offcanvas-open .sticky-header {
 }
 
 /* Page Title Section */
+* {
+    box-sizing: border-box;
+}
+
+/* Image Container Styling */
+.img-container {
+    border: 2px solid rgb(111, 227, 218);
+    float: left;
+    width: 10%;
+}
+
+/* Clearfix for Floated Elements */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
 .page-title-section {
-  padding: 130px 0;
+  padding: 10px 0;
+  background-size: cover;
+  background-position: center;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px), only screen and (min-width: 768px) and (max-width: 991px) {
   .page-title-section {
@@ -8258,7 +8277,8 @@ body.offcanvas-open .sticky-header {
 /* Page Title */
 .page-title .title {
   font-size: 56px;
-  font-weight: 400;
+  font-family: Cursive, serif;
+  font-weight: 100;
   margin-bottom: 30px;
 }
 .page-title .breadcrumb {
@@ -8266,7 +8286,8 @@ body.offcanvas-open .sticky-header {
   background-color: transparent;
 }
 .page-title .breadcrumb .breadcrumb-item {
-  font-size: 16px;
+  font-size: 34px;
+  font-family: Cursive, serif;
   font-weight: 400;
   color: #999999;
 }

@@ -31,8 +31,6 @@
     <br>
     Кількість: {{ $product->quantity }}
     <br>
-    Розмір: {{ $product->size->name }}
-    <br>
     Колір: {{ $product->color->name }}
     <br>
 </p>

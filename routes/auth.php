@@ -21,8 +21,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-//Route::middleware('guest')->group(function () {
-Route::middleware([])->group(function () {
+Route::middleware('guest')->group(function () {
+//Route::middleware([])->group(function () {
+    Route::get('login-register', [RegisteredUserController::class, 'login'])
+        ->name('login-register');
 
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 
@@ -46,8 +48,6 @@ Route::middleware([])->group(function () {
                 ->name('password.store');
 });
 
-Route::get('login-register', [RegisteredUserController::class, 'login'])
-    ->name('login-register');
 
 Route::middleware('auth')->group(function () {
     Route::post('new-password', [NewPasswordController::class, 'store'])->name('newPassword');

@@ -1,33 +1,30 @@
 <!-- Header Section Start -->
 <div class="header-section section bg-white d-none d-xl-block">
     <div class="container">
-        <div class="row row-cols-lg-3 align-items-center">
-
-            <!-- Header Language & Currency Start -->
-            <div class="col">
-                <ul class="header-lan-curr">
-                    <li><a href="#">Українська</a>
-                        <ul class="curr-lan-sub-menu">
-                            <li><a href="#">English</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">UAH</a>
-                        <ul class="curr-lan-sub-menu">
-                            <li><a href="#">EUR</a></li>
-                            <li><a href="#">USD</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <!-- Header Language & Currency End -->
+        <div class="row justify-content-between align-items-center">
 
             <!-- Header Logo Start -->
-            <div class="col">
+            <div class="col-auto">
                 <div class="header-logo justify-content-center">
-                    <a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Crafters bazaar"></a>
+                    <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
                 </div>
             </div>
             <!-- Header Logo End -->
+
+            <!-- Header Search Start -->
+            <div class="col">
+                <div class="header6-search">
+                    <form action="{{ route('products.filter') }}" method="GET">
+                        <div class="row g-0">
+                            <div class="col">
+                                <input type="text" name="search" placeholder="Пошук товарів...">
+                            </div>
+                            <button type="submit"><i class="fal fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Header Search End -->
 
             <!-- Header Tools Start -->
             <div class="col">
@@ -39,9 +36,6 @@
                             <a href="{{ route('login-register') }}"><i class="fal fa-user"></i>&nbsp;Увійти</a>
                         @endif
                     </div>
-                    <div class="header-search">
-                        <a href="{{ asset('#offcanvas-search') }}" class="offcanvas-toggle"><i class="fal fa-search"></i></a>
-                    </div>
                     <div class="header-wishlist">
                         <a href="{{ route('wishlist.index') }}"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
@@ -51,7 +45,6 @@
                 </div>
             </div>
             <!-- Header Tools End -->
-
         </div>
     </div>
 
@@ -119,12 +112,27 @@
                             <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">Portfolio Details</span></a></li>
                         </ul>
                     </li>
-                    <li class="has-children"><a href="{{ route('admin_products.index') }}"><span class="menu-text">Товари</span></a>
+                    <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
+                                @php
+                                $counter = 0;
+                                @endphp
                                 @foreach ($statuses_products as $status_product)
+                                    @if($status_product->id == 4)
+                                        @continue;
+                                    @endif
                                     <li>
-                                        <a href="{{ route('admin_products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                        @if($counter == 0)
+
+                                            <a href="{{ route('products.create') }}" class="mega-menu-title"><span class="menu-text">Додати товар</span></a>
+                                    </li>
+                                    <li>
+                                        @endif
+                                        @php
+                                            $counter ++;
+                                        @endphp
+                                        <a href="{{ route('products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
                                         <ul>
                                             @foreach($products as $product)
                                                 @if($status_product->id == $product->status_product_id)
@@ -132,9 +140,9 @@
                                                         $selectedPhoto = $product->productphotos->where('queue', 1)->first();
                                                     @endphp
                                                     @isset($selectedPhoto)
-                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
                                                     @else
-                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('admin_products.show',['admin_product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
                                                     @endisset
                                                 @endif
                                             @endforeach
@@ -163,8 +171,8 @@
                         <ul class="sub-menu">
                             <li><a href="{{ route('admin_kind_products.create') }}"><span class="menu-text">Створити вид товару</span></a></li>
                             <li><a href="{{ route('admin_kind_products.index') }}"><span class="menu-text">Всі види товарів</span></a></li>
-                            @if(isset($kind_products))
-                                @foreach ($kind_products as $kind_product)
+                            @if(isset($header_kind_products))
+                                @foreach ($header_kind_products as $kind_product)
                                     <li><a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
                                 @endforeach
                             @endif
@@ -173,8 +181,8 @@
                     <li class="has-children">
                         <a href="{{ route('admin_sub_kind_products.index') }}"><span class="menu-text">Підвиди товарів</span></a>
                         <ul class="sub-menu mega-menu">
-                            @if(isset($kind_products))
-                                @foreach ($kind_products as $kind_product)
+                            @if(isset($header_kind_products))
+                                @foreach ($header_kind_products as $kind_product)
                                     <li>
                                         <a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}" class="mega-menu-title">
                                             <span class="menu-text">{{ $kind_product->name }}</span>
@@ -191,7 +199,7 @@
                                                 </a>
                                             </li>
                                             <hr>
-                                        @forelse ($sub_kind_products as $sub_kind_product)
+                                        @forelse ($kind_product->sub_kind_products as $sub_kind_product)
                                             @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                 <li>
                                                     <a href="{{ route('admin_sub_kind_products.show',  ['admin_sub_kind_product' => $sub_kind_product->id]) }}">

@@ -11,7 +11,7 @@ class KindProductController extends Controller
 {
     public function index()
     {
-        $kind_products = KindProduct::query()->with('product')->orderBy('id')->get();
+        $kind_products = KindProduct::query()->with('products')->orderBy('id')->get();
         $sub_kind_products = SubKindProduct::all();
         return view('admin.kind_products.index',[
             "kind_products" => $kind_products,
@@ -21,6 +21,7 @@ class KindProductController extends Controller
 
     public function create()
     {
+
         return view('admin.kind_products.create',[
             'excludeProducts' => true,
         ]);
@@ -44,7 +45,7 @@ class KindProductController extends Controller
 
     public function show($id)
     {
-        $kind_product= KindProduct::query()->with('product')
+        $kind_product= KindProduct::query()->with('products')
             ->where('id',$id)->first();
         $sub_kind_products = SubKindProduct::query()->where('kind_product_id',$kind_product->id)->get();
         return view('admin.kind_products.show',[

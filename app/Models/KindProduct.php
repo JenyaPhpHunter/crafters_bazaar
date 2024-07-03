@@ -14,8 +14,8 @@ class KindProduct extends Model
     {
         return $this->hasMany(Product::class);
     }
-    public function subkindproduct()
+    public function sub_kind_products()
     {
-        return $this->belongsTo(SubKindProduct::class);
+        return $this->hasMany(SubKindProduct::class);
     }
 }

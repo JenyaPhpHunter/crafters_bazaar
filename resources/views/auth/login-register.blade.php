@@ -9,7 +9,7 @@
                     <div class="user-login-register bg-light">
                         <div class="login-register-title">
                             <h2 class="title">Авторизація</h2>
-                            <p class="desc">Чудово, що ти повернувся!</p>
+                            <p class="desc">Чудово, що ви повернулись!</p>
                         </div>
                         <div class="card">
                             <div class="card-header">{{ __('Авторизація') }}</div>

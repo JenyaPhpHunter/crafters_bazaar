@@ -1,25 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="offcanvas-overlay"></div>
 
-<!-- Page Title/Header Start -->
-<div class="page-title-section section" data-bg-image="{{asset('images/bg/page-title-1.webp') }}">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="page-title">
-                    <h1 class="title">Список замовлень</h1>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item active">Список замовлень</li>
-                    </ul>
+    <!-- Page Title/Header Start -->
+    <div class="page-title-section section">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="page-title">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Список замовлень</li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Page Title/Header End -->
+    <!-- Page Title/Header End -->
 
 <!-- Shopping Cart Section Start -->
 <div class="section section-padding">
@@ -27,13 +26,13 @@
         <table class="order-table table">
             <thead>
             <tr>
-                <th class="order" rowspan="2">Номер замовлення</th>
-                <th class="thumbnail" rowspan="2">Товар</th>
-                <th class="name" rowspan="2">Назва товару</th>
-                <th class="price" rowspan="2">Вартість</th>
-                <th class="quantity" rowspan="2">Кількість</th>
-                <th class="subtotal" rowspan="2">Загалом</th>
-                <th class="subtotal" rowspan="2">Статус замовлення</th>
+                <th class="order" rowspan="2" style="text-align: center;">Номер замовлення</th>
+                <th class="thumbnail" rowspan="2" style="text-align: center;">Товар</th>
+                <th class="name" rowspan="2" style="text-align: center;">Назва товару</th>
+                <th class="price" rowspan="2" style="text-align: left;">Вартість</th>
+                <th class="quantity" rowspan="2" style="text-align: center;">Кількість</th>
+                <th class="subtotal" rowspan="2" style="text-align: center;">Загалом</th>
+                <th class="subtotal" rowspan="2" style="text-align: center;">Статус замовлення</th>
             </tr>
             </thead>
             <tbody>
@@ -45,26 +44,20 @@
                 @foreach($cartItems as $cartItemIndex => $cartItem)
                     <tr>
                         @if($cartItemIndex === 0)
-                            <td class="order" rowspan="{{ count($cartItems) }}"><span>№ {{ $order->id }}</span></td>
+                            <td class="order" rowspan="{{ count($cartItems) }}" style="text-align: center;">№ {{ $order->id }}</td>
                         @endif
                         @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
                             <td class="thumbnail"><a href="product-details.html"><img src="{{ asset($cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
                         @else
                             <td></td>
                         @endif
-                        <td class="name">
+                        <td class="name" style="text-align: center;">
                             <a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a>
                         </td>
-                        <td class="price"><span>{{ $cartItem->price }}</span></td>
-                        <td class="quantity">
-                            <div class="product-quantity">
-                                <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                <input type="text" class="input-qty" value="{{ $cartItem->quantity }}">
-                                <span class="qty-btn plus"><i class="ti-plus"></i></span>
-                            </div>
-                        </td>
-                        <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}</span></td>
-                        <td class="status-order"><span>{{ $order->status_order->name }}</span></td>
+                        <td class="price">{{ $cartItem->price }}</td>
+                        <td class="quantity" style="text-align: center;">{{ $cartItem->quantity }}</td>
+                        <td class="subtotal" style="text-align: center;">{{ $cartItem->price * $cartItem->quantity }}</td>
+                        <td class="status-order" style="text-align: center;">{{ $order->status_order->name }}</td>
                     </tr>
                     @php
                         $cost_paid += $cartItem->price * $cartItem->quantity;

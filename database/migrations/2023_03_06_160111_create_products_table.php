@@ -16,14 +16,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->nullable()->default(null)->comment("Назва товару");
-            $table->unsignedBigInteger('kind_product_id')->nullable()->default(null)->comment("Id виду товару");
+//            $table->unsignedBigInteger('kind_product_id')->nullable()->default(null)->comment("Id виду товару");
             $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null)->comment("Id підвиду товару");
             $table->text('content')->nullable()->default(null)->comment("Коментар до товару");
             $table->text('links_networks')->nullable()->default(null)->comment("Посилання на товар");
             $table->bigInteger('price')->nullable()->default(null)->comment("Вартість");
             $table->integer('discount')->nullable()->default(null)->comment("Знижка");
             $table->integer('stock_balance')->nullable()->default(1)->comment("Залишок на складі");
-            $table->unsignedBigInteger('size_id')->nullable()->comment("Id розміру");
             $table->unsignedBigInteger('color_id')->nullable()->comment("Id кольору");
             $table->integer('term_creation')->nullable()->default(null)->comment("строк виготовлення");
             $table->unsignedBigInteger('status_product_id')->comment("Статус товару");
@@ -36,9 +35,8 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
             $table->timestamps();
 
-            $table->foreign('kind_product_id')->references('id')->on('kind_products');
+//            $table->foreign('kind_product_id')->references('id')->on('kind_products');
             $table->foreign('sub_kind_product_id')->references('id')->on('sub_kind_products');
-            $table->foreign('size_id')->references('id')->on('sizes');
             $table->foreign('color_id')->references('id')->on('colors');
             $table->foreign('status_product_id')->references('id')->on('status_products');
             $table->foreign('user_id')->references('id')->on('users');
@@ -54,9 +52,8 @@ class CreateProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['kind_product_id']);
+//            $table->dropForeign(['kind_product_id']);
             $table->dropForeign(['sub_kind_product_id']);
-            $table->dropForeign(['size_id']);
             $table->dropForeign(['color_id']);
             $table->dropForeign(['status_product_id']);
             $table->dropForeign(['user_id']);

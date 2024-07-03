@@ -17,10 +17,18 @@ class WishController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->input('user_id');
+        if (!$user_id && request()->cookie('user_id') != NULL){
+            $user_id = request()->cookie('user_id');
+        }
         $wishitems = WishItems::query()
             ->where('user_id', $user_id)
             ->with('product.productphotos')
             ->get();
+
+//        foreach ($wishitems as $wishitem){
+//            $selectedPhoto = $wishitem->product->productphotos->where('queue', 1)->first();
+//            $this->seedie($selectedPhoto->small_path . '/' . $selectedPhoto->small_filename);
+//        }
 
         return view('wishlist.index', ['wishitems' => $wishitems]);
     }
@@ -69,7 +77,7 @@ class WishController extends Controller
     public function clear(Request $request)
     {
         $user_id = $request->input('user_id');
-        $wishItems = WishItems::query()->where('user_id', $user_id)->delete();
+        WishItems::query()->where('user_id', $user_id)->delete();
 
         return redirect()->back()->with('success', 'Список бажань очищено');
     }

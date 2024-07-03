@@ -96,7 +96,7 @@
                     <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('put')
-                        <input type="hidden" id="selectedColor" name="color" value="">
+                        <input type="hidden" name="color" id="selectedColor" value="{{ $product->color_id }}">
 
                         <label for="name">Назва</label>
                         <br>
@@ -193,22 +193,6 @@
                             <table>
                                 <tbody>
                                 <tr>
-                                    <td class="label"><span>Розмір</span></td>
-                                    <td class="value">
-                                        <div class="product-sizes">
-                                            @foreach($sizes as $size)
-                                                @php
-                                                    $isSelected = $product->size_id === $size->id;
-                                                @endphp
-                                                <a href="#" data-size-id="{{ $size->id }}" onclick="selectSize(this); return false;" class="{{ $isSelected ? 'selected' : '' }}">
-                                                    {{ $size->name }}
-                                                </a>
-                                            @endforeach
-                                            <input type="hidden" name="selected_size" id="selected_size" value="{{ $product->size_id }}">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td class="label"><span>Колір</span></td>
                                     <td class="value">
                                         @foreach($colors as $key => $color)
@@ -249,10 +233,14 @@
                         </div>
                     </form>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                        @isset($user_id)
-                            <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>
+                        @isset($user)
+                            <div class="col-auto learts-mb-20">
+                                <a href="{{ route('users.show',['user' => $user->id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a>
+                            </div>
                         @endisset
-                        <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
+                        @if($user->role_id > 4)
+                            <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
+                        @endif
                     </div>
                     <div class="product-meta">
                         <table>
@@ -352,10 +340,6 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
-                                    <tr>
-                                        <td>Size</td>
-                                        <td>Large, Medium, Small</td>
-                                    </tr>
                                     <tr>
                                         <td>Color</td>
                                         <td>Black, White</td>

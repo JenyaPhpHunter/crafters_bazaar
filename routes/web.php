@@ -53,7 +53,7 @@ Route::prefix('admin')->group(callback: function () {
     Route::resource('admin_users', AdminUserController::class);
     Route::resource('admin_roles', RoleController::class);
     Route::get('/admin_products/filter', [AdminProductController::class, 'filter'])->name('admin_products.filter');
-    Route::resource('admin_products', AdminProductController::class);
+//    Route::resource('admin_products', AdminProductController::class);
     Route::get('/admin_products/send_for_sale/{admin_product}', [AdminProductController::class, 'sendForSale'])->name('admin_product_send_for_sale');
     Route::get('/admin_products/{uri}/create-kind-subkind', [AdminProductController::class, 'createkindsubkind'])->name('admin.products.createkindsubkind');
     Route::post('/admin_products/storekindsubkind', [AdminProductController::class, 'storekindsubkind'])->name('admin.products.storekindsubkind');
@@ -63,6 +63,10 @@ Route::prefix('admin')->group(callback: function () {
     Route::get('/admin_products/kind_products/{kind_products}', [AdminProductController::class, 'productsKind'])->name('admin_products_kind');
     Route::get('/admin_products/kind_products/{kind_products}/sub_kind_products/{sub_kind_products}', [AdminProductController::class, 'productsKindSubkind'])->name('admin_products_kind_subkind');
 });
+//Route::get('/test-email', function () {
+//    $emailService = new \App\Services\EmailService();
+//    $emailService->sendWelcomeEmail('bulic2012@gmail.com', 'your_test_password');
+//});
 
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');

@@ -37,11 +37,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['admin.layouts.app', 'layouts.app'], function ($view) {
+        view()->composer([
+            'include.header-section',
+            'admin.include.header-section',
+            'include.header-sticky-section',
+            'admin.include.header-sticky-section',
+        ], function ($view) {
             $user = Auth::user();
-            $products = Product::all();
-            $kind_products = KindProduct::all();
-            $sub_kind_products = SubKindProduct::all();
+            $header_kind_products = KindProduct::where('del', 0)
+                ->where('active', 1)
+                ->with('sub_kind_products')
+                ->get();
             if($user){
                 $user_products = Product::query()->where('user_id', $user->id)->get();
             } else {
@@ -49,9 +55,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $statuses_products = StatusProduct::all();
-            $statuses_orders = StatusOrder::all();
             $roles = Role::all();
-            $orders = AdminOrder::all();
             if($user){
                 $cartItemsCount = CartItems::query()
                     ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
@@ -78,20 +82,22 @@ class AppServiceProvider extends ServiceProvider
                 $wishItemsCount = 0;
             }
             $forum_categories = ForumCategory::query()->with('forum_sub_categories')->get();
-//            $forum_sub_categories = ForumSubCategory::all();
-            $view->with('products', $products)
-                ->with('kind_products', $kind_products)
-                ->with('sub_kind_products', $sub_kind_products)
-                ->with('roles', $roles)
+            $title_list = Product::query()
+                ->where('status_product_id', 3)
+                ->where('new', 1)
+                ->latest()
+                ->limit(10)
+                ->get();
+
+            $view->with('header_kind_products', $header_kind_products)
+            ->with('roles', $roles)
                 ->with('statuses_products', $statuses_products)
-                ->with('statuses_orders', $statuses_orders)
-                ->with('orders', $orders)
                 ->with('cartItemsCount', $cartItemsCount)
                 ->with('wishItemsCount', $wishItemsCount)
                 ->with('user_products', $user_products)
                 ->with('user', $user)
-                ->with('categories', $forum_categories);
-//                ->with('sub_categories', $forum_sub_categories);
+                ->with('categories', $forum_categories)
+                ->with('title_list', $title_list);
         });
     }
 }

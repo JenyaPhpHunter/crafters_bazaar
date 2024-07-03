@@ -29,7 +29,8 @@ class SubKindProductController extends Controller
 
     public function create(Request $request)
     {
-        $kind_product_id = $request->input('kind_product_id');
+//        $this->seedie($request->all());
+        $kind_product_id = $request->input('admin_kind_product');
         $kind_products = KindProduct::all();
         if($kind_product_id){
             $KindProduct = KindProduct::find($kind_product_id);

@@ -131,7 +131,7 @@
                     </div>
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="bdEmail">Email <abbr class="required">*</abbr></label>
-                        <input type="text" id="email" name="email" value="{{ old('email', $user->email ?? '') }}"
+                        <input type="text" id="email" name="email" value="{{ old('email', $user_email ?? '') }}"
                                class="form-control @error('email') is-invalid @enderror">
                         @error('email')
                         <span class="invalid-feedback" role="alert">

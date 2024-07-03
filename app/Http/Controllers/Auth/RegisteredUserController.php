@@ -22,8 +22,8 @@ class RegisteredUserController extends Controller
     public function create()
     {
         return view('auth.register',[
-            'includeRecommendedProducts' => true,
-            'excludeProducts' => true,
+//            'includeRecommendedProducts' => true,
+//            'excludeProducts' => true,
         ]);
     }
 

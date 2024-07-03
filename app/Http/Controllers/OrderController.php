@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Basket;
 use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\City;
@@ -12,6 +11,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
+use App\Services\EmailService;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
-//use App\Mail\OrderConfirmation;
 
 
 class OrderController extends Controller
@@ -40,9 +38,6 @@ class OrderController extends Controller
 //            "user" => $user,
             "orders" => $orders,
         ]);
-
-        return view('orders.index', compact('booking'));
-
     }
 
     /**
@@ -155,8 +150,12 @@ class OrderController extends Controller
             if (!$user){
                 $user = new User;
                 $user->email = $request->input('email');
-                $user->password = Str::random(10);      // TODO відправити лист з паролем + спливаюче вікно з паролем
+                $user->password = Str::random(10);
                 $user->role_id = 6;
+                $emailService = new EmailService();
+                $emailService->sendWelcomeEmail($user->email, $user->password);
+                $emailService = new EmailService();
+                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
             }
         }
         if($user->role_id == 7) {
@@ -165,8 +164,10 @@ class OrderController extends Controller
             if (!$user) {
                 $user = $old_user;
                 $user->email = $request->input('email');
-                $user->password = Str::random(10);   // TODO відправити лист з паролем + спливаюче вікно з паролем
+                $user->password = Str::random(10);
                 $user->role_id = 6;
+                $emailService = new EmailService();
+                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
             } else {
                 $old_user->delete();
             }
@@ -255,8 +256,8 @@ class OrderController extends Controller
                 'active' => 0,
             ]);
         }
-//
-//        Mail::to($order->email)->send(new OrderConfirmation($data_user));
+
+//        Mail::to($user->email)->send(new OrderConfirmation($data_user));
 //
 //        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
 
@@ -308,7 +309,11 @@ class OrderController extends Controller
             ->where('user_id', $user_id)
             ->get();
 
-        return view('orders.status', ['orders' => $orders]);
+        if ($user_id){
+            return view('orders.status', ['orders' => $orders]);
+        } else {
+            return redirect( route('login-register'));
+        }
     }
     /**
      * Remove the specified resource from storage.

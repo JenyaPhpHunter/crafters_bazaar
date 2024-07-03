@@ -77,14 +77,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Вихід користувача з системи
         Auth::guard('web')->logout();
 
+        // Інвалідація сесії користувача
         $request->session()->invalidate();
 
+        // Регенерація CSRF токена
         $request->session()->regenerateToken();
 
-        Cookie::forget('user_id');
-
-        return redirect('/');
+        // Встановлюємо кукі 'user_id' з від'ємним терміном для видалення
+        return redirect('/')
+            ->withCookie(Cookie::forget('user_id'));
     }
+
 }

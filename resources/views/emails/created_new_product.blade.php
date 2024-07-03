@@ -16,8 +16,6 @@
     <br>
 Кількість {{ $product->stock_balance }}
     <br>
-Розмір {{ $product->size->name }}
-    <br>
 Колір {{ $product->color->name }}
     <br>
 </p>
