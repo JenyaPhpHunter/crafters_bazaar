@@ -11,7 +11,10 @@
               {{ session('error') }}
           </div>
       @endif
-
+      <div style="text-align: right;">
+          <a class="btn btn-primary2 mr-3" href="{{ route('admin_users.create') }}"><i class="fal fa-user-plus"></i>&nbsp;Створити користувача</a>
+      </div>
+      <br>
       <!-- Пошукове вікно -->
       {{--          <form action="{{ route('searchusers') }}" method="GET">--}}
       {{--              <input type="text" name="query" placeholder="Пошук користувача за прізвищем та email">--}}

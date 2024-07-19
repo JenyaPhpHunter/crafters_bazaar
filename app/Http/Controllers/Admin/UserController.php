@@ -138,7 +138,7 @@ class UserController extends Controller
         $categories_user = CategoryUser::where('id', '>', $auth_user->category_user_id)->get();
         $products = Product::all();
 
-        return view('admin.users.edit', [
+        return view('admin.users.show', [
             "user" => $user,
             "categories_user" => $categories_user,
             "roles" => $roles,
