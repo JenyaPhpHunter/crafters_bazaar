@@ -614,7 +614,7 @@ CREATE TABLE `users` (
   `secondname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `role_id` bigint UNSIGNED NOT NULL DEFAULT '6',
-  `category_users_id` bigint UNSIGNED NOT NULL DEFAULT '1',
+  `category_user_id` bigint UNSIGNED NOT NULL DEFAULT '1',
   `gender` bigint UNSIGNED DEFAULT NULL,
   `birthday` date DEFAULT NULL,
   `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -634,7 +634,7 @@ CREATE TABLE `users` (
 -- Дамп даних таблиці `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `name`, `surname`, `secondname`, `phone`, `role_id`, `category_users_id`, `gender`, `birthday`, `city`, `address`, `delivery_id`, `paymentkind_id`, `newpost_id`, `email_verified_at`, `active`, `del`, `remember_token`, `created_at`, `updated_at`) VALUES
+INSERT INTO `users` (`id`, `email`, `password`, `name`, `surname`, `secondname`, `phone`, `role_id`, `category_user_id`, `gender`, `birthday`, `city`, `address`, `delivery_id`, `paymentkind_id`, `newpost_id`, `email_verified_at`, `active`, `del`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'chmyk_vika@ukr.net', '$2y$10$tyFvMKzkHTcLN6Jqvm93je5980aUIsQVGmAkv2rEfYrP5L3t5lPgu', 'Віка', NULL, NULL, '0971129869', 6, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, '2023-11-16 15:57:46', '2023-11-16 15:58:07');
 
 -- --------------------------------------------------------
@@ -846,7 +846,7 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`),
   ADD KEY `users_role_id_foreign` (`role_id`),
-  ADD KEY `users_category_users_id_foreign` (`category_users_id`),
+  ADD KEY `users_category_user_id_foreign` (`category_user_id`),
   ADD KEY `users_delivery_id_foreign` (`delivery_id`),
   ADD KEY `users_newpost_id_foreign` (`newpost_id`);
 
@@ -1100,7 +1100,7 @@ ALTER TABLE `translatehaslang`
 -- Обмеження зовнішнього ключа таблиці `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_category_users_id_foreign` FOREIGN KEY (`category_users_id`) REFERENCES `category_users` (`id`),
+  ADD CONSTRAINT `users_category_user_id_foreign` FOREIGN KEY (`category_user_id`) REFERENCES `category_users` (`id`),
   ADD CONSTRAINT `users_delivery_id_foreign` FOREIGN KEY (`delivery_id`) REFERENCES `deliveries` (`id`),
   ADD CONSTRAINT `users_newpost_id_foreign` FOREIGN KEY (`newpost_id`) REFERENCES `newposts` (`id`),
   ADD CONSTRAINT `users_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);

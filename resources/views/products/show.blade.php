@@ -202,29 +202,6 @@
                                         </form>
                                         <button id="cancelQuestionBtn" class="btn btn-secondary">Відмінити</button>
                                     </div>
-                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-                                    <script>
-                                        $(document).ready(function(){
-                                            $("#askAuthorBtn").click(function(){
-                                                // При нажатии на кнопку "Запитати автора"
-                                                @auth
-                                                $("#questionContainer").hide();  // Скрыть контейнер кнопки "Запитати автора"
-                                                $("#questionField").show();      // Показать текстовое поле
-                                                @else
-                                                // Если пользователь не аутентифицирован, перенаправить его на страницу входа с передачей product_id
-                                                // Получить значение product_id
-                                                var product_id = $(this).data('product-id');
-                                                window.location.href = '/login?sendquestion=sendquestion&product_id=' + product_id;
-                                                @endauth
-                                            });
-
-                                            $("#cancelQuestionBtn").click(function(){
-                                                // При нажатии на кнопку "Відмінити"
-                                                $("#questionField").hide();      // Скрыть текстовое поле
-                                                $("#questionContainer").show();  // Показать контейнер кнопки "Запитати автора"
-                                            });
-                                        });
-                                    </script>
                                 @endif
                                 @if($creator && $product->status_product_id == 1)
                                     <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
@@ -370,7 +347,29 @@
 
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#askAuthorBtn").click(function(){
+                    // При нажатии на кнопку "Запитати автора"
+                    @auth
+                    $("#questionContainer").hide();  // Скрыть контейнер кнопки "Запитати автора"
+                    $("#questionField").show();      // Показать текстовое поле
+                    @else
+                    // Если пользователь не аутентифицирован, перенаправить его на страницу входа с передачей product_id
+                    // Получить значение product_id
+                    var product_id = $(this).data('product-id');
+                    window.location.href = '/login?sendquestion=sendquestion&product_id=' + product_id;
+                    @endauth
+                });
 
+                $("#cancelQuestionBtn").click(function(){
+                    // При нажатии на кнопку "Відмінити"
+                    $("#questionField").hide();      // Скрыть текстовое поле
+                    $("#questionContainer").show();  // Показать контейнер кнопки "Запитати автора"
+                });
+            });
+        </script>
     </div>
     <!-- Single Products Section End -->
     <!-- Single Products Infomation Section Start -->

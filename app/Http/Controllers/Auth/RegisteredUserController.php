@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->post('password'));
         $user->role_id = 6;
-        $user->category_users_id = 1;
+        $user->category_user_id = 1;
         $user->active = 1;
         $user->del = 0;
         $user->created_at = date("Y-m-d H:i:s");

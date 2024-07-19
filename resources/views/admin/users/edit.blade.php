@@ -1,8 +1,6 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <h1>Редагування користувача</h1>
-
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -12,82 +10,119 @@
             </ul>
         </div>
     @endif
+    <!-- Checkout Section Start -->
+    <div class="section section-padding">
+        <div class="container">
+            <div class="section-title2">
+                <h2 class="title">Дані користувача</h2>
+            </div>
+            <form method="post" action="{{ route('admin_users.update', ['admin_user' => $user->id]) }}" enctype="multipart/form-data">
+                @csrf
+                @method('put')
+                <div class="row">
+                    <div class="col-md-6 col-12 learts-mb-20">
+                        <label for="name">Ім'я <abbr class="required">*</abbr></label>
+                        <input type="text" id="name" name="name"
+                               class="form-control @error('name') is-invalid @enderror"
+                               value="{{ old('name', $user->name) }}"
+                        >
+                        @error('name')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-20">
+                        <label for="bdSecondName">По-батькові</label>
+                        <input type="text" id="secondname" name="secondname"
+                               class="form-control @error('secondname') is-invalid @enderror"
+                               value="{{ old('secondname', $user->secondname) }}"
+                        >
+                        @error('secondname')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-30">
+                        <label for="surname">Прізвище <abbr class="required">*</abbr></label>
+                        <input type="text" id="surname" name="surname"
+                               class="form-control @error('surname') is-invalid @enderror"
+                               value="{{ old('surname', $user->surname) }}"
+                        >
+                        @error('surname')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-30">
+                        <label for="bdPhone">Телефон <abbr class="required">*</abbr></label>
+                        <input type="text" id="phone" name="phone"
+                               class="form-control @error('phone') is-invalid @enderror"
+                               value="{{ old('phone', $user->phone) }}"
+                        >
+                        @error('phone')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-20">
+                        <label for="bdEmail">Email <abbr class="required">*</abbr></label>
+                        <input type="text" id="email" name="email"
+                               class="form-control @error('email') is-invalid @enderror"
+                               value="{{ old('email', $user->email) }}"
+                        >
+                        @error('email')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-30">
+                        <label for="password">{{ __('Пароль') }}</label>
+                        <div class="col-md-12">
+                            <input type="password" id="password" name="password"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 learts-mb-30">
+                        <label for="role_id">Роль користувача</label>
+                        <div class="col-md-12">
+                            <select class="search-select select2-basic" id="role_id" name="role_id">
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}" {{ old('role_id', $user->role_id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @error('role_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    <div class="col-md-6 col-12 learts-mb-30">
+                        <label for="category_user_id">Категорія користувача</label>
+                        <div class="col-md-12">
+                            <select class="search-select select2-basic" id="category_user_id" name="category_user_id">
+                                @foreach($categories_user as $category_user)
+                                    <option value="{{ $category_user->id }}" {{ old('category_user_id', $user->category_user_id ?? null) == $category_user->id ? 'selected' : '' }}>{{ $category_user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @error('category_user_id')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    <br>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" name="action" value="Зберегти"
+                            class="btn btn-lg btn-dark btn-outline-hover-dark w-50">
+                        <i class="fas fa-save"></i> Зберегти
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <form method="post" action="{{ route('users.update', ['user' => $user->id]) }}">
-        @csrf
-        @method('put')
-        <label for="surname">Прізвище</label>
-        <br>
-        <input id="surname" name="surname" value="{{ $user->surname }}">
-        <br><br>
-
-        <label for="name">Ім'я</label>
-        <br>
-        <input id="name" name="name" value="{{ $user->name }}">
-        <br><br>
-
-        <label for="secondname">По батькові</label>
-        <br>
-        <input id="secondname" name="secondname" value='{{ $user->secondname }}'>
-        <br><br>
-
-        <label for="email">Email</label>
-        <br>
-        <input id="email" name="email" value={{ $user->email }}>
-        <br><br>
-
-        <label for="password">Новий пароль</label>
-        <br>
-        <input id="password" name="password">
-        <br><br>
-
-        <label for="phone">Телефон</label>
-        <br>
-        <input id="phone" name="phone" type="tel" pattern="[0-9]+" value="{{ $user->phone }}" required>
-        <br><br>
-
-        <label for="delivery_id">Спосіб доставки</label>
-        <br>
-        <select id="delivery_id" name="delivery_id">
-            @foreach($deliveries as $id => $name)
-                <option value="{{ $id }}" {{ $user->delivery_id == $id ? 'selected' : '' }}>{{ $name }}</option>
-            @endforeach
-        </select>
-        <br><br>
-
-        <label for="city">Місто</label>
-        <br>
-        <input id="city" name="city" value="{{ $user->city }}">
-        <br><br>
-
-        <label for="address">Адреса</label>
-        <br>
-        <input id="address" name="address" value="{{ $user->address }}">
-        <br><br>
-
-        <label for="paymentkind_id">Спосіб оплати</label>
-        <br>
-        <select id="paymentkind_id" name="paymentkind_id">
-            @foreach($payment_kinds as $id => $name)
-                <option value="{{ $id }}" {{ $user->paymentkind_id == $id ? 'selected' : '' }}>{{ $name }}</option>
-            @endforeach
-        </select>
-        <br><br>
-
-        <label for="role_id">Роль користувача</label>
-        <br>
-        <select id="role_id" name="role_id">
-            @foreach($roles as $id => $name)
-                <option value="{{ $id }}" {{ $user->role_id == $id ? 'selected' : '' }}>{{ $name }}</option>
-            @endforeach
-        </select>
-        <br><br>
-
-        <input type="submit" value="Зберегти">
-        <span style="display: inline-block; width: 100px;"></span>
-    </form>
-    <a href="{{route('users.index')}}">Повернутися в список користувачів</a>
 @endsection
-
-
-

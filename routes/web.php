@@ -51,8 +51,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->group(callback: function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('admin_users', AdminUserController::class);
+    Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
+
     Route::resource('admin_roles', RoleController::class);
-    Route::get('/admin_products/filter', [AdminProductController::class, 'filter'])->name('admin_products.filter');
+
+//    Route::get('/admin_products/filter', [AdminProductController::class, 'filter'])->name('admin_products.filter');
 //    Route::resource('admin_products', AdminProductController::class);
     Route::get('/admin_products/send_for_sale/{admin_product}', [AdminProductController::class, 'sendForSale'])->name('admin_product_send_for_sale');
     Route::get('/admin_products/{uri}/create-kind-subkind', [AdminProductController::class, 'createkindsubkind'])->name('admin.products.createkindsubkind');

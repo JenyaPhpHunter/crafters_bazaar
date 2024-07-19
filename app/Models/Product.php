@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Product extends Model
 {
@@ -11,13 +12,13 @@ class Product extends Model
         'name', 'content', 'price', 'stock_balance',
     ];
 
-    public function kind_product()
-    {
-        return $this->belongsTo(KindProduct::class);
-    }
     public function sub_kind_product()
     {
         return $this->belongsTo(SubKindProduct::class);
+    }
+    public function kind_product()
+    {
+        return $this->hasOneThrough(KindProduct::class, SubKindProduct::class, 'id', 'id', 'sub_kind_product_id', 'kind_product_id');
     }
     public function status_product()
     {

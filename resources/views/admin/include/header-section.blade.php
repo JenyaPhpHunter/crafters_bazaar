@@ -6,7 +6,7 @@
             <!-- Header Logo Start -->
             <div class="col-auto">
                 <div class="header-logo justify-content-center">
-                    <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
+                    <a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
                 </div>
             </div>
             <!-- Header Logo End -->
@@ -29,6 +29,7 @@
             <!-- Header Tools Start -->
             <div class="col">
                 <div class="header-tools justify-content-end">
+                    <a href="{{ route('admin_users.create') }}"><i class="fal fa-user-plus"></i>&nbsp;Створити користувача</a>
                     <div class="header-login">
                         @if(isset($user))
                             <a href="{{ route('admin_users.show',['admin_user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
