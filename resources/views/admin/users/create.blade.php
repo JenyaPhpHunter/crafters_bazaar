@@ -120,10 +120,12 @@
                     @enderror
                     <br>
                 </div>
-                <button type="submit" name="action" value="Зберегти"
-                        class="btn btn-dark btn-outline-hover-dark">
-                    <i class="fas fa-save"></i> Зберегти
-                </button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" name="action" value="Зберегти"
+                            class="btn btn-lg btn-dark btn-outline-hover-dark w-50">
+                        <i class="fas fa-save"></i> Зберегти
+                    </button>
+                </div>
             </form>
         </div>
     </div>

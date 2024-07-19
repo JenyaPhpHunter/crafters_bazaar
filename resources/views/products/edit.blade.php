@@ -201,19 +201,6 @@
                             </div>
                         </div>
 
-                        {{--                        <label for="quantity">Можу виробити цей товар ще</label>--}}
-{{--                        <input type="checkbox" id="can_produce" name="can_produce">--}}
-{{--                        <div id="termCreationWrapper" style="display: none;">--}}
-{{--                            <br>--}}
-{{--                            <label for="quantity_day">Кількість днів для виготовлення і відправки</label>--}}
-{{--                            <div id="termCreationBlock">--}}
-{{--                                <div class="product-quantity">--}}
-{{--                                    <span class="qty-btn minus"><i class="ti-minus"></i></span>--}}
-{{--                                    <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', $product->term_creation) }}">--}}
-{{--                                    <span class="qty-btn plus"><i class="ti-plus"></i></span>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                         <br>
 
                         <div class="product-variations">

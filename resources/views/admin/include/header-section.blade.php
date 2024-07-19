@@ -29,7 +29,6 @@
             <!-- Header Tools Start -->
             <div class="col">
                 <div class="header-tools justify-content-end">
-                    <a href="{{ route('admin_users.create') }}"><i class="fal fa-user-plus"></i>&nbsp;Створити користувача</a>
                     <div class="header-login">
                         @if(isset($user))
                             <a href="{{ route('admin_users.show',['admin_user' => $user->id]) }}"><i class="fal fa-user"></i>&nbsp;{{ $user->name }}</a>
@@ -54,6 +53,7 @@
         <div class="container">
             <nav class="site-main-menu justify-content-center">
                 <ul>
+                    <li class="has-children"><a href="{{ route('admin_users.index') }}"><span class="menu-text">Користувачі</span></a>
                     <li class="has-children"><a href="#"><span class="menu-text">Продавці</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>
