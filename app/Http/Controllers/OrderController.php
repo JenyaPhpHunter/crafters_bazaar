@@ -12,12 +12,9 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
 use App\Services\EmailService;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -35,7 +32,6 @@ class OrderController extends Controller
         $orders = Order::query()->where('user_id', $user_id)->orderBy('id', 'desc')->get();
 
         return view('orders.index',[
-//            "user" => $user,
             "orders" => $orders,
         ]);
     }
@@ -152,8 +148,8 @@ class OrderController extends Controller
                 $user->email = $request->input('email');
                 $user->password = Str::random(10);
                 $user->role_id = 6;
-                $emailService = new EmailService();
-                $emailService->sendWelcomeEmail($user->email, $user->password);
+//                $emailService = new EmailService();
+//                $emailService->sendWelcomeEmail($user->email, $user->password);
                 $emailService = new EmailService();
                 $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
             }
@@ -172,8 +168,8 @@ class OrderController extends Controller
                 $old_user->delete();
             }
         }
-        if($user->category_users_id == 1){
-            $user->category_users_id = 2;
+        if($user->category_user_id == 1){
+            $user->category_user_id = 2;
         }
         $user->name =  $request->post('name');
         $user->secondname =  $request->post('secondname');

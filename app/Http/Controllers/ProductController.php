@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductPhoto;
 use App\Models\SubKindProduct;
 use App\Models\User;
+use App\Services\EmailService;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,6 @@ class ProductController extends Controller
 
     public function __construct()
     {
-//        $this->products = Product::all();
         $this->kind_products = KindProduct::all();
         $this->sub_kind_products = SubKindProduct::all();
         $this->colors = Color::all();
@@ -52,14 +52,14 @@ class ProductController extends Controller
         });
         $data['products'] = $products;
         $kind_products = KindProduct::query()
-            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
+            ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
         $data['kind_products'] = $kind_products;
-//        $all_kind_products = KindProduct::query()->with('products')->get();
-//var_dump($data);
+
         return view('products.index', $data);
     }
 
@@ -78,15 +78,12 @@ class ProductController extends Controller
         }
         if(empty($user)){
             return view('auth.login-register',[
-//                'includeRecommendedProducts' => true,
-//                'excludeProducts' => true,
-//                'createProduct' => 'createProduct',
             ]);
         }
-        $colors = Color::all();
+        $colors = $this->colors;
         if(empty($request->input('product_id'))){
-            $kind_products = KindProduct::all();
-            $sub_kind_products = SubKindProduct::all();
+            $kind_products = $this->kind_products;
+            $sub_kind_products = $this->sub_kind_products;
 //            $baseQuery = Product::query()
 //                ->where('status_product_id', 3)
 //                ->with(['kind_product', 'productphotos']);
@@ -101,6 +98,7 @@ class ProductController extends Controller
             ))->with([/*'includeRecommendedProducts' => true, 'excludeProducts' => true*/]);
         } else {
             $product_id = $request->input('product_id');
+
             return redirect( route('products.createkindsubkind', [
                 'product_id' => $product_id,
                 'colors' => $colors,
@@ -116,16 +114,14 @@ class ProductController extends Controller
         $product = new Product();
 
         $product->name = $request->input('name');
-        $product->kind_product_id = $request->input('kind_product_id');
         $product->sub_kind_product_id = $request->input('sub_kind_product_id');
         $product->content = $request->input('content');
         $product->price = $request->input('price');
         $product->stock_balance = $request->input('stock_balance');
-        $product->color_id = $request->input('color');
+        $product->color_id = $request->input('color_id');
         $product->term_creation = $request->input('term_creation');
         $product->status_product_id = 1;
         $product->user_id = $request->input('user_id');
-        $product->active = 0;
         $product->created_at = date("Y-m-d H:i:s");
 
         $product->save();
@@ -138,10 +134,11 @@ class ProductController extends Controller
                 $filename = $photo->store('photos'); // Зберегти зображення в папці "storage/app/products"
                 // Тут ви також можете виконати будь-які додаткові операції з файлами, наприклад, зберегти шляхи до зображень в базі даних.
             }
+            echo 'public function store in ProductController';
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 2;
+        $user->category_user_id = 2;
         $user->save();
 
         if ($action === 'Зберегти') {
@@ -247,7 +244,7 @@ class ProductController extends Controller
         }
 
         $creator = ($product->user_id == $user_id) ;
-        var_dump($creator);
+//        var_dump($creator);
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
@@ -267,10 +264,13 @@ class ProductController extends Controller
     public function edit($id, Request $request)
     {
         $user = User::find($request->user_id);
-        $colors = Color::all();
-        $kind_products = KindProduct::all();
-        $sub_kind_products = SubKindProduct::all();
-        $product = Product::query()->with('kind_product')->with('productphotos')->where('id',$id)->first();
+        $colors = $this->colors;
+        $kind_products = $this->kind_products;
+        $sub_kind_products = $this->sub_kind_products;
+        $product = Product::query()
+            ->with(['kind_product', 'sub_kind_product', 'productphotos'])
+            ->where('id', $id)
+            ->first();
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
 
         return view('products.edit',[
@@ -280,8 +280,6 @@ class ProductController extends Controller
             'kind_products' => $kind_products,
             'sub_kind_products' => $sub_kind_products,
             'colors' => $colors,
-//            'includeRecommendedProducts' => true,
-//            'excludeProducts' => true,
         ]);
     }
 
@@ -293,53 +291,58 @@ class ProductController extends Controller
         if(!$product){
             throw new \Exception('Product not found');
         }
-//        if ($action !== 'Виставити на продаж з перегляду') {
-//            $product->name = $request->post('name');
-//            $product->kind_product_id = $request->post('kind_product_id');
-//            $product->sub_kind_product_id = $request->post('sub_kind_product_id');
-//            $product->content = $request->post('content');
-//            $product->price = $request->post('price');
-//            $product->stock_balance = $request->post('stock_balance');
-//            $product->color_id = $request->post('product_color');
-//            $product->term_creation = $request->input('term_creation');
-//            $product->status_product_id = 1;
-//            $product->user_id = $user_id;
-//            $product->active = 0;
-//            $product->updated_at = date("Y-m-d H:i:s");
-//
-//            $product->save();
-//        }
+//        $this->seedie($request->all());
+        $product->name = $request->input('name');
+        $product->sub_kind_product_id = $request->input('sub_kind_product_id');
+        $product->content = $request->input('content');
+        $product->price = $request->input('price');
+        $product->stock_balance = $request->input('stock_balance');
+        $product->color_id = $request->input('color_id');
+        $product->term_creation = $request->input('term_creation');
+        $product->status_product_id = 1;
+        $product->user_id = $request->input('user_id');
+        $product->updated_at = date("Y-m-d H:i:s");
+
+        $product->save();
+
+        if ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
+            return redirect()->route('products.createkindsubkind', [
+                'product' => $product,
+                'uri' => $product->id,
+            ]);
+        }
         if($request->product_photo){
             $product_photo = new ProductPhotoController();
             $product_photo->upload($request, $product->id);
         }
-
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_users_id = 3;
-        $user->save();
+        if ($user->role_id > 4){
+            $user->category_user_id = 2;
+            $user->save();
+        }
         if ($action === 'Зберегти') {
-            $kind_products = KindProduct::all();
-            $sub_kind_products = SubKindProduct::all();
-            $colors = Color::all();
+            $kind_products = $this->kind_products;
+            $sub_kind_products = $this->sub_kind_products;
+            $colors = $this->color;
 
             return redirect()->route('products.edit', ['product' => $product])
                 ->with([
                     'kind_products' => $kind_products,
                     'sub_kind_products' => $sub_kind_products,
                     'colors' => $colors,
-//                    'includeRecommendedProducts' => true,
-//                    'excludeProducts' => true,
                 ]);
-        } elseif ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
-
-            return redirect()->route('products.createkindsubkind', [
-                'product' => $product,
-                'uri' => $product->id,
-            ]);
         } elseif ($action === 'Виставити на продаж' || $action === 'Виставити на продаж з перегляду') {
-            $validated = Validator::make($request->all(), [
+            // Створити масив з даними продукту
+            $data = [
+                'name' => $product->name,
+                'sub_kind_product_id' => $product->sub_kind_product_id,
+                'content' => $product->content,
+                'price' => $product->price,
+                'stock_balance' => $product->stock_balance,
+                'color' => $product->color,
+            ];
+            $validated = Validator::make($data, [
                 'name' => 'required',
-                'kind_product_id' => 'required',
                 'sub_kind_product_id' => 'required',
                 'content' => 'required',
                 'price' => 'required',
@@ -375,16 +378,19 @@ class ProductController extends Controller
             } else {
                 $product->status_product_id = 3;
             }
-
             $product->save();
             if ($user->role_id > 4) {
                 try {
-                    Mail::to('bulic2@ukr.net')->send(new NewProductMail($product));
+                    $emailService = new EmailService();
+                    $emailService->sendPutUpForSaleEmail('bulic2012@gmail.com', $product);
                 } catch (\Exception $e) {
                     return view('emails.error', [
                         'excludeProducts' => true,
                     ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
                 }
+            } else {
+                $product->date_start_sale = date('Y-m-d H:i:s');
+                $product->save();
             }
 
             return redirect( route('products.show', [
@@ -424,13 +430,12 @@ class ProductController extends Controller
             'product_id' => $id,
             'arr_kind_products' => $arr_kind_products,
             'arr_sub_kind_products' => $arr_sub_kind_products,
-//            'includeRecommendedProducts' => true,
-//            'excludeProducts' => true,
         ]);
     }
     public function storekindsubkind(Request $request)
     {
-        $user = Auth::user();
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
         $all_kind_products = KindProduct::all();
         $name_kind_product = $request->post('name_kind_product');
         if(isset($name_kind_product)){
@@ -474,7 +479,6 @@ class ProductController extends Controller
         }
         $product_id = $request->input('product_id');
         $product = Product::query()->where('id',$product_id)->first();
-        $product->kind_product_id = $kind_product->id;
         $product->sub_kind_product_id = $sub_kind_product->id;
 
         $product->save();
@@ -486,35 +490,78 @@ class ProductController extends Controller
             ]);
     }
 
+//    public function productsKind($kind)
+//    {
+//        $products = Product::query()
+//            ->where('status_product_id',3)
+//            ->with('kind_product')
+//            ->where('kind_product_id',$kind)
+//            ->get();
+//        $sub_kind_products_kind = SubKindProduct::query()
+//            ->join('kind_products', 'sub_kind_products.id', '=', 'kind_products.id')
+//            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+//            ->where('status_product_id',3)
+//            ->where('sub_kind_products.kind_product_id',$kind)
+//            ->get();
+//        $kind_products = KindProduct::query()
+//            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+//            ->where('products.status_product_id', '=', 3)
+//            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+//            ->groupBy('kind_products.id', 'kind_products.name')
+//            ->get();
+//        $all_kind_products = KindProduct::all();
+//        $sub_kind_products = SubKindProduct::all();
+//        $colors = Color::all();
+//        $featured_products = Product::query()
+//            ->where('status_product_id',3)
+//            ->with('productphotos')
+//            ->where('featured',1)
+//            ->get();
+//
+//        return view('products.index',[
+//            'products' => $products,
+//            'kind_products' => $kind_products,
+//            'all_kind_products' => $all_kind_products,
+//            'sub_kind_products' => $sub_kind_products,
+//            'colors' => $colors,
+//            'featured_products' => $featured_products,
+//            'sub_kind_products_kind' => $sub_kind_products_kind,
+//        ]);
+//    }
+
     public function productsKind($kind)
     {
         $products = Product::query()
-            ->where('status_product_id',3)
-            ->with('kind_product')
-            ->where('kind_product_id',$kind)
+            ->where('status_product_id', 3)
+            ->whereHas('sub_kind_product', function ($query) use ($kind) {
+                $query->where('kind_product_id', $kind);
+            })
+            ->with('sub_kind_product.kind_product')
             ->get();
+
         $sub_kind_products_kind = SubKindProduct::query()
-            ->join('kind_products', 'sub_kind_products.id', '=', 'kind_products.id')
-            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
-            ->where('status_product_id',3)
-            ->where('sub_kind_products.kind_product_id',$kind)
+            ->where('kind_product_id', $kind)
+            ->with('product')
             ->get();
+
         $kind_products = KindProduct::query()
-            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
-            ->where('products.status_product_id', '=', 3)
+            ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
+            ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
+            ->where('products.status_product_id', 3)
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
+
         $all_kind_products = KindProduct::all();
         $sub_kind_products = SubKindProduct::all();
         $colors = Color::all();
         $featured_products = Product::query()
-            ->where('status_product_id',3)
+            ->where('status_product_id', 3)
             ->with('productphotos')
-            ->where('featured',1)
+            ->where('featured', 1)
             ->get();
 
-        return view('products.index',[
+        return view('products.index', [
             'products' => $products,
             'kind_products' => $kind_products,
             'all_kind_products' => $all_kind_products,
@@ -524,6 +571,8 @@ class ProductController extends Controller
             'sub_kind_products_kind' => $sub_kind_products_kind,
         ]);
     }
+
+
     public function productsKindSubkind($subkind)
     {
         $products = Product::query()

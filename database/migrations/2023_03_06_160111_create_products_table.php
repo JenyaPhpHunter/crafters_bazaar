@@ -16,7 +16,6 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->nullable()->default(null)->comment("Назва товару");
-//            $table->unsignedBigInteger('kind_product_id')->nullable()->default(null)->comment("Id виду товару");
             $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null)->comment("Id підвиду товару");
             $table->text('content')->nullable()->default(null)->comment("Коментар до товару");
             $table->text('links_networks')->nullable()->default(null)->comment("Посилання на товар");
@@ -35,7 +34,6 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
             $table->timestamps();
 
-//            $table->foreign('kind_product_id')->references('id')->on('kind_products');
             $table->foreign('sub_kind_product_id')->references('id')->on('sub_kind_products');
             $table->foreign('color_id')->references('id')->on('colors');
             $table->foreign('status_product_id')->references('id')->on('status_products');
@@ -52,7 +50,6 @@ class CreateProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-//            $table->dropForeign(['kind_product_id']);
             $table->dropForeign(['sub_kind_product_id']);
             $table->dropForeign(['color_id']);
             $table->dropForeign(['status_product_id']);

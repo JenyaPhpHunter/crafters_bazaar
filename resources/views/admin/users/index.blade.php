@@ -1,69 +1,75 @@
   @extends('admin.layouts.app')
 
   @section('content')
-      <a href="{{route('welcome')}}">Повернутися на головну сторінку</a>
-      <br>
       @if (session('success'))
           <div class="alert alert-success">
               {{ session('success') }}
           </div>
       @endif
-
       @if (session('error'))
           <div class="alert alert-danger">
               {{ session('error') }}
           </div>
       @endif
 
-      <div class="container">
-          <h1>Користувачі</h1>
-          <!-- Пошукове вікно -->
-          <form action="{{ route('searchusers') }}" method="GET">
-              <input type="text" name="query" placeholder="Пошук користувача за прізвищем та email">
-              <button type="submit">Знайти</button>
-          </form>
-      </div>
-      @foreach($users as $user)
-          <h2><a href="{{route('users.show', ['user' => $user->id])}}">
-                  @if ($user->surname && $user->name && $user->secondname)
-                      {{ $user->surname }} {{ $user->name }} {{ $user->secondname }}
-                  @elseif ($user->surname && $user->name)
-                      {{ $user->surname }} {{ $user->name }}
-                  @elseif ($user->name)
-                      {{ $user->name }}
-                  @else
-                      {{ $user->email }}
-                  @endif
-              </a>
-          </h2>
-          @if($user->name || $user->surname || $user->secondname)
-          <p>Email: {{ $user->email }}</p>
-          @endif
-          @if($user->phone)
-              <p>Телефон: {{ $user->phone }}</p>
-          @endif
-          @if($user->city)
-              <p>Місто: {{ $user->city }}</p>
-          @endif
-          @if($user->address)
-              <p>Адреса: {{ $user->address }}</p>
-          @endif
-          @if($user->city)
-              <p>Місто: {{ $user->city }}</p>
-          @endif
-          @if($user->delivery_id)
-              <p>Доставка: {{ $user->delivery->name }}</p>
-          @endif
-          @if($user->paymentkind_id)
-              <p>Спосіб оплати: {{ $user->paymentkind->name }}</p>
-          @endif
-          <p>Роль користувача: {{ $user->role->name }}</p>
-          <p>Створено користувача: {{ $user->created_at }}</p>
-          <p>Оновлено користувача: {{ $user->updated_at }}</p>
-          <br>
-          <a href="{{ route('users.edit',['user' => $user->id])}}">Редагувати користувача</a>
-      @endforeach
-<br><br>
-          <a href="{{ route('users.create') }}">Створити користувача</a>
+      <!-- Пошукове вікно -->
+      {{--          <form action="{{ route('searchusers') }}" method="GET">--}}
+      {{--              <input type="text" name="query" placeholder="Пошук користувача за прізвищем та email">--}}
+      {{--              <button type="submit">Знайти</button>--}}
+      {{--          </form>--}}
+          <div class="p-6 text-gray-900">
+              <table class="table table-bordered">
+                  <thead>
+                  <tr>
+                      <th>Id</th>
+                      <th>Прізвище</th>
+                      <th>Ім'я</th>
+                      <th>По батькові</th>
+                      <th>Email</th>
+                      <th>Телефон</th>
+                      <th>Роль</th>
+                      <th>Категорія</th>
+                      <th>Створено користувача</th>
+                      <th>Оновлено користувача</th>
+                      <th>Керування</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach($users as $user)
+                      <tr>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->id }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->surname }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->name }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->secondname }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->email }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->phone }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->role->name }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->category_user->name }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->created_at }}</a></td>
+                          <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->updated_at }}</a></td>
+                          <td>
+                              <!-- Іконка для редагування -->
+                              <a href="{{ route('admin_users.edit', ['admin_user' => $user->id]) }}" title="Редагувати користувача">
+                                  <i class="fas fa-pencil-alt"></i>
+                              </a>
+
+                              <!-- Додаємо відступ між іконками -->
+                              <span style="display: inline-block; width: 30px;"></span>
+
+                              <!-- Іконка для видалення -->
+                              <form action="{{ route('admin_users.destroy', ['admin_user' => $user->id]) }}" method="POST" style="display:inline;">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" style="border:none; background:none; padding:0; margin:0; color:red;" title="Видалити користувача" onclick="return confirm('Ви впевнені, що хочете видалити цього користувача?');">
+                                      <i class="fas fa-trash-alt"></i>
+                                  </button>
+                              </form>
+                          </td>
+
+                      </tr>
+                  @endforeach
+                  </tbody>
+              </table>
+          </div>
   @endsection
 

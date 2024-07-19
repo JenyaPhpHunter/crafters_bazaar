@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Page Title/Header Start -->
     <div class="page-title-section section">
@@ -82,7 +91,7 @@
                     <div class="product-summery">
                         <form method="post" action="{{ route('products.store') }}">
                             @csrf
-                            <input type="hidden" id="selectedColor" name="color" value="">
+                            <input type="hidden" name="color_id" id="selectedColor" value="">
 
                             <label for="name">Назва</label>
                             <br>
@@ -104,15 +113,19 @@
 
                             <label for="kind_product_id">Вид товару</label>
                             <br>
-
-                            <select id="kind_product_id" name="kind_product_id">
-                                @foreach($kind_products as $kind_product)
-                                    <option value="{{ $kind_product->id }}" {{ $selected_kind_product_id == $kind_product->id ? 'selected' : '' }}>
-                                        {{ $kind_product->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <br><br>
+                            <div class="row mb-n3">
+                                <div class="col-lg-4 col-12 mb-3">
+                                    <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
+                                        @foreach($kind_products as $kind_product)
+                                            <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $selected_kind_product_id) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @error('kind_product_id')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <br>
                             <button type="submit" name="action" value="Додати вид товару" class="btn btn-primary3">
                                 <i class="fab fa-galactic-republic"></i> Додати вид товару
                             </button>
@@ -120,14 +133,19 @@
 
                             <label for="sub_kind_product_id">Підвид товару</label>
                             <br>
-                            <select id="sub_kind_product_id" name="sub_kind_product_id">
-                                @foreach($sub_kind_products as $sub_kind_product)
-                                    <option value="{{ $sub_kind_product->id }}" {{ $selected_sub_kind_product_id == $sub_kind_product->id ? 'selected' : '' }}>
-                                        {{ $sub_kind_product->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <br><br>
+                            <div class="row mb-n3">
+                                <div class="col-lg-4 col-12 mb-3">
+                                    <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
+                                        @foreach($sub_kind_products as $sub_kind_product)
+                                            <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', $selected_sub_kind_product_id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @error('sub_kind_product_id')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                            <br>
                             <button type="submit" name="action" value="Додати підвид товару" class="btn btn-primary3">
                                 <i class="fab fa-galactic-republic"></i> Додати відвид товару
                             </button>
@@ -140,45 +158,21 @@
                                 <span class="qty-btn plus"><i class="ti-plus"></i></span>
                             </div>
                             <br><br>
-
                             <label for="quantity">Можу виробити цей товар ще</label>
-                            <input type="checkbox" id="canProduce" name="can_produce">
-
-    {{--                        <div id="termCreationBlock" style="display: none;">--}}
-                            <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
-                            <div id="termCreationBlock">
-                                <div class="product-quantity">
-                                    <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                    <input type="text" class="input-qty" name="term_creation" value="0">
-                                    <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                            <input type="checkbox" id="can_produce" name="can_produce">
+                            <div id="termCreationWrapper" style="display: none;">
+                                <br>
+                                <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
+                                <div id="termCreationBlock">
+                                    <div class="product-quantity">
+                                        <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                        <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', 0) }}">
+                                        <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                    </div>
                                 </div>
                             </div>
                             <br>
 
-                            <script>
-                                $(function () {
-                                    // Отримання посилання на елементи
-                                    let stockBalanceInput = $("#stockBalance");
-                                    let canProduceCheckbox = $("#canProduce");
-                                    let termCreationBlock = $("#termCreationBlock");
-
-                                    // Функція для оновлення стану елементів залежно від значення "Кількість виробів в наявності"
-                                    function updateElementsState() {
-                                        let stockBalanceValue = parseInt(stockBalanceInput.val());
-
-                                        // Відмітити галочку, якщо "Кількість виробів в наявності" дорівнює 0
-                                        canProduceCheckbox.prop("checked", stockBalanceValue === 0);
-
-                                        // Показати або приховати блок "Кількість днів для виготовлення і відправки" залежно від галочки
-                                        termCreationBlock.toggle(canProduceCheckbox.prop("checked"));
-                                    }
-
-                                    // Виклик функції під час завантаження сторінки та при зміні значення "Кількість виробів в наявності"
-                                    updateElementsState();
-                                    stockBalanceInput.change(updateElementsState);
-                                });
-
-                            </script>
                             <div class="product-variations">
                                 <table>
                                     <tbody>

@@ -62,3 +62,28 @@ function selectColor(circle) {
 });
 });
 
+// при створенні чи редагванні товару при відмічанні чекбоксу can_produce відкриває вікно term_creation та при знятті чекбоксу can_produce призначає term_creation = 0
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('can_produce');
+    const termCreationWrapper = document.getElementById('termCreationWrapper');
+    const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
+
+    // Function to toggle the visibility of the term creation wrapper
+    function toggleTermCreationWrapper() {
+        if (checkbox.checked) {
+            termCreationWrapper.style.display = 'block';
+        } else {
+            termCreationWrapper.style.display = 'none';
+            termCreationInput.value = 0; // Set term_creation to 0 when the checkbox is unchecked
+        }
+    }
+
+    // Initial check when the page loads
+    if (parseInt(termCreationInput.value) > 0) {
+        checkbox.checked = true;
+    }
+    toggleTermCreationWrapper();
+
+    // Add an event listener to the checkbox
+    checkbox.addEventListener('change', toggleTermCreationWrapper);
+});

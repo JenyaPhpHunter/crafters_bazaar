@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('secondname')->nullable()->comment("По-батькові");
             $table->string('phone')->nullable()->comment("телефон");
             $table->unsignedBigInteger('role_id')->default(7)->comment("Id ролі користувача");
-            $table->unsignedBigInteger('category_users_id')->default(1)->comment("Id категорії користувача");
+            $table->unsignedBigInteger('category_user_id')->default(1)->comment("Id категорії користувача");
             $table->unsignedBigInteger('gender')->nullable()->comment("Стать користувача");
             $table->date('birthday')->nullable()->comment("День народження");
             $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
@@ -38,7 +38,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles');
-            $table->foreign('category_users_id')->references('id')->on('category_users');
+            $table->foreign('category_user_id')->references('id')->on('category_users');
             $table->foreign('region_id')->references('id')->on('regions');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->foreign('delivery_id')->references('id')->on('deliveries');
@@ -56,7 +56,7 @@ class CreateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
-            $table->dropForeign(['category_users_id']);
+            $table->dropForeign(['category_user_id']);
             $table->dropForeign(['region_id']);
             $table->dropForeign(['city_id']);
             $table->dropForeign(['newpost_id']);

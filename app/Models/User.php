@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ForumPost::class);
     }
+
+    public function category_user()
+    {
+        return $this->belongsTo(CategoryUser::class);
+    }
 }
