@@ -30,7 +30,8 @@ class CreateProductsTable extends Migration
             $table->boolean('featured')->unsigned()->default(0)->comment("Рекомендований");
             $table->boolean('active')->unsigned()->default(1);
             $table->boolean('del')->unsigned()->default(0);
-            $table->dateTime('date_start_sale')->nullable()->comment("Дата початку продажу");
+            $table->dateTime('date_put_up_for_sale')->nullable()->comment("Дата виставлення на продаж");
+            $table->dateTime('date_approve_sale')->nullable()->comment("Дата початку продажу");
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
             $table->timestamps();
 

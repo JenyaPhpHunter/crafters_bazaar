@@ -207,9 +207,9 @@
                                     <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
                                         @csrf
                                         @method('put')
-                                    <button type="submit" name="action" value="Виставити на продаж з перегляду"
+                                    <button type="submit" name="action" value="Виставити на продаж"
                                             class="btn btn-success">
-                                        <i class="fas fa-donate"></i> Виставити на продаж
+                                        <i class="fas fa-donate"></i> {{$action_types['put_up_for_sale']}}
                                     </button>
                                     </form>
                                 @endif

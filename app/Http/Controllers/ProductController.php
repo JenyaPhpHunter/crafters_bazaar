@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewProductMail;
+use App\Constants\ProductsConstants;
 use App\Models\Color;
 use App\Models\Dialog;
 use App\Models\KindProduct;
@@ -11,36 +11,21 @@ use App\Models\ProductPhoto;
 use App\Models\SubKindProduct;
 use App\Models\User;
 use App\Services\EmailService;
-use Illuminate\Http\File;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 
 class ProductController extends Controller
 {
-//    protected $products;
-    protected $kind_products;
-    protected $sub_kind_products;
-    protected $color;
-
-    public function __construct()
-    {
-        $this->kind_products = KindProduct::all();
-        $this->sub_kind_products = SubKindProduct::all();
-        $this->colors = Color::all();
-    }
-
     public function index()
     {
         $data = [];
-        $data['all_kind_products'] = $this->kind_products;
-        $data['sub_kind_products'] = $this->sub_kind_products;
-        $data['colors'] = $this->colors;
+        $data['all_kind_products'] = KindProduct::all();
+        $data['sub_kind_products'] = SubKindProduct::all();
+        $data['colors'] = Color::all();
         $baseQuery = Product::query()
-            ->where('status_product_id', 3)
+//            ->where('status_product_id', 3)
             ->with(['kind_product', 'productphotos']);
         $products = $baseQuery->get();
 
@@ -80,13 +65,12 @@ class ProductController extends Controller
             return view('auth.login-register',[
             ]);
         }
-        $colors = $this->colors;
+        $colors = Color::all();
+        $action_types = ProductsConstants::ACTION_TYPES;
+
         if(empty($request->input('product_id'))){
-            $kind_products = $this->kind_products;
-            $sub_kind_products = $this->sub_kind_products;
-//            $baseQuery = Product::query()
-//                ->where('status_product_id', 3)
-//                ->with(['kind_product', 'productphotos']);
+            $kind_products = KindProduct::all();
+            $sub_kind_products = SubKindProduct::all();
 
             return view('products.create', compact(
                 'selected_kind_product_id',
@@ -95,6 +79,7 @@ class ProductController extends Controller
                 'sub_kind_products',
                 'colors',
                 'user',
+                'action_types',
             ))->with([/*'includeRecommendedProducts' => true, 'excludeProducts' => true*/]);
         } else {
             $product_id = $request->input('product_id');
@@ -103,67 +88,35 @@ class ProductController extends Controller
                 'product_id' => $product_id,
                 'colors' => $colors,
                 'user' => $user,
+                'action_types' => $action_types,
             ]));
         }
     }
 
     public function store(Request $request)
     {
+        $function_name = __FUNCTION__;
         $action = $request->input('action');
         $user_id = $request->post('user_id');
-        $product = new Product();
 
-        $product->name = $request->input('name');
-        $product->sub_kind_product_id = $request->input('sub_kind_product_id');
-        $product->content = $request->input('content');
-        $product->price = $request->input('price');
-        $product->stock_balance = $request->input('stock_balance');
-        $product->color_id = $request->input('color_id');
-        $product->term_creation = $request->input('term_creation');
-        $product->status_product_id = 1;
-        $product->user_id = $request->input('user_id');
-        $product->created_at = date("Y-m-d H:i:s");
-
-        $product->save();
-
-        // Обробити завантажені зображення
-        if ($request->hasFile('product_photo')) {
-            $photos = $request->file('product_photo');
-            foreach ($photos as $photo) {
-                // Зберегти кожне зображення
-                $filename = $photo->store('photos'); // Зберегти зображення в папці "storage/app/products"
-                // Тут ви також можете виконати будь-які додаткові операції з файлами, наприклад, зберегти шляхи до зображень в базі даних.
-            }
-            echo 'public function store in ProductController';
-        }
+        $product = (new ProductService())->createProduct($request, $function_name, $action);
 
         $user = User::query()->where('id',$user_id)->first();
-        $user->category_user_id = 2;
+        if ($user->role_id > 4) {
+            $user->category_user_id = 2;
+        }
         $user->save();
 
-        if ($action === 'Зберегти') {
-            return redirect()->route('products.edit', ['product' => $product]);
-        } elseif ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
+        if ($action === 'save') {
+
+            return redirect()->route('products.edit', ['product' => $product->id]);
+        } elseif ($action === 'add_kind' || $action === 'add_sub_kind') {
 
             return redirect()->route('products.createkindsubkind', [
                 'product' => $product,
                 'uri' => $product->id,
             ]);
-        } elseif ($action === 'Виставити на продаж') {
-            $validated = Validator::make($request->all(), [
-                'name' => 'required',
-                'kind_product_id' => 'required',
-                'sub_kind_product_id' => 'required',
-                'content' => 'required',
-                'price' => 'required',
-                'stock_balance' => 'required',
-                'color' => 'required',
-            ]);
-            if ($validated->fails()) {
-                return redirect()->route('products.edit', ['product' => $product->id])
-                    ->withErrors($validated)
-                    ->withInput();
-            }
+        } elseif ($action === 'put_up_for_sale') {
             $validated_user = Validator::make([
                 'name' => $user->name,
                 'email' => $user->email,
@@ -178,25 +131,18 @@ class ProductController extends Controller
                 $errors = $validated_user->errors();
                 $errorFields = array_keys($errors->toArray());
 
-                return redirect()->route('users.show_seller', ['user' => $user_id])
+                return redirect()->route('users.show', ['user' => $user_id])
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
-
-            if ($user->role_id > 4){
-                $product->status_product_id = 2;
-            } else {
-                $product->status_product_id = 3;
+            $this->seedie($product);
+            try {
+                $emailService = new EmailService();
+                $emailService->sendProductForSaleEmail($product);
+            } catch (\Exception $e) {
+                return view('emails.error',[
+                ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
             }
-            $product->save();
-
-//            try {
-//                Mail::to('bulic2@ukr.net')->send(new NewProductMail($product));
-//            } catch (\Exception $e) {
-//                return view('emails.error',[
-//                    'excludeProducts' => true,
-//                ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-//            }
 
             return redirect( route('products.show', [
                 'product' => $product,
@@ -244,10 +190,10 @@ class ProductController extends Controller
         }
 
         $creator = ($product->user_id == $user_id) ;
-//        var_dump($creator);
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
+        $action_types = ProductsConstants::ACTION_TYPES;
 
         return view('products.show',[
             'product' => $product,
@@ -258,20 +204,22 @@ class ProductController extends Controller
             'dialogs_with_answers' => $dialogs_with_answers,
             'creator' => $creator,
             'user_id' => $user_id,
+            'action_types' => $action_types,
         ]);
     }
 
     public function edit($id, Request $request)
     {
         $user = User::find($request->user_id);
-        $colors = $this->colors;
-        $kind_products = $this->kind_products;
-        $sub_kind_products = $this->sub_kind_products;
+        $colors = Color::all();
+        $kind_products = KindProduct::all();
+        $sub_kind_products = SubKindProduct::all();
         $product = Product::query()
             ->with(['kind_product', 'sub_kind_product', 'productphotos'])
             ->where('id', $id)
             ->first();
         $photos = ProductPhoto::query()->where('product_id', $id)->get();
+        $action_types = ProductsConstants::ACTION_TYPES;
 
         return view('products.edit',[
             'product' => $product,
@@ -280,82 +228,21 @@ class ProductController extends Controller
             'kind_products' => $kind_products,
             'sub_kind_products' => $sub_kind_products,
             'colors' => $colors,
+            'action_types' => $action_types,
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $user_id = $request->user_id;
+        $function_name = __FUNCTION__;
+        $user = User::find($request->user_id);
         $action = $request->input('action');
-        $product = Product::query()->where('id',$id)->first();
-        if(!$product){
-            throw new \Exception('Product not found');
-        }
-//        $this->seedie($request->all());
-        $product->name = $request->input('name');
-        $product->sub_kind_product_id = $request->input('sub_kind_product_id');
-        $product->content = $request->input('content');
-        $product->price = $request->input('price');
-        $product->stock_balance = $request->input('stock_balance');
-        $product->color_id = $request->input('color_id');
-        $product->term_creation = $request->input('term_creation');
-        $product->status_product_id = 1;
-        $product->user_id = $request->input('user_id');
-        $product->updated_at = date("Y-m-d H:i:s");
-
-        $product->save();
-
-        if ($action === 'Додати вид товару' || $action === 'Додати підвид товару') {
-            return redirect()->route('products.createkindsubkind', [
-                'product' => $product,
-                'uri' => $product->id,
-            ]);
-        }
-        if($request->product_photo){
-            $product_photo = new ProductPhotoController();
-            $product_photo->upload($request, $product->id);
-        }
-        $user = User::query()->where('id',$user_id)->first();
+        $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
         if ($user->role_id > 4){
             $user->category_user_id = 2;
             $user->save();
         }
-        if ($action === 'Зберегти') {
-            $kind_products = $this->kind_products;
-            $sub_kind_products = $this->sub_kind_products;
-            $colors = $this->color;
-
-            return redirect()->route('products.edit', ['product' => $product])
-                ->with([
-                    'kind_products' => $kind_products,
-                    'sub_kind_products' => $sub_kind_products,
-                    'colors' => $colors,
-                ]);
-        } elseif ($action === 'Виставити на продаж' || $action === 'Виставити на продаж з перегляду') {
-            // Створити масив з даними продукту
-            $data = [
-                'name' => $product->name,
-                'sub_kind_product_id' => $product->sub_kind_product_id,
-                'content' => $product->content,
-                'price' => $product->price,
-                'stock_balance' => $product->stock_balance,
-                'color' => $product->color,
-            ];
-            $validated = Validator::make($data, [
-                'name' => 'required',
-                'sub_kind_product_id' => 'required',
-                'content' => 'required',
-                'price' => 'required',
-                'stock_balance' => 'required',
-                'color' => 'required',
-            ]);
-
-            if ($validated->fails()) {
-                return redirect()->route('products.edit', ['product' => $id])
-                    ->withErrors($validated)
-                    ->withInput();
-            }
-
+        if ($action === 'put_up_for_sale') {
             $validated_user = Validator::make([
                 'name' => $user->name,
                 'email' => $user->email,
@@ -365,7 +252,6 @@ class ProductController extends Controller
                 'email' => 'required',
                 'phone' => 'required',
             ]);
-
             if ($validated_user->fails()) {
                 $errors = $validated_user->errors();
                 $errorFields = array_keys($errors->toArray());
@@ -373,29 +259,38 @@ class ProductController extends Controller
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
-            if ($user->role_id > 4){
-                $product->status_product_id = 2;
-            } else {
-                $product->status_product_id = 3;
-            }
-            $product->save();
+
             if ($user->role_id > 4) {
-                try {
-                    $emailService = new EmailService();
-                    $emailService->sendPutUpForSaleEmail('bulic2012@gmail.com', $product);
-                } catch (\Exception $e) {
-                    return view('emails.error', [
-                        'excludeProducts' => true,
-                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-                }
-            } else {
-                $product->date_start_sale = date('Y-m-d H:i:s');
-                $product->save();
+//                try {
+                $emailService = new EmailService();
+                $emailService->sendProductForSaleEmail($product);
+//                } catch (\Exception $e) {
+//                    return view('emails.error', [
+//                        'excludeProducts' => true,
+//                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+//                }
             }
 
             return redirect( route('products.show', [
-                'product' => $product,
+                'product' => $product->id,
             ]));
+        } elseif ($action === 'add_kind' || $action === 'add_sub_kind') {
+
+            return redirect()->route('products.createkindsubkind', [
+                'product' => $product,
+                'uri' => $product->id,
+            ]);
+        } elseif ($action === 'save') {
+            $kind_products = KindProduct::all();
+            $sub_kind_products = SubKindProduct::all();
+            $colors = Color::all();
+
+            return redirect()->route('products.edit', ['product' => $product->id])
+                ->with([
+                    'kind_products' => $kind_products,
+                    'sub_kind_products' => $sub_kind_products,
+                    'colors' => $colors,
+                ]);
         }
     }
 
@@ -602,6 +497,13 @@ class ProductController extends Controller
             'colors' => $colors,
             'featured_products' => $featured_products,
         ]);
+    }
+
+    public function approve($product)
+    {
+
+        $emailService = new EmailService();
+        $emailService->sendPutUpForSaleEmail('bulic2012@gmail.com', $product);
     }
 
     public function filter(Request $request)

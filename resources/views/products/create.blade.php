@@ -96,19 +96,28 @@
                             <label for="name">Назва</label>
                             <br>
                             <input id="name" name="name" type="text" class="product-title"
-                                   placeholder="Введіть назву товару">
+                                   placeholder="Введіть назву товару" value="{{ old('name') }}">
+                            @error('name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                             <br>
 
                             <label for="price">Вартість, грн</label>
                             <br>
                             <input type="number" id="price" name="price" min="0" step="1" class="product-title"
-                                   placeholder="Введіть вартість товару">
+                                   placeholder="Введіть вартість товару" value="{{ old('price') }}">
+                            @error('price')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                             <br>
 
                             <label for="content">Інформація про товар</label>
                             <br>
                             <textarea id="content" name="content" rows="10" cols="50"
-                                      placeholder="Введіть опис товару, щоб зацікавити покупця"></textarea>
+                                      placeholder="Введіть опис товару, щоб зацікавити покупця">{{ old('content') }}</textarea>
+                            @error('content')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                             <br>
 
                             <label for="kind_product_id">Вид товару</label>
@@ -126,8 +135,8 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                             <br>
-                            <button type="submit" name="action" value="Додати вид товару" class="btn btn-primary3">
-                                <i class="fab fa-galactic-republic"></i> Додати вид товару
+                            <button type="submit" name="action" value="add_kind" class="btn btn-primary3">
+                                <i class="fab fa-galactic-republic"></i> {{ $action_types['add_kind'] }}
                             </button>
                             <br><br>
 
@@ -146,16 +155,19 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                             <br>
-                            <button type="submit" name="action" value="Додати підвид товару" class="btn btn-primary3">
-                                <i class="fab fa-galactic-republic"></i> Додати відвид товару
+                            <button type="submit" name="action" value="add_sub_kind" class="btn btn-primary3">
+                                <i class="fab fa-galactic-republic"></i> {{ $action_types['add_sub_kind'] }}
                             </button>
                             <br><br>
 
                             <label for="quantity">Кількість виробів в наявності</label>
                             <div class="product-quantity">
                                 <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                <input type="text" class="input-qty" name="stock_balance" id="stockBalance" value="1">
+                                <input type="text" class="input-qty" name="stock_balance" id="stockBalance" value="{{ old('stock_balance', 1) }}">
                                 <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                @error('stock_balance')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <br><br>
                             <label for="quantity">Можу виробити цей товар ще</label>
@@ -198,22 +210,24 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             <label for="product_photo" class="file-input-label">
                                 <i class="fas fa-image"></i> <span id="file-label">Виберіть фото</span>
                             </label>
                             <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
                             <br><br>
                             <div class="product-buttons">
-                                <button type="submit" name="action" value="Виставити на продаж"
+                                <button type="submit" name="action" value="put_up_for_sale"
                                         class="btn btn-dark btn-outline-hover-dark">
-                                    <i class="fas fa-donate"></i> Виставити на продаж
+                                    <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
                                 </button>
-                                <button type="submit" name="action" value="Зберегти"
+                                <button type="submit" name="action" value="save"
                                         class="btn btn-dark btn-outline-hover-dark">
-                                    <i class="fas fa-save"></i> Зберегти
+                                    <i class="fas fa-save"></i> {{ $action_types['save'] }}
                                 </button>
                             </div>
                         </form>
+
                         <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
                             @isset($user_id)
                                 <div class="col-auto learts-mb-20"><a href="{{ route('users.show',['user' => $user_id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a></div>

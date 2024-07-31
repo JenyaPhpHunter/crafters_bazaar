@@ -151,8 +151,8 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <br>
-                        <button type="submit" name="action" value="Додати вид товару" class="btn btn-primary3">
-                            <i class="fab fa-galactic-republic"></i> Додати вид товару
+                        <button type="submit" name="action" value="add_kind" class="btn btn-primary3">
+                            <i class="fab fa-galactic-republic"></i> {{$action_types['add_kind']}}
                         </button>
                         <br><br>
 
@@ -171,8 +171,8 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <br>
-                        <button type="submit" name="action" value="Додати підвид товару" class="btn btn-primary3">
-                            <i class="fab fa-galactic-republic"></i> Додати відвид товару
+                        <button type="submit" name="action" value="add_sub_kind" class="btn btn-primary3">
+                            <i class="fab fa-galactic-republic"></i> {{$action_types['add_sub_kind']}}
                         </button>
                         <br><br>
 
@@ -239,13 +239,13 @@
                         </label>
                         <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
                         <div class="product-buttons">
-                            <button type="submit" name="action" value="Зберегти"
+                            <button type="submit" name="action" value="save"
                                     class="btn btn-dark btn-outline-hover-dark">
-                                <i class="fas fa-save"></i> Зберегти
+                                <i class="fas fa-save"></i> {{ $action_types['save'] }}
                             </button>
-                            <button type="submit" name="action" value="Виставити на продаж"
+                            <button type="submit" name="action" value="put_up_for_sale"
                                     class="btn btn-dark btn-outline-hover-dark">
-                                <i class="fas fa-donate"></i> Виставити на продаж
+                                <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
                             </button>
                         </div>
                     </form>

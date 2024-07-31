@@ -244,12 +244,4 @@ class UserController extends Controller
             'products' => $products,
         ]);
     }
-
-//    public function choiceSellerAdmin()
-//    {
-//        $seller_admin = User::query()::where('role_id', 3)->first();
-//
-//        return $seller_admin;
-//    }
-
 }
