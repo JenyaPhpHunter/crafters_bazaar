@@ -150,8 +150,8 @@ class OrderController extends Controller
                 $user->role_id = 6;
 //                $emailService = new EmailService();
 //                $emailService->sendWelcomeEmail($user->email, $user->password);
-                $emailService = new EmailService();
-                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
+//                $emailService = new EmailService();
+//                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
             }
         }
         if($user->role_id == 7) {
@@ -162,8 +162,8 @@ class OrderController extends Controller
                 $user->email = $request->input('email');
                 $user->password = Str::random(10);
                 $user->role_id = 6;
-                $emailService = new EmailService();
-                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
+//                $emailService = new EmailService();
+//                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
             } else {
                 $old_user->delete();
             }
@@ -304,6 +304,7 @@ class OrderController extends Controller
             ->with('status_order')
             ->where('user_id', $user_id)
             ->get();
+//        $this->seedie($orders);
 
         if ($user_id){
             return view('orders.status', ['orders' => $orders]);

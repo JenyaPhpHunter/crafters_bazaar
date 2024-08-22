@@ -206,8 +206,8 @@
                     </li>
                     <li class="has-children"><a href="{{ route('products.create') }}"><span class="menu-text">Додати свій товар</span></a>
                         <ul class="sub-menu">
-                            @isset($header_kind_products)
-                                @foreach($header_kind_products as $kind_product)
+                            @isset($all_kind_products)
+                                @foreach($all_kind_products as $kind_product)
                                     <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
                                         <ul class="sub-menu">
                                             @php
@@ -242,9 +242,11 @@
 
 <div class="clearfix">
     @foreach($title_list as $item)
+        @isset($item->productphotos[0])
         <div class="img-container" style="background-color:#bbb">
             <a href="{{ route('products.show', ['product' => $item->id]) }}"><img
                     src="{{ asset('photos/' . $item->productphotos[0]->filename) }}" alt="Product Image"></a>
         </div>
+        @endisset
     @endforeach
 </div>

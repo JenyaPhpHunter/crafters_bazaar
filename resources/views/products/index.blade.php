@@ -141,21 +141,49 @@
                                 }
                                 ?>
                                 @foreach($kind_products as $kind_product)
-                                    @if($kind_product->products)
+                                    @if($kind_product->product_count > 0)
                                         <li>
                                             <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}"
                                                    id="category_{{ $kind_product->id }}"
                                                 {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>
                                             &nbsp;
                                             <label for="category_{{ $kind_product->id }}">
-                                                <a href="#">{{ $kind_product->name }}</a> <span class="count">{{ count($kind_product->products) }}</span>
+                                                <a href="#">{{ $kind_product->name }}</a>
+                                                <span class="count">{{ $kind_product->product_count }}</span>
                                             </label>
                                         </li>
                                     @endif
                                 @endforeach
                             </ul>
                         </div>
-                        <!-- Categories End -->
+
+
+                        {{--                        <!-- Categories Start -->--}}
+{{--                        <div class="col learts-mb-30">--}}
+{{--                            <h3 class="widget-title product-filter-widget-title">Категорії</h3>--}}
+{{--                            <ul class="widget-list product-filter-widget customScroll">--}}
+{{--                                <?php--}}
+{{--                                $selectedCategories = []; // Визначте змінну для вибраних категорій--}}
+{{--                                if (isset($_GET['categories'])) {--}}
+{{--                                    $selectedCategories = $_GET['categories'];--}}
+{{--                                }--}}
+{{--                                ?>--}}
+{{--                                @foreach($kind_products as $kind_product)--}}
+{{--                                    @if($kind_product->products)--}}
+{{--                                        <li>--}}
+{{--                                            <input type="checkbox" name="categories[]" value="{{ $kind_product->id }}"--}}
+{{--                                                   id="category_{{ $kind_product->id }}"--}}
+{{--                                                {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>--}}
+{{--                                            &nbsp;--}}
+{{--                                            <label for="category_{{ $kind_product->id }}">--}}
+{{--                                                <a href="#">{{ $kind_product->name }}</a> <span class="count">{{ count($kind_product->products) }}</span>--}}
+{{--                                            </label>--}}
+{{--                                        </li>--}}
+{{--                                    @endif--}}
+{{--                                @endforeach--}}
+{{--                            </ul>--}}
+{{--                        </div>--}}
+{{--                        <!-- Categories End -->--}}
 
                         <!-- Filters by colors Start -->
                         <div class="col learts-mb-30">

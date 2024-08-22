@@ -44,10 +44,26 @@ class AppServiceProvider extends ServiceProvider
             'admin.include.header-sticky-section',
         ], function ($view) {
             $user = Auth::user();
-            $header_kind_products = KindProduct::where('del', 0)
+            // Основний запит для отримання всіх активних та неделеційованих KindProduct
+            $baseQuery = KindProduct::where('del', 0)
                 ->where('active', 1)
-                ->with('sub_kind_products')
+                ->with('sub_kind_products');
+
+// Якщо вам потрібні всі KindProduct, незалежно від того, чи мають вони продукти зі статусом 3
+            $all_kind_products = $baseQuery->get();
+
+// Якщо вам потрібні лише ті KindProduct, які мають продукти зі статусом 3
+            $header_kind_products = $baseQuery->whereHas('sub_kind_products.products', function ($query) {
+                $query->where('status_product_id', 3);
+            })
+                ->with(['sub_kind_products' => function ($query) {
+                    $query->whereHas('products', function ($query) {
+                        $query->where('status_product_id', 3);
+                    });
+                }])
                 ->get();
+
+
             if($user){
                 $user_products = Product::query()->where('user_id', $user->id)->get();
             } else {
@@ -90,7 +106,8 @@ class AppServiceProvider extends ServiceProvider
                 ->get();
 
             $view->with('header_kind_products', $header_kind_products)
-            ->with('roles', $roles)
+                ->with('all_kind_products', $all_kind_products)
+                ->with('roles', $roles)
                 ->with('statuses_products', $statuses_products)
                 ->with('cartItemsCount', $cartItemsCount)
                 ->with('wishItemsCount', $wishItemsCount)

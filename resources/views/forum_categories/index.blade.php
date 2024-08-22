@@ -8,7 +8,6 @@
                 <div class="col">
                     <div class="page-title" style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 class="title" style="margin-bottom: 0;">ФОРУМ</h1>
-                        <a class="btn btn-primary2" href="{{ route('forum_categories.create') }}" style="margin-left: 20px;">Створити категорію</a>
                     </div>
                     <div class="breadcrumb-container" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
                         <ul class="breadcrumb" style="margin-bottom: 0;">
@@ -17,7 +16,10 @@
                             <li class="breadcrumb-item"><a href="{{ route('forum_sub_categories.index') }}">Підкатегорії</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('forum_topics.index') }}">Теми</a></li>
                         </ul>
-                        <a class="btn btn-primary2" href="{{ route('forum_sub_categories.create') }}" style="margin-left: 20px;">Створити підкатегорію</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; margin-top: 20px;">
+                        <a class="btn btn-primary2" href="{{ route('forum_categories.create') }}" style="margin-bottom: 10px;">Створити категорію</a>
+                        <a class="btn btn-primary2" href="{{ route('forum_sub_categories.create') }}" style="margin-bottom: 10px;">Створити підкатегорію</a>
                     </div>
                 </div>
             </div>

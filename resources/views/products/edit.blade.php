@@ -33,15 +33,21 @@
             <!-- Product Images Start -->
             <div class="col-lg-6 col-12 learts-mb-40">
                 <div class="product-images">
-{{--                                <span class="product-badges">--}}
-{{--                                    <span class="hot">hot</span>--}}
-{{--                                </span>--}}
-                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='[
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-1.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-2.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-3.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-4.webp') }}", "w": 700, "h": 1100}
-                                            ]'><i class="far fa-expand"></i></button>
+                                <span class="product-badges">
+                                    <span class="hot">hot</span>
+                                </span>
+                    @php
+                        $galleryImages = $product->productphotos->map(function($photo) {
+                            return [
+                                'src' => asset('photos/' . $photo->zoom_filename),
+                                'w' => 700, // Можете замінити на реальну ширину зображення
+                                'h' => 1100 // Можете замінити на реальну висоту зображення
+                            ];
+                        });
+                    @endphp
+                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='@json($galleryImages)'>
+                        <i class="far fa-expand"></i>
+                    </button>
                     <a href="https://www.youtube.com/watch?v=1jSsy7DtYgc"
                        class="product-video-popup video-popup hintT-left" data-hint="Натисніть, щоб подивтись відео"><i
                             class="fal fa-play"></i></a>
@@ -106,6 +112,7 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="color_id" id="selectedColor" value="{{ $product->color_id }}">
+{{--                        <input type="hidden" name="id" id="id" value="{{ $product->id }}">--}}
 
                         <label for="name">Назва</label>
                         <br>
@@ -238,14 +245,15 @@
                             <i class="fas fa-image"></i> <span id="file-label">Виберіть фото</span>
                         </label>
                         <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
+                        <br><br>
                         <div class="product-buttons">
-                            <button type="submit" name="action" value="save"
-                                    class="btn btn-dark btn-outline-hover-dark">
-                                <i class="fas fa-save"></i> {{ $action_types['save'] }}
-                            </button>
                             <button type="submit" name="action" value="put_up_for_sale"
                                     class="btn btn-dark btn-outline-hover-dark">
                                 <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
+                            </button>
+                            <button type="submit" name="action" value="save"
+                                    class="btn btn-dark btn-outline-hover-dark">
+                                <i class="fas fa-save"></i> {{ $action_types['save'] }}
                             </button>
                         </div>
                     </form>
@@ -452,5 +460,69 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+            <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+            <div class="pswp__bg"></div>
+
+            <!-- Slides wrapper with overflow:hidden. -->
+            <div class="pswp__scroll-wrap">
+
+                <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+                <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+
+                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                <div class="pswp__ui pswp__ui--hidden">
+
+                    <div class="pswp__top-bar">
+
+                        <!--  Controls are self-explanatory. Order can be changed. -->
+
+                        <div class="pswp__counter"></div>
+
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                                <div class="pswp__preloader__cut">
+                                    <div class="pswp__preloader__donut"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                    </button>
+
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                    </button>
+
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 @endsection

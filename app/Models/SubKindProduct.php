@@ -10,10 +10,11 @@ class SubKindProduct extends Model
         'name'
     ];
 
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class, 'sub_kind_product_id');
     }
+
     public function kind_product()
     {
         return $this->belongsTo(KindProduct::class);

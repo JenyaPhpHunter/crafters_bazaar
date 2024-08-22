@@ -41,6 +41,7 @@ class ProductPhotoController extends Controller
 
                 // Викликати функцію для зменшення розміру і збереження зменшеного зображення
                 $this->resizeAndSaveImage($productPhoto);
+                $this->enlargeAndSaveImage($productPhoto);
             } else {
                 return false;
             }
@@ -80,10 +81,7 @@ class ProductPhotoController extends Controller
             $first_productphoto->hover_path = $productPhoto->path;
             $first_productphoto->save();
         }
-//        echo "<pre>";
-//        print_r($productPhoto->product);
-//        echo "</pre>";
-//        die();
+
         // Збереження нового зображення на те саме місце з новим ім'ям
         imagejpeg($newImage, public_path('photos') . '/' . $small_name);
 
@@ -97,6 +95,42 @@ class ProductPhotoController extends Controller
         imagedestroy($originalImage);
         imagedestroy($newImage);
     }
+
+    // Функція для збільшення розміру зображення
+    private function enlargeAndSaveImage(ProductPhoto $productPhoto, $scale = 2)
+    {
+        // Завантаження оригінального зображення
+        $originalImage = imagecreatefromjpeg(public_path('photos') . '/' . $productPhoto->filename);
+        $originalWidth = imagesx($originalImage);
+        $originalHeight = imagesy($originalImage);
+
+        // Розрахунок нових розмірів на основі коефіцієнта збільшення (scale)
+        $newWidth = $originalWidth * $scale;
+        $newHeight = $originalHeight * $scale;
+
+        // Створення пустого зображення заданого розміру
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Збільшення розміру оригінального зображення до нового розміру
+        imagecopyresampled($newImage, $originalImage, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+        // Генерувати унікальне ім'я для збільшеного зображення
+        $enlarged_name = pathinfo($productPhoto->filename, PATHINFO_FILENAME) . '_zoom.' . $productPhoto->ext;
+
+        // Збереження нового зображення на те саме місце з новим ім'ям
+        imagejpeg($newImage, public_path('photos') . '/' . $enlarged_name);
+
+        // Зберегти інформацію про збільшене зображення в базу даних
+        $productPhoto->zoom_filename = $enlarged_name; // Зберегти ім'я файлу
+        $productPhoto->zoom_ext = $productPhoto->ext; // Зберегти розширення
+        $productPhoto->zoom_path = $productPhoto->path;
+        $productPhoto->save();
+
+        // Звільнення пам'яті
+        imagedestroy($originalImage);
+        imagedestroy($newImage);
+    }
+
 
 //    public function upload(Request $request, $product_id)
 //    {

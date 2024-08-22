@@ -18,8 +18,16 @@ class Product extends Model
     }
     public function kind_product()
     {
-        return $this->hasOneThrough(KindProduct::class, SubKindProduct::class, 'id', 'id', 'sub_kind_product_id', 'kind_product_id');
+        return $this->hasOneThrough(
+            KindProduct::class,
+            SubKindProduct::class,
+            'id',                    // Foreign key on SubKindProduct table
+            'id',                    // Foreign key on KindProduct table
+            'sub_kind_product_id',   // Local key on Product table
+            'kind_product_id'        // Local key on SubKindProduct table
+        );
     }
+
     public function status_product()
     {
         return $this->belongsTo(StatusProduct::class);

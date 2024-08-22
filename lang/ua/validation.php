@@ -181,7 +181,8 @@ return [
 
     'attributes' => [
         'content' => 'Опис',
-        'color' => 'Колір',
+        'price' => 'Вартість',
+        'color_id' => 'Колір',
         'name' => 'Ім\'я',
         'surname' => 'Прізвище',
         'phone' => 'Телефон',

@@ -816,6 +816,7 @@
                 };
             new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options).init();
         };
+    console.log($productPopupGallery); // Додаємо цей рядок перед ініціалізацією PhotoSwipe, щоб перевірити, що дані отримані правильно
     $productPopupGalleryBtn.on('click', $openPhotoSwipe);
 
     $('.product-zoom').each(function () {

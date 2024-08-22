@@ -14,6 +14,7 @@ use App\Services\EmailService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 
 class ProductController extends Controller
@@ -21,14 +22,14 @@ class ProductController extends Controller
     public function index()
     {
         $data = [];
-        $data['all_kind_products'] = KindProduct::all();
-        $data['sub_kind_products'] = SubKindProduct::all();
-        $data['colors'] = Color::all();
+//        $data['all_kind_products'] = KindProduct::all();
+//        $data['sub_kind_products'] = SubKindProduct::all();
+//        $data['colors'] = Color::all();
         $baseQuery = Product::query()
-//            ->where('status_product_id', 3)
-            ->with(['kind_product', 'productphotos']);
-        $products = $baseQuery->get();
+            ->where('status_product_id', 3)
+            ->with(['sub_kind_product', 'productphotos']);
 
+        $products = $baseQuery->get();
         $featured_products = (clone $baseQuery)->where('featured', 1)->get();
         $data['featured_products'] = $featured_products;
 
@@ -44,6 +45,12 @@ class ProductController extends Controller
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
         $data['kind_products'] = $kind_products;
+
+        $colors = Color::query()
+            ->join('products', 'colors.id', '=', 'products.color_id')
+            ->where('products.status_product_id', '=', 3)
+            ->get();
+        $data['colors'] = $colors;
 
         return view('products.index', $data);
     }
@@ -99,7 +106,13 @@ class ProductController extends Controller
         $action = $request->input('action');
         $user_id = $request->post('user_id');
 
-        $product = (new ProductService())->createProduct($request, $function_name, $action);
+        try {
+            $product = (new ProductService())->createProduct($request, $function_name, $action);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+        }
 
         $user = User::query()->where('id',$user_id)->first();
         if ($user->role_id > 4) {
@@ -135,10 +148,10 @@ class ProductController extends Controller
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
-            $this->seedie($product);
+
             try {
-                $emailService = new EmailService();
-                $emailService->sendProductForSaleEmail($product);
+//                $emailService = new EmailService();
+//                $emailService->sendProductForSaleEmail($product);
             } catch (\Exception $e) {
                 return view('emails.error',[
                 ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
@@ -157,11 +170,8 @@ class ProductController extends Controller
     {
         $user_id = $request->input('user_id');
         $product = Product::query()
-            ->with('kind_product')
-            ->with('color')
-            ->with('status_product')
-            ->with('user')
-            ->where('id',$id)
+            ->with(['sub_kind_product.kind_product', 'color', 'status_product', 'user'])
+            ->where('id', $id)
             ->first();
 
         $dialogs = Dialog::where('product_id', $id)
@@ -194,6 +204,7 @@ class ProductController extends Controller
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
         $action_types = ProductsConstants::ACTION_TYPES;
+        $user = User::find($user_id);
 
         return view('products.show',[
             'product' => $product,
@@ -203,7 +214,7 @@ class ProductController extends Controller
             'dialogs' => $dialogs,
             'dialogs_with_answers' => $dialogs_with_answers,
             'creator' => $creator,
-            'user_id' => $user_id,
+            'user' => $user,
             'action_types' => $action_types,
         ]);
     }
@@ -237,12 +248,21 @@ class ProductController extends Controller
         $function_name = __FUNCTION__;
         $user = User::find($request->user_id);
         $action = $request->input('action');
-        $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
+
+        try {
+            $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
+        } catch (ValidationException $e) {
+            return redirect()
+                ->route('products.edit', ['product' => $id])
+                ->withErrors($e->validator)
+                ->withInput();
+        }
+
         if ($user->role_id > 4){
             $user->category_user_id = 2;
             $user->save();
         }
-        if ($action === 'put_up_for_sale') {
+        if ($action === 'put_up_for_sale' || $action === 'put_for_sale_from_show') {
             $validated_user = Validator::make([
                 'name' => $user->name,
                 'email' => $user->email,
@@ -255,21 +275,21 @@ class ProductController extends Controller
             if ($validated_user->fails()) {
                 $errors = $validated_user->errors();
                 $errorFields = array_keys($errors->toArray());
-                return redirect()->route('users.show', ['user' => $user_id])
+                return redirect()->route('users.show', ['user' => $request->user_id])
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
 
-            if ($user->role_id > 4) {
+//            if ($user->role_id > 4) {
 //                try {
-                $emailService = new EmailService();
-                $emailService->sendProductForSaleEmail($product);
+//                $emailService = new EmailService();
+//                $emailService->sendProductForSaleEmail($product);
 //                } catch (\Exception $e) {
 //                    return view('emails.error', [
 //                        'excludeProducts' => true,
 //                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
 //                }
-            }
+//            }
 
             return redirect( route('products.show', [
                 'product' => $product->id,
@@ -502,8 +522,8 @@ class ProductController extends Controller
     public function approve($product)
     {
 
-        $emailService = new EmailService();
-        $emailService->sendPutUpForSaleEmail('bulic2012@gmail.com', $product);
+//        $emailService = new EmailService();
+//        $emailService->sendPutUpForSaleEmail('bulic2012@gmail.com', $product);
     }
 
     public function filter(Request $request)

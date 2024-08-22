@@ -89,7 +89,7 @@
                 <!-- Product Summery Start -->
                 <div class="col-lg-6 col-12 learts-mb-40">
                     <div class="product-summery">
-                        <form method="post" action="{{ route('products.store') }}">
+                        <form method="post" action="{{ route('products.store') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="color_id" id="selectedColor" value="">
 

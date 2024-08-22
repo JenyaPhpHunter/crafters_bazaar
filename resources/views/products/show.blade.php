@@ -39,12 +39,18 @@
                                 <span class="product-badges">
                                     <span class="hot">hot</span>
                                 </span>
-                                <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='[
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-1.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-2.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-3.webp') }}", "w": 700, "h": 1100},
-                                                {"src": "{{ asset('images/product/single/4/product-zoom-4.webp') }}", "w": 700, "h": 1100}
-                                            ]'><i class="far fa-expand"></i></button>
+                                @php
+                                    $galleryImages = $product->productphotos->map(function($photo) {
+                                        return [
+                                            'src' => asset('photos/' . $photo->zoom_filename),
+                                            'w' => 700, // Можете замінити на реальну ширину зображення
+                                            'h' => 1100 // Можете замінити на реальну висоту зображення
+                                        ];
+                                    });
+                                @endphp
+                                <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='@json($galleryImages)'>
+                                    <i class="far fa-expand"></i>
+                                </button>
                                 <div class="product-gallery-slider">
                                     @foreach ($photos as $photo)
                                         <div class="product-zoom"
@@ -176,7 +182,8 @@
                                         <a href="#"><img src="{{ asset('images/brands/brand-4.webp')}}" alt=""></a>
                                     </div>
                                 </div>
-                                @if($creator)
+                                @if($user)
+                                    @if($creator || $user->role_id < 5)
                                     <div class="col-auto learts-mb-20">
                                         <a href="{{ route('products.edit', ['product' => $product->id]) }}" class="btn btn-primary2">Редагувати</a>
                                         <br><br>
@@ -187,8 +194,9 @@
                                                onclick="document.getElementById('delete-form-show').submit(); return false;">Видалити</a>
                                         </form>
                                     </div>
+                                    @endif
                                 @endif
-                                @if($product->status_product_id == 3 && $user_id != $creator)
+                                @if($product->status_product_id == 3 && $creator)
                                     <div id="questionContainer">
                                         <button id="askAuthorBtn" class="btn btn-info" data-product-id="{{ $product->id }}">Запитати автора</button>
                                     </div>
@@ -203,15 +211,18 @@
                                         <button id="cancelQuestionBtn" class="btn btn-secondary">Відмінити</button>
                                     </div>
                                 @endif
-                                @if($creator && $product->status_product_id == 1)
-                                    <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
-                                        @csrf
-                                        @method('put')
-                                    <button type="submit" name="action" value="Виставити на продаж"
-                                            class="btn btn-success">
-                                        <i class="fas fa-donate"></i> {{$action_types['put_up_for_sale']}}
-                                    </button>
-                                    </form>
+                                @if($user)
+                                    @if(($creator && $product->status_product_id == 1) || ($user->role_id < 5 && $product->status_product_id == 1))
+                                        <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
+                                            @csrf
+                                            @method('put')
+                                        <button type="submit" name="action" value="put_for_sale_from_show"
+{{--                                        <button type="submit" name="action" value="put_for_sale"--}}
+                                                class="btn btn-success">
+                                            <i class="fas fa-donate"></i> {{$action_types['put_up_for_sale']}}
+                                        </button>
+                                        </form>
+                                    @endif
                                 @endif
                                 <div class="product-meta">
                                     <table>
@@ -224,7 +235,7 @@
                                             <td class="label"><span>Категорія</span></td>
                                             <td class="value">
                                                 <ul class="product-category">
-                                                    <li><a href="{{ route('products.filter', ['categories' => [$product->kind_product->id]]) }}">{{ $product->kind_product->name }}</a></li>
+                                                    <li><a href="{{ route('products.filter', ['categories' => [$product->sub_kind_product->kind_product_id]]) }}">{{ $product->sub_kind_product->kind_product->name }}</a></li>
                                                     <li><a href="{{ route('products.filter', ['sub_categories' => [$product->sub_kind_product->id]]) }}">{{ $product->sub_kind_product->name }}</a></li>
                                                 </ul>
                                             </td>

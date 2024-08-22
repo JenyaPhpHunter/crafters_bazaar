@@ -79,7 +79,7 @@ class WishController extends Controller
         $user_id = $request->input('user_id');
         WishItems::query()->where('user_id', $user_id)->delete();
 
-        return redirect()->back()->with('success', 'Список бажань очищено');
+        return redirect()->route('products.index')->with('success', 'Список бажань очищено');
     }
 
     public function toCart(Request $request)

@@ -69,16 +69,6 @@ class EmailService
 
     public function sendProductForSaleEmail($product)
     {
-//        echo "<pre>";
-//        print_r($admin->email);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($titleEmail);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($product->id);
-//        echo "</pre>";
-//        die();
         $titleEmail = 'Товар запропоновано на продаж';
         $content = "
             <h1 style=\"color: blue;\">Товар запропоновано на продаж!</h1>
@@ -92,7 +82,17 @@ class EmailService
         $product->admin_id = $admin->id;
         $product->date_put_up_for_sale = date('Y-m-d H:i:s');
         $product->save();
-
+//        echo "VAS";
+//        echo "<pre>";
+//        print_r($admin->email);
+//        echo "</pre>";
+//        echo "<pre>";
+//        print_r($titleEmail);
+//        echo "</pre>";
+//        echo "<pre>";
+//        print_r($product->id);
+//        echo "</pre>";
+//        die();
         $this->sendEmail($admin->email, $titleEmail, $content);
     }
 
