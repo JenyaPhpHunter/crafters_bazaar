@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductPhoto;
 use App\Models\SubKindProduct;
 use App\Models\User;
+use App\Services\ApiService;
 use App\Services\EmailService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -22,9 +23,6 @@ class ProductController extends Controller
     public function index()
     {
         $data = [];
-//        $data['all_kind_products'] = KindProduct::all();
-//        $data['sub_kind_products'] = SubKindProduct::all();
-//        $data['colors'] = Color::all();
         $baseQuery = Product::query()
             ->where('status_product_id', 3)
             ->with(['sub_kind_product', 'productphotos']);
@@ -205,6 +203,9 @@ class ProductController extends Controller
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
         $action_types = ProductsConstants::ACTION_TYPES;
         $user = User::find($user_id);
+        $api_gpt = new ApiService(env('OPENAI_API_KEY'));
+//        $ai_comment = $api_gpt->beautifyComment($product->comment);
+//        var_dump($ai_comment); die();
 
         return view('products.show',[
             'product' => $product,
@@ -322,8 +323,8 @@ class ProductController extends Controller
 
     public function createkindsubkind($id)
     {
-        $all_sub_kind_products = $this->sub_kind_products;
-        $all_kind_products = $this->kind_products;
+        $all_sub_kind_products = SubKindProduct::all();
+        $all_kind_products = KindProduct::all();
         $arr_kind_products = [];
         $arr_sub_kind_products = [];
         if(!$all_kind_products->isEmpty()){
@@ -456,7 +457,7 @@ class ProductController extends Controller
 
         $sub_kind_products_kind = SubKindProduct::query()
             ->where('kind_product_id', $kind)
-            ->with('product')
+            ->with('products')
             ->get();
 
         $kind_products = KindProduct::query()

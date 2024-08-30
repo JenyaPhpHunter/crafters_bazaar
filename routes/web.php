@@ -102,6 +102,7 @@ Route::resource('forum_categories', ForumCategoryController::class);
 Route::resource('forum_sub_categories', ForumSubCategoryController::class);
 Route::resource('forum_topics', ForumTopicController::class);
 Route::resource('forum_posts', ForumPostController::class)->except(['index']);
+
 //Route::get('/forum_posts/index/{topic}', [ForumPostController::class, 'index'])->name('forum_posts.index');
 //Route::get('/forum/index', [ForumController::class, 'index'])->name('forum.index');
 

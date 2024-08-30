@@ -388,7 +388,7 @@
         <div class="container">
 
             <ul class="nav product-info-tab-list">
-                <li><a class="active" data-bs-toggle="tab" href="#tab-description">Опис</a></li>
+                <li><a class="active" data-bs-toggle="tab" href="#tab-description">Опис від ШІ</a></li>
                 <li><a data-bs-toggle="tab" href="#tab-pwb_tab">Бренд</a></li>
                 <li><a data-bs-toggle="tab" href="#tab-reviews">Відгуки (2)</a></li>
             </ul>

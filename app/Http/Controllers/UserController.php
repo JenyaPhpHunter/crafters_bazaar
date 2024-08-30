@@ -84,18 +84,25 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
         $user_id = $request->post('user_id');
+
         $validated = Validator::make($request->all(), [
             'name' => 'required',
             'surname' => 'required',
             'phone' => 'required',
             'email' => 'required',
         ]);
+
         if ($validated->fails()) {
             return redirect()
-                ->route('users.show_seller', ['user' => $user_id, '#account-info'])
+                ->route('users.show', ['user' => $user_id, '#account-info'])
                 ->withErrors($validated)
-                ->withInput();
+                ->withInput()
+                ->with('hash', '#account-info');  // Додаємо цей рядок для збереження хешу
         }
 
         $user = User::query()->where('id',$user_id)->first();
@@ -111,10 +118,6 @@ class UserController extends Controller
 
         $user->save();
 
-        //        echo "<pre>";
-//        print_r($validated->fails());
-//        echo "</pre>";
-//        die();
         return redirect( route('welcome'));
     }
 
@@ -126,24 +129,5 @@ class UserController extends Controller
             ->orWhere('email', 'LIKE', "%{$search}%")
             ->get();
         return view('users.index', compact('users'));
-    }
-
-    public function basketItems()
-    {
-//    Витягуємо всі товари, що додані в корзину для поточного користувача з таблиці basket.
-//        Завантажуємо пов'язану модель product з таблиці products для кожного товару з кошика, використовуючи метод with().
-        $basketItems = Basket::where('user_id', auth()->id())->with('product')->get();
-//        Обчислюємо загальну ціну всіх товарів в корзині, знаходячи добуток кількості товару на ціну з урахуванням знижки для кожного товару в корзині.
-        $totalPrice = $basketItems->sum(function ($item) {
-            return $item->quantity * $item->pricediscount;
-        });
-//        Обчислюємо загальну знижку, знаходячи добуток знижки на кількість товару для кожного товару в корзині.
-        $discount = $basketItems->sum(function ($item) {
-            return $item->discount * $item->quantity;
-        });
-//        Обчислюємо загальну суму з урахуванням знижки, віднімаючи загальну знижку від загальної ціни.
-        $total = $totalPrice - $discount;
-//        Повертаємо вид, який відображає всі товари в корзині та загальну ціну, знижку та загальну суму.
-        return view('basket.index', compact('basketItems', 'totalPrice', 'discount', 'total'));
     }
 }

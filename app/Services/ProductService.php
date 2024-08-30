@@ -47,7 +47,9 @@ class ProductService
             }
 
             $product->name = $data['name'];
-            $product->sub_kind_product_id = $data['sub_kind_product_id'];
+            if (isset($data['sub_kind_product_id'])){
+                $product->sub_kind_product_id = $data['sub_kind_product_id'];
+            }
             $product->content = $data['content'];
             $product->price = $data['price'];
             $product->stock_balance = $data['stock_balance'];

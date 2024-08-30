@@ -33,6 +33,7 @@ class CreateProductsTable extends Migration
             $table->dateTime('date_put_up_for_sale')->nullable()->comment("Дата виставлення на продаж");
             $table->dateTime('date_approve_sale')->nullable()->comment("Дата початку продажу");
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
+            $table->text('additional_information')->nullable()->default(null)->comment("Додаткова інформація");
             $table->timestamps();
 
             $table->foreign('sub_kind_product_id')->references('id')->on('sub_kind_products');

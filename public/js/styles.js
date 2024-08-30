@@ -62,6 +62,7 @@ function selectColor(circle) {
 });
 });
 
+
 // при створенні чи редагванні товару при відмічанні чекбоксу can_produce відкриває вікно term_creation та при знятті чекбоксу can_produce призначає term_creation = 0
 document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('can_produce');
@@ -87,3 +88,38 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add an event listener to the checkbox
     checkbox.addEventListener('change', toggleTermCreationWrapper);
 });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     const checkbox = document.getElementById('can_produce');
+//     const termCreationWrapper = document.getElementById('termCreationWrapper');
+//
+//     // Перевіряємо, чи існують необхідні елементи перед доступом до них
+//     if (checkbox && termCreationWrapper) {
+//         const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
+//
+//         if (termCreationInput) {
+//             // Функція для перемикання видимості блоку term_creation
+//             function toggleTermCreationWrapper() {
+//                 if (checkbox.checked) {
+//                     termCreationWrapper.style.display = 'block';
+//                 } else {
+//                     termCreationWrapper.style.display = 'none';
+//                     termCreationInput.value = 0; // Встановити значення 0, якщо чекбокс не відмічений
+//                 }
+//             }
+//
+//             // Початкова перевірка при завантаженні сторінки
+//             if (parseInt(termCreationInput.value) > 0) {
+//                 checkbox.checked = true;
+//             }
+//             toggleTermCreationWrapper();
+//
+//             // Додаємо обробник подій для чекбоксу
+//             checkbox.addEventListener('change', toggleTermCreationWrapper);
+//         } else {
+//             console.error('Element input[name="term_creation"] not found inside #termCreationWrapper');
+//         }
+//     } else {
+//         console.error('Element #can_produce or #termCreationWrapper not found');
+//     }
+// });

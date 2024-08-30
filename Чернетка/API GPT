@@ -1,0 +1,58 @@
+use App\Http\Controllers\EnhanceCommentController;
+
+Route::post('/enhance-comment', [EnhanceCommentController::class, 'enhanceComment']);
+
+
+php artisan make:controller EnhanceCommentController
+
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class EnhanceCommentController extends Controller
+{
+    public function enhanceComment(Request $request)
+    {
+        // Витягування коментаря з запиту
+        $comment = $request->input('comment');
+
+        // Відправлення запиту до API ChatGPT для покращення коментаря
+        $response = Http::post('https://api.openai.com/v1/engines/davinci-codex/completions', [
+            'prompt' => $comment,
+            'max_tokens' => 150,
+            'temperature' => 0.7,
+            'model' => 'text-davinci-004',
+            'api_key' => env('OPENAI_API_KEY'), // API ключ, збережений у .env файлі
+        ]);
+
+        // Перевірка чи запит успішний
+        if ($response->successful()) {
+            $enhancedComment = $response->json()['choices'][0]['text'];
+
+            // Повернення покращеного коментаря
+            return response()->json(['enhanced_comment' => trim($enhancedComment)]);
+        } else {
+            return response()->json(['error' => 'Не вдалося покращити коментар.'], 500);
+        }
+    }
+}
+
+
+У файлі .env додайте ваш OpenAI API ключ:
+OPENAI_API_KEY=your_openai_api_key
+
+Тепер ви можете надсилати POST-запити на ендпойнт /api/enhance-comment з даними comment, і отримувати у відповідь покращений коментар.
+
+Приклад відправлення запиту з Laravel:
+use Illuminate\Support\Facades\Http;
+
+// Відправлення коментаря на покращення
+$response = Http::post('https://yourdomain.com/api/enhance-comment', [
+    'comment' => 'Опис товару, який потрібно покращити.',
+]);
+
+$enhancedComment = $response->json()['enhanced_comment'];
+
+

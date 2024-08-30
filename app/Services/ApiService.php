@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
+
 class ApiService
 {
     private $apiKey;
@@ -24,5 +26,25 @@ class ApiService
         return $response;
     }
 
-    // Додайте інші методи для взаємодії з API, якщо необхідно
+    public function beautifyComment($comment)
+    {
+        // Відправлення запиту до API ChatGPT для покращення коментаря
+        $response = Http::post('https://api.openai.com/v1/engines/davinci-codex/completions', [
+            'prompt' => $comment,
+            'max_tokens' => 150,
+            'temperature' => 0.7,
+            'model' => 'text-davinci-004',
+            'api_key' => env('OPENAI_API_KEY'), // API ключ, збережений у .env файлі
+        ]);
+
+        // Перевірка чи запит успішний
+        if ($response->successful()) {
+            $beautifyComment = $response->json()['choices'][0]['text'];
+
+            // Повернення покращеного коментаря
+            return response()->json(['beautifyComment' => trim($beautifyComment)]);
+        } else {
+            return response()->json(['error' => 'Не вдалося покращити коментар.'], 500);
+        }
+    }
 }

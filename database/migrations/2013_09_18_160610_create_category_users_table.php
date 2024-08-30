@@ -20,11 +20,11 @@ return new class extends Migration
             $table->timestamps();
         });
         DB::table('category_users')->insert([
-            ['name' => 'Користувач'],
+            ['name' => 'SEO'],
+            ['name' => 'Співробітник'],
             ['name' => 'Продавець'],
             ['name' => 'Покупець'],
-            ['name' => 'Співробітник'],
-            ['name' => 'SEO'],
+            ['name' => 'Користувач'],
         ]);
     }
 

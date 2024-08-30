@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends Controller
@@ -127,24 +128,47 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $auth_user = Auth::user();
-        $user = User::query()->where('id',$id)->first();
-        if(!$user){
-            throw new \Exception('User not found');
-        }
-        $roles = Role::where('id', '>', $auth_user->role_id)->get();
-        $categories_user = CategoryUser::where('id', '>', $auth_user->category_user_id)->get();
-        $products = Product::all();
-
-        return view('admin.users.show', [
-            "user" => $user,
-            "categories_user" => $categories_user,
-            "roles" => $roles,
-            "products" => $products,
-        ]);
-    }
+//    public function show(Request $request, $id)
+//    {
+//        echo "<pre>";
+//        print_r($request->all());
+//        echo "</pre>";
+//        die();
+//        $user_id = $request->post('user_id');
+//        $validated = Validator::make($request->all(), [
+//            'name' => 'required',
+//            'surname' => 'required',
+//            'phone' => 'required',
+//            'email' => 'required',
+//        ]);
+//        if ($validated->fails()) {
+//            return redirect()
+//                ->route('users.show', ['user' => $user_id, '#account-info'])
+//                ->withErrors($validated)
+//                ->withInput()
+//                ->with('hash', '#account-info');  // Додаємо цей рядок для збереження хешу
+//        }
+//
+//        $user = User::query()->where('id',$id)->first();
+//        $user->email = $request->post('email');
+//        if($request->post('password')){
+//            $user->password =  Hash::make($request->post('password'));
+//        }
+//        $user->name = $request->post('name');
+//        $user->surname = $request->post('surname');
+//        $user->secondname = $request->post('secondname');
+//        $user->phone = $request->post('phone');
+//        $user->email = $request->post('email');
+//
+//        $user->save();
+//
+//        return view('admin.users.show', [
+//            "user" => $user,
+//            "categories_user" => $categories_user,
+//            "roles" => $roles,
+//            "products" => $products,
+//        ]);
+//    }
 
     /**
      * Show the form for editing the specified resource.
