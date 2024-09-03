@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('forum_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('Назва категорії форума');
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

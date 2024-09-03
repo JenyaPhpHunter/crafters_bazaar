@@ -10,22 +10,22 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->unsignedBigInteger('delivery_id')->comment("Id виду доставки");
-            $table->unsignedBigInteger('kind_payment_id')->comment("Id виду оплати");
-            $table->integer('card')->nullable()->comment("карта"); // ??
-            $table->unsignedBigInteger('region_id')->comment("Id області");
-            $table->unsignedBigInteger('city_id')->comment("Id міста");
-            $table->string('address', 255)->comment("Адреса");
-            $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
-            $table->integer('promocode')->nullable()->comment("Промокод");
-            $table->decimal('pricedelivery', 12, 2)->nullable()->comment("Вартсіть доставки");
-            $table->text('comment')->nullable()->comment("коментар замовлення");
-            $table->unsignedBigInteger('cart_id')->comment("Id корзини");
+            $table->unsignedInteger('user_id')->comment("Id користувача");
             $table->decimal('sum_order',12,2)->comment("сума замовлення");
-            $table->unsignedBigInteger('status_order_id')->comment("Статус замовлення");
-            $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->unsignedInteger('card')->nullable()->comment("карта"); // ??
+            $table->unsignedInteger('cart_id')->comment("Id корзини");
+            $table->unsignedInteger('kind_payment_id')->comment("Id виду оплати");
+            $table->text('comment')->nullable()->comment("коментар замовлення");
+            $table->unsignedInteger('delivery_id')->comment("Id виду доставки");
+            $table->unsignedInteger('region_id')->comment("Id області");
+            $table->unsignedInteger('city_id')->comment("Id міста");
+            $table->string('address', 255)->comment("Адреса");
+            $table->unsignedInteger('newpost_id')->nullable()->comment("Id НП");
+            $table->string('promocode', 255)->nullable()->comment("Промокод");
+            $table->decimal('pricedelivery', 12, 2)->nullable()->comment("Вартсіть доставки");
+            $table->unsignedInteger('status_order_id')->comment("Статус замовлення");
+            $table->boolean('active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

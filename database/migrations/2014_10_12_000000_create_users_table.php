@@ -17,23 +17,24 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('email')->unique()->comment("Email");
             $table->string('password')->comment("Пароль");
-            $table->string('name')->nullable()->comment("Ім'я");
             $table->string('surname')->nullable()->comment("Прізвище");
+            $table->string('name')->nullable()->comment("Ім'я");
             $table->string('secondname')->nullable()->comment("По-батькові");
             $table->string('phone')->nullable()->comment("телефон");
-            $table->unsignedBigInteger('role_id')->default(7)->comment("Id ролі користувача");
-            $table->unsignedBigInteger('category_user_id')->default(1)->comment("Id категорії користувача");
-            $table->unsignedBigInteger('gender')->nullable()->comment("Стать користувача");
+            $table->unsignedInteger('role_id')->default(7)->comment("Id ролі користувача");
+            $table->unsignedInteger('category_user_id')->default(1)->comment("Id категорії користувача");
+            $table->unsignedInteger('brand_id')->nullable()->default(null)->comment("Id бренду");
+            $table->unsignedInteger('gender')->nullable()->comment("Стать користувача");
             $table->date('birthday')->nullable()->comment("День народження");
-            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
-            $table->unsignedBigInteger('city_id')->nullable()->comment("Id міста");
+            $table->unsignedInteger('region_id')->nullable()->comment("Id області");
+            $table->unsignedInteger('city_id')->nullable()->comment("Id міста");
             $table->string('address')->nullable()->comment("Адреса");
-            $table->unsignedBigInteger('delivery_id')->nullable()->comment("Id виду доставки");
-            $table->unsignedBigInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
-            $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
+            $table->unsignedInteger('delivery_id')->nullable()->comment("Id виду доставки");
+            $table->unsignedInteger('newpost_id')->nullable()->comment("Id НП");
+            $table->unsignedInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
 
@@ -44,6 +45,7 @@ class CreateUsersTable extends Migration
             $table->foreign('delivery_id')->references('id')->on('deliveries');
             $table->foreign('newpost_id')->references('id')->on('newposts');
             $table->foreign('kind_payment_id')->references('id')->on('kind_payments');
+            $table->foreign('brand_id')->references('id')->on('brands');
         });
     }
 
@@ -62,6 +64,7 @@ class CreateUsersTable extends Migration
             $table->dropForeign(['newpost_id']);
             $table->dropForeign(['delivery_id']);
             $table->dropForeign(['kind_payment_id']);
+            $table->dropForeign(['brand_id']);
         });
 
         Schema::dropIfExists('users');

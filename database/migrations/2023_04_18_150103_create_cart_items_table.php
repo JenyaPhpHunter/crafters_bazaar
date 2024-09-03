@@ -10,17 +10,17 @@ class CreateCartItemsTable extends Migration
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cart_id')->comment("Id корзини");
-            $table->unsignedBigInteger('product_id')->comment("Id товару");
-            $table->integer('quantity')->comment("Кількість");
+            $table->unsignedInteger('cart_id')->comment("Id корзини");
+            $table->unsignedInteger('product_id')->comment("Id товару");
+            $table->unsignedInteger('quantity')->comment("Кількість");
             $table->decimal('price')->comment("Вартість");
             $table->decimal('pricediscount')->nullable()->comment("Знижка");
             $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

@@ -17,7 +17,7 @@ return new class extends Migration
 //            $table->id();
 //            $table->string('name')->comment("Назва міста");
 //            $table->string('index')->comment("індекс");
-//            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
+//            $table->unsignedInteger('region_id')->nullable()->comment("Id області");
 //            $table->string('latitude')->comment("широта");
 //            $table->string('longitude')->comment("довгота");
 //            $table->string('warehouse')->comment("наявність НП");

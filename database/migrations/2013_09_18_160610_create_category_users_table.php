@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('category_users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment("Назва категорії користвача");
-            $table->boolean('del')->unsigned()->default(0);
             $table->timestamps();
         });
         DB::table('category_users')->insert([

@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\OthersConstants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,10 +17,10 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->text('comment')->comment("Коментар");
-            $table->unsignedBigInteger('product_id')->comment("Id товару");
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->enum('rating', ['1', '2', '3', '4', '5'])->nullable()->comment("рейтинг");
-            $table->boolean('del')->unsigned()->default(0);
+            $table->unsignedInteger('product_id')->comment("Id товару");
+            $table->unsignedInteger('user_id')->comment("Id користувача");
+            $table->enum('rating', array_keys(OthersConstants::RATING))->nullable()->comment("рейтинг товару");
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

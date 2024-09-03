@@ -10,12 +10,12 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->unsignedInteger('user_id')->comment("Id користувача");
             $table->decimal('sum')->nullable()->comment("сума");
             $table->decimal('pricediscount')->nullable()->comment("знижка");
             $table->decimal('total')->nullable()->comment("загалом");
             $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

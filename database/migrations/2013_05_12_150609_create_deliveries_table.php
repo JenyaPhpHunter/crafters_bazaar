@@ -18,7 +18,7 @@ class CreateDeliveriesTable extends Migration
             $table->id();
             $table->string('name')->comment("Назва доставки");
 //            $table->integer('price');
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
         DB::table('deliveries')->insert([

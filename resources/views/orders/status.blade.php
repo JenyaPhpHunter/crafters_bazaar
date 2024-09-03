@@ -23,7 +23,8 @@
 <!-- Shopping Cart Section Start -->
 <div class="section section-padding">
     <div class="container">
-        <table class="order-table table">
+        @if(count($orders) > 0)
+            <table class="order-table table">
             <thead>
             <tr>
                 <th class="order" rowspan="2" style="text-align: center;">Номер замовлення</th>
@@ -36,46 +37,49 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($orders as $index => $order)
-                @if($order->cart->cartitems->isNotEmpty())
-                    @php
-                        $cost_paid = 0;
-                        $cartItems = $order->cart->cartitems;
-                    @endphp
-                    @foreach($cartItems as $cartItemIndex => $cartItem)
-                        <tr>
-                            @if($cartItemIndex === 0)
-                                <td class="order" rowspan="{{ count($cartItems) }}" style="text-align: center;">№ {{ $order->id }}</td>
-                            @endif
-                            @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
-                                <td class="thumbnail"><a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}"><img src="{{ asset($cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
-                            @else
-                                <td></td>
-                            @endif
-                            <td class="name" style="text-align: center;">
-                                <a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a>
-                            </td>
-                            <td class="price">{{ $cartItem->price }}</td>
-                            <td class="quantity" style="text-align: center;">{{ $cartItem->quantity }}</td>
-                            <td class="subtotal" style="text-align: center;">{{ $cartItem->price * $cartItem->quantity }}</td>
-                            <td class="status-order" style="text-align: center;">{{ $order->status_order->name }}</td>
-                        </tr>
+                @foreach($orders as $index => $order)
+                    @if($order->cart->cartitems->isNotEmpty())
                         @php
-                            $cost_paid += $cartItem->price * $cartItem->quantity;
+                            $cost_paid = 0;
+                            $cartItems = $order->cart->cartitems;
                         @endphp
-                    @endforeach
-                    <tr class="order-divider">
-                        <td colspan="6"></td>
-                    </tr>
-                    <tr class="order-total">
-                        <td colspan="6"></td>
-                        <td class="subtotal"><span class="bold-text">Загалом: {{ $cost_paid }}</span></td>
-                        <td colspan="2"></td>
-                    </tr>
-                @endif
-            @endforeach
+                        @foreach($cartItems as $cartItemIndex => $cartItem)
+                            <tr>
+                                @if($cartItemIndex === 0)
+                                    <td class="order" rowspan="{{ count($cartItems) }}" style="text-align: center;">№ {{ $order->id }}</td>
+                                @endif
+                                @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
+                                    <td class="thumbnail"><a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}"><img src="{{ asset($cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
+                                @else
+                                    <td></td>
+                                @endif
+                                <td class="name" style="text-align: center;">
+                                    <a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a>
+                                </td>
+                                <td class="price">{{ $cartItem->price }}</td>
+                                <td class="quantity" style="text-align: center;">{{ $cartItem->quantity }}</td>
+                                <td class="subtotal" style="text-align: center;">{{ $cartItem->price * $cartItem->quantity }}</td>
+                                <td class="status-order" style="text-align: center;">{{ $order->status_order->name }}</td>
+                            </tr>
+                            @php
+                                $cost_paid += $cartItem->price * $cartItem->quantity;
+                            @endphp
+                        @endforeach
+                        <tr class="order-divider">
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr class="order-total">
+                            <td colspan="6"></td>
+                            <td class="subtotal"><span class="bold-text">Загалом: {{ $cost_paid }}</span></td>
+                            <td colspan="2"></td>
+                        </tr>
+                    @endif
+                @endforeach
             </tbody>
             </table>
+        @else
+            <H2 style="color: aqua"> У ВАС ЩЕ НЕМА ЗАМОВЛЕНЬ! </H2>
+        @endif
     </div>
 
 </div>

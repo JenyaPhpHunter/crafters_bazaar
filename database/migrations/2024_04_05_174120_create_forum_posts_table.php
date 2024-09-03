@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('forum_posts', function (Blueprint $table) {
             $table->id();
             $table->string('content')->comment('Контент поста');
-            $table->unsignedBigInteger('forum_topic_id')->comment('Id теми форума');
-            $table->unsignedBigInteger('user_id')->comment('Id користувача');
-            $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на пост Id');
+            $table->unsignedInteger('forum_topic_id')->comment('Id теми форума');
+            $table->unsignedInteger('user_id')->comment('Id користувача');
+            $table->unsignedInteger('answer_to')->nullable()->comment('Відповідь на пост Id');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('forum_topic_id')->references('id')->on('forum_topics')->onDelete('cascade');

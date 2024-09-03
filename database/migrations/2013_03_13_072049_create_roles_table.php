@@ -17,7 +17,7 @@ class CreateRolesTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment("Назва ролі");
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
         DB::table('roles')->insert([

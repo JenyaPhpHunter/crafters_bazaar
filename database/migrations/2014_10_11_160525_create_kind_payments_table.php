@@ -18,8 +18,7 @@ class CreateKindPaymentsTable extends Migration
             $table->id();
             $table->string('name')->comment("Назва виду оплати");
             $table->string('comment')->comment("Коментар до оплати");
-            $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
         DB::table('kind_payments')->insert([

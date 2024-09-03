@@ -15,12 +15,12 @@ class CreateNewpostsTable extends Migration
     {
         Schema::create('newposts', function (Blueprint $table) {
             $table->id();
-            $table->integer('number')->comment("номер НП");
+            $table->unsignedInteger('number')->comment("номер НП");
             $table->string('name')->comment("назва НП");
             $table->string('address')->comment("Адреса НП");
+            $table->unsignedInteger('city_id')->comment("Id міста");
+            $table->unsignedInteger('region_id')->comment("Id області");
             $table->string('category_warehouse')->comment("категорія складу НП");
-            $table->unsignedBigInteger('city_id')->comment("Id міста");
-            $table->unsignedBigInteger('region_id')->comment("Id області");
             $table->timestamps();
 
             // Додаємо зовнішні ключі для city_id та region_id

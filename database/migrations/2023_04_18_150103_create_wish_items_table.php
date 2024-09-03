@@ -10,11 +10,11 @@ class CreateWishItemsTable extends Migration
     {
         Schema::create('wish_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->unsignedBigInteger('product_id')->comment("Id товару");
+            $table->unsignedInteger('user_id')->comment("Id користувача");
+            $table->unsignedInteger('product_id')->comment("Id товару");
             $table->decimal('price')->comment("Вартість");
             $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

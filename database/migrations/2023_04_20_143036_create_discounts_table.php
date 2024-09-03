@@ -11,13 +11,13 @@ class CreateDiscountsTable extends Migration
             $table->id();
             $table->string('pict', 4);
             $table->boolean('headershow')->default(0);
-            $table->integer('order')->default(999);
+            $table->unsignedInteger('order')->default(999);
             $table->dateTime('enddate');
-            $table->integer('percent')->default(0);
-            $table->integer('article')->default(0);
-            $table->integer('actual')->default(0);
+            $table->unsignedInteger('percent')->default(0);
+            $table->unsignedInteger('article')->default(0);
+            $table->unsignedInteger('actual')->default(0);
             $table->boolean('active')->unsigned()->default(1);
-            $table->boolean('del')->unsigned()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -171,8 +171,10 @@
                                     </table>
                                 </div>
                                 <div class="product-buttons">
-                                    <a href="{{ route('wishlist.addToWishlist',['product' => $product->id]) }}" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Додати до улюблених"><i class="fal fa-heart"></i></a>
-                                    <a href="{{ route('carts.addToCart',['product' => $product->id]) }}" class="btn btn-dark btn-outline-hover-dark"><i class="fal fa-shopping-cart"></i> Додати до корзини</a>
+                                    @if($product->status_product_id == 3 && !$creator)
+                                        <a href="{{ route('wishlist.addToWishlist',['product' => $product->id]) }}" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Додати до улюблених"><i class="fal fa-heart"></i></a>
+                                        <a href="{{ route('carts.addToCart',['product' => $product->id]) }}" class="btn btn-dark btn-outline-hover-dark"><i class="fal fa-shopping-cart"></i> Додати до корзини</a>
+                                    @endif
                                     <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Порівняти"><i class="fal fa-random"></i></a>
                                 </div>
                                 <div class="product-brands">
@@ -196,7 +198,7 @@
                                     </div>
                                     @endif
                                 @endif
-                                @if($product->status_product_id == 3 && $creator)
+                                @if($product->status_product_id == 3 && !$creator)
                                     <div id="questionContainer">
                                         <button id="askAuthorBtn" class="btn btn-info" data-product-id="{{ $product->id }}">Запитати автора</button>
                                     </div>
@@ -229,7 +231,7 @@
                                         <tbody>
                                         <tr>
                                             <td class="label"><span>SKU</span></td>
-                                            <td class="value">040422</td>
+                                            <td class="value">{{ $product->id }}</td>
                                         </tr>
                                         <tr>
                                             <td class="label"><span>Категорія</span></td>
