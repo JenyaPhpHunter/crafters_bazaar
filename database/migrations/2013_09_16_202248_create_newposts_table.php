@@ -15,11 +15,11 @@ class CreateNewpostsTable extends Migration
     {
         Schema::create('newposts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('number')->comment("номер НП");
+            $table->unsignedBigInteger('number')->comment("номер НП");
             $table->string('name')->comment("назва НП");
             $table->string('address')->comment("Адреса НП");
-            $table->unsignedInteger('city_id')->comment("Id міста");
-            $table->unsignedInteger('region_id')->comment("Id області");
+            $table->unsignedBigInteger('city_id')->comment("Id міста");
+            $table->unsignedBigInteger('region_id')->comment("Id області");
             $table->string('category_warehouse')->comment("категорія складу НП");
             $table->timestamps();
 
@@ -38,8 +38,8 @@ class CreateNewpostsTable extends Migration
     public function down()
     {
         Schema::table('newposts', function (Blueprint $table) {
-            $table->dropForeign(['region_id']);
             $table->dropForeign(['city_id']);
+            $table->dropForeign(['region_id']);
         });
         Schema::dropIfExists('newposts');
     }

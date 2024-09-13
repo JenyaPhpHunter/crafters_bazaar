@@ -46,7 +46,7 @@ class ForumTopicController extends Controller
         if (!empty($selected_sub_category_id)) {
             $selected_sub_category = ForumSubCategory::find($selected_sub_category_id);
             if ($selected_sub_category) {
-                $selected_category = ForumSubCategory::find($selected_sub_category->forum_category_id);
+                $selected_category = ForumCategory::find($selected_sub_category->forum_category_id);
             }
         }
 

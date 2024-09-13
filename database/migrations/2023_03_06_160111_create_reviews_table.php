@@ -17,8 +17,8 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->text('comment')->comment("Коментар");
-            $table->unsignedInteger('product_id')->comment("Id товару");
-            $table->unsignedInteger('user_id')->comment("Id користувача");
+            $table->unsignedBigInteger('product_id')->comment("Id товару");
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
             $table->enum('rating', array_keys(OthersConstants::RATING))->nullable()->comment("рейтинг товару");
             $table->softDeletes();
             $table->timestamps();

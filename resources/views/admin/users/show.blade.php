@@ -31,7 +31,13 @@
                         <div class="tab-pane fade show active" id="dashboad">
                             <div class="myaccount-content dashboad">
                                 <p>Вітаю, <strong>{{ $user->name }} !</strong></p>
-                                <p>На інформаційній панелі свого облікового запису ви можете переглядати свої <span>останні замовлення</span>, керувати Вашими <span>адресами доставки</span>, а також <span>редагувати пароль і дані облікового запису</span>.</p>
+                                <p>На інформаційній панелі свого облікового запису ви можете переглядати свої
+                                    <span><a href="#orders">останні замовлення</a></span>,
+                                    керувати Вашими
+                                    <span><a href="#address">адресами доставки</a></span>,
+                                    а також
+                                    <span><a href="#account-info">редагувати пароль і дані облікового запису</a></span>.
+                                </p>
                             </div>
                         </div>
                         <!-- Single Tab Content End -->
@@ -43,35 +49,29 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>Order</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Action</th>
+                                            <th>Замовлення</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                            <th>Всього</th>
+                                            {{--                                            <th>Дія</th>--}}
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Aug 22, 2018</td>
-                                            <td>Pending</td>
-                                            <td>$3000</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>July 22, 2018</td>
-                                            <td>Approved</td>
-                                            <td>$200</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>June 12, 2017</td>
-                                            <td>On Hold</td>
-                                            <td>$990</td>
-                                            <td><a href="shopping-cart.html">View</a></td>
-                                        </tr>
+                                        @php
+                                            $counter = 1;
+                                        @endphp
+                                        @foreach($orders as $order)
+                                            <tr>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $counter }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->updated_at }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->status_order->name }}</a></td>
+                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->sum_order }}</a></td>
+                                                {{--                                                <td><a href="shopping-cart.html">View</a></td>--}}
+                                                @php
+                                                    $counter ++;
+                                                @endphp
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -120,10 +120,19 @@
                                     <div class="col-md-6 col-12 learts-mb-30">
                                         <h4 class="title">Адреса доставки <a href="#" class="edit-link">редагувати</a></h4>
                                         <address>
-                                            <p><strong>Alex Tuntuni</strong></p>
-                                            <p>1355 Market St, Suite 900 <br>
-                                                San Francisco, CA 94103</p>
-                                            <p>Mobile: (123) 456-7890</p>
+                                            <p><strong>{{ isset($user->name) ? $user->name : '' }} {{ isset($user->secondname) ? $user->secondname : '' }} {{ isset($user->surname) ? $user->surname : '' }}</strong></p>
+                                            @isset($user->region))
+                                            <p>{{ $user->region->name }}<br>
+                                            @endisset
+                                            @isset($user->city)
+                                                <p>{{ $user->city->name }}<br>
+                                                    @endisset
+                                                    @isset($user->address)
+                                                        {{ $user->address }}</p>
+                                            @endisset
+                                            @isset($user->phone)
+                                                <p>Телефон: {{ $user->phone }}</p>
+                                            @endisset
                                         </address>
                                     </div>
                                 </div>
@@ -135,64 +144,88 @@
                         <div class="tab-pane fade" id="account-info">
                             <div class="myaccount-content account-details">
                                 <div class="account-details-form">
-                                    <form action="#">
+                                    <form action="{{ route('users.update', ['user' => $user->id]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="row learts-mb-n30">
                                             <div class="col-md-6 col-12 learts-mb-30">
                                                 <div class="single-input-item">
-                                                    <label for="first-name">Прізвище <abbr class="required">*</abbr></label>
-                                                    <input type="text" id="first-name" value={{ $user->surname }}>
+                                                    <label for="surname">Прізвище <abbr class="required">*</abbr></label>
+                                                    <input type="text" id="surname" name="surname" value="{{ $user->surname }}">
                                                 </div>
+                                                @error('surname')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-6 col-12 learts-mb-30">
                                                 <div class="single-input-item">
-                                                    <label for="surname">Ім'я <abbr class="required">*</abbr></label>
-                                                    <input type="text" id="surname" value={{ $user->name }}>
+                                                    <label for="name">Ім'я <abbr class="required">*</abbr></label>
+                                                    <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}">
                                                 </div>
+                                                @error('name')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
+
                                             </div>
-                                            <div class="col-md-6 col-12 learts-mb-30">
+                                            <div class="col-md-12 col-12 learts-mb-30">
                                                 <div class="single-input-item">
                                                     <label for="secondname">По-батькові</label>
-                                                    <input type="text" id="secondname" value={{ $user->secondname }}>
+                                                    <input type="text" id="secondname" name="secondname" value="{{ old('secondname', $user->secondname) }}">
                                                 </div>
+                                                @error('secondname')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-6 col-12 learts-mb-30">
                                                 <div class="single-input-item">
-                                                    <label for="email">Email<abbr class="required">*</abbr></label>
-                                                    <input type="email" id="email" value={{ $user->email }} readonly>
+                                                    <label for="email">Email <abbr class="required">*</abbr></label>
+                                                    <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" readonly>
                                                 </div>
+                                                @error('email')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            {{--                                            <div class="col-12 learts-mb-30">--}}
-                                            {{--                                                <label for="display-name">Display Name <abbr class="required">*</abbr></label>--}}
-                                            {{--                                                <input type="text" id="display-name" value="didiv91396">--}}
-                                            {{--                                                <p>This will be how your name will be displayed in the account section and in reviews</p>--}}
-                                            {{--                                            </div>--}}
+                                            <div class="col-md-6 col-12 learts-mb-30">
+                                                <div class="single-input-item">
+                                                    <label for="phone">Телефон <abbr class="required">*</abbr></label>
+                                                    <input type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                                                </div>
+                                                @error('phone')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
                                             <div class="col-12 learts-mb-30 learts-mt-30">
                                                 <fieldset>
                                                     <legend>Зміна паролю</legend>
                                                     <div class="row learts-mb-n30">
                                                         <div class="col-12 learts-mb-30">
                                                             <label for="current-pwd">Поточний пароль (залиште порожнім, щоб залишити без змін)</label>
-                                                            <input type="password" id="current-pwd">
+                                                            <input type="password" id="current-pwd" name="current_password">
                                                         </div>
                                                         <div class="col-12 learts-mb-30">
                                                             <label for="new-pwd">Новий пароль (залиште порожнім, щоб залишити без змін)</label>
-                                                            <input type="password" id="new-pwd">
+                                                            <input type="password" id="new-pwd" name="new_password">
                                                         </div>
                                                         <div class="col-12 learts-mb-30">
                                                             <label for="confirm-pwd">Підтвердження нового паролю</label>
-                                                            <input type="password" id="confirm-pwd">
+                                                            <input type="password" id="confirm-pwd" name="new_password_confirmation">
                                                         </div>
+                                                        @error('new_password_confirmation')
+                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </fieldset>
                                             </div>
                                             <div class="col-12 learts-mb-30">
-                                                <button class="btn btn-dark btn-outline-hover-dark">Зберегти зміни</button>
+                                                <button type="submit" class="btn btn-dark btn-outline-hover-dark">Зберегти зміни</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                        </div> <!-- Single Tab Content End -->
+                        </div>
+                        <!-- Single Tab Content End -->
+
 
                     </div>
                 </div> <!-- My Account Tab Content End -->
@@ -200,19 +233,45 @@
         </div>
     </div>
     <!-- My Account Section End -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Отримати ідентифікатор вкладки з URL
-            var hash = window.location.hash;
 
-            // Перевірити, чи існує вкладка з таким ідентифікатором
-            if ($(hash).length) {
-                // Активувати вкладку та здійснити плавний перехід
-                $('.myaccount-tab-list a[href="' + hash + '"]').tab('show');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function activateTabFromHash() {
+                var hash = window.location.hash;
+                if (hash && document.querySelector(hash)) {
+                    // Видаляємо активний клас з інших вкладок
+                    document.querySelectorAll('.myaccount-tab-list a').forEach(function(tab) {
+                        tab.classList.remove('active');
+                    });
+
+                    // Додаємо активний клас до поточної вкладки
+                    var targetTab = document.querySelector('.myaccount-tab-list a[href="' + hash + '"]');
+                    if (targetTab) {
+                        targetTab.classList.add('active');
+                        var targetPane = document.querySelector(hash);
+                        if (targetPane) {
+                            // Видаляємо активний клас з інших панелей
+                            document.querySelectorAll('.tab-pane').forEach(function(pane) {
+                                pane.classList.remove('show', 'active');
+                            });
+
+                            // Додаємо активний клас до поточної панелі
+                            targetPane.classList.add('show', 'active');
+                        }
+                    }
+                }
             }
+
+            activateTabFromHash();
+
+            // Виклик функції при зміні хеша
+            window.addEventListener('hashchange', function() {
+                activateTabFromHash();
+            });
         });
+
     </script>
+
 @endsection
 
 

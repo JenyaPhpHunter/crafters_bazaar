@@ -16,7 +16,7 @@ class CreateKindProductsTable extends Migration
         Schema::create('kind_products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment("Назва виду товару");
-            $table->unsignedInteger('user_id')->comment("Id адміна");
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
             $table->softDeletes();
             $table->timestamps();
 

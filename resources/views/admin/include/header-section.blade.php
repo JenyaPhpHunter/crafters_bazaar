@@ -54,6 +54,11 @@
             <nav class="site-main-menu justify-content-center">
                 <ul>
                     <li class="has-children"><a href="{{ route('admin_users.index') }}"><span class="menu-text">Користувачі</span></a>
+                        <ul class="sub-menu">
+                            @foreach($roles as $role)
+                                <li><a href="{{ route('admin_users.index', ['role' => $role->id]) }}"><span class="menu-text">{{ $role->name }}</span></a></li>
+                            @endforeach
+                        </ul>
                     <li class="has-children"><a href="#"><span class="menu-text">Продавці</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>
@@ -65,12 +70,6 @@
                                     <li><a href="{{ asset('shop-fullwidth-no-gutters.html') }}"><span class="menu-text">Shop Fullwidth No Space</span></a></li>
                                     <li><a href="{{ asset('shop-fullwidth.html') }}"><span class="menu-text">Shop Fullwidth No Sidebar</span></a></li>
                                     <li><a href="{{ asset('shop-fullwidth-left-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
                                     <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
                                 </ul>
                             </li>
@@ -134,20 +133,22 @@
                                             $counter ++;
                                         @endphp
                                         <a href="{{ route('products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
-                                        <ul>
-                                            @foreach($products as $product)
-                                                @if($status_product->id == $product->status_product_id)
-                                                    @php
-                                                        $selectedPhoto = $product->productphotos->where('queue', 1)->first();
-                                                    @endphp
-                                                    @isset($selectedPhoto)
-                                                        <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
-                                                    @else
-                                                        <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
-                                                    @endisset
-                                                @endif
-                                            @endforeach
-                                        </ul>
+                                        @isset($products)
+                                            <ul>
+                                                @foreach($products as $product)
+                                                    @if($status_product->id == $product->status_product_id)
+                                                        @php
+                                                            $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                        @endphp
+                                                        @isset($selectedPhoto)
+                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        @else
+                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                        @endisset
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        @endisset
                                     </li>
                                 @endforeach
                             @endif
@@ -216,19 +217,19 @@
                             @endif
                         </ul>
                     </li>
-                    @if($user->role_id == 1)
-                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
-                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
-                                @if(isset($roles))
-                                    @foreach ($roles as $role)
-                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </li>
-                    @endif
+{{--                    @if($user->role_id == 1)--}}
+{{--                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>--}}
+{{--                            <ul class="sub-menu">--}}
+{{--                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>--}}
+{{--                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>--}}
+{{--                                @if(isset($roles))--}}
+{{--                                    @foreach ($roles as $role)--}}
+{{--                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>--}}
+{{--                                    @endforeach--}}
+{{--                                @endif--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
                 </ul>
             </nav>
         </div>

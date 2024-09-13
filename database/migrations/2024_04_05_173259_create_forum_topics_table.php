@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('forum_topics', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('Назва теми форума');
-            $table->unsignedInteger('forum_sub_category_id');
+            $table->unsignedBigInteger('forum_sub_category_id');
             $table->softDeletes();
             $table->timestamps();
 

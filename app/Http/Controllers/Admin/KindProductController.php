@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\ProductsConstants;
 use App\Http\Controllers\Controller;
 use App\Models\KindProduct;
 use App\Models\SubKindProduct;
+use App\Models\User;
+use App\Services\UrlService;
 use Illuminate\Http\Request;
 
 class KindProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kind_products = KindProduct::query()->with('products')->orderBy('id')->get();
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        $kind_products = KindProduct::query()->with('sub_kind_products')->orderBy('id')->get();
         $sub_kind_products = SubKindProduct::all();
-        return view('admin.kind_products.index',[
-            "kind_products" => $kind_products,
-            "sub_kind_products" => $sub_kind_products,
-        ]);
+
+        return view('admin.kind_products.index',compact('kind_products','sub_kind_products', 'user'));
     }
 
     public function create()
     {
-
+        $action_types = ProductsConstants::ACTION_TYPES;
         return view('admin.kind_products.create',[
-            'excludeProducts' => true,
+            'action_types' => $action_types,
         ]);
     }
 
@@ -43,30 +46,40 @@ class KindProductController extends Controller
         return redirect(route('admin_kind_products.index'));
     }
 
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        $kind_product= KindProduct::query()->with('products')
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        $kind_product= KindProduct::query()->with('sub_kind_products')
             ->where('id',$id)->first();
-        $sub_kind_products = SubKindProduct::query()->where('kind_product_id',$kind_product->id)->get();
+
         return view('admin.kind_products.show',[
             'kind_product' => $kind_product,
-            'sub_kind_products' => $sub_kind_products,
+            'user' => $user,
         ]);
     }
 
     public function edit($id)
     {
-        $kind_product = KindProduct::query()->with('product')->where('id',$id)->first();
+        $kind_product = KindProduct::query()->with('sub_kind_products')->where('id',$id)->first();
         if(!$kind_product){
             throw new \Exception('User not found');
         }
-        return view('admin.kind_products.edit', ['kind_product' => $kind_product]);
+        $action_types = ProductsConstants::ACTION_TYPES;
+
+        $function = __FUNCTION__;
+
+
+        $urlService = new UrlService();
+        $link = $urlService->getLink('controller', 'action', 'params');
+
+        return view('admin.kind_products.edit', compact('kind_product', 'action_types', 'function'));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35',
+            'name' => 'required|unique:kind_products|max:35,name,'.$id,
         ]);
 
         $kind_product = KindProduct::query()->where('id',$id)->first();
@@ -74,12 +87,12 @@ class KindProductController extends Controller
 
         $kind_product->save();
 
-        return redirect( route('kind_products.show', ['kind_product' => $id]));
+        return redirect( route('admin_kind_products.index'));
     }
 
     public function destroy($id)
     {
         $kind_product = KindProduct::query()->where('id',$id)->delete();
-        return redirect( route('kind_products.index'));
+        return redirect( route('admin_kind_products.index'));
     }
 }

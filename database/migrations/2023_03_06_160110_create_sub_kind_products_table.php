@@ -16,8 +16,8 @@ class CreateSubKindProductsTable extends Migration
         Schema::create('sub_kind_products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment("Назва підвиду товару");
-            $table->unsignedInteger('kind_product_id')->comment("Id виду товару");
-            $table->unsignedInteger('user_id')->comment("Id адміна");
+            $table->unsignedBigInteger('kind_product_id')->comment("Id виду товару");
+            $table->unsignedBigInteger('user_id')->comment("Id адміна");
             $table->softDeletes();
             $table->timestamps();
 

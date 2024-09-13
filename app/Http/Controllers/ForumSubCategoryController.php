@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ProductsConstants;
 use App\Models\ForumCategory;
 use App\Models\ForumSubCategory;
 use App\Models\ForumTopic;
@@ -38,13 +39,11 @@ class ForumSubCategoryController extends Controller
      */
     public function create(Request $request)
     {
+        $selected_category_id = $request->input('category_id');
         $categories = ForumCategory::all();
-        $selected_category = ForumCategory::find($request->input('category_id'));
+        $action_types = ProductsConstants::ACTION_TYPES;
 
-        return view('forum_sub_categories.create', [
-            'categories' => $categories,
-            'selected_category' => $selected_category,
-        ]);
+        return view('forum_sub_categories.create', compact('categories', 'selected_category_id', 'action_types'));
     }
 
     /**

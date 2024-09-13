@@ -10,7 +10,7 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id')->comment("Id користувача");
+            $table->unsignedBigInteger('user_id')->comment("Id користувача");
             $table->decimal('sum')->nullable()->comment("сума");
             $table->decimal('pricediscount')->nullable()->comment("знижка");
             $table->decimal('total')->nullable()->comment("загалом");

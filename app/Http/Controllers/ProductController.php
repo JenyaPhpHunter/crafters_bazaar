@@ -63,6 +63,8 @@ class ProductController extends Controller
         }
         if(!empty($request->input('sub_kind_product_id'))){
             $selected_sub_kind_product_id = $request->input('sub_kind_product_id');
+            $selected_sub_kind_product = SubKindProduct::find($selected_sub_kind_product_id);
+            $selected_kind_product_id = $selected_sub_kind_product->kind_product_id;
         } else {
             $selected_sub_kind_product_id = 1;
         }
@@ -76,7 +78,7 @@ class ProductController extends Controller
         if(empty($request->input('product_id'))){
             $kind_products = KindProduct::all();
             $sub_kind_products = SubKindProduct::all();
-
+//$this->seedie($selected_kind_product_id);
             return view('products.create', compact(
                 'selected_kind_product_id',
                 'kind_products',

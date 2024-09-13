@@ -35,7 +35,7 @@
                         @foreach($categories as $category)
                             <div style="display: flex; align-items: center;"> <!-- Контейнер для категорії та карандаша -->
                                 <span>{{ $category->name }}</span> <!-- Категорія -->
-                                @if($user->role_id < 4)
+                                @if($user && $user->role_id < 4)
                                     <a href="{{ route('forum_categories.edit', ['forum_category' => $category->id]) }}">
                                         &nbsp;&nbsp;<i class="fas fa-pencil-alt ml-2"></i> <!-- Карандаш -->
                                     </a>
@@ -47,7 +47,7 @@
                                         <a href="{{ route('forum_sub_categories.show', ['forum_sub_category' => $sub_category->id]) }}">
                                             <span>{{ $sub_category->name }}</span>
                                         </a>
-                                        @if($user->role_id < 4)
+                                        @if($user && $user->role_id < 4)
                                             <a href="{{ route('forum_sub_categories.edit', ['forum_sub_category' => $sub_category->id]) }}">
                                                 &nbsp;&nbsp;<i class="fas fa-pencil-alt ml-2"></i> <!-- Карандаш -->
                                             </a>

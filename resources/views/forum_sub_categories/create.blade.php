@@ -26,7 +26,7 @@
                             <label for="forum_category_id">Категорія</label>
                             <select id="forum_category_id" name="forum_category_id">
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ $selected_category->id == $category->id ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}" {{$selected_category_id == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -37,7 +37,10 @@
                                    placeholder="Введіть назву підкатегорії">
                             <br><br>
 
-                            <button class="btn btn-dark btn-outline-hover-dark mb-3" type="submit">Зберегти</button>
+                            <button type="submit" name="action" value="save"
+                                    class="btn btn-dark btn-outline-hover-dark">
+                                <i class="fas fa-save"></i> {{ $action_types['save'] }}
+                            </button>
                         </form>
                 </div>
             </div>

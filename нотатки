@@ -1,0 +1,6 @@
+        foreach($kind_products as $kind_product){
+            if (auth()->user()->can('edit', $kind_product)) {
+                echo "VAS"; die();
+            }
+        }
+

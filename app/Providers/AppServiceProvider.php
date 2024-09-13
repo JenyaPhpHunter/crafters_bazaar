@@ -4,14 +4,10 @@ namespace App\Providers;
 
 use App\Models\CartItems;
 use App\Models\ForumCategory;
-use App\Models\ForumSubCategory;
 use App\Models\KindProduct;
-use App\Models\AdminOrder;
 use App\Models\Product;
 use App\Models\Role;
-use App\Models\StatusOrder;
 use App\Models\StatusProduct;
-use App\Models\SubKindProduct;
 use App\Models\WishItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -45,8 +41,7 @@ class AppServiceProvider extends ServiceProvider
         ], function ($view) {
             $user = Auth::user();
             // Основний запит для отримання всіх активних та неделеційованих KindProduct
-            $baseQuery = KindProduct::where('del', 0)
-                ->where('active', 1)
+            $baseQuery = KindProduct::where('deleted_at', NULL)
                 ->with('sub_kind_products');
 
 // Якщо вам потрібні всі KindProduct, незалежно від того, чи мають вони продукти зі статусом 3
@@ -63,15 +58,13 @@ class AppServiceProvider extends ServiceProvider
                 }])
                 ->get();
 
-
             if($user){
                 $user_products = Product::query()->where('user_id', $user->id)->get();
+                $roles = Role::where('id', '>=', $user->role_id)->get();
             } else {
                 $user_products = collect();
             }
-
             $statuses_products = StatusProduct::all();
-            $roles = Role::all();
             if($user){
                 $cartItemsCount = CartItems::query()
                     ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
@@ -104,7 +97,6 @@ class AppServiceProvider extends ServiceProvider
                 ->latest()
                 ->limit(10)
                 ->get();
-
             $view->with('header_kind_products', $header_kind_products)
                 ->with('all_kind_products', $all_kind_products)
                 ->with('roles', $roles)
@@ -115,6 +107,9 @@ class AppServiceProvider extends ServiceProvider
                 ->with('user', $user)
                 ->with('categories', $forum_categories)
                 ->with('title_list', $title_list);
+            if ($user){
+                return redirect(route('welcome'));
+            }
         });
     }
 }

@@ -17,13 +17,13 @@ return new class extends Migration
 //            $table->id();
 //            $table->string('name')->comment("Назва міста");
 //            $table->string('index')->comment("індекс");
-//            $table->unsignedInteger('region_id')->nullable()->comment("Id області");
+//            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
+//            $table->foreign('region_id')->references('id')->on('regions');
 //            $table->string('latitude')->comment("широта");
 //            $table->string('longitude')->comment("довгота");
 //            $table->string('warehouse')->comment("наявність НП");
 //            $table->timestamps();
 //
-//            $table->foreign('region_id')->references('id')->on('regions');
 //        });
     }
 

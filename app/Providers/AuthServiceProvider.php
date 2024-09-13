@@ -4,9 +4,13 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\ForumCategory;
+use App\Models\KindProduct;
+use App\Models\SubKindProduct;
 use App\Models\User;
 use App\Policies\ForumCategoryPolicy;
+use App\Policies\KindProductPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\SubKindProductPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         User::class => RolePolicy::class,
         ForumCategory::class => ForumCategoryPolicy::class,
+        KindProduct::class => KindProductPolicy::class,
     ];
 
     /**

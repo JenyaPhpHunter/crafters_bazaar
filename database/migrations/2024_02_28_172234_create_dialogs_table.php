@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('type')->comment('Тип діалогу');
             $table->string('comment')->comment('Коментар');
-            $table->unsignedInteger('product_id')->comment('Id товару');
-            $table->unsignedInteger('answer_to')->nullable()->comment('Відповідь на діалог Id'); // Тип поля answer_to тепер nullable
+            $table->unsignedBigInteger('product_id')->comment('Id товару');
+            $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на діалог Id'); // Тип поля answer_to тепер nullable
             $table->decimal('queue', 15, 10);
-            $table->unsignedInteger('user_id')->comment('Id користувача');
+            $table->unsignedBigInteger('user_id')->comment('Id користувача');
             $table->softDeletes();
             $table->timestamps();
 

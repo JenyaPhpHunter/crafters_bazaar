@@ -19,7 +19,7 @@
                     </div>
                     <div style="display: flex; flex-direction: column; align-items: flex-end; margin-top: 20px;">
                         <a class="btn btn-primary2" href="{{ route('forum_categories.create') }}" style="margin-bottom: 10px;">Створити категорію</a>
-                        <a class="btn btn-primary2" href="{{ route('forum_sub_categories.create') }}" style="margin-bottom: 10px;">Створити підкатегорію</a>
+                        <a class="btn btn-primary2" href="{{ route('forum_sub_categories.create', ['category_id' => $category->id]) }}" style="margin-bottom: 10px;">Створити підкатегорію</a>
                     </div>
                 </div>
             </div>

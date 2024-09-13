@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('ext',4)->comment("Розширення");
             $table->string('path')->comment("Шлях до файлу");
             $table->string('link')->comment("Посилання");
-            $table->unsignedInteger('queue')->comment("Черга");
+            $table->unsignedBigInteger('queue')->comment("Черга");
             $table->string('hover_filename')->default('')->comment("Назва файлу при наведенні");
             $table->string('hover_ext',4)->default('')->comment("Розширення при наведенні");
             $table->string('hover_path')->default('')->comment("Шлях до файлу при наведенні");
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('small_filename')->default('')->comment("Назва маленького файлу");
             $table->string('small_ext',4)->default('')->comment("Розширення маленького файлу");
             $table->string('small_path')->default('')->comment("Шлях до маленького файлу");
-            $table->unsignedInteger('product_id')->comment('Id товару');
+            $table->unsignedBigInteger('product_id')->comment('Id товару');
             $table->softDeletes();
             $table->timestamps();
 

@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Delivery;
 use App\Models\KindPayment;
 use App\Models\KindProduct;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\Role;
@@ -25,15 +26,29 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Support\Collection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        $users = User::query()->with('role','category_user')->where('del', 0)->orderBy('id', 'desc')->get();
+//        $this->seedie($request->all());
+        $query = User::query()->with(['role', 'category_user'])->whereNull('deleted_at')->orderBy('id', 'desc');
 
-        return view('admin.users.index',[
-            "users" => $users,
-            "products" => $products,
-        ]);
+        // Викликаємо метод filter і передаємо в нього $query і $request
+        $users = $this->filter($query, $request)->get();
+//        $query = User::query()->with('role','category_user')->whereNull('deleted_at')->orderBy('id', 'desc');
+//        if ($request->input('pib') || $request->input('email') || $request->input('phone') || $request->input('role_id') || $request->input('category_user_id')){
+//            $sers = $this->filter($request);
+//        } else {
+//            if ($request->input('role')){
+//                $users = $query->where('role_id', $request->input('role'))->get();
+//            } else {
+//                $users = $query->get();
+//            }
+//        }
+        $user_id = $request->input('user_id');
+        $user = User::find($user_id);
+        $roles = Role::where('id', '>=', $user->role_id)->get();
+        $categories = CategoryUser::where('id', '>=', $user->category_user_id)->get();
+
+        return view('admin.users.index',compact('users','roles','categories'));
     }
 
     /**
@@ -128,47 +143,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-//    public function show(Request $request, $id)
-//    {
-//        echo "<pre>";
-//        print_r($request->all());
-//        echo "</pre>";
-//        die();
-//        $user_id = $request->post('user_id');
-//        $validated = Validator::make($request->all(), [
-//            'name' => 'required',
-//            'surname' => 'required',
-//            'phone' => 'required',
-//            'email' => 'required',
-//        ]);
-//        if ($validated->fails()) {
-//            return redirect()
-//                ->route('users.show', ['user' => $user_id, '#account-info'])
-//                ->withErrors($validated)
-//                ->withInput()
-//                ->with('hash', '#account-info');  // Додаємо цей рядок для збереження хешу
-//        }
-//
-//        $user = User::query()->where('id',$id)->first();
-//        $user->email = $request->post('email');
-//        if($request->post('password')){
-//            $user->password =  Hash::make($request->post('password'));
-//        }
-//        $user->name = $request->post('name');
-//        $user->surname = $request->post('surname');
-//        $user->secondname = $request->post('secondname');
-//        $user->phone = $request->post('phone');
-//        $user->email = $request->post('email');
-//
-//        $user->save();
-//
-//        return view('admin.users.show', [
-//            "user" => $user,
-//            "categories_user" => $categories_user,
-//            "roles" => $roles,
-//            "products" => $products,
-//        ]);
-//    }
+    public function show($id)
+    {
+        $user = User::query()->with('role')
+            ->with('delivery')
+            ->with('kindpayment')
+            ->with('region')
+            ->with('city')
+            ->where('id',$id)->first();
+        $orders = Order::query()->where('user_id', $user->id)->with('status_order')->get();
+
+        return view('users.show',[
+            'user' => $user,
+            'orders' => $orders,
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -268,4 +257,30 @@ class UserController extends Controller
             'products' => $products,
         ]);
     }
+
+    protected function filter($query, $request)
+    {
+        return $query
+            // Фільтр за ПІБ (наприклад, фільтр по суміщеному полю)
+            ->when($request->input('pib'), function ($query, $pib) {
+                $query->whereRaw("CONCAT(surname, ' ', name, ' ', secondname) LIKE ?", ["%$pib%"]);
+            })
+            // Фільтр за email
+            ->when($request->input('email'), function ($query, $email) {
+                $query->where('email', 'like', "%{$email}%");
+            })
+            // Фільтр за телефоном
+            ->when($request->input('phone'), function ($query, $phone) {
+                $query->where('phone', 'like', "%{$phone}%");
+            })
+            // Фільтр за роль
+            ->when($request->input('role_id'), function ($query, $role_id) {
+                $query->where('role_id', $role_id);
+            })
+            // Фільтр за категорію користувача
+            ->when($request->input('category_user_id'), function ($query, $category_user_id) {
+                $query->where('category_user_id', $category_user_id);
+            });
+    }
+
 }

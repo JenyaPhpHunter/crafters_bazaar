@@ -89,6 +89,36 @@
                             <label for="additional_information">Додаткова інформація</label>
                             <textarea id="additional_information" name="additional_information" rows="10" cols="50"
                                       placeholder="За необхідності внесіть додаткову інформацію про товар" style="border: 1px solid black; padding-left: 0.5em;">{{ old('additional_information') }}</textarea>
+                            <div class="product-meta">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td class="label"><span>Теги</span></td>
+                                        <td class="value">
+                                            <ul class="product-tags">
+                                                <li><a href="#">handmade</a></li>
+                                                <li><a href="#">learts</a></li>
+                                                <li><a href="#">mug</a></li>
+                                                <li><a href="#">product</a></li>
+                                                <li><a href="#">learts</a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label"><span>Поширити</span></td>
+                                        <td class="va">
+                                            <div class="product-share">
+                                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                                                <a href="#"><i class="fab fa-pinterest"></i></a>
+                                                <a href="#"><i class="fal fa-envelope"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <!-- Single Products Infomation Section End -->
@@ -244,36 +274,6 @@
                                 <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
                             </div>
                         @endif
-                        <div class="product-meta">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td class="label"><span>Теги</span></td>
-                                    <td class="value">
-                                        <ul class="product-tags">
-                                            <li><a href="#">handmade</a></li>
-                                            <li><a href="#">learts</a></li>
-                                            <li><a href="#">mug</a></li>
-                                            <li><a href="#">product</a></li>
-                                            <li><a href="#">learts</a></li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="label"><span>Поширити</span></td>
-                                    <td class="va">
-                                        <div class="product-share">
-                                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                            <a href="#"><i class="fab fa-twitter"></i></a>
-                                            <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                                            <a href="#"><i class="fab fa-pinterest"></i></a>
-                                            <a href="#"><i class="fal fa-envelope"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
                 <!-- Product Summery End -->

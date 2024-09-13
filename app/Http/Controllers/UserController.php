@@ -55,7 +55,6 @@ class UserController extends Controller
         return view('users.show',[
             'user' => $user,
             'orders' => $orders,
-            'excludeProducts' => true,
         ]);
     }
     public function edit($id)
