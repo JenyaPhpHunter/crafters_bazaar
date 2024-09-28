@@ -28,7 +28,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-//        $this->seedie($request->all());
         $query = User::query()->with(['role', 'category_user'])->whereNull('deleted_at')->orderBy('id', 'desc');
 
         // Викликаємо метод filter і передаємо в нього $query і $request

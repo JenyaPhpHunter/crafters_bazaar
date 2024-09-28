@@ -3,7 +3,20 @@
 @section('seo_title', 'Головна сторінка')
 
 @section('content')
-
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- Page Title/Header End -->
 <!-- Slider main container Start -->
 <div class="home1-slider swiper-container">

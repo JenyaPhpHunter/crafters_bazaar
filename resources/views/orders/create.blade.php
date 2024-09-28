@@ -1,26 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section" data-bg-image="assets/images/bg/page-title-1.webp">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title">
-                        <h1 class="title">Деталі замовлення</h1>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active">Деталі замовлення</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
-    <!-- Page Title/Header End -->
-    <div class="section-title2 text-center">
-        <h2 class="title">Ваше замовлення</h2>
-    </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="container">
         <div class="row learts-mb-n30">
             <div class="col-lg-12 order-lg-2 learts-mb-30">

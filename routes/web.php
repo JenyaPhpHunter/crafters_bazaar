@@ -32,12 +32,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/locations/{location:slug}', [LocationsController::class, 'show'])
-//    ->name('locations.view')
-//    ->missing(function (Request $request) {
-//        return Redirect::route('locations.index');
-//    });
-
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
@@ -47,47 +41,42 @@ use Illuminate\Support\Facades\Route;
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 //});
-
-Route::prefix('admin')->group(callback: function () {
-    Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-    Route::resource('admin_users', AdminUserController::class);
-    Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
-
-    Route::resource('admin_roles', RoleController::class);
-
-//    Route::get('/admin_products/filter', [AdminProductController::class, 'filter'])->name('admin_products.filter');
-//    Route::resource('admin_products', AdminProductController::class);
-    Route::get('/admin_products/send_for_sale/{admin_product}', [AdminProductController::class, 'sendForSale'])->name('admin_product_send_for_sale');
-    Route::get('/admin_products/{uri}/create-kind-subkind', [AdminProductController::class, 'createkindsubkind'])->name('admin.products.createkindsubkind');
-    Route::post('/admin_products/storekindsubkind', [AdminProductController::class, 'storekindsubkind'])->name('admin.products.storekindsubkind');
-    Route::resource('admin_kind_products', AdminKindProductController::class);
-    Route::resource('admin_sub_kind_products', AdminSubKindProductController::class);
-    Route::resource('admin_orders', AdminOrderController::class);
-    Route::get('/admin_products/kind_products/{kind_products}', [AdminProductController::class, 'productsKind'])->name('admin_products_kind');
-    Route::get('/admin_products/kind_products/{kind_products}/sub_kind_products/{sub_kind_products}', [AdminProductController::class, 'productsKindSubkind'])->name('admin_products_kind_subkind');
-});
+    Route::prefix('admin')->middleware('auth')->group(callback: function () {
+        Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+        Route::resource('admin_users', AdminUserController::class);
+        Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
+        Route::resource('admin_roles', RoleController::class);
+        Route::resource('admin_kind_products', AdminKindProductController::class);
+        Route::resource('admin_sub_kind_products', AdminSubKindProductController::class);
+        Route::resource('admin_orders', AdminOrderController::class);
 //Route::get('/test-email', function () {
 //    $emailService = new \App\Services\EmailService();
 //    $emailService->sendWelcomeEmail('bulic2012@gmail.com', 'your_test_password');
 //});
-
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit/', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::post('products/sendquestion/{product}', [ProductController::class, 'sendquestion'])->name('products.sendquestion');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
+    Route::post('/products/storekindsubkind', [ProductController::class, 'storekindsubkind'])->name('products.storekindsubkind');
+    Route::delete('/products', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::resource('forum_categories', ForumCategoryController::class);
+    Route::resource('forum_sub_categories', ForumSubCategoryController::class);
+    Route::resource('forum_topics', ForumTopicController::class);
+    Route::resource('forum_posts', ForumPostController::class)->except(['index']);
+});
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
-Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-Route::get('/users/{user}/edit/', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
-Route::post('products/sendquestion/{product}', [ProductController::class, 'sendquestion'])->name('products.sendquestion');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
-Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
-Route::post('/products/storekindsubkind', [ProductController::class, 'storekindsubkind'])->name('products.storekindsubkind');
 Route::get('/products/kind_products/{kind_products}', [ProductController::class, 'productsKind'])->name('products_kind');
 Route::get('/products/sub_kind_products/{sub_kind_products}', [ProductController::class, 'productsKindSubkind'])->name('products_kind_subkind');
-Route::delete('/products', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/carts/index', [CartController::class, 'index'])->name('carts.index');
 Route::get('/carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
 Route::delete('/carts/clear', [CartController::class, 'clearCart'])->name('carts.clearСart');
@@ -98,28 +87,12 @@ Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishli
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
 Route::get('/orders/status', [OrderController::class, 'status'])->name('orders.status');
 Route::resource('orders', OrderController::class);
-Route::resource('forum_categories', ForumCategoryController::class);
-Route::resource('forum_sub_categories', ForumSubCategoryController::class);
-Route::resource('forum_topics', ForumTopicController::class);
-Route::resource('forum_posts', ForumPostController::class)->except(['index']);
 
-//Route::get('/forum_posts/index/{topic}', [ForumPostController::class, 'index'])->name('forum_posts.index');
-//Route::get('/forum/index', [ForumController::class, 'index'])->name('forum.index');
-
-
+require __DIR__.'/auth.php';
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');
 
-//Route::resource('products', ProductController::class)->except(['destroy']);
 //Route::view('/validation/debug', 'validation_debug')->name('validation.debug');
 
-
-//Route::get('/sub_kind_products/create', [AdminSubKindProductController::class, 'create'])->name('sub_kind_products.create');
-//Route::get('/sub_kind_products', [AdminSubKindProductController::class, 'index'])->name('sub_kind_products.index');
-//Route::post('/sub_kind_products', [AdminSubKindProductController::class, 'store'])->name('sub_kind_products.store');
-//Route::get('/sub_kind_products/{sub_kind_product}', [AdminSubKindProductController::class, 'show'])->name('sub_kind_products.show');
-//Route::get('/sub_kind_products/{sub_kind_product}/edit/', [AdminSubKindProductController::class, 'edit'])->name('sub_kind_products.edit');
-//Route::put('/sub_kind_products/{sub_kind_product}', [AdminSubKindProductController::class, 'update'])->name('sub_kind_products.update');
-//Route::delete('/sub_kind_products/{sub_kind_product}', [AdminSubKindProductController::class, 'destroy'])->name('sub_kind_products.destroy');
 // Маршрути для незареєстрованих користувачів
 //Route::middleware('guest')->group(function () {
 //    // Остальні маршрути реєстрації, відновлення пароля та інші
@@ -127,18 +100,9 @@ Route::resource('forum_posts', ForumPostController::class)->except(['index']);
 //Route::put('/post/{id}', function ($id) {
 //    //
 //})->middleware('role:editor');
-//Route::controller(OrderController::class)->group(function () {
-//    Route::get('/orders/{id}', 'show');
-//    Route::post('/orders', 'store');
 //});
 
-
-//Route::name('admin.')->group(function () {
-//    Route::get('/users', function () {
-//        // Маршруту присвоено имя `admin.users` ...
-//    })->name('users');
-//});
 //Route::fallback(function () {
 //    echo "Резервный маршрут";
 //});
-require __DIR__.'/auth.php';
+

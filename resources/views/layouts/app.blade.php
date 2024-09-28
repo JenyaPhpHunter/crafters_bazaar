@@ -76,6 +76,7 @@
     @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')
 @endisset
 
+@include('components.page-title')
 @yield('content')
 @include('include.footer')
 

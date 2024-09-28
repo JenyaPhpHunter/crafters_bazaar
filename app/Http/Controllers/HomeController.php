@@ -12,10 +12,8 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $products = Product::all();
-        $kindProducts = KindProduct::all();
         return view('welcome',[
             "products" => $products,
-            "kindProducts" => $kindProducts,
             "user" => $user,
         ]);
     }

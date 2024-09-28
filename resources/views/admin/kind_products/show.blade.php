@@ -1,29 +1,20 @@
 @extends('admin.layouts.app')
 
 @section('content')
-
-    <div class="page-title-section section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title" style="display: flex; align-items: center; justify-content: space-between;">
-                        <h1 class="title" style="margin-bottom: 0;">Перегляд виду товарів</h1>
-                    </div>
-                    <div class="breadcrumb-container" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
-                        <ul class="breadcrumb" style="margin-bottom: 0;">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin_kind_products.index') }}">Види товарів</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin_sub_kind_products.index') }}">Підвиди товарів</a></li>
-                            <li class="breadcrumb-item active">{{ $kind_product->name }}</li>
-                        </ul>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; margin-top: 20px;">
-                        <a class="btn btn-primary2" href="{{ route('admin_sub_kind_products.create', ['kind_product_id' => $kind_product->id]) }}" style="margin-bottom: 10px;">Створити підвид товару</a>
-                    </div>
-                </div>
-            </div>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="section section-padding pt-0">
         <div class="section section-fluid learts-mt-70">

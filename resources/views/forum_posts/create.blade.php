@@ -2,38 +2,20 @@
 
 @section('content')
 
-    <!-- Page Title/Header Start -->
-    <div class="page-title">
-        <h1 class="title">Створення поста</h1>
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('forum_categories.index') }}">Категорії</a></li>
-            @isset($topic)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_categories.show', ['forum_category' => $topic->forum_sub_category->forum_category_id]) }}">
-                        {{ $topic->forum_sub_category->forum_category->name }}
-                    </a>
-                </li>
-            @endisset
-            <li class="breadcrumb-item"><a href="{{ route('forum_sub_categories.index') }}">Підкатегорії</a></li>
-            @isset($topic)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_sub_categories.show', ['forum_sub_category' => $topic->forum_sub_category_id]) }}">
-                        {{ $topic->forum_sub_category->name }}
-                    </a>
-                </li>
-            @endisset
-            <li class="breadcrumb-item"><a href="{{ route('forum_topics.index') }}">Теми</a></li>
-            @isset($topic)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_topics.show', ['forum_topic' => $topic->forum_sub_category->forum_category_id]) }}">
-                        {{ $topic->name }}
-                    </a>
-                </li>
-            @endisset
-        </ul>
-    </div>
-    <!-- Page Title/Header End -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     @if($answer_post)
         <h1>Ви пишете відповідь користувачу {{ $answer_post->user->name }}</h1>
         <h2>на його пост </h2>

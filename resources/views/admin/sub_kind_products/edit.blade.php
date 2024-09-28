@@ -1,6 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -10,27 +15,7 @@
             </ul>
         </div>
     @endif
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title" style="display: flex; align-items: center; justify-content: space-between;">
-                        <h1 class="title" style="margin-bottom: 0;">Редагування підвиду товару</h1>
-                    </div>
-                    <div class="breadcrumb-container" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
-                        <ul class="breadcrumb" style="margin-bottom: 0;">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin_kind_products.index') }}">Види товарів</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin_sub_kind_products.index') }}">Підвиди товарів</a></li>
-                            <li class="breadcrumb-item active">{{ $sub_kind_product->name }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Title/Header End -->
+
     <div class="section section-padding border-bottom">
         <div class="container">
             <div class="col-lg-6 col-12 learts-mb-40">

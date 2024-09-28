@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title">
-        <h1 class="title">Редагування категорії</h1>
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('forum_categories.index') }}">Категорії</a></li>
-            @isset($category)
-                <li class="breadcrumb-item active">{{ $category->name }}</li>
-            @endisset
-        </ul>
-    </div>
-    <!-- Page Title/Header End -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="section section-padding border-bottom">
         <div class="row learts-mb-n40">

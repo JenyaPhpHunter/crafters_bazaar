@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -10,29 +15,6 @@
             </ul>
         </div>
     @endif
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title">
-                        <h1 class="title">Створення товару</h1>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
-                            @isset($product->name)
-                                <li class="breadcrumb-item active">{{ $product->name }}</li>
-                            @endisset
-                        </ul>
-                        <div class="offcanvas-overlay"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Title/Header End -->
-
 
 <!-- Single Products Section Start -->
     <div class="section section-padding border-bottom">
@@ -266,13 +248,15 @@
                                 </button>
                             </div>
                         </form>
-                        @if(empty($user->name) || empty($user->surname) || empty($user->email) || empty($user->phone))
-                            <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                                <div class="col-auto learts-mb-20">
-                                    <a href="{{ route('users.show', ['user' => $user->id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a>
+                        @if($user)
+                            @if(empty($user->name) || empty($user->surname) || empty($user->email) || empty($user->phone))
+                                <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
+                                    <div class="col-auto learts-mb-20">
+                                        <a href="{{ route('users.show', ['user' => $user->id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a>
+                                    </div>
+                                    <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
                                 </div>
-                                <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
-                            </div>
+                            @endif
                         @endif
                     </div>
                 </div>

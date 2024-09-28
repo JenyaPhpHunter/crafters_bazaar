@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\AdminOrder;
 use App\Models\CartItems;
 use App\Models\ForumCategory;
 use App\Models\KindProduct;
 use App\Models\Product;
 use App\Models\Role;
+use App\Models\StatusOrder;
 use App\Models\StatusProduct;
+use App\Models\User;
 use App\Models\WishItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -40,6 +43,11 @@ class AppServiceProvider extends ServiceProvider
             'admin.include.header-sticky-section',
         ], function ($view) {
             $user = Auth::user();
+            $users = User::all();
+            $orders = AdminOrder::all();
+            $statuses_orders = StatusOrder::all();
+            $statuses_products = StatusProduct::all();
+            $roles = Role::all();
             // Основний запит для отримання всіх активних та неделеційованих KindProduct
             $baseQuery = KindProduct::where('deleted_at', NULL)
                 ->with('sub_kind_products');
@@ -57,14 +65,12 @@ class AppServiceProvider extends ServiceProvider
                     });
                 }])
                 ->get();
-
             if($user){
                 $user_products = Product::query()->where('user_id', $user->id)->get();
                 $roles = Role::where('id', '>=', $user->role_id)->get();
             } else {
                 $user_products = collect();
             }
-            $statuses_products = StatusProduct::all();
             if($user){
                 $cartItemsCount = CartItems::query()
                     ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
@@ -106,6 +112,9 @@ class AppServiceProvider extends ServiceProvider
                 ->with('user_products', $user_products)
                 ->with('user', $user)
                 ->with('categories', $forum_categories)
+                ->with('users', $users)
+                ->with('orders', $orders)
+                ->with('statuses_orders', $statuses_orders)
                 ->with('title_list', $title_list);
             if ($user){
                 return redirect(route('welcome'));

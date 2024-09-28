@@ -1,29 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
-                            @isset($product)
-                                <li class="breadcrumb-item active">{{ $product->name }}</li>
-                            @endisset
-                        </ul>
-                    </div>
-                    @isset($product)
-                        <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
-                    @endisset
-                </div>
-            </div>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
-    <!-- Page Title/Header End -->
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Single Products Section Start -->
     <div class="section section-fluid section-padding border-bottom">

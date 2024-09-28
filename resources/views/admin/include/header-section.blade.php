@@ -124,7 +124,6 @@
                                     @endif
                                     <li>
                                         @if($counter == 0)
-
                                             <a href="{{ route('products.create') }}" class="mega-menu-title"><span class="menu-text">Додати товар</span></a>
                                     </li>
                                     <li>
@@ -183,6 +182,8 @@
                     <li class="has-children">
                         <a href="{{ route('admin_sub_kind_products.index') }}"><span class="menu-text">Підвиди товарів</span></a>
                         <ul class="sub-menu mega-menu">
+                            <li><a href="{{ route('admin_sub_kind_products.create') }}"><span class="menu-text">Створити підвид товару</span></a></li>
+                            <li><a href="{{ route('admin_sub_kind_products.index') }}"><span class="menu-text">Всі підвиди товарів</span></a></li>
                             @if(isset($header_kind_products))
                                 @foreach ($header_kind_products as $kind_product)
                                     <li>

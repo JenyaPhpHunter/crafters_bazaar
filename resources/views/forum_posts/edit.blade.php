@@ -1,40 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title">
-        <h1 class="title">Редагування поста</h1>
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('forum_categories.index') }}">Категорії</a></li>
-            @isset($post)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_categories.show', ['forum_category' => $post->forum_topic->forum_sub_category->forum_category_id]) }}">
-                        {{ $post->forum_topic->forum_sub_category->forum_category->name }}
-                    </a>
-                </li>
-            @endisset
-            <li class="breadcrumb-item"><a href="{{ route('forum_sub_categories.index') }}">Підкатегорії</a></li>
-            @isset($post)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_sub_categories.show', ['forum_sub_category' => $post->forum_topic->forum_sub_category_id]) }}">
-                        {{ $post->forum_topic->forum_sub_category->name }}
-                    </a>
-                </li>
-            @endisset
-            <li class="breadcrumb-item"><a href="{{ route('forum_topics.index') }}">Теми</a></li>
-            @isset($post)
-                <li class="breadcrumb-item">
-                    <a href="{{ route('forum_topics.show', ['forum_topic' => $post->forum_topic->forum_sub_category->forum_category_id]) }}">
-                        {{ $post->forum_topic->name }}
-                    </a>
-                </li>
-                <li class="breadcrumb-item active">{{ $post->name }}</li>
-            @endisset
-        </ul>
-    </div>
-    <!-- Page Title/Header End -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="section section-padding border-bottom">
         <div class="container">

@@ -70,15 +70,17 @@
                         @if(isset($header_kind_products))
                             <ul class="sub-menu">
                             @foreach($header_kind_products as $kind_product)
-                                <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
-                                    <ul class="sub-menu">
-                                        @if(!empty($kind_product->sub_kind_products))
-                                            @foreach($kind_product->sub_kind_products as $sub_kind_product)
-                                                <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
-                                            @endforeach
-                                        @endif
-                                    </ul>
-                                </li>
+                                @if ($kind_product->id != 1)
+                                    <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
+                                        <ul class="sub-menu">
+                                            @if(!empty($kind_product->sub_kind_products))
+                                                @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                                                    <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                                @endforeach
+                                            @endif
+                                        </ul>
+                                    </li>
+                                @endif
                             @endforeach
                             </ul>
                         @endif
@@ -208,25 +210,27 @@
                         <ul class="sub-menu">
                             @isset($all_kind_products)
                                 @foreach($all_kind_products as $kind_product)
-                                    <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
-                                        <ul class="sub-menu">
-                                            @php
-                                                $counter = 0;
-                                            @endphp
-                                            @forelse ($kind_product->sub_kind_products as $sub_kind_product)
-                                                @if($kind_product->id == $sub_kind_product->kind_product_id)
-                                                    @php
-                                                        $counter++;
-                                                    @endphp
-                                                    <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id, 'sub_kind_product_id' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                    @if ($kind_product->id != 1)
+                                        <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
+                                            <ul class="sub-menu">
+                                                @php
+                                                    $counter = 0;
+                                                @endphp
+                                                @forelse ($kind_product->sub_kind_products as $sub_kind_product)
+                                                    @if($kind_product->id == $sub_kind_product->kind_product_id)
+                                                        @php
+                                                            $counter++;
+                                                        @endphp
+                                                        <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id, 'sub_kind_product_id' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                                @if($counter == 0)
+                                                <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">Додати перший товар в категорію {{ $kind_product->name }}</span></a></li>
                                                 @endif
-                                            @empty
-                                            @endforelse
-                                            @if($counter == 0)
-                                            <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">Додати перший товар в категорію {{ $kind_product->name }}</span></a></li>
-                                            @endif
-                                        </ul>
-                                    </li>
+                                            </ul>
+                                        </li>
+                                    @endif
                                 @endforeach
                             @endisset
                         </ul>

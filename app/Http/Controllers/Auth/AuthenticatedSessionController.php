@@ -13,9 +13,14 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
+
+    public function loginRegister()
+    {
+        return view('auth.login-register',[
+
+        ]);
+    }
+
     public function create(Request $request): View
     {
         if($request->input('sendquestion') == 'sendquestion'){
@@ -38,38 +43,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-//        echo "<pre>";
-//        print_r($request->all());
-//        echo "</pre>";
-//        die();
-//        $request->authenticate();
-//
-//        $request->session()->regenerate();
-//
-//        return redirect()->intended(RouteServiceProvider::HOME);
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $user = Auth::user();
-            $role = $user->role_id;
-            if ($role < 5) {
-                if($request->input('createProduct') == 'createProducts'){
-                    return redirect()->route('admin.products.create');
-                } else {
-                    return redirect()->intended('/admin');
-                }
-            }
-            if($request->input('createProduct')){
-                return redirect()->route('products.create');
-            } elseif(! empty($request->input('sendquestion'))) {
-                return redirect()->route('products.show',['product' => $request->input('product_id')]);
-            } else {
-                return redirect()->intended(RouteServiceProvider::HOME);
-            }
-        }
+        // Аутентифікація користувача
+        $request->authenticate();
 
-        return back()->withErrors([
-            'email' => 'Надані облікові дані не збігаються з нашими записами.',
-        ]);
+        // Регенерація сесії після успішної аутентифікації
+        $request->session()->regenerate();
+
+        // Перевірка, чи потрібно перенаправити користувача на попередню сторінку, або на домашню
+        return redirect()->intended();
     }
 
     /**

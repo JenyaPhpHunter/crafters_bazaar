@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\OthersConstants;
 use App\Constants\ProductsConstants;
 use App\Http\Controllers\Controller;
 use App\Models\KindProduct;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 
 class KindProductController extends Controller
 {
+
     public function index(Request $request)
     {
         $user_id = $request->input('user_id');
@@ -35,7 +37,6 @@ class KindProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:kind_products|max:35',
         ]);
-
 
         $kind_product = new KindProduct();
         $kind_product->name = $request->post('name');
@@ -67,13 +68,7 @@ class KindProductController extends Controller
         }
         $action_types = ProductsConstants::ACTION_TYPES;
 
-        $function = __FUNCTION__;
-
-
-        $urlService = new UrlService();
-        $link = $urlService->getLink('controller', 'action', 'params');
-
-        return view('admin.kind_products.edit', compact('kind_product', 'action_types', 'function'));
+        return view('admin.kind_products.edit', compact('kind_product', 'action_types'));
     }
 
     public function update(Request $request, $id)

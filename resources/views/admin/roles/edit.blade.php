@@ -1,7 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <h1>Редагування видів продукту</h1>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -19,11 +23,9 @@
         <br>
         <input id="name" name="name" value="{{$role->name}}">
         <br><br>
-
         <input type="submit" value="Зберегти">
         <span style="display: inline-block; width: 100px;"></span>
         <a href="{{route('admin_roles.index')}}">Повернутися до списку ролей</a>
-
     </form>
 @endsection
 

@@ -41,16 +41,34 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Отримуємо email і password з запиту
+        $credentials = $this->only('email', 'password');
+
+        // Використовуємо модель User для перевірки, чи існує користувач із вказаним email
+        $user = \App\Models\User::where('email', $credentials['email'])->first();
+
+        if (! $user) {
             RateLimiter::hit($this->throttleKey());
 
+            // Помилка для неправильного email
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => trans('auth.failed_email'), // Додайте це повідомлення у локалізацію
+            ]);
+        }
+
+        // Перевіряємо правильність пароля
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            // Помилка для неправильного пароля
+            throw ValidationException::withMessages([
+                'password' => trans('auth.failed_password'), // Додайте це повідомлення у локалізацію
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
     }
+
 
     /**
      * Ensure the login request is not rate limited.

@@ -187,6 +187,8 @@ return [
         'surname' => 'Прізвище',
         'phone' => 'Телефон',
         'email' => 'Email',
+        'name_kind_product' => 'Назва виду товару',
+        'name_sub_kind_product' => 'Назва підвиду товару',
     ],
 
 ];

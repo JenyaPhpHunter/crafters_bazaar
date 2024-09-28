@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -10,18 +15,6 @@
             </ul>
         </div>
     @endif
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title">
-        <h1 class="title">Редагування товару</h1>
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Товари</a></li>
-            @isset($product->name)
-                <li class="breadcrumb-item active">{{ $product->name }}</li>
-            @endisset
-        </ul>
-    </div>
     @isset($product)
         <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
     @endisset

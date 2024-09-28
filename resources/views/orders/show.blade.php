@@ -1,25 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="offcanvas-overlay"></div>
-
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section" data-bg-image="{{asset('images/bg/page-title-1.webp') }}">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title">
-                        <h1 class="title">Ваше замовлення</h1>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Ваше замовлення</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
-    <!-- Page Title/Header End -->
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Shopping Cart Section Start -->
     <div class="section section-padding">

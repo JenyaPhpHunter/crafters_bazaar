@@ -25,11 +25,6 @@ class WishController extends Controller
             ->with('product.productphotos')
             ->get();
 
-//        foreach ($wishitems as $wishitem){
-//            $selectedPhoto = $wishitem->product->productphotos->where('queue', 1)->first();
-//            $this->seedie($selectedPhoto->small_path . '/' . $selectedPhoto->small_filename);
-//        }
-
         return view('wishlist.index', ['wishitems' => $wishitems]);
     }
 
@@ -55,7 +50,6 @@ class WishController extends Controller
         if (!$product) {
             return redirect()->route('products.index')->with('error', 'Товар не знайдено');
         }
-
         // Перевірка, чи товар вже є в кошику
         $wishItem = WishItems::query()->where('product_id', $productId)->first();
         if ($wishItem) {

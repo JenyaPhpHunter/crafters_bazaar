@@ -18,9 +18,9 @@ class UrlService
         }
         return $link;
     }
-    function getBreadcrumbs($lang = null)
+    function getBreadcrumbs()
     {
-        $breadcrumbs['title'] = $par->getName($lang);
+        $breadcrumbs['title'] = $par->getName();
         $breadcrumbs['url'] = $par->getLink();
         return $breadcrumbs;
     }

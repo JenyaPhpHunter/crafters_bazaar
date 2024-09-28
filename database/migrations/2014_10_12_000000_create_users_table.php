@@ -47,6 +47,15 @@ class CreateUsersTable extends Migration
             $table->foreign('kind_payment_id')->references('id')->on('kind_payments');
             $table->foreign('brand_id')->references('id')->on('brands');
         });
+        DB::table('users')->insert([
+            [
+                'email' => 'crafters_bazaar@gmail.com',
+                'password' => rand(),
+                'surname' => 'crafters bazaar',
+                'role_id' => 1,
+                'category_user_id' => 1,
+            ],
+        ]);
     }
 
     /**

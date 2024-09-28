@@ -14,16 +14,6 @@ class ProductService
     {
         $data = $request->all();
 
-//        echo "<pre>";
-//        print_r($function_name);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($action);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($request->all());
-//        echo "</pre>";
-//        die();
         $user = User::find($request->input('user_id'));
         $action = $request->input('action');
         if ($function_name == 'store') {

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateKindProductsTable extends Migration
@@ -17,8 +18,8 @@ class CreateKindProductsTable extends Migration
             $table->id();
             $table->string('name', 255)->comment("Назва виду товару");
             $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
         });

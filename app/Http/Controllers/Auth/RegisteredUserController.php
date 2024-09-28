@@ -15,18 +15,6 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-
-    /**
-     * Display the registration view.
-     */
-    public function create()
-    {
-        return view('auth.register',[
-//            'includeRecommendedProducts' => true,
-//            'excludeProducts' => true,
-        ]);
-    }
-
     /**
      * Handle an incoming registration request.
      *
@@ -56,14 +44,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
-    }
-
-    public function login()
-    {
-        return view('auth.login-register',[
-//            'includeRecommendedProducts' => true,
-//            'excludeProducts' => true,
-        ]);
+//        return redirect(RouteServiceProvider::HOME);
+        return redirect()->back();
     }
 }

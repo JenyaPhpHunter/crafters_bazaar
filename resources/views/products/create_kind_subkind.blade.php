@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -11,8 +16,6 @@
         </div>
     @endif
     <div class="container">
-        <h1>Додавання виду та підвиду продукту</h1>
-        <br><br>
         <form method="post" action="{{ route('products.storekindsubkind') }}">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product_id }}">

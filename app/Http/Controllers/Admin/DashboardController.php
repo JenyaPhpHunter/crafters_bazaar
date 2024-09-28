@@ -18,20 +18,20 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $users = User::all();
+//        $users = User::all();
         $orders = AdminOrder::all();
-        $statuses_orders = StatusOrder::all();
-        $roles = Role::all();
-        $kind_products = KindProduct::all();
-        $sub_kind_products = SubKindProduct::all();
+//        $statuses_orders = StatusOrder::all();
+//        $roles = Role::all();
+//        $kind_products = KindProduct::all();
+//        $sub_kind_products = SubKindProduct::all();
         $products = Product::all();
         return view('admin.dashboard',[
-            "users" => $users,
+//            "users" => $users,
             "orders" => $orders,
-            "statuses_orders" => $statuses_orders,
-            "roles" => $roles,
-            "kind_products" => $kind_products,
-            "sub_kind_products" => $sub_kind_products,
+//            "statuses_orders" => $statuses_orders,
+//            "roles" => $roles,
+//            "kind_products" => $kind_products,
+//            "sub_kind_products" => $sub_kind_products,
             "products" => $products,
         ]);
     }
