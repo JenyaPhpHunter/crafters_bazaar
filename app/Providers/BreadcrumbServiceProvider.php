@@ -23,8 +23,14 @@ class BreadcrumbServiceProvider extends ServiceProvider
             // Генеруємо breadcrumbs за допомогою глобального методу
             $controller = app(Controller::class);
             $breadcrumbs = $controller->getBreadcrumbs($currentRouteName);
+            $buttons = $controller->getButtons($currentRouteName);
+//            echo "<pre>";
+//            print_r($buttons);
+//            echo "</pre>";
+//            die();
             // Передаємо breadcrumbs у всі view
-            $view->with('breadcrumbs', $breadcrumbs);
+            $view->with('breadcrumbs', $breadcrumbs)
+                ->with('buttons', $buttons);
         });
     }
 

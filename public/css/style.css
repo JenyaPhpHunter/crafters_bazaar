@@ -1688,7 +1688,7 @@ body.homepage-bg1.offcanvas-open {
     border-color: #72A499;
     background-color: #72A499;
     color: #FFFFFF;
-    min-width: 300px; /* Встановлює мінімальну ширину */
+    min-width: 350px; /* Встановлює мінімальну ширину */
     text-align: center; /* Центрує текст всередині кнопки */
 }
 .btn-primary2:hover {
@@ -1701,7 +1701,7 @@ body.homepage-bg1.offcanvas-open {
     color: #72A499;
     border-color: #72A499;
     background-color: transparent;
-    min-width: 300px; /* Теж встановлює мінімальну ширину для кнопок з обводкою */
+    min-width: 350px; /* Теж встановлює мінімальну ширину для кнопок з обводкою */
     text-align: center;
 }
 .btn-outline-primary2:hover {

@@ -6,7 +6,15 @@
             <!-- Header Logo Start -->
             <div class="col-auto">
                 <div class="header-logo justify-content-center">
-                    <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
+                    @isset($user)
+                        @if ($user->role_id < 5)
+                            <a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
+                        @else
+                            <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
+                        @endif
+                    @else
+                        <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
+                    @endisset
                 </div>
             </div>
             <!-- Header Logo End -->

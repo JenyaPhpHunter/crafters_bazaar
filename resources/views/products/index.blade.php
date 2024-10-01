@@ -15,7 +15,6 @@
             </ul>
         </div>
     @endif
-
     <!-- Shop Products Section Start -->
     <div class="section section-padding pt-0">
 

@@ -18,9 +18,10 @@ class Controller extends BaseController
         'admin',
         'admin_kind_products.index',
         'admin_sub_kind_products.index',
+        'admin_orders.index',
         'admin_roles.index',
         'admin_users.index',
-        'cart.index',
+        'carts.index',
         'orders.status',
         'products.index',
         'wishlist.index',
@@ -37,6 +38,21 @@ class Controller extends BaseController
 
     private $without_breadcrumps = [
         'users.show',
+    ];
+
+    private $with_buttons = [
+        'admin_kind_products.index',
+        'admin_kind_products.show',
+        'admin_sub_kind_products.index',
+        'admin_sub_kind_products.show',
+        'admin_orders.index',
+        'admin_roles.index',
+        'admin_users.index',
+        'admin_users.details',
+        'products.index',
+        'forum_categories.index',
+        'forum_sub_categories.index',
+        'forum_topics.index',
     ];
 
     public function getBreadcrumbs($routeName)
@@ -109,7 +125,40 @@ class Controller extends BaseController
         return $breadcrumbs;
     }
 
-
+    public function getButtons($routeName)
+    {
+        if (in_array($routeName, $this->with_buttons)) {
+            $buttons = [];
+// Розділяємо рядок на дві частини (клас і дію)
+            $routeParts = explode('.', $routeName);
+            // Перевіряємо, чи можна розділити на два елементи
+            if (count($routeParts) === 2) {
+                list($class, $action) = $routeParts;
+            } else {
+                // У випадку, якщо ім'я роута не відповідає очікуваному формату
+                return [];
+            }
+            // Отримуємо базові значення з OthersConstants
+            $classData = OthersConstants::BUTTONSNAMES[$class] ?? null;
+//            $actionName = OthersConstants::ACTIONS[$action] ?? null;
+            $buttons[] = [
+                'name'  => $classData['name'],
+                'route' => route($classData['route']),
+            ];
+            if (isset(OthersConstants::FRIENDLY_BUTTONS[$class])){
+                foreach (OthersConstants::FRIENDLY_BUTTONS[$class] as $item) {
+                    $buttons[] = [
+                        'name'  => OthersConstants::BUTTONSNAMES[$item]['name'],
+                        'route' => route(OthersConstants::BUTTONSNAMES[$item]['route']),
+                    ];
+                }
+            }
+        } else {
+            return [];
+        }
+//        $this->seedie($buttons);
+        return $buttons;
+    }
     protected function see($item)
     {
         echo "<pre>";

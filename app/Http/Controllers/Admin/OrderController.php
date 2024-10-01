@@ -53,10 +53,10 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-//    public function create(Request $request) //TODO зробити метод для створення замовлення по телефону
-//    {
-
-//    }
+    public function create(Request $request) //TODO зробити метод для створення замовлення по телефону
+    {
+        echo 'Cтвори замолвення вручну'; die();
+    }
 //
 //    public function store(Request $request) //TODO зробити метод для запису створенного замовлення по телефону
 //    {

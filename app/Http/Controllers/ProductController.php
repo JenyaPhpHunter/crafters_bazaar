@@ -39,6 +39,7 @@ class ProductController extends Controller
             ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
             ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
+            ->where('kind_products.id', '!=', 1)
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
@@ -72,8 +73,8 @@ class ProductController extends Controller
         $action_types = ProductsConstants::ACTION_TYPES;
 
         if(empty($request->input('product_id'))){
-            $kind_products = KindProduct::all();
-            $sub_kind_products = SubKindProduct::all();
+            $kind_products = KindProduct::all();        // TODO ->where('kind_products.id', '!=', 1);
+            $sub_kind_products = SubKindProduct::all();     // TODO ->where('sub_kind_products.id', '!=', 1);
 
             return view('products.create', compact(
                 'selected_kind_product_id',

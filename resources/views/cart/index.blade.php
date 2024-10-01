@@ -15,23 +15,6 @@
             </ul>
         </div>
     @endif
-    <!-- Page Title/Header Start -->
-    <div class="page-title-section section">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="page-title">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Корзина</li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Title/Header End -->
 
 <!-- Shopping Cart Section Start -->
 <div class="section section-padding">
