@@ -1685,25 +1685,29 @@ body.homepage-bg1.offcanvas-open {
 }
 
 .btn-primary2 {
-  border-color: #72A499;
-  background-color: #72A499;
-  color: #FFFFFF;
+    border-color: #72A499;
+    background-color: #72A499;
+    color: #FFFFFF;
+    min-width: 300px; /* Встановлює мінімальну ширину */
+    text-align: center; /* Центрує текст всередині кнопки */
 }
 .btn-primary2:hover {
-  border-color: #5e9286;
-  background-color: #5e9286;
-  color: #FFFFFF;
+    border-color: #5e9286;
+    background-color: #5e9286;
+    color: #FFFFFF;
 }
 
 .btn-outline-primary2 {
-  color: #72A499;
-  border-color: #72A499;
-  background-color: transparent;
+    color: #72A499;
+    border-color: #72A499;
+    background-color: transparent;
+    min-width: 300px; /* Теж встановлює мінімальну ширину для кнопок з обводкою */
+    text-align: center;
 }
 .btn-outline-primary2:hover {
-  border-color: #72A499;
-  background-color: #72A499;
-  color: #FFFFFF;
+    border-color: #72A499;
+    background-color: #72A499;
+    color: #FFFFFF;
 }
 
 .btn-primary3 {
