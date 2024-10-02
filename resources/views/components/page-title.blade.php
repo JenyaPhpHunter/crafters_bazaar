@@ -23,7 +23,7 @@
                 @foreach($buttons as $button)
                     <a class="btn btn-primary2" href="{{ $button['route'] }}" style="margin-bottom: 10px;">
                         {{ $button['name'] }}
-                        <i class="fal fa-user-plus" style="margin-left: 10px;"></i>
+                        <i class="{{ $button['icon'] }}" style="margin-left: 10px;"></i>
                     </a>
                 @endforeach
             </div>

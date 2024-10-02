@@ -144,12 +144,14 @@ class Controller extends BaseController
             $buttons[] = [
                 'name'  => $classData['name'],
                 'route' => route($classData['route']),
+                'icon' => $classData['icon'],
             ];
             if (isset(OthersConstants::FRIENDLY_BUTTONS[$class])){
                 foreach (OthersConstants::FRIENDLY_BUTTONS[$class] as $item) {
                     $buttons[] = [
                         'name'  => OthersConstants::BUTTONSNAMES[$item]['name'],
                         'route' => route(OthersConstants::BUTTONSNAMES[$item]['route']),
+                        'icon' => OthersConstants::BUTTONSNAMES[$item]['icon'],
                     ];
                 }
             }

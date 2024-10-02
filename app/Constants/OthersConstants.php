@@ -48,16 +48,15 @@ class OthersConstants
     ];
 
     const BUTTONSNAMES = [
-        'admin_kind_products' => ['name' => 'Створити вид товарів', 'route' => 'admin_kind_products.create'],
-        'admin_sub_kind_products' => ['name' => 'Створити підвид товарів', 'route' => 'admin_sub_kind_products.create'],
-        'products' => ['name' => 'Створити товар', 'route' => 'products.create'],
-        'admin_orders' => ['name' => 'Створити замовлення', 'route' => 'admin_orders.create'],
-        'admin_roles' => ['name' => 'Створити роль', 'route' => 'admin_roles.create'],
-        'admin_users' => ['name' => 'Створити користувача', 'route' => 'admin_users.create'],
-        'forum_categories' => ['name' => 'Створити категорію', 'route' => 'forum_categories.create'],
-        'forum_sub_categories' => ['name' => 'Створити підкатегорію', 'route' => 'forum_sub_categories.create'],
-        'forum_topics' => ['name' => 'Створити тему', 'route' => 'forum_topics.create'],
-//        'users' => ['name' => 'Користвачі', 'route' => 'users.show'],
+        'admin_kind_products' => ['name' => 'Створити вид товарів', 'route' => 'admin_kind_products.create' , 'icon' => 'fal fa-box-open'],
+        'admin_sub_kind_products' => ['name' => 'Створити підвид товарів', 'route' => 'admin_sub_kind_products.create', 'icon' => 'fal fa-boxes'],
+        'products' => ['name' => 'Створити товар', 'route' => 'products.create', 'icon' => 'fal fa-cube'],
+        'admin_orders' => ['name' => 'Створити замовлення', 'route' => 'admin_orders.create', 'icon' => 'fal fa-shopping-cart'],
+        'admin_roles' => ['name' => 'Створити роль', 'route' => 'admin_roles.create', 'icon' => 'fal fa-user-shield'],
+        'admin_users' => ['name' => 'Створити користувача', 'route' => 'admin_users.create', 'icon' => 'fal fa-user-plus'],
+        'forum_categories' => ['name' => 'Створити категорію', 'route' => 'forum_categories.create', 'icon' => 'fal fa-folder-plus'],
+        'forum_sub_categories' => ['name' => 'Створити підкатегорію', 'route' => 'forum_sub_categories.create', 'icon' => 'fal fa-folder-tree'],
+        'forum_topics' => ['name' => 'Створити тему', 'route' => 'forum_topics.create', 'icon' => 'fal fa-comments'],
     ];
 
     const FRIENDLY_BUTTONS = [
