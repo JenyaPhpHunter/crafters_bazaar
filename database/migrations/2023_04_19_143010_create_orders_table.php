@@ -25,8 +25,8 @@ class CreateOrdersTable extends Migration
             $table->decimal('pricedelivery', 12, 2)->nullable()->comment("Вартсіть доставки");
             $table->unsignedBigInteger('status_order_id')->comment("Статус замовлення");
             $table->boolean('active')->default(true);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('kind_payment_id')->references('id')->on('kind_payments');

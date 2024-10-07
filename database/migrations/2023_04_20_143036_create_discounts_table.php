@@ -17,8 +17,8 @@ class CreateDiscountsTable extends Migration
             $table->unsignedBigInteger('article')->default(0);
             $table->unsignedBigInteger('actual')->default(0);
             $table->boolean('active')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

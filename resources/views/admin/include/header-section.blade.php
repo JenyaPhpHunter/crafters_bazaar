@@ -59,57 +59,12 @@
                                 <li><a href="{{ route('admin_users.index', ['role' => $role->id]) }}"><span class="menu-text">{{ $role->name }}</span></a></li>
                             @endforeach
                         </ul>
-                    <li class="has-children"><a href="#"><span class="menu-text">Продавці</span></a>
-                        <ul class="sub-menu mega-menu">
-                            <li>
-                                <a href="#" class="mega-menu-title"><span class="menu-text">ВІП продавці</span></a>
-                                <ul>
-                                    <li><a href="{{ asset('shop.html') }}"><span class="menu-text">Shop No Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-left-sidebar.html') }}"><span class="menu-text">Shop Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-right-sidebar.html') }}"><span class="menu-text">Shop Right Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-no-gutters.html') }}"><span class="menu-text">Shop Fullwidth No Space</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth.html') }}"><span class="menu-text">Shop Fullwidth No Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-left-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Left Sidebar</span></a></li>
-                                    <li><a href="{{ asset('shop-fullwidth-right-sidebar.html') }}"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" class="mega-menu-title"><span class="menu-text">Середні продаввці</span></a>
-                                <ul>
-                                    <li><a href="{{ asset('product-details.html') }}"><span class="menu-text">Basic</span></a></li>
-                                    <li><a href="{{ asset('product-details-fullwidth.html') }}"><span class="menu-text">Fullwidth</span></a></li>
-                                    <li><a href="{{ asset('product-details-sticky.html') }}"><span class="menu-text">Sticky Details</span></a></li>
-                                    <li><a href="{{ asset('product-details-sidebar.html') }}"><span class="menu-text">Width Sidebar</span></a></li>
-                                    <li><a href="{{ asset('product-details-extra-content.html') }}"><span class="menu-text">Extra Content</span></a></li>
-                                    <li><a href="{{ asset('product-details-image-variation.html') }}"><span class="menu-text">Variations Images</span></a></li>
-                                    <li><a href="{{ asset('product-details-group.html') }}"><span class="menu-text">Bought Together</span></a></li>
-                                    <li><a href="{{ asset('product-details-360.html') }}"><span class="menu-text">Product 360</span></a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" class="mega-menu-title"><span class="menu-text">Початківці продавці</span></a>
-                                <ul>
-                                    <li><a href="{{ asset('product-details-background.html') }}"><span class="menu-text">Product with Background</span></a></li>
-                                    <li><a href="{{ asset('shopping-cart.html') }}"><span class="menu-text">Shopping Cart</span></a></li>
-                                    <li><a href="{{ asset('checkout.html') }}"><span class="menu-text">Checkout</span></a></li>
-                                    <li><a href="{{ asset('order-tracking.html') }}"><span class="menu-text">Order Tracking</span></a></li>
-                                    <li><a href="{{ asset('wishlist.html') }}"><span class="menu-text">Wishlist</span></a></li>
-                                    <li><a href="{{ asset('login-register.html') }}"><span class="menu-text">Customer Login</span></a></li>
-                                    <li><a href="{{ asset('my-account.html') }}"><span class="menu-text">My Account</span></a></li>
-                                    <li><a href="{{ asset('lost-password.html') }}"><span class="menu-text">Lost Password</span></a></li>
-                                </ul>
-                            </li>
-                            <li class="align-self-center">
-                                <a href="#" class="menu-banner"><img src="{{ asset('images/banner/menu-banner-2.webp') }}" alt="Shop Menu Banner"></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="has-children"><a href="#"><span class="menu-text">Покупці</span></a>
+                    <li class="has-children"><a href="{{ route('sellers_buyers.index') }}"><span class="menu-text">Покупці та продавці</span></a>
                         <ul class="sub-menu">
-                            <li><a href="{{ asset('portfolio-3-columns.html') }}"><span class="menu-text">ВІП покупці</span></a></li>
-                            <li><a href="{{ asset('portfolio-4-columns.html') }}"><span class="menu-text">Середні покупці</span></a></li>
-                            <li><a href="{{ asset('portfolio-5-columns.html') }}"><span class="menu-text">Почтаківці покупці</span></a></li>
-                            <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">Portfolio Details</span></a></li>
+                                <li><a href="{{ route('sellers_buyers.index', ['role_id' => 5, 'category_user_id' => 3]) }}"><span class="menu-text">ВІП продавці</span></a></li>
+                                <li><a href="{{ route('sellers_buyers.index', ['role_id' => 6, 'category_user_id' => 3]) }}"><span class="menu-text">Продавці</span></a></li>
+                                <li><a href="{{ route('sellers_buyers.index', ['role_id' => 5, 'category_user_id' => 4]) }}"><span class="menu-text">ВІП покупці</span></a></li>
+                                <li><a href="{{ route('sellers_buyers.index', ['role_id' => 6, 'category_user_id' => 4]) }}"><span class="menu-text">Покупці</span></a></li>
                         </ul>
                     </li>
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>

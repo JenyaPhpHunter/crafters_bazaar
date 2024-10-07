@@ -32,11 +32,11 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('delivery_id')->nullable()->comment("Id виду доставки");
             $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
             $table->unsignedBigInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
-            $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->unsigned()->default(1);
-            $table->softDeletes();
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('category_user_id')->references('id')->on('category_users');

@@ -16,8 +16,8 @@ class CreateCartItemsTable extends Migration
             $table->decimal('price')->comment("Вартість");
             $table->decimal('pricediscount')->nullable()->comment("Знижка");
             $table->boolean('active')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products');

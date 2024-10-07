@@ -4,10 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ForumTopic extends Model
 {
-    protected $fillable = ['name'];
+    use SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'forum_sub_category_id',
+    ];
 
     public function forum_category()
     {

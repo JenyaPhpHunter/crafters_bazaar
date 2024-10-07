@@ -299,6 +299,10 @@
                             @endforeach
                         </div>
                         <!-- Products End -->
+{{--                        <x-danger-button>--}}
+{{--                            Видалити--}}
+{{--                        </x-danger-button>--}}
+
                         <div class="text-center learts-mt-70">
                             <a href="#" class="btn btn-dark btn-outline-hover-dark"><i class="ti-plus"></i> Показати ще</a>
                         </div>

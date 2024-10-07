@@ -22,6 +22,7 @@ class CreateNewpostsTable extends Migration
             $table->unsignedBigInteger('region_id')->comment("Id області");
             $table->string('category_warehouse')->comment("категорія складу НП");
             $table->timestamps();
+            $table->softDeletes();
 
             // Додаємо зовнішні ключі для city_id та region_id
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');

@@ -14,6 +14,7 @@ use App\Services\ApiService;
 use App\Services\EmailService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -275,16 +276,20 @@ class ProductController extends Controller
                     ->with('errorFields', $errorFields);
             }
 
-//            if ($user->role_id > 4) {
-//                try {
-//                $emailService = new EmailService();
-//                $emailService->sendProductForSaleEmail($product);
-//                } catch (\Exception $e) {
-//                    return view('emails.error', [
-//                        'excludeProducts' => true,
-//                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-//                }
-//            }
+            if ($user->role_id > 4) {
+                try {
+                $emailService = new EmailService();
+                $emailService->sendProductForSaleEmail($product);
+                } catch (\Exception $e) {
+                    return view('emails.error', [
+                        'excludeProducts' => true,
+                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+                }
+            } else {
+                $product->status_product_id = 3;
+
+                $product->save();
+            }
 
             return redirect( route('products.show', [
                 'product' => $product->id,
@@ -493,6 +498,7 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
+//        $this->seedie($request->all());
         $sortBy = $request->input('sort_by');
         $filterPrice = $request->input('filter_price');
         if(isset($filterPrice)){
@@ -506,8 +512,12 @@ class ProductController extends Controller
         $sub_categories = $request->input('sub_categories');
         $filterColor = $request->input('filter_color');
         $filterSearch = $request->input('search');
-
-        $query = Product::query()->where('status_product_id', 3);
+        $filterStatus = $request->input('status_product');
+        if (isset($filterStatus)){
+            $query = Product::query()->where('status_product_id', $filterStatus);
+        } else {
+            $query = Product::query()->where('status_product_id', 3);
+        }
         $products = $query->get();
 
         // Фільтрація за назвою
@@ -541,7 +551,8 @@ class ProductController extends Controller
 
         $all_kind_products = KindProduct::all();
         $kind_products = KindProduct::query()
-            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+            ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
+            ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')

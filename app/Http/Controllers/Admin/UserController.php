@@ -28,7 +28,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query()->with(['role', 'category_user'])->whereNull('deleted_at')->orderBy('id', 'desc');
+        $role_id_user = $request->input('role');
+        if ($role_id_user){
+            $query = User::query()->with(['role', 'category_user'])->where('role_id', $role_id_user)->whereNull('deleted_at')->orderBy('id', 'desc');
+        } else {
+            $query = User::query()->with(['role', 'category_user'])->whereNull('deleted_at')->orderBy('id', 'desc');
+        }
 
         // Викликаємо метод filter і передаємо в нього $query і $request
         $users = $this->filter($query, $request)->get();
@@ -230,9 +235,24 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::query()->where('id',$id)->first();
-        $user->del = 1;
+        $user->deleted_at = now();
         $user->save();
         return redirect(route('admin_users.index'))->with('success', 'Користувача успішно видалено');
+    }
+
+    public function sellersBuyers(Request $request)
+    {
+//        $this->seedie($request->all());
+        $role_id = $request->input('role_id');
+        $category_user_id = $request->input('category_user_id');
+        $query_users = User::query()->whereNull('deleted_at');
+        if ($role_id && $category_user_id){
+            $users = $query_users->where('role_id', $role_id)->where('category_user_id', $category_user_id)->get();
+        } else {
+            $users = $query_users->where('role_id', '>', 4)->where('category_user_id', '>', 2)->get();
+        }
+
+        return view('admin.sellers_buyers.index', compact('users'));
     }
 
     public function searchusers(Request $request)
@@ -242,7 +262,7 @@ class UserController extends Controller
             ->where('name', 'LIKE', "%{$search}%")
             ->orWhere('email', 'LIKE', "%{$search}%")
             ->get();
-        return view('users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     public function getDetails($id)

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->comment('Назва теми форума');
             $table->unsignedBigInteger('forum_sub_category_id');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('forum_sub_category_id')->references('id')->on('forum_sub_categories')->onDelete('cascade');
         });

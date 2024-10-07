@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Delivery extends Model
+class Brand
 {
-    use softDeletes;
+    use SoftDeletes;
 
-    protected $fillable = ['name', 'price', 'free_from'];
+    protected $fillable = [
+        'name',
+        'content',
+        'path',
+        'rating',
+    ];
 
     public function users()
     {

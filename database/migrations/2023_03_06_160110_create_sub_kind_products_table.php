@@ -18,8 +18,8 @@ class CreateSubKindProductsTable extends Migration
             $table->string('name', 255)->comment("Назва підвиду товару");
             $table->unsignedBigInteger('kind_product_id')->comment("Id виду товару");
             $table->unsignedBigInteger('user_id')->comment("Id адміна");
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('kind_product_id')->references('id')->on('kind_products');
             $table->foreign('user_id')->references('id')->on('users');

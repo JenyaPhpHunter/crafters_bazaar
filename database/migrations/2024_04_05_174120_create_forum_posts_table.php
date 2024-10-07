@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('forum_topic_id')->comment('Id теми форума');
             $table->unsignedBigInteger('user_id')->comment('Id користувача');
             $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на пост Id');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('forum_topic_id')->references('id')->on('forum_topics')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');

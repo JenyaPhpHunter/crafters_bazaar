@@ -23,6 +23,7 @@ return new class extends Migration
 //            $table->string('longitude')->comment("довгота");
 //            $table->string('warehouse')->comment("наявність НП");
 //            $table->timestamps();
+//            $table->softDeletes();
 //
 //        });
     }

@@ -43,13 +43,18 @@ class AppServiceProvider extends ServiceProvider
             'admin.include.header-sticky-section',
         ], function ($view) {
             $user = Auth::user();
-            $users = User::all();
+
+//            $query_users = User::query()->whereNull('deleted_at');
+//            $users = $query_users->get();
+//            $sellers_buyers = $query_users->whereIn('role_id', [5,6])->get();
+//            $sellers = $query_users->where('category_user_id', 3)->get();
+//            $buyers = $query_users->where('category_user_id', 4)->get();
             $orders = AdminOrder::all();
             $statuses_orders = StatusOrder::all();
             $statuses_products = StatusProduct::all();
             $roles = Role::all();
             // Основний запит для отримання всіх активних та неделеційованих KindProduct
-            $baseQuery = KindProduct::where('deleted_at', NULL)
+            $baseQuery = KindProduct::whereNull('deleted_at')
                 ->with('sub_kind_products');
 
 // Якщо вам потрібні всі KindProduct, незалежно від того, чи мають вони продукти зі статусом 3
@@ -65,8 +70,10 @@ class AppServiceProvider extends ServiceProvider
                     });
                 }])
                 ->get();
+            $products_query = Product::whereNull('deleted_at');
+            $products = $products_query->get();
             if($user){
-                $user_products = Product::query()->where('user_id', $user->id)->get();
+                $user_products = $products_query->where('user_id', $user->id)->get();
                 $roles = Role::where('id', '>=', $user->role_id)->get();
             } else {
                 $user_products = collect();
@@ -112,7 +119,8 @@ class AppServiceProvider extends ServiceProvider
                 ->with('user_products', $user_products)
                 ->with('user', $user)
                 ->with('categories', $forum_categories)
-                ->with('users', $users)
+                ->with('products', $products)
+//                ->with('users', $users)
                 ->with('orders', $orders)
                 ->with('statuses_orders', $statuses_orders)
                 ->with('title_list', $title_list);

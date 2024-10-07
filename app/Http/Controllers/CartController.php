@@ -46,6 +46,8 @@ class CartController extends Controller
             $user->save();
             // Автентифікувати користувача
 //            Auth::login($user);
+            // Передати повідомлення користувачу про успішну автентифікацію
+//            session()->flash('success', 'Ви були успішно зареєстровані та автентифіковані.');
 
             $user_id = $user->id;
         }

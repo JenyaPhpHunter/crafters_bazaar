@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на діалог Id'); // Тип поля answer_to тепер nullable
             $table->decimal('queue', 15, 10);
             $table->unsignedBigInteger('user_id')->comment('Id користувача');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');

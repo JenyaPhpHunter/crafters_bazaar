@@ -11,8 +11,6 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
 Route::middleware('guest')->group(function () {
     Route::get('login-register', [AuthenticatedSessionController::class, 'loginRegister'])
         ->name('login-register');

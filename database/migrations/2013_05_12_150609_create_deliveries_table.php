@@ -17,9 +17,8 @@ class CreateDeliveriesTable extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment("Назва доставки");
-//            $table->integer('price');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
         DB::table('deliveries')->insert([
             ['name' => 'Самовивіз з Нової Пошти'],

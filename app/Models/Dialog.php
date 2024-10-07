@@ -9,7 +9,15 @@ class Dialog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'queue',];
+    protected $fillable = [
+        'type',
+        'comment',
+        'product_id',
+        'answer_to',
+        'queue',
+        'user_id',
+    ];
+
 
     public function product()
     {

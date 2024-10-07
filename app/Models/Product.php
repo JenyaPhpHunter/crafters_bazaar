@@ -5,11 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
-        'name', 'content', 'price', 'stock_balance',
+        'name',
+        'sub_kind_product_id',
+        'content',
+        'links_networks',
+        'price',
+        'discount',
+        'stock_balance',
+        'color_id',
+        'term_creation',
+        'status_product_id',
+        'user_id',
+        'new',
+        'featured',
+        'active',
+        'del',
+        'date_put_up_for_sale',
+        'date_approve_sale',
+        'admin_id',
+        'additional_information',
     ];
 
     public function sub_kind_product()

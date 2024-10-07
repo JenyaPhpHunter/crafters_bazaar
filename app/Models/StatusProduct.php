@@ -10,7 +10,6 @@ class StatusProduct extends Model
         'name'
     ];
 
-
     public function product()
     {
         return $this->belongsTo(Product::class);

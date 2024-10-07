@@ -171,8 +171,10 @@ class OrderController extends Controller
         $user->save();
 
         // Автентифікувати користувача
-        Auth::login($user);
-        Cookie::queue('user_id', $user->id, 60); // 60 - це час у хвилинах, на який ви хочете встановити куку
+//        Auth::login($user);
+        // Передати повідомлення користувачу про успішну автентифікацію
+//        session()->flash('success', 'Ви були успішно зареєстровані та автентифіковані.');
+//        Cookie::queue('user_id', $user->id, 60); // 60 - це час у хвилинах, на який ви хочете встановити куку
 
         $order = new Order();
         $order->user_id =  $user->id;

@@ -23,8 +23,8 @@ return new class extends Migration
                     ->nullable()
                     ->default(null)
                     ->comment("рейтинг бренду");
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

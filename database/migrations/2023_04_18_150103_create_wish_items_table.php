@@ -13,9 +13,9 @@ class CreateWishItemsTable extends Migration
             $table->unsignedBigInteger('user_id')->comment("Id користувача");
             $table->unsignedBigInteger('product_id')->comment("Id товару");
             $table->decimal('price')->comment("Вартість");
-            $table->boolean('active')->unsigned()->default(1);
-            $table->softDeletes();
+            $table->boolean('active')->unsigned()->default(true);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');

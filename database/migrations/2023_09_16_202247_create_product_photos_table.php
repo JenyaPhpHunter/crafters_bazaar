@@ -30,8 +30,8 @@ return new class extends Migration
             $table->string('small_ext',4)->default('')->comment("Розширення маленького файлу");
             $table->string('small_path')->default('')->comment("Шлях до маленького файлу");
             $table->unsignedBigInteger('product_id')->comment('Id товару');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('product_id')->references('id')->on('products');
         });

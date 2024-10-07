@@ -18,8 +18,8 @@ class CreateKindPaymentsTable extends Migration
             $table->id();
             $table->string('name')->comment("Назва виду оплати");
             $table->string('comment')->comment("Коментар до оплати");
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
         DB::table('kind_payments')->insert([
             ['name' => 'Оплатити зараз', 'comment' => 'Якщо Вам не сподобається товар, то ми повернемо Вам гроші.'],

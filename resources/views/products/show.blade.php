@@ -133,6 +133,7 @@
                                     <a href="#reviews" class="review-link">(<span class="count">2</span> відгуки покупців)</a>
                                 </div>
                                 <h3 class="product-title">{{ $product->name }}</h3>
+                                <h2 class="product-title">{{ $product->status_product->name }}</h2>
                                 <div class="product-price">{{ $product->price }} грн</div>
                                 <div class="product-description">
                                     <p> {{ $product->content }}</p>
@@ -205,7 +206,7 @@
                                     </div>
                                 @endif
                                 @if($user)
-                                    @if(($creator && $product->status_product_id == 1) || ($user->role_id < 5 && $product->status_product_id == 1))
+                                    @if(($creator && $product->status_product_id == 1) || ($user->role_id < 5 && $product->status_product_id < 3))
                                         <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}">
                                             @csrf
                                             @method('put')

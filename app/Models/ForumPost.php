@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ForumPost extends Model
 {
+    use SoftDeletes;
 
     protected $fillable = [
-       'content', 'answer_to'
+        'content',
+        'forum_topic_id',
+        'user_id',
+        'answer_to',
     ];
 
     public function forum_topic()

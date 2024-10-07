@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('admin')->middleware('auth')->group(callback: function () {
         Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::resource('admin_users', AdminUserController::class);
+        Route::get('/sellers_buyers', [AdminUserController::class, 'sellersBuyers'])->name('sellers_buyers.index');
         Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
         Route::resource('admin_roles', RoleController::class);
         Route::resource('admin_kind_products', AdminKindProductController::class);

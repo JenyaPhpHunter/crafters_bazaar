@@ -15,8 +15,8 @@ class CreateCartsTable extends Migration
             $table->decimal('pricediscount')->nullable()->comment("знижка");
             $table->decimal('total')->nullable()->comment("загалом");
             $table->boolean('active')->unsigned()->default(1);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
         });

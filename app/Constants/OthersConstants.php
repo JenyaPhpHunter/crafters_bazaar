@@ -39,6 +39,7 @@ class OthersConstants
         'forum_sub_categories' => ['name' => 'Підкатегорії форума', 'route' => 'forum_sub_categories.index'],
         'forum_topics' => ['name' => 'Теми форума', 'route' => 'forum_topics.index'],
         'users' => ['name' => 'Користвачі', 'route' => 'users.show'],
+        'sellers_buyers' => ['name' => 'Продавці та покупці', 'route' => 'sellers_buyers.index'],
     ];
 
     const FRIENDLY_BREADCRUMPS = [

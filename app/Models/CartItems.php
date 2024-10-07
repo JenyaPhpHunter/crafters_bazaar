@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CartItems extends Model
 {
-use HasFactory;
+    use SoftDeletes;
 
-    protected $fillable = ['active', 'del', 'cart_id', 'product_id', 'quantity', 'price', 'pricediscount'];
+    protected $fillable = [
+        'cart_id',
+        'product_id',
+        'quantity',
+        'price',
+        'pricediscount',
+        'active',
+    ];
+
 
     public function cart()
     {

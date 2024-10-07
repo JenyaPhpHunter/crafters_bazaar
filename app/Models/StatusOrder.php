@@ -10,7 +10,6 @@ class StatusOrder extends Model
         'name'
     ];
 
-
     public function order()
     {
         return $this->belongsTo(AdminOrder::class);

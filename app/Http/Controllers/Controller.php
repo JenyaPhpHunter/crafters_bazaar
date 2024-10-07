@@ -29,6 +29,7 @@ class Controller extends BaseController
         'forum_sub_categories.index',
         'forum_topics.index',
         'users.show',
+        'sellers_buyers.index',
     ];
 
 
@@ -158,7 +159,6 @@ class Controller extends BaseController
         } else {
             return [];
         }
-//        $this->seedie($buttons);
         return $buttons;
     }
     protected function see($item)

@@ -34,8 +34,8 @@ class CreateProductsTable extends Migration
             $table->dateTime('date_approve_sale')->nullable()->comment("Дата початку продажу");
             $table->unsignedBigInteger('admin_id')->unsigned()->nullable()->comment("Id затверджуючого товар");
             $table->text('additional_information')->nullable()->default(null)->comment("Додаткова інформація");
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('sub_kind_product_id')->references('id')->on('sub_kind_products');
             $table->foreign('color_id')->references('id')->on('colors');
