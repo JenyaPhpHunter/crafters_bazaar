@@ -88,7 +88,9 @@
                 <h2 class="title">Ваші дані</h2>
             </div>
             <form class="checkout-form learts-mb-50" method="post" action="{{ route('orders.store') }}">
-                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                @if(!empty($user))
+                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                @endif
                 @csrf
                 <div class="row">
                     <div class="col-md-6 col-12 learts-mb-20">
@@ -127,7 +129,7 @@
                     <div class="col-md-6 col-12 learts-mb-20">
                         <label for="bdEmail">Email <abbr class="required">*</abbr></label>
                         <input type="text" id="email" name="email" value="{{ old('email', $user_email ?? '') }}"
-                               class="form-control @error('email') is-invalid @enderror">
+                               class="form-control @error('email') is-invalid @enderror" @if(!empty($user)) readonly @endif>
                         @error('email')
                         <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -151,7 +153,9 @@
                         <div class="form-check form-check-inline">
                             <input type="radio" id="deliveryType{{ $delivery->id }}" name="delivery_id"
                                    value="{{ $delivery->id }}"
+                                   @if(!empty($user))
                                    @if(old('delivery_id', $user->delivery_id) == $delivery->id) checked @endif
+                                   @endif
                                    class="form-check-input @error('delivery_id') is-invalid @enderror">
                             <label class="form-check-label" for="deliveryType{{ $delivery->id }}">
                                 {{ $delivery->name }}
@@ -163,13 +167,16 @@
         <strong>{{ $message }}</strong>
     </span>
                     @enderror
-
+                    <br>
                     <!-- HTML для поля областей -->
                     <div class="col-6 learts-mb-20">
                         <input type="text" id="bdTownOrRegion" name="region" placeholder="Область"
-                               @if($user->region) value="{{ old('region', $user->region->name ?? '') }}"
-                               @else value="{{ old('region') }}"
-                               @endif class="form-control @error('region') is-invalid @enderror">
+                               @if(!empty($user))
+                                   @if($user->region) value="{{ old('region', $user->region->name ?? '') }}"
+                                   @else value="{{ old('region') }}"
+                                   @endif
+                               @endif
+                               class="form-control @error('region') is-invalid @enderror">
                         @error('region')
                         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
@@ -181,9 +188,12 @@
                     <!-- HTML для поля міст -->
                     <div class="col-6 learts-mb-20">
                         <input type="text" id="bdTownOrCity" name="city" placeholder="Населений пункт (місто/село)"
-                               @if($user->city) value="{{ old('city', $user->city->name ?? '') }}"
-                               @else value="{{ old('city') }}"
-                               @endif class="form-control @error('city') is-invalid @enderror">
+                               @if(!empty($user))
+                                   @if($user->city) value="{{ old('city', $user->city->name ?? '') }}"
+                                   @else value="{{ old('city') }}"
+                                   @endif
+                               @endif
+                               class="form-control @error('city') is-invalid @enderror">
                         @error('city')
                         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
@@ -289,14 +299,14 @@
                     </div>
                     <div class="col-12 learts-mb-40">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="callMe" name="callMe">
+                            <input type="checkbox" class="form-check-input" id="callMe" name="callMe"
+                                {{ old('callMe') ? 'checked' : '' }}>
                             <label class="form-check-label" for="callMe">Передзвонити Вам?</label>
                         </div>
                     </div>
                     <div class="col-12 learts-mb-20">
                         <label for="bdOrderNote">Примітки до замовлення</label>
-                        <textarea id="bdOrderNote" name="bdOrderNote"
-                                  placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки"></textarea>
+                        <textarea id="bdOrderNote" name="bdOrderNote" placeholder="Примітки щодо вашого замовлення, наприклад спеціальні примітки для доставки">{{ old('bdOrderNote', '') }}</textarea>
                     </div>
                 </div>
                 <div class="col-lg-12 order-lg-1 learts-mb-30">
@@ -310,7 +320,10 @@
                                                name="payment_type"
                                                id="paymentType{{ $payment_kind->id }}"
                                                value="{{ $payment_kind->id }}"
-                                            {{ old('payment_type', $user->kind_payment_id) == $payment_kind->id ? 'checked' : '' }}>
+                                        @if(!empty($user))
+                                            {{ old('payment_type', $user->kind_payment_id) == $payment_kind->id ? 'checked' : '' }}
+                                            @endif
+                                        >
                                         <label class="form-check-label" for="paymentType{{ $payment_kind->id }}">
                                             {{ $payment_kind->name }}
                                         </label>

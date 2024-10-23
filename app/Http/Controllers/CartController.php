@@ -16,104 +16,118 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->input('user_id')){
-            $user_id = $request->input('user_id');
-        } else {
-            $user_id = request()->cookie('user_id');
-        }
-        $cartItems = CartItems::query()
-            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
-            ->where('carts.user_id', $user_id)
-            ->where('carts.active', 1)
-            ->get();
+        // Перевірка чи користувач авторизований
+        if (auth()->check()) {
+            // Якщо користувач авторизований, то використовуємо його id
+            $user_id = auth()->id();
 
+            // Отримуємо товари з бази даних для авторизованого користувача
+            $cartItems = CartItems::query()
+                ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+                ->with('product')
+                ->where('carts.user_id', $user_id)
+                ->where('carts.active', 1)
+                ->get();
+        } else {
+            // Якщо користувач неавторизований, використовуємо сесію для отримання товарів
+            $cart = session()->get('cart', []);
+            $cartItems = [];
+
+            // Перебираємо товари з сесії
+            foreach ($cart as $productId => $details) {
+                $product = Product::find($productId);
+                if ($product) {
+                    $cartItems[] = (object)[
+                        'product' => $product,
+                        'quantity' => $details['quantity'],
+                        'price' => $product->price,
+                    ];
+                }
+            }
+        }
+
+        // Повертаємо вигляд з товарами
         return view('cart.index', ['cartItems' => $cartItems]);
     }
 
     public function addToCart(Request $request, $productId)
     {
+        $product = Product::find($productId);
         if ($request->input('user_id')) {
             $user_id = $request->input('user_id');
-        } elseif(request()->cookie('user_id') != NULL) {
-            $user_id = request()->cookie('user_id');
-        } else {
-            $user = new User();
-            $user->email = date('Ymd_His') . '_' . Str::random(10) . '@user.com';
-            $user->password =  Hash::make($request->post('password'));
-            $user->created_at = date("Y-m-d H:i:s");
-            $user->role_id = 7;
+            // Отримуємо або створюємо кошик користувача
+            $cart = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);
+            $cart->user_id = $user_id;
 
-            $user->save();
-            // Автентифікувати користувача
-//            Auth::login($user);
-            // Передати повідомлення користувачу про успішну автентифікацію
-//            session()->flash('success', 'Ви були успішно зареєстровані та автентифіковані.');
-
-            $user_id = $user->id;
-        }
-
-        $product = Product::find($productId);
-        // Отримуємо або створюємо кошик користувача
-        $cart = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);
-        $cart->user_id = $user_id;
-
-        $cart->save();
+            $cart->save();
 
 // Перевірка, чи товар вже є в кошику
-        $cartItem = CartItems::where('cart_id', $cart->id)
-            ->where('product_id', $productId)
-            ->first();
+            $cartItem = CartItems::where('cart_id', $cart->id)
+                ->where('product_id', $productId)
+                ->first();
 
-        if ($cartItem) {
-            // Якщо товар вже є в кошику, збільшуємо кількість
-            $cartItem->quantity += 1;
-            $cartItem->save();
+            if ($cartItem) {
+                // Якщо товар вже є в кошику, збільшуємо кількість
+                $cartItem->quantity ++;
+                $cartItem->save();
+            } else {
+                // Якщо товару немає в кошику, додаємо його
+                $cartItem = new CartItems([
+                    'cart_id' => $cart->id,
+                    'product_id' => $productId,
+                    'price' => $product->price,
+                    'quantity' => 1,
+                ]);
+                $cartItem->save();
+            }
+            $cartItems = CartItems::query()->where('cart_id', $cart->id)->get();
+            $sum = 0;
+            $pricediscount = 0;
+            foreach ($cartItems as $item){
+                $sum += $item->price * $item->quantity;
+                $pricediscount += $item->pricediscount;
+            }
+            $cart->sum = $sum;
+            $cart->pricediscount = $pricediscount;
+            $cart->total = $sum - $pricediscount;
+            $cart->save();
         } else {
-            // Якщо товару немає в кошику, додаємо його
-            $cartItem = new CartItems([
-                'cart_id' => $cart->id,
-                'product_id' => $productId,
-                'price' => $product->price,
-                'quantity' => 1,
-            ]);
-            $cartItem->save();
+            $cart = session()->get('cart', []);
+            // Перевірка чи товар вже є в кошику
+            if(isset($cart[$productId])) {
+                $cart[$productId]['quantity']++;
+            } else {
+                $cart[$productId] = [
+                    "quantity" => 1,
+                ];
+            }
+            session()->put('cart', $cart);
         }
-        $cartItems = CartItems::query()->where('cart_id', $cart->id)->get();
-        $sum = 0;
-        $pricediscount = 0;
-        foreach ($cartItems as $item){
-            $sum += $item->price * $item->quantity;
-            $pricediscount += $item->pricediscount;
-        }
-        $cart->sum = $sum;
-        $cart->pricediscount = $pricediscount;
-        $cart->total = $sum - $pricediscount;
-
-        $cart->save();
-        // Опціонально можна використовувати метод associate для спрощення зв'язку з об'єктом товару
-        $cartItem->product()->associate($product);
-        $cartItem->save();
 
         return redirect()->route('carts.index')
             ->with([
-            'success' => 'Товар додано до корзини',
-            'cartItem' => $cartItem,
-        ])->withCookie(cookie('user_id', $user_id));
+            'success' => 'Товар додано до кошика',
+        ]);
+//        ->withCookie(cookie('user_id', $user_id));
     }
 
     public function clearCart(Request $request)
     {
-        if ($request->input('user_id')) {
-            $user_id = $request->input('user_id');
-        } elseif(request()->cookie('user_id') != NULL) {
-            $user_id = request()->cookie('user_id');
-        }
-        $cartItems = CartItems::query()
-            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
-            ->where('carts.user_id', $user_id)
-            ->delete();
+        // Отримуємо user_id або з request, або з cookie
+        $user_id = $request->input('user_id') ?? $request->cookie('user_id');
 
-        return redirect( route('carts.index'));
+        if ($user_id) {
+            // Якщо user_id існує, видаляємо товари з корзини користувача
+            CartItems::query()
+                ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+                ->where('carts.user_id', $user_id)
+                ->delete();
+        } else {
+            // Якщо user_id немає, видаляємо товари з сесії
+            session()->forget('cart'); // Видаляє лише ключ 'cart'
+        }
+
+        return redirect()->route('carts.index');
     }
     public function removeItem(Request $request)
     {
@@ -128,5 +142,19 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Товар видалено з корзини');
     }
+
+    public function removeItemGuest($productId)
+    {
+        $cart = session()->get('cart', []);
+
+        // Якщо товар є в кошику, видаляємо його
+        if(isset($cart[$productId])) {
+            unset($cart[$productId]);
+            session()->put('cart', $cart);
+        }
+
+        return redirect()->back()->with('success', 'Товар був видалений з кошика!');
+    }
+
 }
 

@@ -33,7 +33,7 @@ class OthersConstants
         'admin_roles' => ['name' => 'Ролі', 'route' => 'admin_roles.index'],
         'admin_users' => ['name' => 'Користувачі', 'route' => 'admin_users.index'],
         'wishlist' => ['name' => 'Список бажань', 'route' => 'wishlist.index'],
-        'orders' => ['name' => 'Статус замовлень', 'route' => 'orders.status'],
+        'orders' => ['name' => 'Замовлення', 'route' => 'orders.index'],
         'carts' => ['name' => 'Корзина', 'route' => 'carts.index'],
         'forum_categories' => ['name' => 'Категорії форума', 'route' => 'forum_categories.index'],
         'forum_sub_categories' => ['name' => 'Підкатегорії форума', 'route' => 'forum_sub_categories.index'],

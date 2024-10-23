@@ -68,9 +68,9 @@
                     <!-- Single Products Infomation Section Start -->
                     <div class="section section-padding border-bottom">
                         <div class="container">
-                            <label for="additional_information">Додаткова інформація</label>
-                            <textarea id="additional_information" name="additional_information" rows="10" cols="50"
-                                      placeholder="За необхідності внесіть додаткову інформацію про товар" style="border: 1px solid black; padding-left: 0.5em;">{{ old('additional_information') }}</textarea>
+{{--                            <label for="additional_information">Додаткова інформація</label>--}}
+{{--                            <textarea id="additional_information" name="additional_information" rows="10" cols="50"--}}
+{{--                                      placeholder="За необхідності внесіть додаткову інформацію про товар" style="border: 1px solid black; padding-left: 0.5em;">{{ old('additional_information') }}</textarea>--}}
                             <div class="product-meta">
                                 <table>
                                     <tbody>

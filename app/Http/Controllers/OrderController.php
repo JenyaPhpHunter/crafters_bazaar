@@ -24,11 +24,13 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->input('user_id');
-        $orders = Order::query()->where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        $orders = Order::query()
+            ->with('cart.cartitems') // Додати зв'язок cart_items до моделі Cart
+            ->with('status_order')
+            ->where('user_id', $user_id)
+            ->get();
 
-        return view('orders.index',[
-            "orders" => $orders,
-        ]);
+        return view('orders.status', ['orders' => $orders]);
     }
 
     public function create(Request $request)
@@ -38,13 +40,43 @@ class OrderController extends Controller
         } elseif (request()->cookie('user_id') != NULL) {
             $user_id = request()->cookie('user_id');
         }
-
         $user = User::find($user_id);
+        $user_email = $user->email;
+        $addressParts = explode(', ', $user->address);
+        $address = [
+            'street' => $addressParts[0] ?? null,
+            'home' => $addressParts[1] ?? null,
+            'apartment' => $addressParts[2] ?? null,
+        ];
+        $cart = session()->get('cart', []);
+        if (!empty($cart)){
+            $cart_obj = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);
+            $cart_obj->save();
+            foreach ($cart as $key => $cartItem) {
+                $product = Product::find($key); // Отримуємо товар за ідентифікатором
+                if ($product) {
+                    $cartItemObj = new CartItems();
+                    $cartItemObj->cart_id = $cart_obj->id;
+                    $cartItemObj->product_id = $product->id;
+                    $cartItemObj->quantity = $cartItem['quantity'];
+                    $cartItemObj->price = $product->price;
+                    $cartItemObj->active = 1;
+                    $cartItemObj->save();
+                }
+            }
+            $cart_sum = $cart_obj->cartitems()->sum('price');
+
+            $cart_obj->sum = $cart_sum;
+            $cart_obj->total = $cart_sum - $cart_obj->pricediscount;
+            $cart_obj->user_id = $user_id;
+            $cart_obj->save();
+        }
         $cartItems = CartItems::query()
             ->join('carts', 'carts.id', '=', 'cart_items.cart_id')
             ->where('carts.user_id', $user_id)
             ->where('carts.active', 1)
             ->get();
+
         $countries = [
             'UA' => 'Україна',
             'PL' => 'Польща',
@@ -68,29 +100,16 @@ class OrderController extends Controller
         $deliveries = Delivery::all();
         $payment_kinds = KindPayment::all();
 
-        $user_email = $user->email;
-        if (preg_match('/@user\.com$/', $user_email)) {
-            $user_email = '';
-        }
-
-        $addressParts = explode(', ', $user->address);
-
-        $address = [
-            'street' => $addressParts[0] ?? null,
-            'home' => $addressParts[1] ?? null,
-            'apartment' => $addressParts[2] ?? null,
-        ];
-
-        return view('orders.create',[
+        return view('orders.create', [
             'cartItems' => $cartItems,
             'countries' => $countries,
             'arr_cities' => $arr_cities,
             'arr_region_cities' => $arr_region_cities,
-            "user" => $user,
-            "address" => $address,
-            "user_email" => $user_email,
-            "deliveries" => $deliveries,
-            "payment_kinds" => $payment_kinds,
+            'user' => $user,
+            'address' => $address,
+            'user_email' => $user_email,
+            'deliveries' => $deliveries,
+            'payment_kinds' => $payment_kinds,
         ]);
     }
 
@@ -121,39 +140,11 @@ class OrderController extends Controller
         if ($validated->fails()) {
             return redirect()->back()->withErrors($validated)->withInput();
         }
+
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
-        $old_user = $user;
-        if($request->input('email') != $user->email && $user->role_id != 7){
-            Auth::logout();
-            $user = User::query()->where('email', $request->input('email'))->first();
-            if (!$user){
-                $user = new User;
-                $user->email = $request->input('email');
-                $user->password = Str::random(10);
-                $user->role_id = 6;
-//                $emailService = new EmailService();
-//                $emailService->sendWelcomeEmail($user->email, $user->password);
-//                $emailService = new EmailService();
-//                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
-            }
-        }
-        if($user->role_id == 7) {
-            $old_user = $user;
-            $user = User::query()->where('email', $request->input('email'))->first();
-            if (!$user) {
-                $user = $old_user;
-                $user->email = $request->input('email');
-                $user->password = Str::random(10);
-                $user->role_id = 6;
-//                $emailService = new EmailService();
-//                $emailService->sendWelcomeEmail('bulic2012@gmail.com', $user->password);
-            } else {
-                $old_user->delete();
-            }
-        }
-        if($user->category_user_id == 1){
-            $user->category_user_id = 2;
+        if($user->category_user_id == 5){
+            $user->category_user_id = 4;
         }
         $user->name =  $request->post('name');
         $user->secondname =  $request->post('secondname');
@@ -170,14 +161,18 @@ class OrderController extends Controller
 
         $user->save();
 
-        // Автентифікувати користувача
-//        Auth::login($user);
-        // Передати повідомлення користувачу про успішну автентифікацію
-//        session()->flash('success', 'Ви були успішно зареєстровані та автентифіковані.');
 //        Cookie::queue('user_id', $user->id, 60); // 60 - це час у хвилинах, на який ви хочете встановити куку
 
+        $cart = Cart::query()
+            ->where('user_id', $user_id)
+            ->where('active', 1)
+            ->latest()  // Сортування за спаданням дати створення
+            ->first();
+        $cart->active = 0;
+        $cart->save();
+
         $order = new Order();
-        $order->user_id =  $user->id;
+        $order->user_id =  $user_id;
         $order->delivery_id = $request->post('delivery_id');
         $order->kind_payment_id = $request->post('payment_type');
 //        $order->card = $request->post('card');
@@ -188,15 +183,6 @@ class OrderController extends Controller
 //        $order->promocode = $request->post('promocode');
 //        $order->pricedelivery = $request->post('pricedelivery');
         $order->comment = $request->post('bdOrderNote');
-        $cart = Cart::query()
-            ->where('user_id', $old_user->id)
-            ->where('active', 1)
-            ->latest()  // Сортування за спаданням дати створення
-            ->first();
-        $cart->user_id = $user->id;
-        $cart->active = 0;
-
-        $cart->save();
         $order->cart_id = $cart->id;
         $order->sum_order = $cart->total;
         $order->status_order_id = 1;
@@ -230,9 +216,9 @@ class OrderController extends Controller
                 'total' => $item->total,
             ];
             $admin_data['cart'][] = [
-                    'product' => $product_name,
-                    'quantity' => $item->quantity,
-                    'total' => $item->total,
+                'product' => $product_name,
+                'quantity' => $item->quantity,
+                'total' => $item->total,
             ];
             CartItems::find($item->id)->update([
                 'active' => 0,
@@ -243,6 +229,7 @@ class OrderController extends Controller
 //
 //        Mail::to('bulic2@ukr.net')->send(new OrderConfirmation($admin_data));
 
+        session()->forget('cart'); // Видаляє лише ключ 'cart'
         if($user->role_id < 5){
             return redirect(route('admin_users.show', ['admin_user' => $user->id]).'#orders');
         } else {
@@ -273,23 +260,6 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         //
-    }
-
-    public function status(Request $request)
-    {
-        $user_id = $request->input('user_id');
-        $orders = Order::query()
-            ->with('cart.cartitems') // Додати зв'язок cart_items до моделі Cart
-            ->with('status_order')
-            ->where('user_id', $user_id)
-            ->get();
-//        $this->seedie($orders);
-
-        if ($user_id){
-            return view('orders.status', ['orders' => $orders]);
-        } else {
-            return redirect( route('login-register'));
-        }
     }
 
     public function destroy($id)

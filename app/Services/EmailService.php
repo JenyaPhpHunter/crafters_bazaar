@@ -61,47 +61,25 @@ class EmailService
             <p style=\"font-style: italic; color: green;\">Маємо надію, що Ваш товар скоро придбають)</p>
         ";
 
-        $product->date_approve_sale = date('Y-m-d H:i:s');
-        $product->save();
-
         $this->sendEmail($email, $titleEmail, $content);
     }
 
     public function sendProductForSaleEmail($product)
     {
         $titleEmail = 'Товар запропоновано на продаж';
+        $baseUrl = config('app.url'); // отримуємо базовий URL з конфігурації
         $content = "
-            <h1 style=\"color: blue;\">Товар запропоновано на продаж!</h1>
+        <h1 style=\"color: blue;\">Товар запропоновано на продаж!</h1>
 
-            <p>Код товару: {$product->id}</p>
-            <p>Посилання: <a href=\"http://crafters_bazaar.loc/products/{$product->id}/edit\">http://crafters_bazaar.loc/products/{$product->id}/edit</a></p>
-            <p style=\"font-style: italic; color: green;\">Перевірте та відправте товар на продаж</p>
+        <p>Код товару: {$product->id}</p>
+        <p>Посилання: <a href=\"{$baseUrl}/products/{$product->id}/edit\">{$baseUrl}/products/{$product->id}/edit</a></p>
+        <p style=\"font-style: italic; color: green;\">Перевірте та відправте товар на продаж</p>
         ";
 
-        $admin = $this->choiceSellerAdmin();
-        $product->admin_id = $admin->id;
-        $product->date_put_up_for_sale = date('Y-m-d H:i:s');
-        $product->save();
-//        echo "VAS";
-//        echo "<pre>";
-//        print_r($admin->email);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($titleEmail);
-//        echo "</pre>";
-//        echo "<pre>";
-//        print_r($product->id);
-//        echo "</pre>";
-//        die();
         $this->sendEmail($admin->email, $titleEmail, $content);
     }
 
-    public function choiceSellerAdmin()
-    {
-        $seller_admin = User::where('role_id', 3)->inRandomOrder()->first();
 
-        return $seller_admin;
-    }
 
     /**
      * Відправка листа для скидання пароля.

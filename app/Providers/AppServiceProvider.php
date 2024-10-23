@@ -56,11 +56,7 @@ class AppServiceProvider extends ServiceProvider
             // Основний запит для отримання всіх активних та неделеційованих KindProduct
             $baseQuery = KindProduct::whereNull('deleted_at')
                 ->with('sub_kind_products');
-
-// Якщо вам потрібні всі KindProduct, незалежно від того, чи мають вони продукти зі статусом 3
             $all_kind_products = $baseQuery->get();
-
-// Якщо вам потрібні лише ті KindProduct, які мають продукти зі статусом 3
             $header_kind_products = $baseQuery->whereHas('sub_kind_products.products', function ($query) {
                 $query->where('status_product_id', 3);
             })
@@ -78,17 +74,18 @@ class AppServiceProvider extends ServiceProvider
             } else {
                 $user_products = collect();
             }
-            if($user){
+            $wishItemsCount = 0;
+            if ($user) {
                 $cartItemsCount = CartItems::query()
-                    ->join('carts', 'cart_items.cart_id', '=', 'carts.id')->with('product')
+                    ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
                     ->where('carts.user_id', $user->id)
                     ->where('carts.active', 1)
-                    ->count();
+                    ->sum('cart_items.quantity');
                 $wishItemsCount = WishItems::query()
                     ->where('user_id', $user->id)
                     ->where('active', 1)
                     ->count();
-            } elseif (request()->cookie('user_id') != NULL) {
+            }         elseif (request()->cookie('user_id') != NULL) {
                 $user_id = request()->cookie('user_id');
                 $cartItemsCount = CartItems::query()
                     ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
@@ -100,8 +97,8 @@ class AppServiceProvider extends ServiceProvider
                     ->where('active', 1)
                     ->count();
             } else {
-                $cartItemsCount = 0;
-                $wishItemsCount = 0;
+                $cart = session()->get('cart', []);
+                $cartItemsCount = array_sum(array_column($cart, 'quantity'));
             }
             $forum_categories = ForumCategory::query()->with('forum_sub_categories')->get();
             $title_list = Product::query()

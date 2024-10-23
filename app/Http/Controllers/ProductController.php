@@ -152,6 +152,16 @@ class ProductController extends Controller
                 ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
             }
 
+            $product->date_put_up_for_sale = date("Y-m-d H:i:s");
+            if ($user->role_id > 4){
+                $product->status_product_id = 2;
+            } else {
+                $product->status_product_id = 3;
+                $product->date_approve_sale = date("Y-m-d H:i:s");
+                $$product->admiin_id = $user->id;
+            }
+            $product->save();
+
             return redirect( route('products.show', [
                 'product' => $product,
                 'colors',
@@ -275,21 +285,31 @@ class ProductController extends Controller
                     ->withErrors($validated_user)
                     ->with('errorFields', $errorFields);
             }
-
+            $product->date_put_up_for_sale = date("Y-m-d H:i:s");
             if ($user->role_id > 4) {
-                try {
-                $emailService = new EmailService();
-                $emailService->sendProductForSaleEmail($product);
-                } catch (\Exception $e) {
-                    return view('emails.error', [
-                        'excludeProducts' => true,
-                    ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-                }
+                $product->status_product_id = 2;
+//                try {
+//                $emailService = new EmailService();
+//                $emailService->sendProductForSaleEmail($product);
+//                } catch (\Exception $e) {
+//                    return view('emails.error')
+//                        ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+//                }
             } else {
                 $product->status_product_id = 3;
-
-                $product->save();
+                $product->date_approve_sale = date("Y-m-d H:i:s");
+                $product->admiin_id = $user->id;
+//                try {
+//                $emailService = new EmailService();
+//                    $emailService->sendPutUpForSaleEmail($user->email, $product);
+//                    $admin = $this->choiceSellerAdmin();
+//                    $product->admin_id = $admin->id;
+//                } catch (\Exception $e) {
+//                    return view('emails.error')
+//                        ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+//                }
             }
+            $product->save();
 
             return redirect( route('products.show', [
                 'product' => $product->id,
@@ -361,7 +381,6 @@ class ProductController extends Controller
         $user = User::find($user_id);
         $all_kind_products = KindProduct::all();
         $name_kind_product = $request->post('name_kind_product');
-//        $this->seedie($request->all());
         if(isset($name_kind_product)){
             $names_kind_products = [];
             foreach ($all_kind_products as $one_kind_product){
@@ -708,5 +727,12 @@ class ProductController extends Controller
         return redirect( route('products.show', [
             'product' => $product,
         ]));
+    }
+
+    public function choiceSellerAdmin()
+    {
+        $seller_admin = User::where('role_id', '<',  5)->inRandomOrder()->first();
+
+        return $seller_admin;
     }
 }

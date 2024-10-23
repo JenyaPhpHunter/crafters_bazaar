@@ -3,13 +3,11 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KindProductController as AdminKindProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubKindProductController as AdminSubKindProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ForumCategoryController;
-use App\Http\Controllers\ForumController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ForumPostController;
@@ -41,15 +39,15 @@ use Illuminate\Support\Facades\Route;
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 //});
-    Route::prefix('admin')->middleware('auth')->group(callback: function () {
-        Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-        Route::resource('admin_users', AdminUserController::class);
-        Route::get('/sellers_buyers', [AdminUserController::class, 'sellersBuyers'])->name('sellers_buyers.index');
-        Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
-        Route::resource('admin_roles', RoleController::class);
-        Route::resource('admin_kind_products', AdminKindProductController::class);
-        Route::resource('admin_sub_kind_products', AdminSubKindProductController::class);
-        Route::resource('admin_orders', AdminOrderController::class);
+Route::prefix('admin')->middleware('auth')->group(callback: function () {
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::resource('admin_users', AdminUserController::class);
+    Route::get('/sellers_buyers', [AdminUserController::class, 'sellersBuyers'])->name('sellers_buyers.index');
+    Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
+    Route::resource('admin_roles', RoleController::class);
+    Route::resource('admin_kind_products', AdminKindProductController::class);
+    Route::resource('admin_sub_kind_products', AdminSubKindProductController::class);
+    Route::resource('admin_orders', AdminOrderController::class);
 //Route::get('/test-email', function () {
 //    $emailService = new \App\Services\EmailService();
 //    $emailService->sendWelcomeEmail('bulic2012@gmail.com', 'your_test_password');
@@ -71,6 +69,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('forum_sub_categories', ForumSubCategoryController::class);
     Route::resource('forum_topics', ForumTopicController::class);
     Route::resource('forum_posts', ForumPostController::class)->except(['index']);
+    Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
@@ -82,12 +83,12 @@ Route::get('/carts/index', [CartController::class, 'index'])->name('carts.index'
 Route::get('/carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
 Route::delete('/carts/clear', [CartController::class, 'clearCart'])->name('carts.clearСart');
 Route::delete('/carts', [CartController::class, 'removeItem'])->name('carts.remove_item');
+Route::get('cart/remove-item-guest/{product_id}', [CartController::class, 'removeItemGuest'])->name('carts.remove_item_guest');
 Route::get('/wishlist/index', [WishController::class, 'index'])->name('wishlist.index');
 Route::get('/wishlist/index/{product}', [WishController::class, 'addToWishlist'])->name('wishlist.addToWishlist');
 Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishlist.clear');
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
-Route::get('/orders/status', [OrderController::class, 'status'])->name('orders.status');
-Route::resource('orders', OrderController::class);
+Route::resource('orders', OrderController::class)->except(['index', 'store', 'create']);
 
 require __DIR__.'/auth.php';
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

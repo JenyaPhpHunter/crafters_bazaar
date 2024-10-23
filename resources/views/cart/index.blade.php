@@ -26,6 +26,7 @@
                 <thead>
                 <tr>
                     <th class="name" colspan="2" style="text-align: center;">Товар</th>
+                    <th class="price">Назва</th>
                     <th class="price">Вартість</th>
                     <th class="quantity">Кількість</th>
                     <th class="subtotal">Загалом</th>
@@ -44,18 +45,28 @@
                             @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
                                 <td class="thumbnail"><a href="{{ route('products.show',['product' => $cartItem->product->id]) }}"><img src="{{asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
                                 <td></td>
+                            @else
+                                <td></td><td></td>
                             @endif
                             <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a></td>
-                        <td class="price"><span>{{ $cartItem->price }}</span></td>
-                        <td class="quantity">
-                            <div class="product-quantity">
-                                <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                <input type="text" class="input-qty" value={{ $cartItem->quantity }}>
-                                <span class="qty-btn plus"><i class="ti-plus"></i></span>
-                            </div>
-                        </td>
-                        <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}грн</span></td>
-                                    <td class="remove"><a href="{{ route('carts.remove_item',['cart_item' => $cartItem->id]) }}" class="btn">×</a></td>
+                            <td class="price"><span>{{ $cartItem->price }}</span></td>
+                            <td class="quantity">
+                                <div class="product-quantity">
+                                    <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                    <input type="text" class="input-qty" value={{ $cartItem->quantity }}>
+                                    <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                </div>
+                            </td>
+                            <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}грн</span></td>
+                            <td class="remove">
+                                @if (auth()->check())
+                                    <!-- Видалення для авторизованого користувача -->
+                                    <a href="{{ route('carts.remove_item',['cart_item' => $cartItem->id]) }}" class="btn">×</a>
+                                @else
+                                    <!-- Видалення для неавторизованого користувача (видаляємо за productId) -->
+                                    <a href="{{ route('carts.remove_item_guest', ['product_id' => $cartItem->product->id]) }}" class="btn">×</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

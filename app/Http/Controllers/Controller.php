@@ -22,7 +22,7 @@ class Controller extends BaseController
         'admin_roles.index',
         'admin_users.index',
         'carts.index',
-        'orders.status',
+        'orders.index',
         'products.index',
         'wishlist.index',
         'forum_categories.index',
@@ -111,6 +111,7 @@ class Controller extends BaseController
                     $breadcrumbs[] = [
                         'title' => [$classData['name']],
                         'name'  => $classData['name'],
+                        'route' => route($classData['route']),
                         'route' => route($classData['route']),
                     ];
                 }

@@ -13,9 +13,8 @@ class ProductService
     public function createProduct($request, $function_name, $action, $id = NULL)
     {
         $data = $request->all();
-
-        $user = User::find($request->input('user_id'));
-        $action = $request->input('action');
+        $user = User::find($data['user_id']);
+        $action = $data['action'];
         if ($function_name == 'store') {
             $product = new Product();
             if ($action == 'put_up_for_sale') {
@@ -31,9 +30,8 @@ class ProductService
                 if ($validator->fails()) {
                     throw new ValidationException($validator);
                 }
-
-                $product->date_put_up_for_sale = date("Y-m-d H:i:s");
-                $product->status_product_id = ($user->role_id > 4) ? 2 : 3;
+            } else {
+                $product->status_product_id = 1;
             }
 
             $product->name = $data['name'];
@@ -45,7 +43,6 @@ class ProductService
             $product->stock_balance = $data['stock_balance'];
             $product->color_id = $data['color_id'];
             $product->term_creation = $data['term_creation'];
-            $product->status_product_id = 1;
             $product->user_id = $data['user_id'];
             $product->created_at = date("Y-m-d H:i:s");
 
@@ -72,24 +69,7 @@ class ProductService
             if(!$product){
                 throw new \Exception('Product not found');
             }
-            if ($action == 'put_up_for_sale') {
-
-                $validator = Validator::make($data, [
-                    'name' => 'required',
-                    'sub_kind_product_id' => 'required',
-                    'content' => 'required',
-                    'price' => 'required',
-                    'stock_balance' => 'required',
-                    'color_id' => 'required',
-                ]);
-
-                if ($validator->fails()) {
-                    throw new ValidationException($validator);
-                }
-
-                $product->date_put_up_for_sale = date("Y-m-d H:i:s");
-                $product->status_product_id = ($user->role_id > 4) ? 2 : 3;
-            } elseif ($action == 'put_for_sale_from_show'){
+            if ($action == 'put_up_for_sale' || $action == 'put_for_sale_from_show') {
                 $data['name'] = $product->name;
                 $data['sub_kind_product_id'] = $product->sub_kind_product_id;
                 $data['content'] = $product->content;
@@ -110,9 +90,6 @@ class ProductService
                 if ($validator->fails()) {
                     throw new ValidationException($validator);
                 }
-
-                $product->date_put_up_for_sale = date("Y-m-d H:i:s");
-                $product->status_product_id = ($user->role_id > 4) ? 2 : 3;
             }
 
             $product->name = $data['name'];
@@ -122,7 +99,11 @@ class ProductService
             $product->stock_balance = $data['stock_balance'];
             $product->color_id = $data['color_id'];
             $product->term_creation = $data['term_creation'];
-            $product->user_id = $data['user_id'];
+            if ($user->role_id > 4) {
+                $product->user_id = $data['user_id'];
+            } else {
+                $product->admin_id = $data['user_id'];
+            }
             $product->updated_at = date("Y-m-d H:i:s");
 
             $product->save();

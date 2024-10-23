@@ -12,6 +12,8 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $products = Product::all();
+//        session()->flush();
+
         return view('welcome',[
             "products" => $products,
             "user" => $user,

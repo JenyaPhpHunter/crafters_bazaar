@@ -44,11 +44,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Отримуємо дані кошика з сесії перед регенерацією
+        $cart = session()->get('cart', []);
         // Аутентифікація користувача
         $request->authenticate();
 
         // Регенерація сесії після успішної аутентифікації
         $request->session()->regenerate();
+
+        // Повертаємо дані кошика у нову сесію
+        session()->put('cart', $cart);
 
         $user = User::where('email', $request->input('email'))->first();
         if ($user->role_id < 5) {
