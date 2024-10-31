@@ -24,6 +24,11 @@ class AuthenticatedSessionController extends Controller
 
     public function create(Request $request): View
     {
+        if ($request->input('review_product_id')){
+            session()->put('review_product_id', $request->input('review_product_id'));
+
+            return view('auth.login');
+        }
         if($request->input('sendquestion') == 'sendquestion'){
             $sendquestion = true;
             $product_id = $request->input('product_id');
@@ -46,6 +51,7 @@ class AuthenticatedSessionController extends Controller
     {
         // Отримуємо дані кошика з сесії перед регенерацією
         $cart = session()->get('cart', []);
+        $review_product_id = session()->get('review_product_id', []);
         // Аутентифікація користувача
         $request->authenticate();
 
@@ -54,6 +60,11 @@ class AuthenticatedSessionController extends Controller
 
         // Повертаємо дані кошика у нову сесію
         session()->put('cart', $cart);
+        if ($review_product_id) {
+            return redirect( route('products.show', [
+                'product' => $review_product_id
+            ]));
+        }
 
         $user = User::where('email', $request->input('email'))->first();
         if ($user->role_id < 5) {

@@ -11969,57 +11969,40 @@ body.offcanvas-open .sticky-header {
 }
 
 /* Product Review Form */
-.review-form .note {
-  font-size: 16px;
-  margin-bottom: 25px;
-}
-/* Product Form Rating */
-.form-rating {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-}
-.form-rating .title {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-  display: block;
-  margin-right: 40px;
-  margin-bottom: 0;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #333333;
-}
 .form-rating .rating {
-  font-family: "Font Awesome 5 Pro";
-  font-size: 12px;
-  line-height: 1;
-  position: relative;
-  -webkit-align-self: center;
-      -ms-flex-item-align: center;
-          align-self: center;
-  color: #F5CC26;
+    display: flex;
+    direction: ltr; /* Забезпечує напрямок зліва направо */
 }
-.form-rating .rating::before {
-  content: "\f005  \f005  \f005  \f005  \f005";
+
+.form-rating .star {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s;
 }
-.form-rating .rating .star {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
+
+/* Підсвічує обрані зірки */
+.form-rating .star.selected {
+    color: #F5CC26;
 }
-.form-rating .rating .star::before {
-  font-weight: 700;
-  content: "\f005  \f005  \f005  \f005  \f005";
-}
-.form-rating .rating:hover .star {
-  opacity: 1;
-}
+
+/*.form-rating .rating {*/
+/*    display: flex;*/
+/*}*/
+/*.form-rating .star {*/
+/*    font-size: 24px;*/
+/*    color: #ccc;*/
+/*    cursor: pointer;*/
+/*    transition: color 0.3s;*/
+/*}*/
+/*.form-rating .star.selected {*/
+/*    color: #F5CC26;*/
+/*}*/
+/*.form-rating .star:hover,*/
+/*.form-rating .star:hover ~ .star {*/
+/*    color: #F5CC26;*/
+/*    direction: ltr; !* Встановлює напрямок зліва направо *!*/
+/*}*/
 
 /* 09.04. Quick View CSS */
 .quickViewModal .modal-dialog {

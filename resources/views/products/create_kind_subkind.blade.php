@@ -27,7 +27,8 @@
             @empty
             @endforelse
             <label for="name_kind_product">Назва виду продукту</label>
-            <input id="name_kind_product" name="name_kind_product" placeholder="Введіть назву виду товару" value="">
+            <input id="name_kind_product" name="name_kind_product" placeholder="Введіть назву виду товару" value="{{ old('name_kind_product') }}">
+            {{--            <input id="name_kind_product" name="name_kind_product" placeholder="Введіть назву виду товару" value="">--}}
             <br><br>
             @forelse($arr_sub_kind_products as $sub_kind_product)
                 @php
@@ -37,7 +38,8 @@
             @empty
             @endforelse
             <label for="name_sub_kind_product">Назва підвиду продукту</label>
-            <input id="name_sub_kind_product" name="name_sub_kind_product" placeholder="Введіть підвиду товару">
+            <input id="name_sub_kind_product" name="name_sub_kind_product" placeholder="Введіть підвиду товару" value="{{ old('name_sub_kind_product') }}">
+            {{--            <input id="name_sub_kind_product" name="name_sub_kind_product" placeholder="Введіть підвиду товару">--}}
             <br><br>
             <div class="col-auto learts-mb-20">
                 <button type="submit" class="btn btn-primary2">Зберегти</button>

@@ -33,19 +33,22 @@ class Product extends Model
         'additional_information',
     ];
 
+
     public function sub_kind_product()
     {
-        return $this->belongsTo(SubKindProduct::class);
+        return $this->belongsTo(SubKindProduct::class, 'sub_kind_product_id');
     }
+
+    // Зв'язок з видом продукту через підвид продукту
     public function kind_product()
     {
         return $this->hasOneThrough(
-            KindProduct::class,
-            SubKindProduct::class,
-            'id',                    // Foreign key on SubKindProduct table
-            'id',                    // Foreign key on KindProduct table
-            'sub_kind_product_id',   // Local key on Product table
-            'kind_product_id'        // Local key on SubKindProduct table
+            KindProduct::class,  // Цільова модель (KindProduct)
+            SubKindProduct::class, // Проміжна модель (SubKindProduct)
+            'id', // Поле в SubKindProduct, яке пов'язане з KindProduct (id у таблиці sub_kind_products)
+            'id', // Поле в KindProduct, яке має бути пов'язане
+            'sub_kind_product_id', // Поле в таблиці products, яке пов'язане з sub_kind_products
+            'kind_product_id' // Поле в таблиці sub_kind_products, яке пов'язане з kind_products
         );
     }
 

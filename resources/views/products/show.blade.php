@@ -123,14 +123,18 @@
                         <div class="col-xl-6 col-12 learts-mb-40">
                             <div class="product-summery product-summery-center">
                                 <div class="product-nav">
-                                    <a href="#"><i class="fal fa-long-arrow-left"></i></a>
-                                    <a href="#"><i class="fal fa-long-arrow-right"></i></a>
+                                    @if ($previous_product_id)
+                                        <a href="{{ route('products.show', ['product' => $previous_product_id]) }}"><i class="fal fa-long-arrow-left"></i></a>
+                                    @endif
+                                    @if ($next_product_id)
+                                        <a href="{{ route('products.show', ['product' => $next_product_id]) }}"><i class="fal fa-long-arrow-right"></i></a>
+                                    @endif
                                 </div>
                                 <div class="product-ratings">
                                 <span class="star-rating">
-                                    <span class="rating-active" style="width: 80%;">ratings</span>
+                                    <span class="rating-active" style="width: {{ ($reviews->avg('rating') ?? 0) * 20 }}%;">ratings</span>
                                 </span>
-                                    <a href="#reviews" class="review-link">(<span class="count">2</span> відгуки покупців)</a>
+                                    <a href="#tab-reviews" class="review-link">(<span class="count">{{ $reviews->count() }}</span> відгуки(ів) покупців)</a>
                                 </div>
                                 <h3 class="product-title">{{ $product->name }}</h3>
                                 <h2 class="product-title">{{ $product->status_product->name }}</h2>
@@ -211,7 +215,6 @@
                                             @csrf
                                             @method('put')
                                         <button type="submit" name="action" value="put_for_sale_from_show"
-{{--                                        <button type="submit" name="action" value="put_for_sale"--}}
                                                 class="btn btn-success">
                                             <i class="fas fa-donate"></i> {{$action_types['put_up_for_sale']}}
                                         </button>
@@ -380,11 +383,10 @@
     <!-- Single Products Infomation Section Start -->
     <div class="section section-padding border-bottom">
         <div class="container">
-
             <ul class="nav product-info-tab-list">
                 <li><a class="active" data-bs-toggle="tab" href="#tab-description">Опис від ШІ</a></li>
                 <li><a data-bs-toggle="tab" href="#tab-pwb_tab">Бренд</a></li>
-                <li><a data-bs-toggle="tab" href="#tab-reviews">Відгуки (2)</a></li>
+                <li><a data-bs-toggle="tab" href="#tab-reviews">Відгуки ({{ $reviews->count() }})</a></li>
             </ul>
             <div class="tab-content product-infor-tab-content">
                 <div class="tab-pane fade show active" id="tab-description">
@@ -408,65 +410,57 @@
                 </div>
                 <div class="tab-pane fade" id="tab-reviews">
                     <div class="product-review-wrapper">
-                        <span class="title">2 reviews for Modern Camera</span>
+                        <span class="title">{{ $reviews->count() }} відгук(и) для {{ $product->name }}</span>
                         <ul class="product-review-list">
-                            <li>
-                                <div class="product-review">
-                                    <div class="thumb"><img src="{{ asset('images/review/review-2.webp') }}" alt=""></div>
-                                    <div class="content">
-                                        <div class="ratings">
-                                        <span class="star-rating">
-                                            <span class="rating-active" style="width: 100%;">ratings</span>
-                                        </span>
+                            @foreach($reviews as $review)
+                                <li>
+                                    <div class="product-review">
+{{--                                        <div class="thumb">    показує аватар користувача--}}
+{{--                                            <img src="{{ $review->user->avatar ?? asset('images/review/default-avatar.webp') }}" alt="">--}}
+{{--                                        </div>--}}
+                                        <div class="content">
+                                            <div class="ratings">
+                        <span class="star-rating">
+                            <span class="rating-active" style="width: {{ $review->rating * 20 }}%;">ratings</span>
+                        </span>
+                                            </div>
+                                            <div class="meta">
+                                                <h5 class="title">{{ $review->user->name }}</h5>
+                                                <span class="date">{{ $review->created_at->locale('uk')->isoFormat('D MMMM YYYY') }}</span>
+                                            </div>
+                                            <p>{{ $review->comment }}</p>
                                         </div>
-                                        <div class="meta">
-                                            <h5 class="title">Scott James</h5>
-                                            <span class="date">November 27, 2020</span>
-                                        </div>
-                                        <p>Thanks for always keeping your WordPress themes up to date. Your level of support and dedication is second to none.</p>
                                     </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="product-review">
-                                    <div class="thumb"><img src="{{ asset('images/review/review-1.webp') }}" alt=""></div>
-                                    <div class="content">
-                                        <div class="ratings">
-                                        <span class="star-rating">
-                                            <span class="rating-active" style="width: 80%;">ratings</span>
-                                        </span>
-                                        </div>
-                                        <div class="meta">
-                                            <h5 class="title">Edna Watson</h5>
-                                            <span class="date">November 27, 2020</span>
-                                        </div>
-                                        <p>Wonderful quality, and an awesome design !</p>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
-                        <span class="title">Add a review</span>
-                        <div class="review-form">
-                            <p class="note">Your email address will not be published. Required fields are marked *</p>
-                            <form action="#">
-                                <div class="row learts-mb-n30">
-                                    <div class="col-md-6 col-12 learts-mb-30"><input type="text" placeholder="Name *"></div>
-                                    <div class="col-md-6 col-12 learts-mb-30"><input type="email" placeholder="Email *"></div>
-                                    <div class="col-12 learts-mb-10">
-                                        <div class="form-rating">
-                                            <span class="title">Your rating</span>
-                                            <span class="rating"><span class="star"></span></span>
-                                        </div>
+                    @auth
+                            <div class="review-form">
+                                <span class="title">Додати відгук</span>
+                                <div class="col-md-6 col-12 learts-mb-30"><input type="text" placeholder="{{ $user->name }}" readonly></div>
+                                <form action="{{ route('reviews.store', $product->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="rating" id="rating">
+                                    <div class="form-rating">
+                                        <span class="title">Ваша оцінка</span>
+                                        <span class="rating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </span>
                                     </div>
-                                    <div class="col-12 learts-mb-30"><textarea placeholder="Your Review *"></textarea></div>
-                                    <div class="col-12 text-center learts-mb-30"><button class="btn btn-dark btn-outline-hover-dark">Submit</button></div>
-                                </div>
-                            </form>
-                        </div>
+                                    <textarea name="comment" placeholder="Ваш відгук *"></textarea>
+                                    <button type="submit" class="btn btn-dark btn-outline-hover-dark">Відправити</button>
+                                </form>
+                            </div>
+                        @else
+                            <p class="note">Щоб залишити відгук, будь ласка, <a href="{{ route('login', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">увійдіть</a> або <a href="{{ route('register', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">зареєструйтесь</a>.</p>
+                        @endauth
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -534,5 +528,59 @@
     </div>
 
 </div>
+
+<script>
+    const stars = document.querySelectorAll('.star');
+    let currentRating = 0;
+
+    // Клік для встановлення рейтингу
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            currentRating = this.dataset.value;
+            document.getElementById('rating').value = currentRating;
+            highlightStars(currentRating);
+        });
+
+        // Наведення для підсвічування зірок
+        star.addEventListener('mouseover', function() {
+            highlightStars(this.dataset.value);
+        });
+
+        // Повернення до обраного рейтингу після зняття наведення
+        star.addEventListener('mouseout', function() {
+            highlightStars(currentRating);
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            star.classList.toggle('selected', star.dataset.value <= rating);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const reviewLink = document.querySelector('.review-link');
+        const reviewTab = document.querySelector('#tab-reviews');
+
+        reviewLink.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            // Змінюємо активну вкладку
+            document.querySelectorAll('.product-info-tab-list a').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('show', 'active');
+            });
+
+            // Активуємо вкладку з відгуками
+            document.querySelector('[href="#tab-reviews"]').classList.add('active');
+            reviewTab.classList.add('show', 'active');
+
+            // Прокручуємо до секції відгуків
+            reviewTab.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
 
 @endsection

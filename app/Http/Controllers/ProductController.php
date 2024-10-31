@@ -8,6 +8,7 @@ use App\Models\Dialog;
 use App\Models\KindProduct;
 use App\Models\Product;
 use App\Models\ProductPhoto;
+use App\Models\Review;
 use App\Models\SubKindProduct;
 use App\Models\User;
 use App\Services\ApiService;
@@ -40,7 +41,6 @@ class ProductController extends Controller
             ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
             ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
-            ->where('kind_products.id', '!=', 1)
             ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
             ->groupBy('kind_products.id', 'kind_products.name')
             ->get();
@@ -176,7 +176,29 @@ class ProductController extends Controller
             ->with(['sub_kind_product.kind_product', 'color', 'status_product', 'user'])
             ->where('id', $id)
             ->first();
+        if ($product) {
+            $previous_product = Product::query()
+                ->where('status_product_id', 3)
+                ->where('id', '<', $product->id)
+                ->orderBy('id', 'desc')
+                ->first();
+            if ($previous_product) {
+                $previous_product_id = $previous_product->id;
+            } else {
+                $previous_product_id = null;
+            }
 
+            $next_product = Product::query()
+                ->where('status_product_id', 3)
+                ->where('id', '>', $product->id)
+                ->orderBy('id', 'asc')
+                ->first();
+            if ($next_product) {
+                $next_product_id = $next_product->id;
+            } else {
+                $next_product_id = null;
+            }
+        }
         $dialogs = Dialog::where('product_id', $id)
             ->with('user')
             ->orderByRaw('CASE WHEN answer_to IS NULL THEN 1 ELSE 0 END, answer_to')
@@ -207,6 +229,8 @@ class ProductController extends Controller
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
         $action_types = ProductsConstants::ACTION_TYPES;
+        $reviews = Review::query()->where('product_id', $id)->get();
+        $averageRating = $reviews->avg('rating') ?? 0; // Середній рейтинг
         $user = User::find($user_id);
         $api_gpt = new ApiService(env('OPENAI_API_KEY'));
 //        $ai_comment = $api_gpt->beautifyComment($product->comment);
@@ -214,6 +238,8 @@ class ProductController extends Controller
 
         return view('products.show',[
             'product' => $product,
+            'previous_product_id' => $previous_product_id,
+            'next_product_id' => $next_product_id,
             'photos' => $photos,
             'kind_products' => $kind_products,
             'featured_products' => $featured_products,
@@ -222,6 +248,7 @@ class ProductController extends Controller
             'creator' => $creator,
             'user' => $user,
             'action_types' => $action_types,
+            'reviews' => $reviews,
         ]);
     }
 
@@ -298,7 +325,7 @@ class ProductController extends Controller
             } else {
                 $product->status_product_id = 3;
                 $product->date_approve_sale = date("Y-m-d H:i:s");
-                $product->admiin_id = $user->id;
+                $product->admin_id = $user->id;
 //                try {
 //                $emailService = new EmailService();
 //                    $emailService->sendPutUpForSaleEmail($user->email, $product);
@@ -481,16 +508,17 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->where('status_product_id',3)
-            ->with('kind_product')
-            ->with('sub_kind_product')
+            ->with('sub_kind_product.kind_product')
             ->where('sub_kind_product_id',$subkind)
             ->get();
-        $kind_products = KindProduct::query()
-            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
-            ->where('products.status_product_id', '=', 3)
-            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
-            ->groupBy('kind_products.id', 'kind_products.name')
-            ->get();
+//        $kind_products = KindProduct::query()
+//            ->join('products', 'kind_products.id', '=', 'products.kind_product_id')
+//            ->where('products.status_product_id', '=', 3)
+//            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
+//            ->groupBy('kind_products.id', 'kind_products.name')
+//            ->get();
+
+        $kind_products = KindProduct::all();
         $sub_kind_products = SubKindProduct::all();
         $colors = Color::all();
         $featured_products = Product::query()
@@ -614,9 +642,9 @@ class ProductController extends Controller
         // Фільтрування товарів за категоріями
         $products = $products->filter(function ($product) use ($selectedCategories) {
             // Перевірка, чи у товару вказана категорія
-            if ($product->kind_product_id) {
+            if ($product->kind_product->id) {
                 // Перевірка, чи ідентифікатор категорії товару є в обраному списку категорій
-                return in_array($product->kind_product_id, $selectedCategories);
+                return in_array($product->kind_product->id, $selectedCategories);
             }
             // Якщо товар не має вказаної категорії, можливо, ви бажаєте ігнорувати його або додати спеціальну логіку.
             return false;

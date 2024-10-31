@@ -22,7 +22,7 @@ class SubKindProduct extends Model
 
     public function kind_product()
     {
-        return $this->belongsTo(KindProduct::class);
+        return $this->belongsTo(KindProduct::class, 'kind_product_id');
     }
 
 }

@@ -105,8 +105,6 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="color_id" id="selectedColor" value="{{ $product->color_id }}">
-{{--                        <input type="hidden" name="id" id="id" value="{{ $product->id }}">--}}
-
                         <label for="name">Назва</label>
                         <br>
                         <input id="name" name="name" type="text" class="product-title"

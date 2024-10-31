@@ -70,13 +70,15 @@ class ProductService
                 throw new \Exception('Product not found');
             }
             if ($action == 'put_up_for_sale' || $action == 'put_for_sale_from_show') {
-                $data['name'] = $product->name;
-                $data['sub_kind_product_id'] = $product->sub_kind_product_id;
-                $data['content'] = $product->content;
-                $data['price'] = $product->price;
-                $data['stock_balance'] = $product->stock_balance;
-                $data['color_id'] = $product->color_id;
-                $data['term_creation'] = $product->term_creation;
+                if ($action == 'put_for_sale_from_show'){
+                    $data['name'] = $product->name;
+                    $data['sub_kind_product_id'] = $product->sub_kind_product_id;
+                    $data['content'] = $product->content;
+                    $data['price'] = $product->price;
+                    $data['stock_balance'] = $product->stock_balance;
+                    $data['color_id'] = $product->color_id;
+                    $data['term_creation'] = $product->term_creation;
+                }
 
                 $validator = Validator::make($data, [
                     'name' => 'required',
@@ -86,7 +88,6 @@ class ProductService
                     'stock_balance' => 'required',
                     'color_id' => 'required',
                 ]);
-
                 if ($validator->fails()) {
                     throw new ValidationException($validator);
                 }

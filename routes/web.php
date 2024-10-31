@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ForumSubCategoryController;
 use App\Http\Controllers\ForumTopicController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishController;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +90,7 @@ Route::get('/wishlist/index/{product}', [WishController::class, 'addToWishlist']
 Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishlist.clear');
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
 Route::resource('orders', OrderController::class)->except(['index', 'store', 'create']);
+Route::post('/products/{productId}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 require __DIR__.'/auth.php';
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

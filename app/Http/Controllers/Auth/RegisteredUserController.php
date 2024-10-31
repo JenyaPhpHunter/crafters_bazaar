@@ -15,11 +15,15 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+    public function create(Request $request)
+    {
+        if ($request->input('review_product_id')){
+            session()->put('review_product_id', $request->input('review_product_id'));
+        }
+
+        return view('auth.register');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -43,6 +47,13 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        $review_product_id = session()->get('review_product_id', []);
+        if ($review_product_id) {
+            return redirect( route('products.show', [
+                'product' => $review_product_id
+            ]));
+        }
 
         return redirect()->intended();
     }

@@ -67,26 +67,28 @@ function selectColor(circle) {
 document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('can_produce');
     const termCreationWrapper = document.getElementById('termCreationWrapper');
-    const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
+    if (termCreationWrapper) {
+        const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
 
-    // Function to toggle the visibility of the term creation wrapper
-    function toggleTermCreationWrapper() {
-        if (checkbox.checked) {
-            termCreationWrapper.style.display = 'block';
-        } else {
-            termCreationWrapper.style.display = 'none';
-            termCreationInput.value = 0; // Set term_creation to 0 when the checkbox is unchecked
+        // Function to toggle the visibility of the term creation wrapper
+        function toggleTermCreationWrapper() {
+            if (checkbox.checked) {
+                termCreationWrapper.style.display = 'block';
+            } else {
+                termCreationWrapper.style.display = 'none';
+                termCreationInput.value = 0; // Set term_creation to 0 when the checkbox is unchecked
+            }
         }
-    }
 
-    // Initial check when the page loads
-    if (parseInt(termCreationInput.value) > 0) {
-        checkbox.checked = true;
-    }
-    toggleTermCreationWrapper();
+        // Initial check when the page loads
+        if (parseInt(termCreationInput.value) > 0) {
+            checkbox.checked = true;
+        }
+        toggleTermCreationWrapper();
 
-    // Add an event listener to the checkbox
-    checkbox.addEventListener('change', toggleTermCreationWrapper);
+        // Add an event listener to the checkbox
+        checkbox.addEventListener('change', toggleTermCreationWrapper);
+    }
 });
 
 // document.addEventListener('DOMContentLoaded', function() {
