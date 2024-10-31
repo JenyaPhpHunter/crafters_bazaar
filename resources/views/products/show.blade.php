@@ -233,10 +233,18 @@
                                             <td class="value">
                                                 <ul class="product-category">
                                                     <li><a href="{{ route('products.filter', ['categories' => [$product->sub_kind_product->kind_product_id]]) }}">{{ $product->sub_kind_product->kind_product->name }}</a></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label"><span>Підатегорія</span></td>
+                                            <td class="value">
+                                                <ul class="product-category">
                                                     <li><a href="{{ route('products.filter', ['sub_categories' => [$product->sub_kind_product->id]]) }}">{{ $product->sub_kind_product->name }}</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <td class="label"><span>Теги</span></td>
                                             <td class="value">

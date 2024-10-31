@@ -177,27 +177,42 @@ class ProductController extends Controller
             ->where('id', $id)
             ->first();
         if ($product) {
-            $previous_product = Product::query()
-                ->where('status_product_id', 3)
-                ->where('id', '<', $product->id)
+            $filters = session()->get('filters', []);
+            $query = Product::query()->where('status_product_id', 3);
+            if (!empty($filters)) {
+                if (!empty($filters['filter_price']) && is_array($filters['filter_price'])) {
+                    foreach ($filters['filter_price'] as $priceRange) {
+                        [$min, $max] = explode(';', $priceRange);
+                        $query->whereBetween('price', [(float) $min, (float) $max]);
+                    }
+                }
+                if (!empty($filters['categories']) && is_array($filters['categories'])) {
+                    $subKindProductIds = KindProduct::whereIn('id', $filters['categories'])
+                        ->with('sub_kind_products:id,kind_product_id')
+                        ->get()
+                        ->flatMap(fn($kindProduct) => $kindProduct->sub_kind_products->pluck('id'))
+                        ->toArray();
+                    $query->whereIn('sub_kind_product_id', $subKindProductIds);
+                }
+                if (!empty($filters['sub_categories']) && is_array($filters['sub_categories'])) {
+                    $query->whereIn('sub_category_id', $filters['sub_categories']);
+                }
+                if (!empty($filters['filter_color']) && is_array($filters['filter_color'])) {
+                    $query->whereIn('color_id', $filters['filter_color']);
+                }
+
+            }
+            $previousProductQuery = clone $query;
+            $previous_product = $previousProductQuery->where('id', '<', $product->id)
                 ->orderBy('id', 'desc')
                 ->first();
-            if ($previous_product) {
-                $previous_product_id = $previous_product->id;
-            } else {
-                $previous_product_id = null;
-            }
+            $previous_product_id = $previous_product ? $previous_product->id : null;
 
-            $next_product = Product::query()
-                ->where('status_product_id', 3)
-                ->where('id', '>', $product->id)
+            $nextProductQuery = clone $query;
+            $next_product = $nextProductQuery->where('id', '>', $product->id)
                 ->orderBy('id', 'asc')
                 ->first();
-            if ($next_product) {
-                $next_product_id = $next_product->id;
-            } else {
-                $next_product_id = null;
-            }
+            $next_product_id = $next_product ? $next_product->id : null;
         }
         $dialogs = Dialog::where('product_id', $id)
             ->with('user')
@@ -545,7 +560,10 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-//        $this->seedie($request->all());
+        $filters = $request->only(['filter_price', 'categories', 'sub_categories', 'filter_color']);
+        if (!empty(array_filter($filters))) {
+            session()->put('filters', $filters);
+        }
         $sortBy = $request->input('sort_by');
         $filterPrice = $request->input('filter_price');
         if(isset($filterPrice)){
