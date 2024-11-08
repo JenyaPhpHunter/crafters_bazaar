@@ -26,7 +26,7 @@
                         <select id="forum_category_id" name="forum_category_id">
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}"
-                                @isset($selected_category){{ $selected_category->id == $category->id ? 'selected' : '' }}@endisset>
+                                @isset($selected_category_id){{ $selected_category_id == $category->id ? 'selected' : '' }}@endisset>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -36,7 +36,7 @@
                         <select id="forum_sub_category_id" name="forum_sub_category_id">
                             @foreach($sub_categories as $sub_category)
                                 <option value="{{ $sub_category->id }}"
-                                @isset($selected_category->id){{ $selected_sub_category->id == $sub_category->id ? 'selected' : '' }}@endisset>
+                                @isset($selected_sub_category_id){{ $selected_sub_category_id == $sub_category->id ? 'selected' : '' }}@endisset>
                                     {{ $sub_category->name }}
                                 </option>
                             @endforeach

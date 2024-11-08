@@ -52,12 +52,21 @@
                             </select>
                         @endif
                         <br><br>
-                        <label for="content">Повідомлення</label>
-                        <input id="content" name="content" type="text" class="post-title"
-                               placeholder="{{ $answer_post ? 'Введіть текст відповіді' : 'Введіть текст' }}">
-                        <br><br>
-
-                        <button class="btn btn-dark btn-outline-hover-dark mb-3" type="submit">{{ $answer_post ? 'Відповісти' : 'Опублікувати' }}</button>
+                            <label for="forum_post_id">Пости по цій темі:</label>
+                        @foreach($posts as $post)
+                            {{ $loop->iteration }}. {{ $post->user->name }}
+                            <input type="text" id="forum_post_id" name="forum_post_id"
+                            value="{{ $post->content }}" readonly>
+                            @if ($answer_post_id == $post->id)
+                                <br>
+                                <label for="content">{{ $answer_post ? 'Відповідь' : 'Повідомлення' }}</label>
+                                <textarea id="content" name="content" class="post-title" rows="3"
+                                    placeholder="{{ $answer_post ? 'Введіть текст відповіді' : 'Введіть текст' }}"></textarea>
+                                <br>
+                                <button class="btn btn-dark btn-outline-hover-dark mb-3" type="submit">{{ $answer_post ? 'Відповісти' : 'Опублікувати' }}</button>
+                                <br><br>
+                            @endif
+                        @endforeach
                     </form>
                 </div>
             </div>

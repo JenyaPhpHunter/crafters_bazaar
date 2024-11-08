@@ -39,7 +39,7 @@ class ForumSubCategoryController extends Controller
      */
     public function create(Request $request)
     {
-        $selected_category_id = $request->input('category_id');
+        $selected_category_id = $request->input('forum_category');
         $categories = ForumCategory::all();
         $action_types = ProductsConstants::ACTION_TYPES;
 

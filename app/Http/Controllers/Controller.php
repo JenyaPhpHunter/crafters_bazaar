@@ -52,8 +52,11 @@ class Controller extends BaseController
         'admin_users.details',
         'products.index',
         'forum_categories.index',
+        'forum_categories.show',
         'forum_sub_categories.index',
+        'forum_sub_categories.show',
         'forum_topics.index',
+        'forum_topics.show',
     ];
 
     public function getBreadcrumbs($routeName)
@@ -112,7 +115,6 @@ class Controller extends BaseController
                         'title' => [$classData['name']],
                         'name'  => $classData['name'],
                         'route' => route($classData['route']),
-                        'route' => route($classData['route']),
                     ];
                 }
 
@@ -127,7 +129,7 @@ class Controller extends BaseController
         return $breadcrumbs;
     }
 
-    public function getButtons($routeName)
+    public function getButtons($routeName, $firstParameterValue = null)
     {
         if (in_array($routeName, $this->with_buttons)) {
             $buttons = [];
@@ -150,11 +152,21 @@ class Controller extends BaseController
             ];
             if (isset(OthersConstants::FRIENDLY_BUTTONS[$class])){
                 foreach (OthersConstants::FRIENDLY_BUTTONS[$class] as $item) {
-                    $buttons[] = [
-                        'name'  => OthersConstants::BUTTONSNAMES[$item]['name'],
-                        'route' => route(OthersConstants::BUTTONSNAMES[$item]['route']),
-                        'icon' => OthersConstants::BUTTONSNAMES[$item]['icon'],
-                    ];
+                    if ($action === 'show' && !empty($firstParameterValue)) {
+                        foreach ($firstParameterValue as $key => $value){
+                            $buttons[] = [
+                                'name'  => OthersConstants::BUTTONSNAMES[$item]['name'],
+                                'route' => route(OthersConstants::BUTTONSNAMES[$item]['route'], [$key => $value]),
+                                'icon' => OthersConstants::BUTTONSNAMES[$item]['icon'],
+                            ];
+                        }
+                    } else {
+                        $buttons[] = [
+                            'name'  => OthersConstants::BUTTONSNAMES[$item]['name'],
+                            'route' => route(OthersConstants::BUTTONSNAMES[$item]['route']),
+                            'icon' => OthersConstants::BUTTONSNAMES[$item]['icon'],
+                        ];
+                    }
                 }
             }
         } else {

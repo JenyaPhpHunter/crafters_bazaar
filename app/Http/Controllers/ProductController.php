@@ -178,6 +178,7 @@ class ProductController extends Controller
             ->first();
         if ($product) {
             $filters = session()->get('filters', []);
+//            var_dump($filters); die();
             $query = Product::query()->where('status_product_id', 3);
             if (!empty($filters)) {
                 if (!empty($filters['filter_price']) && is_array($filters['filter_price'])) {
@@ -195,7 +196,7 @@ class ProductController extends Controller
                     $query->whereIn('sub_kind_product_id', $subKindProductIds);
                 }
                 if (!empty($filters['sub_categories']) && is_array($filters['sub_categories'])) {
-                    $query->whereIn('sub_category_id', $filters['sub_categories']);
+                    $query->whereIn('sub_kind_product_id', $filters['sub_categories']);
                 }
                 if (!empty($filters['filter_color']) && is_array($filters['filter_color'])) {
                     $query->whereIn('color_id', $filters['filter_color']);
@@ -203,15 +204,25 @@ class ProductController extends Controller
 
             }
             $previousProductQuery = clone $query;
-            $previous_product = $previousProductQuery->where('id', '<', $product->id)
-                ->orderBy('id', 'desc')
-                ->first();
+            $previousProductCount = $previousProductQuery->where('id', '<', $product->id)->count();
+            if ($previousProductCount > 0) {
+                $previous_product = $previousProductQuery->where('id', '<', $product->id)
+                    ->orderBy('id', 'desc')
+                    ->first();
+            } else {
+                $previous_product = null;
+            }
             $previous_product_id = $previous_product ? $previous_product->id : null;
 
             $nextProductQuery = clone $query;
-            $next_product = $nextProductQuery->where('id', '>', $product->id)
-                ->orderBy('id', 'asc')
-                ->first();
+            $nextProductCount = $nextProductQuery->where('id', '>', $product->id)->count();
+            if ($nextProductCount > 0){
+                $next_product = $nextProductQuery->where('id', '>', $product->id)
+                    ->orderBy('id', 'asc')
+                    ->first();
+            } else {
+                $next_product = null;
+            }
             $next_product_id = $next_product ? $next_product->id : null;
         }
         $dialogs = Dialog::where('product_id', $id)

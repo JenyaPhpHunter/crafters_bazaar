@@ -11,43 +11,55 @@ use Illuminate\Http\Request;
 
 class ForumPostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        echo "ForumPostController.php.index"; die();
+        return redirect()->route('forum_topics.show', ['forum_topic' => 1]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
+        $this->see($request->all());
         $user = User::find($request->input('user_id'));
-//        $this->seedie($request->all());
-        $topic = ForumTopic::query()
-            ->where('id',$request->input('topic_id'))
-            ->with('forum_sub_category.forum_category')
-            ->first();
-        $answer_post = false;
-        if ($request->input('post_id')){
-            $answer_post = ForumPost::find($request->input('post_id'));
+        if ($request->input('post_id')) {
+            $answer_post_id = $request->input('post_id');
         }
+        $selected_topic_id = $request->input('forum_topic') ?? $request->input('topic_id');
+        $topic = ForumTopic::with('forum_sub_category.forum_category')
+            ->find($selected_topic_id);
+
+        $answer_post = $request->input('post_id') ? ForumPost::find($request->input('post_id')) : false;
+
+//        $selected_topic_id = $request->input('forum_topic');
+//        if (isset($selected_topic_id)) {
+//            $topic = ForumTopic::query()
+//                ->where('id',$selected_topic_id)
+//                ->with('forum_sub_category.forum_category')
+//                ->first();
+//            $answer_post = false;
+//        } else {
+//            $topic = ForumTopic::query()
+//                ->where('id',$request->input('topic_id'))
+//                ->with('forum_sub_category.forum_category')
+//                ->first();
+//            $answer_post = false;
+//            if ($request->input('post_id')){
+//                $answer_post = ForumPost::find($request->input('post_id'));
+//            }
+//        }
+
         $categories = ForumCategory::all();
         $sub_categories = ForumSubCategory::all();
         $topics = ForumTopic::all();
+        $posts = ForumPost::where('forum_topic_id', $selected_topic_id)->get();
 
         return view('forum_posts.create', [
             'user' => $user,
             'topic' => $topic,
+            'answer_post_id' => $answer_post_id,
             'topics' => $topics,
             'categories' => $categories,
             'sub_categories' => $sub_categories,
+            'posts' => $posts,
             'answer_post' => $answer_post,
         ]);
     }

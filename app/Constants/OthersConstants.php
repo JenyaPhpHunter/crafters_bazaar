@@ -33,6 +33,7 @@ class OthersConstants
         'forum_categories' => ['name' => 'Категорії форума', 'route' => 'forum_categories.index'],
         'forum_sub_categories' => ['name' => 'Підкатегорії форума', 'route' => 'forum_sub_categories.index'],
         'forum_topics' => ['name' => 'Теми форума', 'route' => 'forum_topics.index'],
+        'forum_posts' => ['name' => 'Пости форума', 'route' => 'forum_posts.index'],
         'users' => ['name' => 'Користвачі', 'route' => 'users.show'],
         'sellers_buyers' => ['name' => 'Продавці та покупці', 'route' => 'sellers_buyers.index'],
     ];
@@ -53,6 +54,7 @@ class OthersConstants
         'forum_categories' => ['name' => 'Створити категорію', 'route' => 'forum_categories.create', 'icon' => 'fal fa-folder-plus'],
         'forum_sub_categories' => ['name' => 'Створити підкатегорію', 'route' => 'forum_sub_categories.create', 'icon' => 'fal fa-folder-tree'],
         'forum_topics' => ['name' => 'Створити тему', 'route' => 'forum_topics.create', 'icon' => 'fal fa-comments'],
+        'forum_posts' => ['name' => 'Створити пост', 'route' => 'forum_posts.create', 'icon' => 'fal fa-comments'],
     ];
 
     const FRIENDLY_BUTTONS = [
@@ -73,6 +75,7 @@ class OthersConstants
         'forum_topics' => [
             'forum_categories',
             'forum_sub_categories',
+            'forum_posts',
         ],
     ];
 }

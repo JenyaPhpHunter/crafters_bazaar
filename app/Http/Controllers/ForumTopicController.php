@@ -38,23 +38,14 @@ class ForumTopicController extends Controller
     {
         $categories = ForumCategory::all();
         $sub_categories = ForumSubCategory::all();
-
-        $selected_sub_category_id = $request->input('sub_category_id');
-        $selected_sub_category = null;
-        $selected_category = null;
-
-        if (!empty($selected_sub_category_id)) {
-            $selected_sub_category = ForumSubCategory::find($selected_sub_category_id);
-            if ($selected_sub_category) {
-                $selected_category = ForumCategory::find($selected_sub_category->forum_category_id);
-            }
-        }
+        $selected_category_id = $request->input('forum_category');
+        $selected_sub_category_id = $request->input('forum_sub_category');
 
         return view('forum_topics.create', [
             'categories' => $categories,
             'sub_categories' => $sub_categories,
-            'selected_sub_category' => $selected_sub_category ? $selected_sub_category : null,
-            'selected_category' => $selected_category,
+            'selected_sub_category_id' => $selected_sub_category_id ? $selected_sub_category_id : null,
+            'selected_category_id' => $selected_category_id ? $selected_category_id : null,
         ]);
     }
 
