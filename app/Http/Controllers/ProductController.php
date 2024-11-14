@@ -341,6 +341,16 @@ class ProductController extends Controller
             $product->date_put_up_for_sale = date("Y-m-d H:i:s");
             if ($user->role_id > 4) {
                 $product->status_product_id = 2;
+//                $apiService = new ApiService();
+//                $beautifiedCommentResponse = $apiService->beautifyComment($product->content);
+//                $this->seedie($beautifiedCommentResponse);
+//                if ($beautifiedCommentResponse->status() == 200) {
+//                    $beautifiedComment = $beautifiedCommentResponse->getData()->beautifyComment;
+                    // Можна зберегти покращений коментар у базі або вивести на екран
+                    // $product->description = $beautifiedComment; // наприклад, оновити опис товару
+//                } else {
+//                    return back()->withErrors(['error' => 'Не вдалося покращити коментар']);
+//                }
 //                try {
 //                $emailService = new EmailService();
 //                $emailService->sendProductForSaleEmail($product);
@@ -431,58 +441,45 @@ class ProductController extends Controller
             throw new ValidationException($validator);
         }
         $user_id = $request->input('user_id');
-        $user = User::find($user_id);
-        $all_kind_products = KindProduct::all();
         $name_kind_product = $request->post('name_kind_product');
-        if(isset($name_kind_product)){
-            $names_kind_products = [];
-            foreach ($all_kind_products as $one_kind_product){
-                $names_kind_products[] = $one_kind_product->name;
-            }
-            if(!in_array($name_kind_product, $names_kind_products)){
-                $kind_product = new KindProduct();
-                $kind_product->name = $name_kind_product;
-                $kind_product->user_id = $user->id;
-                $kind_product->created_at = date("Y-m-d H:i:s");
-                $kind_product->save();
-            } else {
-                $kind_product = KindProduct::query()->where('name', $name_kind_product)->first();
-            }
-        } else {
-            $kind_product = null;
-        }
-        $all_sub_kind_products = SubKindProduct::all();
         $name_sub_kind_product = $request->post('name_sub_kind_product');
-        if(isset($name_kind_product)){
-            $names_sub_kind_products = [];
-            foreach ($all_sub_kind_products as $one_sub_kind_product){
-                $names_sub_kind_products[] = $one_sub_kind_product->name;
-            }
-            if(!in_array($name_sub_kind_product, $names_sub_kind_products)){
-                $sub_kind_product = new SubKindProduct();
-                $sub_kind_product->name = $request->post('name_sub_kind_product');
-                if($kind_product){
-                    $sub_kind_product->kind_product_id = $kind_product->id;
-                }
-                $sub_kind_product->user_id = $user->id;
-                $sub_kind_product->created_at = date("Y-m-d H:i:s");
-                $sub_kind_product->save();
-            } else {
-                $sub_kind_product = SubKindProduct::query()->where('name', $request->post('name_sub_kind_product'))->first();
-            }
-        } else {
-            $sub_kind_product = null;
+
+        $kind_product = KindProduct::query()
+            ->whereRaw('LOWER(name) = ?', [strtolower($name_kind_product)])
+            ->first();
+        if(empty($kind_product)){
+            $kind_product = new KindProduct();
+            $kind_product->name = $name_kind_product;
+            $kind_product->user_id = $user_id;
+            $kind_product->checked = false;
+            $kind_product->created_at = date("Y-m-d H:i:s");
+            $kind_product->save();
+        }
+
+        $sub_kind_product = SubKindProduct::query()
+            ->whereRaw('LOWER(name) = ?', [strtolower($name_sub_kind_product)])
+            ->first();
+        if(empty($sub_kind_product)){
+            $sub_kind_product = new SubKindProduct();
+            $sub_kind_product->name = $name_sub_kind_product;
+            $sub_kind_product->kind_product_id = $kind_product->id;
+            $sub_kind_product->user_id = $user_id;
+            $sub_kind_product->checked = false;
+            $sub_kind_product->created_at = date("Y-m-d H:i:s");
+            $sub_kind_product->save();
         }
         $product_id = $request->input('product_id');
         $product = Product::query()->where('id',$product_id)->first();
         $product->sub_kind_product_id = $sub_kind_product->id;
-
         $product->save();
 
-        return redirect()->route('products.edit', ['product' => $product])
+        $EmailService = new EmailService();
+        $EmailService->sendApproveKindSubkind($kind_product, $sub_kind_product, $product_id);
+
+        return redirect()->route('products.edit', ['product' => $product_id])
             ->with([
-                'kind_product_obj' => $kind_product,
-                'sub_kind_product_obj' => $sub_kind_product,
+                'kind_product' => $kind_product,
+                'sub_kind_product' => $sub_kind_product,
             ]);
     }
 

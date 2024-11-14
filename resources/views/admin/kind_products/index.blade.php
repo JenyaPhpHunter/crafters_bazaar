@@ -25,7 +25,7 @@
                               <div class="category-container" id="category-{{ $kind_product->id }}">
                                   <!-- Контейнер для категорії та карандаша -->
                                   <a href="{{ route('admin_kind_products.show', ['admin_kind_product' => $kind_product->id]) }}">
-                                      <span>{{ $kind_product->name }}</span>
+                                      <span style="{{ $kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $kind_product->name }}</span>
                                   </a>
                                   @isset($user)
                                       @can('edit', $kind_product)
@@ -39,7 +39,7 @@
                                           @foreach($kind_product->sub_kind_products as $sub_kind_product)
                                               <div class="subcategory-item">
                                                   <a href="{{ route('admin_sub_kind_products.show', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
-                                                      <span>{{ $sub_kind_product->name }}</span>
+                                                      <span style="{{ $sub_kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $sub_kind_product->name }}</span>
                                                   </a>
                                                   @isset($user)
                                                       @can('edit', $kind_product)

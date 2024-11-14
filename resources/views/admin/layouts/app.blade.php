@@ -77,7 +77,7 @@
     @include('admin.include.recommended-products')
 @endisset
 
-@include('components.page-title')
+@include('components.breadcrumps')
 @yield('content')
 @include('admin.include.footer')
 

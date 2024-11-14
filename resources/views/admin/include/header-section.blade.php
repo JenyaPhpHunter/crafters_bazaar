@@ -127,6 +127,7 @@
                         <ul class="sub-menu">
                             <li><a href="{{ route('admin_kind_products.create') }}"><span class="menu-text">Створити вид товару</span></a></li>
                             <li><a href="{{ route('admin_kind_products.index') }}"><span class="menu-text">Всі види товарів</span></a></li>
+                            <li><a href="{{ route('admin_kind_products.index', ['not_checked' => true]) }}"><span class="menu-text">Незатверджені види товарів</span></a></li>
                             @if(isset($header_kind_products))
                                 @foreach ($header_kind_products as $kind_product)
                                     <li><a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
@@ -139,6 +140,7 @@
                         <ul class="sub-menu mega-menu">
                             <li><a href="{{ route('admin_sub_kind_products.create') }}"><span class="menu-text">Створити підвид товару</span></a></li>
                             <li><a href="{{ route('admin_sub_kind_products.index') }}"><span class="menu-text">Всі підвиди товарів</span></a></li>
+                            <li><a href="{{ route('admin_sub_kind_products.index', ['not_checked' => true]) }}"><span class="menu-text">Незатверджені підвиди товарів</span></a></li>
                             @if(isset($header_kind_products))
                                 @foreach ($header_kind_products as $kind_product)
                                     <li>

@@ -18,7 +18,12 @@ class KindProductController extends Controller
     {
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
-        $kind_products = KindProduct::query()->with('sub_kind_products')->orderBy('id')->get();
+        $not_checked = $request->input('not_checked');
+        if ($not_checked){
+            $kind_products = KindProduct::query()->with('sub_kind_products')->where('checked', 0)->orderBy('id')->get();
+        } else {
+            $kind_products = KindProduct::query()->with('sub_kind_products')->orderBy('id')->get();
+        }
         $sub_kind_products = SubKindProduct::all();
 
         return view('admin.kind_products.index',compact('kind_products','sub_kind_products', 'user'));
@@ -41,6 +46,7 @@ class KindProductController extends Controller
         $kind_product = new KindProduct();
         $kind_product->name = $request->post('name');
         $kind_product->user_id = $request->user_id;
+        $kind_product->checked = true;
 
         $kind_product->save();
 
@@ -78,7 +84,9 @@ class KindProductController extends Controller
         ]);
 
         $kind_product = KindProduct::query()->where('id',$id)->first();
-        $kind_product->name = $request->post('name');
+        $kind_product->name = $request->name;
+        $kind_product->user_id = $request->user_id;
+        $kind_product->checked = true;
 
         $kind_product->save();
 

@@ -103,7 +103,7 @@ class AppServiceProvider extends ServiceProvider
             $forum_categories = ForumCategory::query()->with('forum_sub_categories')->get();
             $title_list = Product::query()
                 ->where('status_product_id', 3)
-                ->where('new', 1)
+//                ->where('new', 1)
                 ->latest()
                 ->limit(10)
                 ->get();

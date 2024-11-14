@@ -52,9 +52,26 @@ class CreateUsersTable extends Migration
             [
                 'email' => 'crafters_bazaar@gmail.com',
                 'password' => Hash::make(env('APP_KEY')),
+                'name' => 'crafters bazaar',
                 'surname' => 'crafters bazaar',
                 'role_id' => 1,
                 'category_user_id' => 1,
+            ],                                              //TODO DEL TEMPORALY
+            [
+                'email' => 'bulic2012@gmail.com',
+                'password' => Hash::make(12345678),
+                'name' => 'Євгеній',
+                'surname' => 'Рибалкін',
+                'role_id' => 1,
+                'category_user_id' => 1,
+            ],
+            [
+                'email' => 'Chmyk_Vika@ukr.net',
+                'password' => Hash::make(12345678),
+                'name' => 'Вікторія',
+                'surname' => 'Рибалкіна',
+                'role_id' => 4,
+                'category_user_id' => 2,
             ],
         ]);
     }

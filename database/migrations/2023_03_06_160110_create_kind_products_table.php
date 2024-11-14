@@ -18,6 +18,7 @@ class CreateKindProductsTable extends Migration
             $table->id();
             $table->string('name', 255)->comment("Назва виду товару");
             $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->boolean('checked')->default(true)->comment('перевірений вид');
             $table->timestamps();
             $table->softDeletes();
 

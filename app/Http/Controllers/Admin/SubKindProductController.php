@@ -20,10 +20,16 @@ class SubKindProductController extends Controller
         if($kind_product_id){
             $sub_kind_products = SubKindProduct::query()->with('kind_product')->where('kind_product_id',$kind_product_id)->orderBy('id')->get();
             $KindProduct = KindProduct::find($kind_product_id);
-            return view('admin.sub_kind_products.index', compact('KindProduct','kind_products', 'sub_kind_products', 'user'));
+            return view('admin.sub_kind_products.index', compact('KindProduct','kind_products', 'sub_kind_products', 'user', 'not_checked'));
         } else {
-            $sub_kind_products = SubKindProduct::query()->with('kind_product')->orderBy('id')->get();
-            return view('admin.sub_kind_products.index', compact('sub_kind_products', 'kind_products', 'user'));
+            $not_checked = $request->input('not_checked');
+            if ($not_checked){
+                $sub_kind_products = SubKindProduct::query()->with('kind_product')->where('checked', 0)->orderBy('id')->get();
+            } else {
+                $sub_kind_products = SubKindProduct::query()->with('kind_product')->orderBy('id')->get();
+            }
+
+            return view('admin.sub_kind_products.index', compact('sub_kind_products', 'kind_products', 'user', 'not_checked'));
         }
     }
 
@@ -44,9 +50,10 @@ class SubKindProductController extends Controller
         ]);
 
         $sub_kind_product = new SubKindProduct();
-        $sub_kind_product->name = $request->post('name');
-        $sub_kind_product->kind_product_id = $request->post('kind_product_id');
+        $sub_kind_product->name = $request->name;
+        $sub_kind_product->kind_product_id = $request->kind_product_id;
         $sub_kind_product->user_id = $request->user_id;
+        $sub_kind_product->checked = true;
 
         $sub_kind_product->save();
 
@@ -83,8 +90,9 @@ class SubKindProductController extends Controller
 
 
         $sub_kind_product = SubKindProduct::query()->where('id',$id)->first();
-        $sub_kind_product->name = $request->post('name');
-        $sub_kind_product->kind_product_id = $request->post('kind_product_id');
+        $sub_kind_product->name = $request->name;
+        $sub_kind_product->kind_product_id = $request->kind_product_id;
+        $sub_kind_product->checked = true;
 
         $sub_kind_product->save();
 
