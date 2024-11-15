@@ -49,19 +49,18 @@ class EmailService
         $this->sendEmail($email, $titleEmail, $content);
     }
 
-    public function sendPutUpForSaleEmail($email, $product)
+    public function sendPutUpForSaleEmail($product)
     {
         $titleEmail = 'Ваш товар виставлено на продаж';
             $content = "
             <h1 style=\"color: blue;\">Ваш товар виставлено на продаж!</h1>
 
             <p>Код товару: {$product->id}</p>
-            <p>Посилання: <a href=\"http://crafters_bazaar.loc/products/{$product->id}/edit\">http://crafters_bazaar.loc/products/{$product->id}/edit</a></p>
+            <p>Посилання: <a href=\"http://crafters_bazaar.loc/products/{$product->id}/edit\">http://crafters_bazaar.loc/products/{$product->id}</a></p>
             <p style=\"font-style: italic; color: green;\">Ваш менеджер </p>
             <p style=\"font-style: italic; color: green;\">Маємо надію, що Ваш товар скоро придбають)</p>
         ";
-
-        $this->sendEmail($email, $titleEmail, $content);
+        $this->sendEmail($product->user->email, $titleEmail, $content);
     }
 
     public function sendProductForSaleEmail($product)

@@ -1,20 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+
     @isset($product)
         <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
     @endisset
@@ -238,10 +225,16 @@
                         <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
                         <br><br>
                         <div class="product-buttons">
-                            <button type="submit" name="action" value="put_up_for_sale"
-                                    class="btn btn-dark btn-outline-hover-dark">
-                                <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
-                            </button>
+                            @php
+                                $isProductNew = $product->status_product_id == 1;
+                                $isAdminUser = isset($user) && $user->role_id < 5 && $product->status_product_id < 3;
+                            @endphp
+                            @if($isProductNew || $isAdminUser)
+                                <button type="submit" name="action" value="put_up_for_sale"
+                                        class="btn btn-dark btn-outline-hover-dark">
+                                    <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
+                                </button>
+                            @endif
                             <button type="submit" name="action" value="save"
                                     class="btn btn-dark btn-outline-hover-dark">
                                 <i class="fas fa-save"></i> {{ $action_types['save'] }}

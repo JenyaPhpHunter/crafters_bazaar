@@ -1,20 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <!-- Single Products Section Start -->
     <div class="section section-fluid section-padding border-bottom">
@@ -181,7 +167,7 @@
                                     </div>
                                 </div>
                                 @if($user)
-                                    @if($creator || $user->role_id < 5)
+                                    @if(($creator && $product->status_product_id < 3) || ($user->role_id < 5 && $product->status_product_id < 4))
                                     <div class="col-auto learts-mb-20">
                                         <a href="{{ route('products.edit', ['product' => $product->id]) }}" class="btn btn-primary2">Редагувати</a>
                                         <br><br>

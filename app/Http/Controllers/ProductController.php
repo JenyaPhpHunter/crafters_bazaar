@@ -280,26 +280,40 @@ class ProductController extends Controller
 
     public function edit($id, Request $request)
     {
-        $user = User::find($request->user_id);
-        $colors = Color::all();
-        $kind_products = KindProduct::all();
-        $sub_kind_products = SubKindProduct::all();
         $product = Product::query()
             ->with(['kind_product', 'sub_kind_product', 'productphotos'])
             ->where('id', $id)
             ->first();
-        $photos = ProductPhoto::query()->where('product_id', $id)->get();
-        $action_types = ProductsConstants::ACTION_TYPES;
+        $user = User::find($request->user_id);
+        $isProductNew = $product->status_product_id == 1;
+        $isAdminUser = isset($user) && $user->role_id < 5 && $product->status_product_id != 4;
+        if($isProductNew || $isAdminUser){
+            $colors = Color::all();
+            $kind_products = KindProduct::all();
+            $sub_kind_products = SubKindProduct::all();
+            $photos = ProductPhoto::query()->where('product_id', $id)->get();
+            $action_types = ProductsConstants::ACTION_TYPES;
 
-        return view('products.edit',[
-            'product' => $product,
-            'photos' => $photos,
-            'user' => $user,
-            'kind_products' => $kind_products,
-            'sub_kind_products' => $sub_kind_products,
-            'colors' => $colors,
-            'action_types' => $action_types,
-        ]);
+            return view('products.edit',[
+                'product' => $product,
+                'photos' => $photos,
+                'user' => $user,
+                'kind_products' => $kind_products,
+                'sub_kind_products' => $sub_kind_products,
+                'colors' => $colors,
+                'action_types' => $action_types,
+            ]);
+        } else {
+            if ($user->role_id > 4) {
+                return redirect()->route('products.show', ['product' => $product->id])
+                    ->with('error', 'Корегування даних товару заборонено тому що товар вже відправили на продаж. За необхідності зв \'яжіться з вашим менеджером ' .
+                        $product->admin->name . ' ' . $product->admin->phone .
+                        '. В зв\'язку з тим, що ваш товар відправлнений на продаж, Вам відправлений лист на пощшту з контактами вашого менеджера');
+            } else {
+                return redirect()->route('products.show', ['product' => $product->id])
+                    ->with('error', 'Корегування даних товару заборонено, тому що його купили');
+            }
+        }
     }
 
     public function update(Request $request, $id)
@@ -307,40 +321,42 @@ class ProductController extends Controller
         $function_name = __FUNCTION__;
         $user = User::find($request->user_id);
         $action = $request->input('action');
-
-        try {
-            $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
-        } catch (ValidationException $e) {
-            return redirect()
-                ->route('products.edit', ['product' => $id])
-                ->withErrors($e->validator)
-                ->withInput();
-        }
-
-        if ($user->role_id > 4){
-            $user->category_user_id = 2;
-            $user->save();
-        }
-        if ($action === 'put_up_for_sale' || $action === 'put_for_sale_from_show') {
-            $validated_user = Validator::make([
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone,
-            ], [
-                'name' => 'required',
-                'email' => 'required',
-                'phone' => 'required',
-            ]);
-            if ($validated_user->fails()) {
-                $errors = $validated_user->errors();
-                $errorFields = array_keys($errors->toArray());
-                return redirect()->route('users.show', ['user' => $request->user_id])
-                    ->withErrors($validated_user)
-                    ->with('errorFields', $errorFields);
+        $product = Product::find($id);
+        if (($user->role_id > 4 && $product->status_product_id < 3) || ($user->role_id < 5 && $product->status_product_id < 4)){
+            try {
+                $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
+            } catch (ValidationException $e) {
+                return redirect()
+                    ->route('products.edit', ['product' => $id])
+                    ->withErrors($e->validator)
+                    ->withInput();
             }
-            $product->date_put_up_for_sale = date("Y-m-d H:i:s");
-            if ($user->role_id > 4) {
-                $product->status_product_id = 2;
+
+            if ($user->role_id > 4){
+                $user->category_user_id = 3;
+                $user->save();
+            }
+            if ($action === 'put_up_for_sale' || $action === 'put_for_sale_from_show') {
+                $validated_user = Validator::make([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                ], [
+                    'name' => 'required',
+                    'email' => 'required',
+                    'phone' => 'required',
+                ]);
+                if ($validated_user->fails()) {
+                    $errors = $validated_user->errors();
+                    $errorFields = array_keys($errors->toArray());
+                    return redirect()->route('users.show', ['user' => $request->user_id])
+                        ->withErrors($validated_user)
+                        ->with('errorFields', $errorFields);
+                }
+                $product->date_put_up_for_sale = date("Y-m-d H:i:s");
+                if ($user->role_id > 4) {
+                    $product->status_product_id = 2;
+
 //                $apiService = new ApiService();
 //                $beautifiedCommentResponse = $apiService->beautifyComment($product->content);
 //                $this->seedie($beautifiedCommentResponse);
@@ -351,49 +367,59 @@ class ProductController extends Controller
 //                } else {
 //                    return back()->withErrors(['error' => 'Не вдалося покращити коментар']);
 //                }
-//                try {
-//                $emailService = new EmailService();
-//                $emailService->sendProductForSaleEmail($product);
-//                } catch (\Exception $e) {
-//                    return view('emails.error')
-//                        ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-//                }
-            } else {
-                $product->status_product_id = 3;
-                $product->date_approve_sale = date("Y-m-d H:i:s");
-                $product->admin_id = $user->id;
-//                try {
-//                $emailService = new EmailService();
-//                    $emailService->sendPutUpForSaleEmail($user->email, $product);
-//                    $admin = $this->choiceSellerAdmin();
-//                    $product->admin_id = $admin->id;
-//                } catch (\Exception $e) {
-//                    return view('emails.error')
-//                        ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-//                }
-            }
-            $product->save();
+                    try {
+                        $emailService = new EmailService();
+                        $emailService->sendProductForSaleEmail($product);
+                    } catch (\Exception $e) {
+                        return view('emails.error')
+                            ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+                    }
+                } else {
+                    $product->status_product_id = 3;
+                    $product->date_approve_sale = date("Y-m-d H:i:s");
+                    $product->admin_id = $user->id;
+                    try {
+                        $emailService = new EmailService();
+                        $emailService->sendPutUpForSaleEmail($product);
+                    } catch (\Exception $e) {
+                        return view('emails.error')
+                            ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+                    }
+                }
+                $product->save();
 
-            return redirect( route('products.show', [
-                'product' => $product->id,
-            ]));
-        } elseif ($action === 'add_kind' || $action === 'add_sub_kind') {
+                return redirect( route('products.show', [
+                    'product' => $product->id,
+                ]));
+            } elseif ($action === 'add_kind' || $action === 'add_sub_kind') {
 
-            return redirect()->route('products.createkindsubkind', [
-                'product' => $product,
-                'uri' => $product->id,
-            ]);
-        } elseif ($action === 'save') {
-            $kind_products = KindProduct::all();
-            $sub_kind_products = SubKindProduct::all();
-            $colors = Color::all();
-
-            return redirect()->route('products.edit', ['product' => $product->id])
-                ->with([
-                    'kind_products' => $kind_products,
-                    'sub_kind_products' => $sub_kind_products,
-                    'colors' => $colors,
+                return redirect()->route('products.createkindsubkind', [
+                    'product' => $product,
+                    'uri' => $product->id,
                 ]);
+            } elseif ($action === 'save') {
+                $kind_products = KindProduct::all();
+                $sub_kind_products = SubKindProduct::all();
+                $colors = Color::all();
+
+                return redirect()->route('products.edit', ['product' => $product->id])
+                    ->with([
+                        'kind_products' => $kind_products,
+                        'sub_kind_products' => $sub_kind_products,
+                        'colors' => $colors,
+                    ]);
+            }
+        } else {
+            if ($user->role_id > 4) {
+                return redirect()->route('products.show', ['product' => $product->id])
+                    ->with('error', 'Корегування даних товару заборонено тому що товар вже відправили на продаж. За необхідності зв \'яжіться з вашим менеджером ' .
+                        $product->admin->name . ' ' . $product->admin->phone .
+                        '. В зв\'язку з тим, що ваш товар відправлнений на продаж, Вам відправлений лист на пощшту з контактами вашого менеджера');
+            } else {
+                return redirect()->route('products.show', ['product' => $product->id])
+                    ->with('error', 'Корегування даних товару заборонено, тому що його купили');
+            }
+
         }
     }
 
@@ -781,12 +807,5 @@ class ProductController extends Controller
         return redirect( route('products.show', [
             'product' => $product,
         ]));
-    }
-
-    public function choiceSellerAdmin()
-    {
-        $seller_admin = User::where('role_id', '<',  5)->inRandomOrder()->first();
-
-        return $seller_admin;
     }
 }

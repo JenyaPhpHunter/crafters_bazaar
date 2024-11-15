@@ -15279,3 +15279,11 @@ input[type="file"] {
     font-weight: bold;
 }
 
+.alert {
+    display: flex;
+    align-items: center; /* Вирівнюємо текст по центру вертикально */
+    padding: 10px 20px; /* Встановлюємо менший відступ */
+    max-height: 150px;
+    margin: 0 auto;
+    overflow: hidden; /* Прибираємо зайвий текст, якщо він перевищує висоту */
+}
