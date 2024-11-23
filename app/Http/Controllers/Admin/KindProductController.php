@@ -80,7 +80,7 @@ class KindProductController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35,name,'.$id,
+            'name' => 'required|unique:kind_products,name,' . $id . '|max:35',
         ]);
 
         $kind_product = KindProduct::query()->where('id',$id)->first();
@@ -90,7 +90,8 @@ class KindProductController extends Controller
 
         $kind_product->save();
 
-        return redirect( route('admin_kind_products.index'));
+        return redirect( route('admin_kind_products.index'))
+            ->with('success', 'Вид товару успішно затверджено');
     }
 
     public function destroy($id)

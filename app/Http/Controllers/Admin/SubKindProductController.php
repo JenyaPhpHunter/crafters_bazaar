@@ -89,6 +89,7 @@ class SubKindProductController extends Controller
         ]);
 
 
+
         $sub_kind_product = SubKindProduct::query()->where('id',$id)->first();
         $sub_kind_product->name = $request->name;
         $sub_kind_product->kind_product_id = $request->kind_product_id;

@@ -1,21 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="container">
         <div class="row learts-mb-n30">
             <div class="col-lg-12 order-lg-2 learts-mb-30">
@@ -135,7 +120,6 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                        {{--                        <input type="text" id="bdEmail" name="email" value="{{ $user_email ?? '' }}">--}}
                     </div>
                     <div class="col-md-6 col-12 learts-mb-30">
                         <label for="bdPhone">Телефон <abbr class="required">*</abbr></label>

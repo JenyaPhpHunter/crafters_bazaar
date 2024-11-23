@@ -55,6 +55,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guarded = ['id']; // Заборонено змінювати `id`
+
     public function product()
     {
         return $this->belongsTo(Product::class);

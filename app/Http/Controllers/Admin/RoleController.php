@@ -56,7 +56,10 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:roles|max:35',
+            'name' => 'required|unique:roles,name,' . $id . '|max:35',
+        ]);
+        $validated = $request->validate([
+            'name' => 'required|unique:kind_products,name,' . $id . '|max:35',
         ]);
 
         $role = Role::query()->where('id',$id)->first();

@@ -1,20 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <!-- My Account Section Start -->
     <div class="section section-padding">
         <div class="container">
@@ -23,11 +9,11 @@
                 <!-- My Account Tab List Start -->
                 <div class="col-lg-4 col-12 learts-mb-30">
                     <div class="myaccount-tab-list nav">
-                        <a href="#dashboad" class="active" data-bs-toggle="tab">Dashboard <i class="far fa-home"></i></a>
-                        <a href="#orders" data-bs-toggle="tab">Замовлення <i class="far fa-file-alt"></i></a>
-                        <a href="#download" data-bs-toggle="tab">Завантажити <i class="far fa-arrow-to-bottom"></i></a>
-                        <a href="#address" data-bs-toggle="tab">Адреса <i class="far fa-map-marker-alt"></i></a>
-                        <a href="#account-info" data-bs-toggle="tab">Дані користувача <i class="far fa-user"></i></a>
+                        <a href="#dashboad" class="{{ session('activeTab') == 'dashboad' ? 'active' : '' }}" data-bs-toggle="tab">Dashboard <i class="far fa-home"></i></a>
+                        <a href="#orders" class="{{ session('activeTab') == 'orders' ? 'active' : '' }}" data-bs-toggle="tab">Замовлення <i class="far fa-file-alt"></i></a>
+                        <a href="#download" class="{{ session('activeTab') == 'download' ? 'active' : '' }}" data-bs-toggle="tab">Завантажити <i class="far fa-arrow-to-bottom"></i></a>
+                        <a href="#address" class="{{ session('activeTab') == 'address' ? 'active' : '' }}" data-bs-toggle="tab">Адреса <i class="far fa-map-marker-alt"></i></a>
+                        <a href="#account-info" class="{{ session('activeTab') == 'account-info' ? 'active' : '' }}" data-bs-toggle="tab">Дані користувача <i class="far fa-user"></i></a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
@@ -41,7 +27,7 @@
                     <div class="tab-content">
 
                         <!-- Single Tab Content Start -->
-                        <div class="tab-pane fade show active" id="dashboad">
+                        <div class="tab-pane fade {{ session('activeTab') == 'dashboad' ? 'show active' : '' }}" id="dashboad">
                             <div class="myaccount-content dashboad">
                                 <p>Вітаю, <strong>{{ $user->name }} !</strong></p>
                                 <p>На інформаційній панелі свого облікового запису ви можете переглядати свої
@@ -56,7 +42,7 @@
                         <!-- Single Tab Content End -->
 
                         <!-- Single Tab Content Start -->
-                        <div class="tab-pane fade" id="orders">
+                        <div class="tab-pane fade {{ session('activeTab') == 'orders' ? 'show active' : '' }}" id="orders">
                             <div class="myaccount-content order">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -93,7 +79,7 @@
                         <!-- Single Tab Content End -->
 
                         <!-- Single Tab Content Start -->
-                        <div class="tab-pane fade" id="download">
+                        <div class="tab-pane fade {{ session('activeTab') == 'download' ? 'show active' : '' }}" id="download">
                             <div class="myaccount-content download">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -126,40 +112,162 @@
                         <!-- Single Tab Content End -->
 
                         <!-- Single Tab Content Start -->
-                        <div class="tab-pane fade" id="address">
+                        <div class="tab-pane fade {{ session('activeTab') == 'address' ? 'show active' : '' }}" id="address">
                             <div class="myaccount-content address">
-                                <p>Ця адреса буде використовуватись на сторінці оформлення замовлення за замовчуванням.</p>
-                                <div class="row learts-mb-n30">
-                                    <div class="col-md-6 col-12 learts-mb-30">
-                                        <h4 class="title">Адреса доставки <a href="#" class="edit-link">редагувати</a></h4>
-                                        <address>
-                                            <p><strong>{{ isset($user->name) ? $user->name : '' }} {{ isset($user->secondname) ? $user->secondname : '' }} {{ isset($user->surname) ? $user->surname : '' }}</strong></p>
-                                            @isset($user->region))
-                                                <p>{{ $user->region->name }}<br>
-                                            @endisset
-                                            @isset($user->city)
-                                                <p>{{ $user->city->name }}<br>
-                                            @endisset
-                                            @isset($user->address)
-                                                {{ $user->address }}</p>
-                                            @endisset
-                                            @isset($user->phone)
-                                                <p>Телефон: {{ $user->phone }}</p>
-                                            @endisset
-                                        </address>
-                                    </div>
+                                <p>Ця адреса буде використовуватись на сторінці оформлення замовлення за замовчуванням.
+                                    <br>
+                                    Але це не заважає змінити її в момент оформлення замовлення.</p>
+                                <div class="account-address-form">
+                                    <form action="{{ route('users.update', ['user' => $user->id]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="address" value="1">
+                                        <div class="row learts-mb-n30">
+                                            <div class="col-6 learts-mb-20">
+                                                <input type="text" id="bdTownOrRegion" name="region" placeholder="Область"
+                                                   @if(!empty($user))
+                                                        @if($user->region) value="{{ old('region', $user->region->name ?? '') }}"
+                                                        @else value="{{ old('region') }}"
+                                                       @endif
+                                                   @endif
+                                                       class="form-control @error('region') is-invalid @enderror">
+                                                @error('region')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                                <ul id="regionList"></ul>
+                                            </div>
+                                            <div class="col-6 learts-mb-20">
+                                                <input type="text" id="bdTownOrCity" name="city" placeholder="Населений пункт (місто/село)"
+                                                       @if(!empty($user))
+                                                           @if($user->city) value="{{ old('city', $user->city->name ?? '') }}"
+                                                       @else value="{{ old('city') }}"
+                                                       @endif
+                                                       @endif
+                                                       class="form-control @error('city') is-invalid @enderror">
+                                                @error('city')
+                                                <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+                                                @enderror
+                                                <ul id="cityList"></ul>
+                                            </div>
+
+                                            <script>
+                                                // Селектор для поля областей
+                                                const townOrRegionInput = document.getElementById("bdTownOrRegion");
+                                                const regionList = document.getElementById("regionList");
+
+                                                // Селектор для поля міст
+                                                const townOrCityInput = document.getElementById("bdTownOrCity");
+                                                const cityList = document.getElementById("cityList");
+
+                                                // Масив областей та міст (ваші дані з бази)
+                                                // Масив областей та міст (ваші дані з бази)
+                                                const regionsAndCities = @json(array_values($arr_region_cities));
+
+                                                // Функція фільтрації списку областей
+                                                function filterRegions() {
+                                                    const searchText = townOrRegionInput.value.toLowerCase();
+                                                    const filteredRegions = regionsAndCities.filter(region => region.region_name.toLowerCase().includes(searchText));
+
+                                                    // Очищаємо список областей
+                                                    regionList.innerHTML = "";
+
+                                                    // Додаємо знайдені області до списку
+                                                    filteredRegions.forEach(region => {
+                                                        const li = document.createElement("li");
+                                                        li.textContent = region.region_name;
+                                                        li.addEventListener("click", () => {
+                                                            townOrRegionInput.value = region.region_name;
+                                                            regionList.innerHTML = ""; // Сховати список після вибору
+                                                        });
+                                                        regionList.appendChild(li);
+                                                    });
+                                                }
+
+                                                // Функція фільтрації списку міст
+                                                function filterCities() {
+                                                    const searchText = townOrCityInput.value.toLowerCase();
+                                                    const selectedRegion = townOrRegionInput.value;
+                                                    const citiesInRegion = regionsAndCities.find(region => region.region_name === selectedRegion)?.cities || [];
+                                                    const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));
+
+                                                    // Очищаємо список міст
+                                                    cityList.innerHTML = "";
+
+                                                    // Додаємо знайдені міста до списку
+                                                    filteredCities.forEach(city => {
+                                                        const li = document.createElement("li");
+                                                        li.textContent = city;
+                                                        li.addEventListener("click", () => {
+                                                            townOrCityInput.value = city;
+                                                            cityList.innerHTML = ""; // Сховати список після вибору
+                                                        });
+                                                        cityList.appendChild(li);
+                                                    });
+                                                }
+
+                                                // Обробники подій
+                                                townOrRegionInput.addEventListener("input", filterRegions);
+                                                townOrCityInput.addEventListener("input", filterCities);
+
+                                                document.addEventListener("click", (event) => {
+                                                    if (event.target !== townOrRegionInput) {
+                                                        regionList.innerHTML = "";
+                                                    }
+                                                    if (event.target !== townOrCityInput) {
+                                                        cityList.innerHTML = "";
+                                                    }
+                                                });
+                                            </script>
+                                            <div class="col-6 learts-mb-20">
+                                                <label for="bdAddress1">Вулиця</label>
+                                                <input type="text" id="bdAddress1" name="street" placeholder="назва вулиці"
+                                                       value="{{ old('street', $address['street'] ?? '') }}"
+                                                       class="form-control @error('street') is-invalid @enderror">
+                                                @error('street')
+                                                <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-3 learts-mb-20">
+                                                <label for="bdHouseNumber">№ Будинку</label>
+                                                <input type="text" id="bdHouseNumber" name="home" placeholder="номер будинку"
+                                                       value="{{ old('home', $address['home'] ?? '') }}"
+                                                       class="form-control @error('home') is-invalid @enderror">
+                                                @error('home')
+                                                <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-3 learts-mb-20">
+                                                <label for="bdApartment">№ Квартири</label>
+                                                <input type="text" id="bdApartment" name="apartment" placeholder="номер квартири"
+                                                       value="{{ $address['apartment'] }}">
+                                            </div>
+                                            <br>
+                                            <div class="col-12 learts-mb-30">
+                                                <button type="submit" class="btn btn-dark btn-outline-hover-dark">Зберегти зміни</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                         <!-- Single Tab Content End -->
 
                         <!-- Single Tab Content Start -->
-                        <div class="tab-pane fade" id="account-info">
+                        <div class="tab-pane fade {{ session('activeTab') == 'account-info' ? 'show active' : '' }}" id="account-info">
                             <div class="myaccount-content account-details">
                                 <div class="account-details-form">
                                     <form action="{{ route('users.update', ['user' => $user->id]) }}" method="POST">
                                         @csrf
                                         @method('PUT')
+                                        <input type="hidden" name="previous_page" value="{{ session('previous_page') }}">
                                         <div class="row learts-mb-n30">
                                             <div class="col-md-6 col-12 learts-mb-30">
                                                 <div class="single-input-item">

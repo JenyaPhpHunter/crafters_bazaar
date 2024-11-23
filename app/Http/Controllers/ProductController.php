@@ -141,12 +141,13 @@ class ProductController extends Controller
 
                 return redirect()->route('users.show', ['user' => $user_id])
                     ->withErrors($validated_user)
-                    ->with('errorFields', $errorFields);
+                    ->with('errorFields', $errorFields)
+                    ->with('activeTab', 'account-info');
             }
 
             try {
-//                $emailService = new EmailService();
-//                $emailService->sendProductForSaleEmail($product);
+                $emailService = new EmailService();
+                $emailService->sendProductForSaleEmail($product);
             } catch (\Exception $e) {
                 return view('emails.error',[
                 ])->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
@@ -351,7 +352,9 @@ class ProductController extends Controller
                     $errorFields = array_keys($errors->toArray());
                     return redirect()->route('users.show', ['user' => $request->user_id])
                         ->withErrors($validated_user)
-                        ->with('errorFields', $errorFields);
+                        ->with('errorFields', $errorFields)
+                        ->with('activeTab', 'account-info')
+                        ->with('previous_page', url()->current());
                 }
                 $product->date_put_up_for_sale = date("Y-m-d H:i:s");
                 if ($user->role_id > 4) {
@@ -390,7 +393,7 @@ class ProductController extends Controller
 
                 return redirect( route('products.show', [
                     'product' => $product->id,
-                ]));
+                ]))->with('success', 'Товар успішно відправлено на продаж!');
             } elseif ($action === 'add_kind' || $action === 'add_sub_kind') {
 
                 return redirect()->route('products.createkindsubkind', [

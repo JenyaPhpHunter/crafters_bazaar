@@ -57,7 +57,8 @@ class EmailService
 
             <p>Код товару: {$product->id}</p>
             <p>Посилання: <a href=\"http://crafters_bazaar.loc/products/{$product->id}/edit\">http://crafters_bazaar.loc/products/{$product->id}</a></p>
-            <p style=\"font-style: italic; color: green;\">Ваш менеджер </p>
+            <p style=\"font-style: italic; color: green;\">Ваш менеджер: </p>
+            <p style=\"font-style: italic; color: green;\">{$product->admin->name} . ': ' {$product->admin->phone} </p>
             <p style=\"font-style: italic; color: green;\">Маємо надію, що Ваш товар скоро придбають)</p>
         ";
         $this->sendEmail($product->user->email, $titleEmail, $content);
