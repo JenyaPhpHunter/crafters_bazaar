@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
             'admin.include.header-section',
             'include.header-sticky-section',
             'admin.include.header-sticky-section',
+            'include.footer',
         ], function ($view) {
             $user = Auth::user();
 

@@ -42,21 +42,20 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-xl-4 col-12 learts-mb-40">
                 <h5 class="widget-title mb-2">Підписка</h5>
-                <form id="mc-form" class="mc-form widget-subscibe2">
-                    <input id="mc-email" autocomplete="off" type="email" placeholder="Введіть ваш e-mail">
-                    <button id="mc-submit" class="btn">Підписатися</button>
+                <form id="subscribe_news" class="mc-form widget-subscibe2" action="{{ route('subscribe.toggle') }}" method="POST">
+                    @csrf
+                    <input id="subscribe-email" name="email" type="email" placeholder="Введіть ваш e-mail" @if($user)value="{{ $user->email }}"@endif>
+                    <button id="subscribe-submit" class="btn">Підписатися</button>
                 </form>
-                <!-- mailchimp-alerts Start -->
-                <div class="mailchimp-alerts text-centre">
-                    <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
-                    <div class="mailchimp-success text-success"></div><!-- mailchimp-success end -->
-                    <div class="mailchimp-error text-danger"></div><!-- mailchimp-error end -->
-                </div><!-- mailchimp-alerts end -->
+{{--                <!-- mailchimp-alerts Start -->--}}
+{{--                <div class="mailchimp-alerts text-centre">--}}
+{{--                    <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->--}}
+{{--                    <div class="mailchimp-success text-success"></div><!-- mailchimp-success end -->--}}
+{{--                    <div class="mailchimp-error text-danger"></div><!-- mailchimp-error end -->--}}
+{{--                </div><!-- mailchimp-alerts end -->--}}
             </div>
-
         </div>
     </div>
 </div>

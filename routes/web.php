@@ -91,6 +91,7 @@ Route::delete('/wishlist/clear', [WishController::class, 'clear'])->name('wishli
 Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlist.toCart');
 Route::resource('orders', OrderController::class)->except(['index', 'store', 'create']);
 Route::post('/products/{productId}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::post('/subscribe', [UserController::class, 'toggleSubscriptionStatus'])->name('subscribe.toggle');
 
 require __DIR__.'/auth.php';
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

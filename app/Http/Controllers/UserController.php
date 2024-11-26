@@ -147,4 +147,29 @@ class UserController extends Controller
             ->get();
         return view('users.index', compact('users'));
     }
+
+    public function toggleSubscriptionStatus(Request $request)
+    {
+        $email = $request->input('email');
+        $user = User::query()
+            ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+            ->first();
+
+        if (!$user) {
+            $user = new User();
+            $user->email = $email;
+            $user->password = Hash::make(random_int(10000000, 99999999));
+            $user->is_subscribed = true;
+            $user->created_at = date('Y-m-d H:i:s');
+            $user->save();
+        } else {
+            // Перемикаємо статус підписки
+            $user->is_subscribed = !$user->is_subscribed;
+            $user->save();
+        }
+        return redirect()->back()->with(
+            'success',
+            $user->is_subscribed ? 'Ви успішно підписалися!' : 'Ви успішно відписалися!'
+        );
+    }
 }

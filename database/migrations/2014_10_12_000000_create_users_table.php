@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
@@ -23,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('secondname')->nullable()->comment("По-батькові");
             $table->string('phone')->nullable()->comment("телефон");
             $table->unsignedBigInteger('role_id')->default(7)->comment("Id ролі користувача");
-            $table->unsignedBigInteger('category_user_id')->default(1)->comment("Id категорії користувача");
+            $table->unsignedBigInteger('category_user_id')->default(5)->comment("Id категорії користувача");
             $table->unsignedBigInteger('brand_id')->nullable()->default(null)->comment("Id бренду");
             $table->string('gender')->nullable()->comment("Стать користувача");
             $table->date('birthday')->nullable()->comment("День народження");
@@ -33,6 +34,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('delivery_id')->nullable()->comment("Id виду доставки");
             $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
             $table->unsignedBigInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
+            $table->boolean('is_subscribed')->unsigned()->default(1)->comment('Чи підписаний на новини');
             $table->boolean('active')->unsigned()->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
@@ -54,26 +56,75 @@ class CreateUsersTable extends Migration
                 'password' => Hash::make(env('APP_KEY')),
                 'name' => 'crafters bazaar',
                 'surname' => 'crafters bazaar',
+                'secondname' => null,
+                'phone' => null,
                 'role_id' => 1,
                 'category_user_id' => 1,
-            ],                                              //TODO DEL TEMPORALY
+                'brand_id' => null,
+                'gender' => null,
+                'birthday' => null,
+                'region_id' => null,
+                'city_id' => null,
+                'address' => null,
+                'delivery_id' => null,
+                'newpost_id' => null,
+                'kind_payment_id' => null,
+                'is_subscribed' => 1,
+                'active' => 1,
+                'email_verified_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null,
+            ],
             [
                 'email' => 'bulic2012@gmail.com',
-                'password' => Hash::make(12345678),
+                'password' => Hash::make('12345678'),
                 'name' => 'Євгеній',
                 'surname' => 'Рибалкін',
+                'secondname' => null,
                 'phone' => '0673291419',
                 'role_id' => 1,
                 'category_user_id' => 1,
+                'brand_id' => null,
+                'gender' => null,
+                'birthday' => null,
+                'region_id' => null,
+                'city_id' => null,
+                'address' => null,
+                'delivery_id' => null,
+                'newpost_id' => null,
+                'kind_payment_id' => null,
+                'is_subscribed' => 1,
+                'active' => 1,
+                'email_verified_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null,
             ],
             [
                 'email' => 'Chmyk_Vika@ukr.net',
-                'password' => Hash::make(12345678),
+                'password' => Hash::make('12345678'),
                 'name' => 'Вікторія',
                 'surname' => 'Рибалкіна',
+                'secondname' => null,
                 'phone' => '0971129869',
                 'role_id' => 4,
                 'category_user_id' => 2,
+                'brand_id' => null,
+                'gender' => null,
+                'birthday' => null,
+                'region_id' => null,
+                'city_id' => null,
+                'address' => null,
+                'delivery_id' => null,
+                'newpost_id' => null,
+                'kind_payment_id' => null,
+                'is_subscribed' => 1,
+                'active' => 1,
+                'email_verified_at' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null,
             ],
         ]);
     }
