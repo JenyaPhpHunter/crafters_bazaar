@@ -122,8 +122,8 @@
                                 </span>
                                     <a href="#tab-reviews" class="review-link">(<span class="count">{{ $reviews->count() }}</span> відгуки(ів) покупців)</a>
                                 </div>
-                                <h3 class="product-title">{{ $product->name }}</h3>
-                                <h2 class="product-title">{{ $product->status_product->name }}</h2>
+                                <h3 class="product-title">{{ $product->title }}</h3>
+                                <h2 class="product-title">{{ $product->status_product->title }}</h2>
                                 <div class="product-price">{{ $product->price }} грн</div>
                                 <div class="product-description">
                                     <p> {{ $product->content }}</p>
@@ -218,7 +218,7 @@
                                             <td class="label"><span>Категорія</span></td>
                                             <td class="value">
                                                 <ul class="product-category">
-                                                    <li><a href="{{ route('products.filter', ['categories' => [$product->sub_kind_product->kind_product_id]]) }}">{{ $product->sub_kind_product->kind_product->name }}</a></li>
+                                                    <li><a href="{{ route('products.filter', ['categories' => [$product->sub_kind_product->kind_product_id]]) }}">{{ $product->sub_kind_product->kind_product->title }}</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -226,7 +226,7 @@
                                             <td class="label"><span>Підатегорія</span></td>
                                             <td class="value">
                                                 <ul class="product-category">
-                                                    <li><a href="{{ route('products.filter', ['sub_categories' => [$product->sub_kind_product->id]]) }}">{{ $product->sub_kind_product->name }}</a></li>
+                                                    <li><a href="{{ route('products.filter', ['sub_categories' => [$product->sub_kind_product->id]]) }}">{{ $product->sub_kind_product->title }}</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -283,7 +283,7 @@
                         <ul class="widget-list">
                             @foreach($kind_products as $kind_product)
                                 @if($kind_product->product)
-                                    <li><a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">{{ $kind_product->name }}</a> <span class="count">{{ $kind_product->product->count() }}</span></li>
+                                    <li><a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">{{ $kind_product->title }}</a> <span class="count">{{ $kind_product->product->count() }}</span></li>
                                 @endif
                             @endforeach
                         </ul>
@@ -318,7 +318,7 @@
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h6 class="title"><a href="product-details.html">{{ $featured_product->name }}</a></h6>
+                                        <h6 class="title"><a href="product-details.html">{{ $featured_product->title }}</a></h6>
                                         <span class="price">
                                                 {{ $featured_product->price }} грн
                                             </span>
@@ -404,7 +404,7 @@
                 </div>
                 <div class="tab-pane fade" id="tab-reviews">
                     <div class="product-review-wrapper">
-                        <span class="title">{{ $reviews->count() }} відгук(и) для {{ $product->name }}</span>
+                        <span class="title">{{ $reviews->count() }} відгук(и) для {{ $product->title }}</span>
                         <ul class="product-review-list">
                             @foreach($reviews as $review)
                                 <li>

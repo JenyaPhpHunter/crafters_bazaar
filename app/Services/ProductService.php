@@ -34,7 +34,7 @@ class ProductService
                 $product->status_product_id = 1;
             }
 
-            $product->name = $data['name'];
+            $product->title = $data['title'];
             if (isset($data['sub_kind_product_id'])){
                 $product->sub_kind_product_id = $data['sub_kind_product_id'];
             }
@@ -71,7 +71,7 @@ class ProductService
             }
             if ($action == 'put_up_for_sale' || $action == 'put_for_sale_from_show') {
                 if ($action == 'put_for_sale_from_show'){
-                    $data['name'] = $product->name;
+                    $data['title'] = $product->title;
                     $data['sub_kind_product_id'] = $product->sub_kind_product_id;
                     $data['content'] = $product->content;
                     $data['price'] = $product->price;
@@ -93,7 +93,7 @@ class ProductService
                 }
             }
 
-            $product->name = $data['name'];
+            $product->title = $data['title'];
             $product->sub_kind_product_id = $data['sub_kind_product_id'];
             $product->content = $data['content'];
             $product->price = $data['price'];

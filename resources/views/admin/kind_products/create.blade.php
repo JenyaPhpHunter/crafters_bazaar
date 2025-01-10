@@ -7,10 +7,10 @@
                     <form method="post" action="{{ route('admin_kind_products.store') }}" enctype="multipart/form-data">
                         @csrf
 
-                        <label for="name">Назва</label>
+                        <label for="title">Назва</label>
                         <br>
-                        <input id="name" name="name" type="text" class="product-title"
-                               placeholder="Введіть назву виду товару" value="{{ old('name') }}">
+                        <input id="title" name="title" type="text" class="product-title"
+                               placeholder="Введіть назву виду товару" value="{{ old('title') }}">
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

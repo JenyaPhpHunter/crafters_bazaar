@@ -15,7 +15,7 @@ class CreateTranslate extends Migration
     {
         Schema::create('translate', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
+            $table->string('title', 255);
             $table->timestamps();
         });
     }

@@ -21,9 +21,9 @@
             Було змінено: {{ $key }} на значення {{ $difference }} <br>
         @endforeach
     @endif
-    Вид товару: {{ $product->kind_product->name }}
+    Вид товару: {{ $product->kind_product->title }}
     <br>
-    Підид товару: {{ $product->sub_kind_product->name }}
+    Підид товару: {{ $product->sub_kind_product->title }}
     <br>
     Вартість: {{ $product->price }}
     <br>

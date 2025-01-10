@@ -33,7 +33,7 @@
                             @else
                                 <td></td><td></td>
                             @endif
-                            <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a></td>
+                            <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->title }}</a></td>
                             <td class="price"><span>{{ $cartItem->price }}</span></td>
                             <td class="quantity">
                                 <div class="product-quantity">

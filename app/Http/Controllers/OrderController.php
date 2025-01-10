@@ -209,7 +209,7 @@ class OrderController extends Controller
         $cartitems = CartItems::query()->where('cart_id', $cart->id)->get();
         foreach ($cartitems as $item) {
             $product = Product::find($item->product_id);
-            $product_name = $product->name;
+            $product_name = $product->title;
             $data_user['cart'][] = [
                 'product' => $product_name,
                 'quantity' => $item->quantity,

@@ -15,7 +15,7 @@ return new class extends Migration
     {
 //        Schema::create('cities', function (Blueprint $table) {
 //            $table->id();
-//            $table->string('name')->comment("Назва міста");
+//            $table->string('title')->comment("Назва міста");
 //            $table->string('index')->comment("індекс");
 //            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
 //            $table->foreign('region_id')->references('id')->on('regions');

@@ -8,7 +8,7 @@
 
 <h2>Замовник {{ $product->user->name }}, номер телефону {{ $product->user->phone }}</h2>
 
-<p>Клієнт стоврив новий товар і хоче додати його в категорію {{ $product->kind_product->name }} та підкатегорію {{ $product->sub_kind_product->name }}</p>
+<p>Клієнт стоврив новий товар і хоче додати його в категорію {{ $product->kind_product->title }} та підкатегорію {{ $product->sub_kind_product->title }}</p>
 <br>
 <p>Зв'яжіться з {{ $product->user->name }} за телефоном {{ $product->user->phone }} і уточніть:
     <br>

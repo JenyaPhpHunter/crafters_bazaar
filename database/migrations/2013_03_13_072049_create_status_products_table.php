@@ -16,14 +16,14 @@ class CreateStatusProductsTable extends Migration
     {
         Schema::create('status_products', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment("Назва статусу товару");
+            $table->string('title')->comment("Назва статусу товару");
             $table->timestamps();
         });
         DB::table('status_products')->insert([
-            ['name' => 'Новий'],
-            ['name' => 'На затверджені'],
-            ['name' => 'В продажу'],
-            ['name' => 'Проданий'],
+            ['title' => 'Новий'],
+            ['title' => 'На затверджені'],
+            ['title' => 'В продажу'],
+            ['title' => 'Проданий'],
         ]);
     }
 

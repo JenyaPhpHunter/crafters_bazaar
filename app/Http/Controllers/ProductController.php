@@ -41,8 +41,8 @@ class ProductController extends Controller
             ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
             ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
-            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
-            ->groupBy('kind_products.id', 'kind_products.name')
+            ->select('kind_products.id', 'kind_products.title', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.title')
             ->get();
         $data['kind_products'] = $kind_products;
 
@@ -440,14 +440,14 @@ class ProductController extends Controller
         $arr_sub_kind_products = [];
         if(!$all_kind_products->isEmpty()){
             foreach ($all_kind_products as $kind_product){
-                $arr_kind_products[] = $kind_product->name;
+                $arr_kind_products[] = $kind_product->title;
             }
         } else {
             $arr_kind_products[] = false;
         }
         if(!$all_sub_kind_products->isEmpty()){
             foreach ($all_sub_kind_products as $sub_kind_product){
-                $arr_sub_kind_products[] = $sub_kind_product->name;
+                $arr_sub_kind_products[] = $sub_kind_product->title;
             }
         } else {
             $arr_sub_kind_products[] = false;
@@ -462,23 +462,23 @@ class ProductController extends Controller
     public function storekindsubkind(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name_kind_product' => 'required',
-            'name_sub_kind_product' => 'required',
+            'title_kind_product' => 'required',
+            'title_sub_kind_product' => 'required',
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
         $user_id = $request->input('user_id');
-        $name_kind_product = $request->post('name_kind_product');
-        $name_sub_kind_product = $request->post('name_sub_kind_product');
+        $title_kind_product = $request->post('title_kind_product');
+        $title_sub_kind_product = $request->post('title_sub_kind_product');
 
         $kind_product = KindProduct::query()
-            ->whereRaw('LOWER(name) = ?', [strtolower($name_kind_product)])
+            ->whereRaw('LOWER(title) = ?', [strtolower($title_kind_product)])
             ->first();
         if(empty($kind_product)){
             $kind_product = new KindProduct();
-            $kind_product->name = $name_kind_product;
+            $kind_product->title = $title_kind_product;
             $kind_product->user_id = $user_id;
             $kind_product->checked = false;
             $kind_product->created_at = date("Y-m-d H:i:s");
@@ -486,11 +486,11 @@ class ProductController extends Controller
         }
 
         $sub_kind_product = SubKindProduct::query()
-            ->whereRaw('LOWER(name) = ?', [strtolower($name_sub_kind_product)])
+            ->whereRaw('LOWER(title) = ?', [strtolower($title_sub_kind_product)])
             ->first();
         if(empty($sub_kind_product)){
             $sub_kind_product = new SubKindProduct();
-            $sub_kind_product->name = $name_sub_kind_product;
+            $sub_kind_product->title = $title_sub_kind_product;
             $sub_kind_product->kind_product_id = $kind_product->id;
             $sub_kind_product->user_id = $user_id;
             $sub_kind_product->checked = false;
@@ -531,8 +531,8 @@ class ProductController extends Controller
             ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
             ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', 3)
-            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
-            ->groupBy('kind_products.id', 'kind_products.name')
+            ->select('kind_products.id', 'kind_products.title', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.title')
             ->get();
 
         $all_kind_products = KindProduct::all();
@@ -656,8 +656,8 @@ class ProductController extends Controller
             ->join('sub_kind_products', 'kind_products.id', '=', 'sub_kind_products.kind_product_id')
             ->join('products', 'sub_kind_products.id', '=', 'products.sub_kind_product_id')
             ->where('products.status_product_id', '=', 3)
-            ->select('kind_products.id', 'kind_products.name', \DB::raw('COUNT(products.id) as product_count'))
-            ->groupBy('kind_products.id', 'kind_products.name')
+            ->select('kind_products.id', 'kind_products.title', \DB::raw('COUNT(products.id) as product_count'))
+            ->groupBy('kind_products.id', 'kind_products.title')
             ->get();
 
         $featured_products = Product::query()
@@ -740,7 +740,7 @@ class ProductController extends Controller
     {
         $products = $products->filter(function ($product) use ($filterSearch) {
             // Перевірка, чи назва товару містить значення $filterSearch (регістронезалежно)
-            return mb_stripos($product->name, $filterSearch) !== false;
+            return mb_stripos($product->title, $filterSearch) !== false;
         });
 
         return $products;

@@ -16,22 +16,22 @@ return new class extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment("Назва кольору");
+            $table->string('title')->comment("Назва кольору");
             $table->string('php_name')->comment("Назва кольору на англійській мові");
             $table->string('code')->comment("Код кольору");
             $table->timestamps();
         });
         DB::table('colors')->insert([
-            ['name' => 'Чорний', 'php_name' => 'Black', 'code' => '#000000'],
-            ['name' => 'Білий', 'php_name' => 'White', 'code' => '#ffffff'],
-            ['name' => 'Червоний', 'php_name' => 'Red',  'code' => '#ff0000'],
-            ['name' => 'Зелений', 'php_name' => 'Green',  'code' => '#00ff00'],
-            ['name' => 'Синій', 'php_name' => 'Blue',  'code' => '#0000ff'],
-            ['name' => 'Жовтий', 'php_name' => 'Yellow',  'code' => '#ffff00'],
-            ['name' => 'Фіолетовий', 'php_name' => 'Violet',  'code' => '#ff00ff'],
-            ['name' => 'Помаранчевий', 'php_name' => 'Orange',  'code' => '#ffa500'],
-            ['name' => 'Темно-зелений', 'php_name' => 'Dark_green',  'code' => '#008000'],
-            ['name' => 'Пурпурний', 'php_name' => 'Purple',  'code' => '#800080'],
+            ['title' => 'Чорний', 'php_name' => 'Black', 'code' => '#000000'],
+            ['title' => 'Білий', 'php_name' => 'White', 'code' => '#ffffff'],
+            ['title' => 'Червоний', 'php_name' => 'Red',  'code' => '#ff0000'],
+            ['title' => 'Зелений', 'php_name' => 'Green',  'code' => '#00ff00'],
+            ['title' => 'Синій', 'php_name' => 'Blue',  'code' => '#0000ff'],
+            ['title' => 'Жовтий', 'php_name' => 'Yellow',  'code' => '#ffff00'],
+            ['title' => 'Фіолетовий', 'php_name' => 'Violet',  'code' => '#ff00ff'],
+            ['title' => 'Помаранчевий', 'php_name' => 'Orange',  'code' => '#ffa500'],
+            ['title' => 'Темно-зелений', 'php_name' => 'Dark_green',  'code' => '#008000'],
+            ['title' => 'Пурпурний', 'php_name' => 'Purple',  'code' => '#800080'],
         ]);
     }
 

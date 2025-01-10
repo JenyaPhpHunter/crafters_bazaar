@@ -50,7 +50,7 @@
                                     <td></td>
                                 @endif
                                 <td class="name" style="text-align: center;">
-                                    <a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a>
+                                    <a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->title }}</a>
                                 </td>
                                 <td class="price">{{ $cartItem->price }}</td>
                                 <td class="quantity" style="text-align: center;">{{ $cartItem->quantity }}</td>

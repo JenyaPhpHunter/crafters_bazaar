@@ -184,6 +184,7 @@ return [
         'price' => 'Вартість',
         'color_id' => 'Колір',
         'name' => 'Ім\'я',
+        'title' => 'Назва',
         'surname' => 'Прізвище',
         'phone' => 'Телефон',
         'email' => 'Email',

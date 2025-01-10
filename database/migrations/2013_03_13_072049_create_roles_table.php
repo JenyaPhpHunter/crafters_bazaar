@@ -16,18 +16,18 @@ class CreateRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment("Назва ролі");
+            $table->string('title')->comment("Назва ролі");
             $table->timestamps();
             $table->softDeletes();
         });
         DB::table('roles')->insert([
-            ['name' => 'Супер Адмін'],
-            ['name' => 'Адміністратор'],
-            ['name' => 'Начальник'],
-            ['name' => 'Продавець'],
-            ['name' => 'Віп користувач'],
-            ['name' => 'Зареєстрований користувач'],
-            ['name' => 'Не зареєстрований користувач'],
+            ['title' => 'Супер Адмін'],
+            ['title' => 'Адміністратор'],
+            ['title' => 'Начальник'],
+            ['title' => 'Продавець'],
+            ['title' => 'Віп користувач'],
+            ['title' => 'Зареєстрований користувач'],
+            ['title' => 'Не зареєстрований користувач'],
         ]);
     }
 

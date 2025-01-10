@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('category_users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment("Назва категорії користвача");
+            $table->string('title')->comment("Назва категорії користвача");
             $table->timestamps();
         });
         DB::table('category_users')->insert([
-            ['name' => 'SEO'],
-            ['name' => 'Співробітник'],
-            ['name' => 'Продавець'],
-            ['name' => 'Покупець'],
-            ['name' => 'Користувач'],
+            ['title' => 'SEO'],
+            ['title' => 'Співробітник'],
+            ['title' => 'Продавець'],
+            ['title' => 'Покупець'],
+            ['title' => 'Користувач'],
         ]);
     }
 

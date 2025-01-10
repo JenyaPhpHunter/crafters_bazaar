@@ -8,7 +8,7 @@
                         <a href="{{ route('admin_products_kind', ['kind_products' => $kind_product->id]) }}" class="inner">
                         <div class="image"><img src="{{ asset('images/banner/category/banner-s4-1.webp') }}" alt=""></div>
                             <div class="content" data-bg-color="#f4ede7">
-                                <h3 class="title">{{ $kind_product->name }}</h3>
+                                <h3 class="title">{{ $kind_product->title }}</h3>
                             </div>
                         </a>
                     </div>

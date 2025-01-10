@@ -130,7 +130,7 @@
                                                 {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>
                                             &nbsp;
                                             <label for="category_{{ $kind_product->id }}">
-                                                <a href="#">{{ $kind_product->name }}</a>
+                                                <a href="#">{{ $kind_product->title }}</a>
                                                 <span class="count">{{ $kind_product->product_count }}</span>
                                             </label>
                                         </li>
@@ -158,7 +158,7 @@
 {{--                                                {{ in_array($kind_product->id, $selectedCategories) ? 'checked' : '' }}>--}}
 {{--                                            &nbsp;--}}
 {{--                                            <label for="category_{{ $kind_product->id }}">--}}
-{{--                                                <a href="#">{{ $kind_product->name }}</a> <span class="count">{{ count($kind_product->products) }}</span>--}}
+{{--                                                <a href="#">{{ $kind_product->title }}</a> <span class="count">{{ count($kind_product->products) }}</span>--}}
 {{--                                            </label>--}}
 {{--                                        </li>--}}
 {{--                                    @endif--}}
@@ -258,7 +258,7 @@
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h6 class="title"><a href="{{ route('products.show',['product' => $product->id]) }}">{{ $product->name }}</a></h6>
+                                            <h6 class="title"><a href="{{ route('products.show',['product' => $product->id]) }}">{{ $product->title }}</a></h6>
                                             <span class="price">
                                             {{ $product->price }} грн
                                             </span>
@@ -314,7 +314,7 @@
                                         @if($kind_product->product_count > 0)
                                             <li>
                                                 <a href="{{ route('products.filter', ['categories' => [$kind_product->id]]) }}">
-                                                    {{ $kind_product->name }}
+                                                    {{ $kind_product->title }}
                                                     <span class="count">{{ $kind_product->product_count }}</span>
                                                 </a>
                                             </li>
@@ -360,7 +360,7 @@
                                                 </a>
                                             </div>
                                             <div class="content">
-                                                <h6 class="title"><a href="{{ route('products.show',['product' => $featured_product->id]) }}">{{ $featured_product->name }}</a></h6>
+                                                <h6 class="title"><a href="{{ route('products.show',['product' => $featured_product->id]) }}">{{ $featured_product->title }}</a></h6>
                                                 <span class="price">
                                                 {{ $featured_product->price }} грн
                                             </span>

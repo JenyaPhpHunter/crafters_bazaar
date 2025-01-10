@@ -8,7 +8,7 @@
                     <div class="col-lg-9 col-12 learts-mb-50">
                         <div class="category-container" id="category-{{ $kind_product->id }}">
                             <div style="display: flex; align-items: center;"> <!-- Контейнер для категорії та карандаша -->
-                                    <span>{{ $kind_product->name }}</span>
+                                    <span>{{ $kind_product->title }}</span>
                                 @isset($user)
                                     @can('edit', $kind_product)
                                         <a href="{{ route('admin_kind_products.edit', ['admin_kind_product' => $kind_product->id]) }}">
@@ -23,7 +23,7 @@
                                 @if($sub_kind_product->kind_product_id == $kind_product->id)
                                     <div style="margin-left: 20px; display: flex; align-items: center;"> <!-- Контейнер для підкатегорії та карандаша -->
                                         <a href="{{ route('admin_sub_kind_products.show', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
-                                            <span> - {{ $sub_kind_product->name }}</span>
+                                            <span> - {{ $sub_kind_product->title }}</span>
                                         </a>
                                         @isset($user)
                                             @can('edit', $kind_product)

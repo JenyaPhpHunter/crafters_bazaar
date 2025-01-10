@@ -86,7 +86,7 @@
                                         @php
                                             $counter ++;
                                         @endphp
-                                        <a href="{{ route('products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                        <a href="{{ route('products.filter', ['status_product' => $status_product->id]) }}" class="mega-menu-title"><span class="menu-text">{{ $status_product->title }}</span></a>
                                         @isset($products)
                                             <ul>
                                                 @foreach($products as $product)
@@ -95,9 +95,9 @@
                                                             $selectedPhoto = $product->productphotos->where('queue', 1)->first();
                                                         @endphp
                                                         @isset($selectedPhoto)
-                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->title }}</span></a></li>
                                                         @else
-                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->name }}</span></a></li>
+                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->title }}</span></a></li>
                                                         @endisset
                                                     @endif
                                                 @endforeach
@@ -130,7 +130,7 @@
                             <li><a href="{{ route('admin_kind_products.index', ['not_checked' => true]) }}"><span class="menu-text">Незатверджені види товарів</span></a></li>
                             @if(isset($header_kind_products))
                                 @foreach ($header_kind_products as $kind_product)
-                                    <li><a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a></li>
+                                    <li><a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->title }}</span></a></li>
                                 @endforeach
                             @endif
                         </ul>
@@ -145,7 +145,7 @@
                                 @foreach ($header_kind_products as $kind_product)
                                     <li>
                                         <a href="{{ route('admin_kind_products.show',  ['admin_kind_product' => $kind_product->id]) }}" class="mega-menu-title">
-                                            <span class="menu-text">{{ $kind_product->name }}</span>
+                                            <span class="menu-text">{{ $kind_product->title }}</span>
                                         </a>
                                         <ul>
                                             <li>
@@ -163,7 +163,7 @@
                                             @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                 <li>
                                                     <a href="{{ route('admin_sub_kind_products.show',  ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
-                                                        <span class="menu-text">{{ $sub_kind_product->name }}</span>
+                                                        <span class="menu-text">{{ $sub_kind_product->title }}</span>
                                                     </a>
                                                 </li>
                                             @endif
@@ -175,19 +175,32 @@
                             @endif
                         </ul>
                     </li>
-{{--                    @if($user->role_id == 1)--}}
-{{--                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>--}}
-{{--                            <ul class="sub-menu">--}}
-{{--                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>--}}
-{{--                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>--}}
-{{--                                @if(isset($roles))--}}
-{{--                                    @foreach ($roles as $role)--}}
-{{--                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>--}}
-{{--                                    @endforeach--}}
-{{--                                @endif--}}
-{{--                            </ul>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
+                    @if($user->role_id == 1)
+                        <li class="has-children"><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Ролі</span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
+                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
+                                @if(isset($roles))
+                                    @foreach ($roles as $role)
+                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if($user->role_id == 1)
+                        <li class="has-children"><a href="{{ route('admin_tags.index') }}"><span class="menu-text">Теги</span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{{ route('admin_tags.create') }}"><span class="menu-text">Створити тег</span></a></li>
+                                <li><a href="{{ route('admin_tags.index') }}"><span class="menu-text">Всі теги</span></a></li>
+                                @if(isset($tags))
+                                    @foreach ($tags as $tag)
+                                        <li><a href="{{ route('admin_tags.edit', ['admin_tag' => $tag]) }}"><span class="menu-text">{{ $tag->name }}</span></a></li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
             </nav>
         </div>

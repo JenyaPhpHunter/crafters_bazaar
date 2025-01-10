@@ -46,7 +46,7 @@
                             @else
                                 <td></td>
                             @endif
-                            <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}</a></td>
+                            <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->title }}</a></td>
                             <td class="price"><span>{{ $cartItem->price }}</span></td>
                             <td class="quantity"> {{ $cartItem->quantity }} </td>
                             <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}</span></td>

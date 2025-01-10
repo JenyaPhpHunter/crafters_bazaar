@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->comment("Назва бренду");
+            $table->string('title', 255)->comment("Назва бренду");
             $table->text('content')->nullable()->default(null)->comment("Коментар до бренду");
             $table->string('path')->nullable()->default(null)->comment("Шлях до картинки бренду");
             $table->enum('rating', array_keys(OthersConstants::RATING))

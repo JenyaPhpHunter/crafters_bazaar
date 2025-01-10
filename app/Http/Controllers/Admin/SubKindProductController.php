@@ -45,12 +45,12 @@ class SubKindProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:sub_kind_products|max:35',
+            'title' => 'required|unique:sub_kind_products|max:35',
             'kind_product_id' => 'required',
         ]);
 
         $sub_kind_product = new SubKindProduct();
-        $sub_kind_product->name = $request->name;
+        $sub_kind_product->title = $request->title;
         $sub_kind_product->kind_product_id = $request->kind_product_id;
         $sub_kind_product->user_id = $request->user_id;
         $sub_kind_product->checked = true;
@@ -72,7 +72,7 @@ class SubKindProductController extends Controller
     public function edit($id)
     {
         $sub_kind_product = SubKindProduct::query()->with('kind_product')->where('id',$id)->first();
-        $kind_products = KindProduct::pluck('name', 'id');
+        $kind_products = KindProduct::pluck('title', 'id');
         if(!$sub_kind_product){
             throw new \Exception('Subkind product not found');
         }
@@ -84,14 +84,14 @@ class SubKindProductController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:sub_kind_products,name,'.$id,
+            'title' => 'required|unique:sub_kind_products,title,'.$id,
             'kind_product_id' => 'required',
         ]);
 
 
 
         $sub_kind_product = SubKindProduct::query()->where('id',$id)->first();
-        $sub_kind_product->name = $request->name;
+        $sub_kind_product->title = $request->title;
         $sub_kind_product->kind_product_id = $request->kind_product_id;
         $sub_kind_product->checked = true;
 

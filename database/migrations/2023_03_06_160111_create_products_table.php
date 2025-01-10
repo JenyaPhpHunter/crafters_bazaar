@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->nullable()->default(null)->comment("Назва товару");
+            $table->string('title', 255)->nullable()->default(null)->comment("Назва товару");
             $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null)->comment("Id підвиду товару");
             $table->text('content')->nullable()->default(null)->comment("Коментар до товару");
             $table->text('links_networks')->nullable()->default(null)->comment("Посилання на товар");

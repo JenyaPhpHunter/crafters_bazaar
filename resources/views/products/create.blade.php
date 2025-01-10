@@ -147,7 +147,7 @@
                                 <div class="col-lg-4 col-12 mb-3">
                                     <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
                                         @foreach($kind_products as $kind_product)
-                                            <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $selected_kind_product_id) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
+                                            <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $selected_kind_product_id) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -167,7 +167,7 @@
                                 <div class="col-lg-4 col-12 mb-3">
                                     <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
                                         @foreach($sub_kind_products as $sub_kind_product)
-                                            <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', $selected_sub_kind_product_id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->name }}</option>
+                                            <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', $selected_sub_kind_product_id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>

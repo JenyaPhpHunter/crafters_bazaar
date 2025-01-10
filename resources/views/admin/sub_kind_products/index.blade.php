@@ -1,21 +1,6 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="section section-padding pt-0">
         <div class="section section-fluid learts-mt-70">
             <div class="container">
@@ -25,7 +10,7 @@
                             <div class="category-container" id="category-{{ $kind_product->id }}">
                             <div style="display: flex; align-items: center;"> <!-- Контейнер для категорії та карандаша -->
                                 <a href="{{ route('admin_kind_products.show', ['admin_kind_product' => $kind_product->id]) }}">
-                                    <span style="{{ $kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $kind_product->name }}</span>
+                                    <span style="{{ $kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $kind_product->title }}</span>
                                 </a>
                                 @isset($user)
                                     @can('edit', $kind_product)
@@ -41,7 +26,7 @@
                                     @if($sub_kind_product->kind_product_id == $kind_product->id)
                                         <div style="margin-left: 20px; display: flex; align-items: center;"> <!-- Контейнер для підкатегорії та карандаша -->
                                             <a href="{{ route('admin_sub_kind_products.show', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
-                                                <span style="{{ $sub_kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $sub_kind_product->name }}</span>
+                                                <span style="{{ $sub_kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $sub_kind_product->title }}</span>
                                             </a>
                                             @isset($user)
                                                 @can('edit', $kind_product)

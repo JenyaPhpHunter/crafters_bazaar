@@ -66,7 +66,7 @@
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h6 class="title"><a href="{{ route('products.show',['product' => $wishitem->product->id]) }}">{{ $wishitem->product->name }}</a></h6>
+                                            <h6 class="title"><a href="{{ route('products.show',['product' => $wishitem->product->id]) }}">{{ $wishitem->product->title }}</a></h6>
                                             <span class="price">
                                                     <span class="old"> було {{-- {{ $wishitem->product->price }} --}} 1000 грн</span>
                                                 <br>

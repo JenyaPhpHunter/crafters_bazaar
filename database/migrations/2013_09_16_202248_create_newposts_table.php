@@ -16,7 +16,7 @@ class CreateNewpostsTable extends Migration
         Schema::create('newposts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('number')->comment("номер НП");
-            $table->string('name')->comment("назва НП");
+            $table->string('title')->comment("назва НП");
             $table->string('address')->comment("Адреса НП");
             $table->unsignedBigInteger('city_id')->comment("Id міста");
             $table->unsignedBigInteger('region_id')->comment("Id області");

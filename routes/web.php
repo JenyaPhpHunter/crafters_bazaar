@@ -5,16 +5,16 @@ use App\Http\Controllers\Admin\KindProductController as AdminKindProductControll
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubKindProductController as AdminSubKindProductController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ForumCategoryController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ForumPostController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ForumSubCategoryController;
 use App\Http\Controllers\ForumTopicController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishController;
@@ -49,6 +49,7 @@ Route::prefix('admin')->middleware('auth')->group(callback: function () {
     Route::resource('admin_kind_products', AdminKindProductController::class);
     Route::resource('admin_sub_kind_products', AdminSubKindProductController::class);
     Route::resource('admin_orders', AdminOrderController::class);
+    Route::resource('admin_tags', TagController::class);
 //Route::get('/test-email', function () {
 //    $emailService = new \App\Services\EmailService();
 //    $emailService->sendWelcomeEmail('bulic2012@gmail.com', 'your_test_password');

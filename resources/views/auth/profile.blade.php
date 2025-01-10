@@ -109,8 +109,8 @@
                 <h1>Замовлення в корзині: </h1>
                 <h2>Загальна вартість замовленнь в корзині: {{ $sum_baskets_without_order }}</h2>
                 @foreach($baskets_without_order as $basket_without_order)
-                    <h2><a href="{{route('products.show', ['product' => $basket_without_order->product_id])}}">{{$basket_without_order->product->name}}</a></h2>
-                    <p>Категорія: {{ $basket_without_order->product->kind_product->name }}</p>
+                    <h2><a href="{{route('products.show', ['product' => $basket_without_order->product_id])}}">{{$basket_without_order->product->title}}</a></h2>
+                    <p>Категорія: {{ $basket_without_order->product->kind_product->title }}</p>
                     <p>Кількість: {{ $basket_without_order->quantity }}</p>
                     <p>Вартість: {{ $basket_without_order->sum }}
                         @if($basket_without_order->sum != $basket_without_order->total)
@@ -139,8 +139,8 @@
                         @php
                             $order = $basket->order_id;
                         @endphp
-                    <h2><a href="{{route('products.show', ['product' => $basket->product_id])}}">{{$basket->product->name}}</a></h2>
-                    <p>Категорія: {{ $basket->product->kind_product->name }}</p>
+                    <h2><a href="{{route('products.show', ['product' => $basket->product_id])}}">{{$basket->product->title}}</a></h2>
+                    <p>Категорія: {{ $basket->product->kind_product->title }}</p>
                     <p>Кількість: {{ $basket->quantity }}</p>
                     <p>Вартість: {{ $basket->sum }}
                         @if($basket->sum != $basket->total)

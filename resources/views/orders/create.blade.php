@@ -28,7 +28,7 @@
                                     <td></td>
                                 @endif
                                 <td class="name"><a
-                                        href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->name }}
+                                        href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->title }}
                                         &nbsp; <strong class="quantity">×&nbsp;{{ $cartItem->quantity }}</strong></td>
                                 <td class="total"><span>{{ $cartItem->price * $cartItem->quantity }} грн</span></td>
                                 @php

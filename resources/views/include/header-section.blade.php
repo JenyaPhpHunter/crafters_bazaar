@@ -78,11 +78,11 @@
                         @if(isset($header_kind_products))
                             <ul class="sub-menu">
                             @foreach($header_kind_products as $kind_product)
-                                <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
+                                <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->title }}</span></a>
                                     <ul class="sub-menu">
                                         @if(!empty($kind_product->sub_kind_products))
                                             @foreach($kind_product->sub_kind_products as $sub_kind_product)
-                                                <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                                <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->title }}</span></a></li>
                                             @endforeach
                                         @endif
                                     </ul>
@@ -97,7 +97,7 @@
                                 @if(isset($statuses_products))
                                     @foreach ($statuses_products as $status_product)
                                         <li>
-                                            <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->name }}</span></a>
+                                            <a href="#" class="mega-menu-title"><span class="menu-text">{{ $status_product->title }}</span></a>
                                             <ul>
                                                 @foreach($user_products as $user_product)
                                                     @if($status_product->id == $user_product->status_product_id)
@@ -105,9 +105,9 @@
                                                             $selectedPhoto = $user_product->productphotos->where('queue', 1)->first();
                                                         @endphp
                                                         @isset($selectedPhoto)
-                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
+                                                            <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->title }}</span></a></li>
                                                         @else
-                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->name }}</span></a></li>
+                                                            <li> <img class="mmh_img " src="{{ asset('images/product/s328/product-14.webp') }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->title }}</span></a></li>
                                                         @endisset
                                                     @endif
                                                 @endforeach
@@ -216,7 +216,7 @@
                         <ul class="sub-menu">
                             @isset($all_kind_products)
                                 @foreach($all_kind_products as $kind_product)
-                                        <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->name }}</span></a>
+                                        <li class="has-children"><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->title }}</span></a>
                                             <ul class="sub-menu">
                                                 @php
                                                     $counter = 0;
@@ -226,12 +226,12 @@
                                                         @php
                                                             $counter++;
                                                         @endphp
-                                                        <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id, 'sub_kind_product_id' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->name }}</span></a></li>
+                                                        <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id, 'sub_kind_product_id' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->title }}</span></a></li>
                                                     @endif
                                                 @empty
                                                 @endforelse
                                                 @if($counter == 0)
-                                                <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">Додати перший товар в категорію {{ $kind_product->name }}</span></a></li>
+                                                <li><a href="{{ route('products.create', ['kind_product_id' => $kind_product->id]) }}"><span class="menu-text">Додати перший товар в категорію {{ $kind_product->title }}</span></a></li>
                                                 @endif
                                             </ul>
                                         </li>

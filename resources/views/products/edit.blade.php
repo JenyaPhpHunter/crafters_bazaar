@@ -3,7 +3,7 @@
 @section('content')
 
     @isset($product)
-        <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->name }}</div>
+        <div class="breadcrumb-item active">Статус товару: {{ $product->status_product->title }}</div>
     @endisset
     <!-- Page Title/Header End -->
 
@@ -96,7 +96,7 @@
                         <br>
                         <input id="name" name="name" type="text" class="product-title"
                                placeholder="Введіть назву товару"
-                               value="{{ old('name', $product->name) }}"
+                               value="{{ old('name', $product->title) }}"
                         >
                         @error('name')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -127,7 +127,7 @@
                             <div class="col-lg-4 col-12 mb-3">
                                 <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
                                     @foreach($kind_products as $kind_product)
-                                        <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $product->sub_kind_product->kind_product->id ?? null) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->name }}</option>
+                                        <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $product->sub_kind_product->kind_product->id ?? null) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -147,7 +147,7 @@
                             <div class="col-lg-4 col-12 mb-3">
                                 <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
                                     @foreach($sub_kind_products as $sub_kind_product)
-                                        <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', optional($product->sub_kind_product)->id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->name }}</option>
+                                        <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', optional($product->sub_kind_product)->id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
                                     @endforeach
                                 </select>
                             </div>

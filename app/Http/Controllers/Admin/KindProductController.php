@@ -40,11 +40,11 @@ class KindProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products|max:35',
+            'title' => 'required|unique:kind_products|max:35',
         ]);
 
         $kind_product = new KindProduct();
-        $kind_product->name = $request->post('name');
+        $kind_product->title = $request->post('title');
         $kind_product->user_id = $request->user_id;
         $kind_product->checked = true;
 
@@ -80,11 +80,11 @@ class KindProductController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:kind_products,name,' . $id . '|max:35',
+            'title' => 'required|unique:kind_products,title,' . $id . '|max:35',
         ]);
 
         $kind_product = KindProduct::query()->where('id',$id)->first();
-        $kind_product->name = $request->name;
+        $kind_product->title = $request->title;
         $kind_product->user_id = $request->user_id;
         $kind_product->checked = true;
 

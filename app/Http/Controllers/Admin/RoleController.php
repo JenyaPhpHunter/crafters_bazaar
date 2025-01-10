@@ -24,11 +24,11 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:roles|max:35',
+            'title' => 'required|unique:roles|max:35',
         ]);
 
         $roles = new Role();
-        $roles->name = $request->post('name');
+        $roles->title = $request->post('title');
 
         $roles->save();
 
@@ -40,7 +40,7 @@ class RoleController extends Controller
         $role= Role::query()->with('users')
             ->where('id',$id)->first();
         return view('admin.roles.show',[
-            'role' => $role,
+            'admin_role' => $id,
         ]);
     }
 
@@ -50,24 +50,21 @@ class RoleController extends Controller
         if(!$role){
             throw new \Exception('Role not found');
         }
-        return view('admin.roles.edit', ['role' => $role]);
+        return view('admin.roles.edit', ['admin_role' => $role]);
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:roles,name,' . $id . '|max:35',
-        ]);
-        $validated = $request->validate([
-            'name' => 'required|unique:kind_products,name,' . $id . '|max:35',
+            'title' => 'required|unique:roles,title,' . $id . '|max:35',
         ]);
 
         $role = Role::query()->where('id',$id)->first();
-        $role->name = $request->post('name');
+        $role->title = $request->post('title');
 
         $role->save();
 
-        return redirect( route('roles.show', ['role' => $id]));
+        return redirect( route('admin.roles.show', ['admin_role' => $id]));
     }
 
     public function destroy($id)
