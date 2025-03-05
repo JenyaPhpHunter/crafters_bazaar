@@ -13,19 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-//        Schema::create('cities', function (Blueprint $table) {
-//            $table->id();
-//            $table->string('title')->comment("Назва міста");
-//            $table->string('index')->comment("індекс");
-//            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
-//            $table->foreign('region_id')->references('id')->on('regions');
-//            $table->string('latitude')->comment("широта");
-//            $table->string('longitude')->comment("довгота");
-//            $table->string('warehouse')->comment("наявність НП");
-//            $table->timestamps();
-//            $table->softDeletes();
-//
-//        });
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->comment("Назва міста");
+            $table->string('index')->comment("індекс");
+            $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
+            $table->foreign('region_id')->references('id')->on('regions');
+            $table->string('latitude')->comment("широта");
+            $table->string('longitude')->comment("довгота");
+            $table->string('warehouse')->comment("наявність НП");
+            $table->timestamps();
+            $table->softDeletes();
+
+        });
     }
 
     /**
@@ -35,10 +35,10 @@ return new class extends Migration
      */
     public function down()
     {
-//        Schema::table('cities', function (Blueprint $table) {
-//            $table->dropForeign(['region_id']);
-//        });
-//
-//        Schema::dropIfExists('cities');
+        Schema::table('cities', function (Blueprint $table) {
+            $table->dropForeign(['region_id']);
+        });
+
+        Schema::dropIfExists('cities');
     }
 };
