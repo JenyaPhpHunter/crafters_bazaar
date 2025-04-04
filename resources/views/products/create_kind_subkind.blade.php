@@ -26,9 +26,8 @@
                 <a href="#" onclick="fillNameKindProduct('{{ $escapedKindProduct }}')">{{ $kind_product }}</a>
             @empty
             @endforelse
-            <label for="name_kind_product">Назва виду продукту</label>
-            <input id="name_kind_product" name="name_kind_product" placeholder="Введіть назву виду товару" value="{{ old('name_kind_product') }}">
-            {{--            <input id="name_kind_product" name="name_kind_product" placeholder="Введіть назву виду товару" value="">--}}
+            <label for="title_kind_product">Назва виду продукту</label>
+            <input id="title_kind_product" name="title_kind_product" placeholder="Введіть назву виду товару" value="{{ old('title_kind_product') }}">
             <br><br>
             @forelse($arr_sub_kind_products as $sub_kind_product)
                 @php
@@ -37,9 +36,8 @@
                 <a href="#" onclick="fillNameSubKindProduct('{{ $escapedSubKindProduct }}')">{{ $sub_kind_product }}</a>
             @empty
             @endforelse
-            <label for="name_sub_kind_product">Назва підвиду продукту</label>
-            <input id="name_sub_kind_product" name="name_sub_kind_product" placeholder="Введіть підвиду товару" value="{{ old('name_sub_kind_product') }}">
-            {{--            <input id="name_sub_kind_product" name="name_sub_kind_product" placeholder="Введіть підвиду товару">--}}
+            <label for="title_sub_kind_product">Назва підвиду продукту</label>
+            <input id="title_sub_kind_product" name="title_sub_kind_product" placeholder="Введіть підвиду товару" value="{{ old('title_sub_kind_product') }}">
             <br><br>
             <div class="col-auto learts-mb-20">
                 <button type="submit" class="btn btn-primary2">Зберегти</button>
@@ -51,7 +49,7 @@
         var kindProducts = @json($arr_kind_products);
         // Функція, яка заповнює поле вводу 'name_kind_product' при натисканні на відповідний текст
         function fillNameKindProduct(kindProduct) {
-            var nameKindProductInput = document.getElementById('name_kind_product');
+            var nameKindProductInput = document.getElementById('title_kind_product');
             if (nameKindProductInput) {
                 nameKindProductInput.value = kindProduct;
             }
@@ -61,7 +59,7 @@
 
         // Функція, яка заповнює поле вводу 'name_sub_kind_product' при натисканні на відповідний текст
         function fillNameSubKindProduct(subKindProduct) {
-            var nameSubKindProductInput = document.getElementById('name_sub_kind_product');
+            var nameSubKindProductInput = document.getElementById('title_sub_kind_product');
             if (nameSubKindProductInput) {
                 nameSubKindProductInput.value = subKindProduct;
             }

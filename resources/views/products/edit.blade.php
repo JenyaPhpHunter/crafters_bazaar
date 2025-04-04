@@ -92,13 +92,13 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="color_id" id="selectedColor" value="{{ $product->color_id }}">
-                        <label for="name">Назва</label>
+                        <label for="title">Назва</label>
                         <br>
-                        <input id="name" name="name" type="text" class="product-title"
+                        <input id="title" name="title" type="text" class="product-title"
                                placeholder="Введіть назву товару"
-                               value="{{ old('name', $product->title) }}"
+                               value="{{ old('title', $product->title) }}"
                         >
-                        @error('name')
+                        @error('title')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <br>
@@ -164,7 +164,6 @@
                         <label for="quantity">Кількість виробів в наявності</label>
                         <div class="product-quantity">
                             <span class="qty-btn minus"><i class="ti-minus"></i></span>
-{{--                            <input type="text" class="input-qty" name="stock_balance" id="stock_balance" value={{ $product->stock_balance }}>--}}
                             <input type="text" class="input-qty" name="stock_balance" id="stock_balance" value="{{ old('stock_balance', $product->stock_balance) }}">
                             <span class="qty-btn plus"><i class="ti-plus"></i></span>
                         </div>
@@ -185,9 +184,7 @@
                                 </div>
                             </div>
                         </div>
-
                         <br>
-
                         <div class="product-variations">
                             <table>
                                 <tbody>
@@ -240,6 +237,13 @@
                                 <i class="fas fa-save"></i> {{ $action_types['save'] }}
                             </button>
                         </div>
+                    </form>
+                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-outline-hover-danger" onclick="return confirm('Ви впевнені, що хочете видалити цей товар?');">
+                            <i class="fas fa-trash-alt"></i> {{ $action_types['delete'] }}
+                        </button>
                     </form>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
                         @isset($user)

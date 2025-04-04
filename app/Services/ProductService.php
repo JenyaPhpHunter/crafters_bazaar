@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
-    public function createProduct($request, $function_name, $action, $id = NULL)
+    public function createProduct($request, $function_name, $id = NULL)
     {
         $data = $request->all();
         $user = User::find($data['user_id']);
@@ -19,7 +19,7 @@ class ProductService
             $product = new Product();
             if ($action == 'put_up_for_sale') {
                 $validator = Validator::make($data, [
-                    'name' => 'required',
+                    'title' => 'required',
                     'sub_kind_product_id' => 'required',
                     'content' => 'required',
                     'price' => 'required',
@@ -33,8 +33,9 @@ class ProductService
             } else {
                 $product->status_product_id = 1;
             }
-
-            $product->title = $data['title'];
+            if (isset($data['title'])){
+                $product->title = $data['title'];
+            }
             if (isset($data['sub_kind_product_id'])){
                 $product->sub_kind_product_id = $data['sub_kind_product_id'];
             }
@@ -81,7 +82,7 @@ class ProductService
                 }
 
                 $validator = Validator::make($data, [
-                    'name' => 'required',
+                    'title' => 'required',
                     'sub_kind_product_id' => 'required',
                     'content' => 'required',
                     'price' => 'required',
@@ -93,7 +94,9 @@ class ProductService
                 }
             }
 
-            $product->title = $data['title'];
+            if (isset($data['title'])){
+                $product->title = $data['title'];
+            }
             $product->sub_kind_product_id = $data['sub_kind_product_id'];
             $product->content = $data['content'];
             $product->price = $data['price'];

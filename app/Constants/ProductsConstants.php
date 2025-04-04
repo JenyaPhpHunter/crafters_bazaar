@@ -11,6 +11,7 @@ class ProductsConstants
         'publish_product' => 'Опублікувати товар',
         'add_kind' => 'Додати вид товару',
         'add_sub_kind' => 'Додати підвид товару',
+        'delete' => 'Видалити',
 
     ];
 }

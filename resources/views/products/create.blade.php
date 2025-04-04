@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+{{--    @if (session('success'))--}}
+{{--        <div class="alert alert-success">--}}
+{{--            {{ session('success') }}--}}
+{{--        </div>--}}
+{{--    @endif--}}
+{{--    @if ($errors->any())--}}
+{{--        <div class="alert alert-danger">--}}
+{{--            <ul>--}}
+{{--                @foreach ($errors->all() as $error)--}}
+{{--                    <li>{{ $error }}</li>--}}
+{{--                @endforeach--}}
+{{--            </ul>--}}
+{{--        </div>--}}
+{{--    @endif--}}
 
 <!-- Single Products Section Start -->
     <div class="section section-padding border-bottom">
@@ -116,9 +116,9 @@
 
                             <label for="name">Назва</label>
                             <br>
-                            <input id="name" name="name" type="text" class="product-title"
+                            <input id="title" name="title" type="text" class="product-title"
                                    placeholder="Введіть назву товару" value="{{ old('name') }}">
-                            @error('name')
+                            @error('title')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                             <br>

@@ -174,8 +174,13 @@
                                         <form id="delete-form-show" method="post">
                                             @csrf
                                             @method('delete')
-                                            <a href="{{ route('products.destroy', ['product' => $product->id]) }}" class="btn btn-primary"
-                                               onclick="document.getElementById('delete-form-show').submit(); return false;">Видалити</a>
+                                            <form action="{{ route('products.destroy', ['id' => $product->id]) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені, що хочете видалити цей товар?');">
+                                                    <i class="fas fa-trash-alt"></i> Видалити
+                                                </button>
+                                            </form>
                                         </form>
                                     </div>
                                     @endif

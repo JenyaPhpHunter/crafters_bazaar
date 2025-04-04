@@ -105,7 +105,7 @@ class ProductController extends Controller
         $user_id = $request->post('user_id');
 
         try {
-            $product = (new ProductService())->createProduct($request, $function_name, $action);
+            $product = (new ProductService())->createProduct($request, $function_name);
         } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->validator)
@@ -179,7 +179,6 @@ class ProductController extends Controller
             ->first();
         if ($product) {
             $filters = session()->get('filters', []);
-//            var_dump($filters); die();
             $query = Product::query()->where('status_product_id', 3);
             if (!empty($filters)) {
                 if (!empty($filters['filter_price']) && is_array($filters['filter_price'])) {
@@ -325,7 +324,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         if (($user->role_id > 4 && $product->status_product_id < 3) || ($user->role_id < 5 && $product->status_product_id < 4)){
             try {
-                $product = (new ProductService())->createProduct($request, $function_name, $action, $id);
+                $product = (new ProductService())->createProduct($request, $function_name, $id);
             } catch (ValidationException $e) {
                 return redirect()
                     ->route('products.edit', ['product' => $id])
