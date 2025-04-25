@@ -142,7 +142,7 @@
                                    @endif
                                    class="form-check-input @error('delivery_id') is-invalid @enderror">
                             <label class="form-check-label" for="deliveryType{{ $delivery->id }}">
-                                {{ $delivery->name }}
+                                {{ $delivery->title }}
                             </label>
                         </div>
                     @endforeach
@@ -309,7 +309,7 @@
                                             @endif
                                         >
                                         <label class="form-check-label" for="paymentType{{ $payment_kind->id }}">
-                                            {{ $payment_kind->name }}
+                                            {{ $payment_kind->title }}
                                         </label>
                                         <div id="checkPayments{{ $payment_kind->id }}" class="collapse"
                                              data-bs-parent="#paymentMethod">

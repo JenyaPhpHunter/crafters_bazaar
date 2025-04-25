@@ -9,7 +9,7 @@ class Delivery extends Model
 {
     use softDeletes;
 
-    protected $fillable = ['name', 'price', 'free_from'];
+    protected $fillable = ['title'];
 
     public function users()
     {

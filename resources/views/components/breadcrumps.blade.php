@@ -1,15 +1,17 @@
 @if (session('error'))
-    <div class="alert alert-danger">
+    <div id="alert-error" class="alert alert-danger">
         {{ session('error') }}
     </div>
 @endif
+
 @if (session('success'))
-    <div class="alert alert-success">
+    <div id="alert-success" class="alert alert-success">
         {{ session('success') }}
     </div>
 @endif
+
 @if ($errors->any())
-    <div class="alert alert-danger">
+    <div id="alert-validation" class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -17,6 +19,21 @@
         </ul>
     </div>
 @endif
+
+{{-- Додаємо JavaScript --}}
+<script>
+    setTimeout(() => {
+        ['alert-error', 'alert-success', 'alert-validation'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.transition = 'opacity 0.5s ease-out';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);
+            }
+        });
+    }, 3000);
+</script>
+
 <div class="page-title-section section">
     <div class="row">
         <div class="col-6">

@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->comment("Назва міста");
-            $table->string('index')->comment("індекс");
+            $table->string('type')->comment("Тип населенного пункту");
+            $table->string('title')->comment("Назва населенного пункту");
+            $table->string('index')->nullable()->comment("індекс");
             $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
             $table->foreign('region_id')->references('id')->on('regions');
-            $table->string('latitude')->comment("широта");
-            $table->string('longitude')->comment("довгота");
-            $table->string('warehouse')->comment("наявність НП");
+            $table->string('latitude')->nullable()->comment("широта");
+            $table->string('longitude')->nullable()->comment("довгота");
+            $table->string('warehouse')->nullable()->comment("наявність НП");
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

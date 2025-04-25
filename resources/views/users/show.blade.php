@@ -72,6 +72,31 @@
                                             </tr>
                                         @endforeach
                                         </tbody>
+                                        <thead>
+                                        <tr>
+                                            <th>Відправлення</th>
+                                            <th>Дата</th>
+                                            <th>Статус</th>
+                                            <th>Всього</th>
+                                            {{--                                            <th>Дія</th>--}}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @php
+                                            $counter = 1;
+                                        @endphp
+                                        @foreach($orders as $order)
+                                            <tr>
+                                                <td>  1 </td>>
+                                                <td>  1 </td>>
+                                                <td>  1 </td>>
+                                                <td>  1 </td>>
+                                                @php
+                                                    $counter ++;
+                                                @endphp
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
