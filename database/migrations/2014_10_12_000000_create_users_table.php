@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique()->comment("Email");
+            $table->string('email')->comment("Email");
             $table->string('password')->comment("Пароль");
             $table->string('surname')->nullable()->comment("Прізвище");
             $table->string('name')->nullable()->comment("Ім'я");
@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable()->comment("телефон");
             $table->unsignedBigInteger('role_id')->default(7)->comment("Id ролі користувача");
             $table->unsignedBigInteger('category_user_id')->default(5)->comment("Id категорії користувача");
-            $table->unsignedBigInteger('brand_id')->nullable()->default(null)->comment("Id бренду");
+            $table->unsignedBigInteger('brand_id')->nullable()->comment("Id бренду");
             $table->string('gender')->nullable()->comment("Стать користувача");
             $table->date('birthday')->nullable()->comment("День народження");
             $table->unsignedBigInteger('region_id')->nullable()->comment("Id області");
@@ -34,7 +34,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('delivery_id')->nullable()->comment("Id виду доставки");
             $table->unsignedBigInteger('newpost_id')->nullable()->comment("Id НП");
             $table->unsignedBigInteger('kind_payment_id')->nullable()->comment("Id виду оплати");
-            $table->boolean('is_subscribed')->unsigned()->default(1)->comment('Чи підписаний на новини');
+            $table->boolean('is_subscribed')->default(1)->comment('Чи підписаний на новини');
             $table->boolean('active')->unsigned()->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

@@ -135,10 +135,10 @@
                                         <address>
                                             <p><strong>{{ isset($user->name) ? $user->name : '' }} {{ isset($user->secondname) ? $user->secondname : '' }} {{ isset($user->surname) ? $user->surname : '' }}</strong></p>
                                             @isset($user->region))
-                                            <p>{{ $user->region->name }}<br>
+                                            <p>{{ $user->region->title }}<br>
                                             @endisset
                                             @isset($user->city)
-                                                <p>{{ $user->city->name }}<br>
+                                                <p>{{ $user->city->title }}<br>
                                                     @endisset
                                                     @isset($user->address)
                                                         {{ $user->address }}</p>

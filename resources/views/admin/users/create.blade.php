@@ -85,22 +85,11 @@
                         @enderror
                     </div>
                     <div class="col-md-6 col-12 learts-mb-30">
-                        <label for="password">{{ __('Пароль') }} <abbr class="required">*</abbr></label>
-                        <div class="col-md-12">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-                            @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-12 learts-mb-30">
                     <label for="role_id">Роль користувача</label>
                         <div class="col-md-12">
                             <select class="search-select select2-basic" id="role_id" name="role_id">
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ old('role_id') ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    <option value="{{ $role->id }}" {{ old('role_id') ? 'selected' : '' }}>{{ $role->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -113,7 +102,7 @@
                         <div class="col-md-12">
                             <select class="search-select select2-basic" id="category_user_id" name="category_user_id">
                                 @foreach($categories_user as $category_user)
-                                    <option value="{{ $category_user->id }}" {{ old('category_user_id') ? 'selected' : '' }}>{{ $category_user->name }}</option>
+                                    <option value="{{ $category_user->id }}" {{ old('category_user_id') ? 'selected' : '' }}>{{ $category_user->title }}</option>
                                 @endforeach
                             </select>
                         </div>

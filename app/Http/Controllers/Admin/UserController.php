@@ -13,10 +13,14 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\EmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 
 class UserController extends Controller
@@ -114,19 +118,24 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'surname' => 'required',
-            'email' => 'required|unique:users',
-            'password' => 'required',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->whereNull('deleted_at')
+            ],
             'phone' => 'required',
             'role_id' => 'required',
             'category_user_id' => 'required',
         ]);
+
+        $password = Str::random(7);
 
         $user = new User();
         $user->name = $request->post('name');
         $user->secondname = $request->post('secondname');
         $user->surname = $request->post('surname');
         $user->email = $request->post('email');
-        $user->password =  Hash::make($request->post('password'));
+        $user->password = Hash::make($password);
         $user->phone = $request->post('phone');
         $user->role_id = $request->post('role_id');
         $user->category_user_id = $request->post('category_user_id');
@@ -137,6 +146,22 @@ class UserController extends Controller
 //        $user->paymentkind_id = $request->post('paymentkind_id');
 
         $user->save();
+        $email = $user->email;
+        $sendEmail = new EmailService();
+        $title = 'Вам створено користувача';
+        $content = 'Ваш логін: ' . $email . "<br>" . 'Ваш пароль: ' . $password;
+
+        try {
+            $sendEmail->sendEmail($email, $title, $content);
+             Log::info('Лист успішно відправлено', ['email' => $email]);
+        } catch (\Exception $e) {
+             Log::error('Помилка відправки листа', [
+                 'email' => $email,
+                 'error' => $e->getMessage(),
+                 'trace' => $e->getTraceAsString() // Опціонально (для детального дебагу)
+             ]);
+             session()->flash('warning', 'Лист не вдалося відправити, але акаунт створено');
+        }
 
         return redirect(route('admin_users.index'));
     }
@@ -157,9 +182,32 @@ class UserController extends Controller
             ->where('id',$id)->first();
         $orders = Order::query()->where('user_id', $user->id)->with('status_order')->get();
 
+        $cities = City::all();
+        $arr_cities = [];
+        $arr_region_cities = [];
+        foreach ($cities as $city) {
+            $arr_cities[] = $city->name;
+            if (!isset($arr_region_cities[$city->region_id])) {
+                $region = Region::query()->find($city->region_id);
+                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
+                $arr_region_cities[$city->region_id]['cities'] = [];
+            }
+            $arr_region_cities[$city->region_id]['cities'][] = $city->name;
+        }
+        $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
+        collator_sort($collator, $arr_region_cities); // Виконуємо сортування
+        $addressParts = explode(', ', $user->address);
+        $address = [
+            'street' => $addressParts[0] ?? null,
+            'home' => $addressParts[1] ?? null,
+            'apartment' => $addressParts[2] ?? null,
+        ];
         return view('users.show',[
             'user' => $user,
             'orders' => $orders,
+            'arr_cities' => $arr_cities,
+            'arr_region_cities' => $arr_region_cities,
+            'address' => $address,
         ]);
     }
 
@@ -180,7 +228,6 @@ class UserController extends Controller
         $categories_user = CategoryUser::where('id', '>', $auth_user->category_user_id)->get();
         $products = Product::all();
 
-//        echo $user->id; die();
         return view('admin.users.edit', [
             "user" => $user,
             "categories_user" => $categories_user,
@@ -237,12 +284,29 @@ class UserController extends Controller
         $user = User::query()->where('id',$id)->first();
         $user->deleted_at = now();
         $user->save();
+        $email = $user->email;
+        $sendEmail = new EmailService();
+        $title = 'Вашого користувача видалено';
+        $content = 'Вашого користувача з логіном ' . $email .
+            ' видалено.' . '<br>' . ' Ви можете повторно зареєструватись на нашому сайті' .
+            env('APP_URL');
+
+        try {
+            $sendEmail->sendEmail($email, $title, $content);
+            Log::info('Лист успішно відправлено', ['email' => $email]);
+        } catch (\Exception $e) {
+            Log::error('Помилка відправки листа', [
+                'email' => $email,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString() // Опціонально (для детального дебагу)
+            ]);
+            session()->flash('warning', 'Лист не вдалося відправити, але акаунт створено');
+        }
         return redirect(route('admin_users.index'))->with('success', 'Користувача успішно видалено');
     }
 
     public function sellersBuyers(Request $request)
     {
-//        $this->seedie($request->all());
         $role_id = $request->input('role_id');
         $category_user_id = $request->input('category_user_id');
         $query_users = User::query()->whereNull('deleted_at');
