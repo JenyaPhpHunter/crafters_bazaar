@@ -28,7 +28,6 @@ class ProductController extends Controller
         $baseQuery = Product::query()
             ->where('status_product_id', 3)
             ->with(['sub_kind_product', 'productphotos']);
-
         $products = $baseQuery->get();
         $featured_products = (clone $baseQuery)->where('featured', 1)->get();
         $data['featured_products'] = $featured_products;
@@ -97,6 +96,16 @@ class ProductController extends Controller
             ]));
         }
     }
+
+//    public function store(ProductRequest $request): RedirectResponse
+//    {
+//        $data = $request->validated();
+//
+//        $product = app(ProductService::class)->create($data);
+//
+//        return redirect()->route('products.index')
+//            ->with('success', 'Товар успішно створено');
+//    }
 
     public function store(Request $request)
     {
@@ -318,6 +327,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+//        $this->seedie($request->all());
         $function_name = __FUNCTION__;
         $user = User::find($request->user_id);
         $action = $request->input('action');
@@ -380,13 +390,13 @@ class ProductController extends Controller
                     $product->status_product_id = 3;
                     $product->date_approve_sale = date("Y-m-d H:i:s");
                     $product->admin_id = $user->id;
-                    try {
-                        $emailService = new EmailService();
-                        $emailService->sendPutUpForSaleEmail($product);
-                    } catch (\Exception $e) {
-                        return view('emails.error')
-                            ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
-                    }
+//                    try {
+//                        $emailService = new EmailService();
+//                        $emailService->sendPutUpForSaleEmail($product);
+//                    } catch (\Exception $e) {
+//                        return view('emails.error')
+//                            ->with('message', 'Помилка з\'єднання з сервером. Перевірте ваше інтернет-з\'єднання та спробуйте ще раз.');
+//                    }
                 }
                 $product->save();
 

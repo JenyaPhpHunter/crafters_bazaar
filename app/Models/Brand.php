@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Brand
+class Brand extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
-        'name',
+        'title',
         'content',
-        'path',
+        'image_path',
         'rating',
+        'createdby'
     ];
 
-    public function users()
+    public function users(): BelongsToMany
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'brand_user');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'createdby');
     }
 }

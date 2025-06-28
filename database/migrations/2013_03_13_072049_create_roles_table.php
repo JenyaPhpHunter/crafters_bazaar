@@ -23,8 +23,10 @@ class CreateRolesTable extends Migration
         DB::table('roles')->insert([
             ['title' => 'Супер Адмін'],
             ['title' => 'Адміністратор'],
-            ['title' => 'Начальник'],
+            ['title' => 'SEO'],
+            ['title' => 'Керівник'],
             ['title' => 'Продавець'],
+            ['title' => 'Співробітник'],
             ['title' => 'Віп користувач'],
             ['title' => 'Зареєстрований користувач'],
             ['title' => 'Не зареєстрований користувач'],

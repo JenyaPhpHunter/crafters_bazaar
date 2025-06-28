@@ -14,6 +14,9 @@
 
     <!-- CSS
 	============================================ -->
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Vendor CSS (Bootstrap & Icon Font) -->
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
@@ -92,6 +95,7 @@
 <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Plugins JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>

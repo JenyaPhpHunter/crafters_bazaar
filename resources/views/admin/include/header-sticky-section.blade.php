@@ -60,14 +60,6 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Покупці</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="{{ asset('portfolio-3-columns.html') }}"><span class="menu-text">ВІП покупці</span></a></li>
-                                <li><a href="{{ asset('portfolio-4-columns.html') }}"><span class="menu-text">Середні покупці</span></a></li>
-                                <li><a href="{{ asset('portfolio-5-columns.html') }}"><span class="menu-text">Почтаківці покупці</span></a></li>
-                                <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">Portfolio Details</span></a></li>
-                            </ul>
-                        </li>
                         <li class="has-children"><a href="#"><span class="menu-text">Товари</span></a>
                             <ul class="sub-menu mega-menu">
                                 @if(isset($statuses_products))
@@ -179,17 +171,17 @@
                                 @endif
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>
-                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>
-                                @if(isset($roles))
-                                    @foreach ($roles as $role)
-                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </li>
+{{--                        <li class="has-children"><a href="#"><span class="menu-text">Ролі</span></a>--}}
+{{--                            <ul class="sub-menu">--}}
+{{--                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>--}}
+{{--                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>--}}
+{{--                                @if(isset($roles))--}}
+{{--                                    @foreach ($roles as $role)--}}
+{{--                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>--}}
+{{--                                    @endforeach--}}
+{{--                                @endif--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
                     </ul>
                 </nav>
             </div>

@@ -18,7 +18,7 @@ class CreateReviewsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id')->comment("Id товару");
             $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->enum('rating', array_keys(OthersConstants::RATING))->nullable()->comment("рейтинг товару");
+            $table->enum('rating', array_keys(config('others.rating')))->nullable()->comment("рейтинг товару");
             $table->text('comment')->comment("Коментар");
             $table->timestamps();
             $table->softDeletes();

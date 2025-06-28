@@ -1,47 +1,34 @@
   @extends('admin.layouts.app')
 
   @section('content')
-      @if (session('success'))
-          <div class="alert alert-success">
-              {{ session('success') }}
-          </div>
-      @endif
-      @if ($errors->any())
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-      @endif
       <!-- Фільтри -->
       <form action="{{ route('admin_users.index') }}" method="GET">
           <div class="row mb-3">
               <div class="col-md-2">
-                  <input type="text" name="pib" class="form-control" placeholder="ПІБ" value="{{ request('pib') }}">
+                  <input type="text" name="pib" class="form-control" placeholder="ПІБ" value="{{ $filters['pib'] ?? '' }}">
               </div>
               <div class="col-md-2">
-                  <input type="email" name="email" class="form-control" placeholder="Email" value="{{ request('email') }}">
+                  <input type="email" name="email" class="form-control" placeholder="Email" value="{{  $filters['email'] ?? '' }}">
               </div>
               <div class="col-md-2">
-                  <input type="text" name="phone" class="form-control" placeholder="Телефон" value="{{ request('phone') }}">
+                  <input type="text" name="phone" class="form-control" placeholder="Телефон" value="{{ $filters['phone'] ?? '' }}">
               </div>
               <div class="col-md-2">
-                  <select name="role_id" class="form-control">
-                      <option value="">Роль</option>
+                  <select name="role_id[]" class="form-control select2-basic" multiple>
                       @foreach($roles as $role)
-                          <option value="{{ $role->id }}" {{ request('role_id') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                          <option value="{{ $role->id }}" {{ in_array($role->id, $filters['role_id'] ?? []) ? 'selected' : '' }}>
+                              {{ $role->title }}
+                          </option>
                       @endforeach
                   </select>
               </div>
-{{--          </div>--}}
-{{--          <div class="row mb-3">--}}
+
               <div class="col-md-2">
-                  <select name="category_user_id" class="form-control">
-                      <option value="">Категорія</option>
+                  <select name="category_user_id[]" class="form-control select2-basic" multiple>
                       @foreach($categories as $category)
-                          <option value="{{ $category->id }}" {{ request('category_user_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                          <option value="{{ $category->id }}" {{ in_array($category->id, $filters['category_user_id'] ?? []) ? 'selected' : '' }}>
+                              {{ $category->title }}
+                          </option>
                       @endforeach
                   </select>
               </div>
@@ -74,8 +61,8 @@
                       <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->surname }} {{ $user->name }} {{ $user->secondname }}</a></td>
                       <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->email }}</a></td>
                       <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->phone }}</a></td>
-                      <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->role->name }}</a></td>
-                      <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->category_user->name }}</a></td>
+                      <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->role->title }}</a></td>
+                      <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->category_user->title }}</a></td>
                       <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->created_at }}</a></td>
                       <td><a href="{{ route('admin_users.details', ['admin_user' => $user->id]) }}">{{ $user->updated_at }}</a></td>
                       <td>

@@ -53,6 +53,7 @@ class Controller extends BaseController
         'admin_users.index',
         'admin_users.details',
         'products.index',
+        'brands.index',
         'forum_categories.index',
         'forum_categories.show',
         'forum_sub_categories.index',

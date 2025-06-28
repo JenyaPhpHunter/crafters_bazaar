@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubKindProductController as AdminSubKindProductController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ForumCategoryController;
 use App\Http\Controllers\ForumPostController;
@@ -43,7 +44,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->middleware('auth')->group(callback: function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('admin_users', AdminUserController::class);
-    Route::get('/sellers_buyers', [AdminUserController::class, 'sellersBuyers'])->name('sellers_buyers.index');
+//    Route::get('/sellers_buyers', [AdminUserController::class, 'sellersBuyers'])->name('sellers_buyers.index');
     Route::get('/admin_users/{admin_user}/details', [AdminUserController::class, 'getDetails'])->name('admin_users.details');
     Route::resource('admin_roles', RoleController::class);
     Route::resource('admin_kind_products', AdminKindProductController::class);
@@ -74,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::resource('brands', BrandController::class);
 });
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');

@@ -37,7 +37,11 @@
     <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
+    <style>
+        body.modal-open {
+            padding-right: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -94,6 +98,7 @@
 <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Plugins JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>

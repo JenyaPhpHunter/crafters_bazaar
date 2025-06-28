@@ -3,139 +3,217 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ProductsConstants;
+use App\Exceptions\BrandCreationException;
+use App\Http\Requests\BrandRequest;
+use App\Mail\InviteToBrandMail;
 use App\Models\Brand;
 use App\Models\ForumCategory;
 use App\Models\ForumSubCategory;
 use App\Models\ForumTopic;
 use App\Models\User;
+use App\Services\BrandService;
+use App\Services\EmailService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the brands.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
-        $brands = Brand::with('users')->get();
-        $user_id = $request->input('user_id');
-        $user = User::find($user_id);
+        try {
+            // Отримуємо параметри фільтрації з запиту
+            $search = $request->input('search');
+            $sortField = $request->input('sort_by', 'created_at');
+            $sortDirection = $request->input('sort_dir', 'desc');
+            $perPage = $request->input('per_page', 10);
+            $ratingFilter = $request->input('rating');
 
-        return view('forum_sub_categories.index',
-            compact(
-                'brands',
-                'user',
-            )
-        );
-    }
+            // Базовий запит з відношеннями
+            $query = Brand::with(['users:id,name'])
+                ->withCount('users');
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)   //TODO
-    {
-        $selected_category_id = $request->input('category_id');
-        $categories = ForumCategory::all();
-        $action_types = ProductsConstants::ACTION_TYPES;
+            // Застосовуємо пошук
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                        ->orWhere('content', 'like', "%{$search}%");
+                });
+            }
 
-        return view('forum_sub_categories.create', compact('categories', 'selected_category_id', 'action_types'));
-    }
+            // Фільтр по рейтингу
+            if ($ratingFilter) {
+                $query->where('rating', $ratingFilter);
+            }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)  //TODO
-    {
-        $validated = $request->validate([
-            'name' => 'required|unique:forum_sub_categories',
-            'forum_category_id' => 'required',
-        ]);
-        $sub_category = new ForumSubCategory();
-        $sub_category->name = $request->post('name');
-        $sub_category->forum_category_id = $request->post('forum_category_id');
-        $sub_category->created_at = date("Y-m-d H:i:s");
+            // Сортування
+            $validSortFields = ['title', 'created_at', 'updated_at', 'rating', 'users_count'];
+            $sortField = in_array($sortField, $validSortFields) ? $sortField : 'created_at';
+            $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
 
-        $sub_category->save();
+            $query->orderBy($sortField, $sortDirection);
 
-        return redirect(route('forum_sub_categories.show',['forum_sub_category' => $sub_category->id]));
-    }
+            // Пагінація
+            $brands = $query->paginate($perPage)
+                ->appends($request->query());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id, Request $request)  //TODO
-    {
-        $user_id = $request->input('user_id');
-        $user = User::find($user_id);
-        $sub_category = ForumSubCategory::query()
-            ->with('forum_category')
-            ->with('forum_topics')
-            ->where('id', $id)
-            ->first();
+            // Отримуємо доступні рейтинги для фільтра
+            $availableRatings = config('others.rating');
 
-        return view('forum_sub_categories.show', compact('sub_category', 'user'));
-    }
+            return view('brands.index', [
+                'brands' => $brands,
+                'search' => $search,
+                'sortField' => $sortField,
+                'sortDirection' => $sortDirection,
+                'perPage' => $perPage,
+                'ratingFilter' => $ratingFilter,
+                'availableRatings' => $availableRatings,
+            ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)  //TODO
-    {
-        $sub_category = ForumSubCategory::query()->with('forum_category')->where('id',$id)->first();
-        $categories = ForumCategory::pluck('name', 'id');
-        if(!$sub_category){
-            throw new \Exception('Підкатегорія не знайдена');
+        } catch (\Exception $e) {
+            Log::error('Помилка при отриманні списку брендів', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+
+            return redirect()
+                ->route('dashboard')
+                ->with('error', 'Сталася помилка при завантаженні списку брендів');
         }
-
-        return view('forum_sub_categories.edit', [
-            'sub_category' => $sub_category,
-            'categories' => $categories,
-        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Показує форму для створення нового бренду.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function update(Request $request, $id)  //TODO
+    public function create()
     {
-        $validated = $request->validate([
-            'name' => 'required|unique:forum_sub_categories,name,'.$id,
-            'forum_category_id' => 'required',
-        ]);
+        return view('brands.create');
+    }
 
-        $sub_category = ForumSubCategory::query()->where('id',$id)->first();
-        $sub_category->name = $request->post('name');
-        $sub_category->forum_category_id = $request->post('forum_category_id');
-        $sub_category->updated_at = date("Y-m-d H:i:s");
 
-        $sub_category->save();
+    public function store(BrandRequest $request, EmailService $emailService)
+    {
+        try {
+            $data = $request->validated();
+            $data['image_path'] = BrandService::handleBrandImage($request->file('image'));
 
-        return redirect( route('forum_sub_categories.index'));
+            $brand = BrandService::createBrand($data);
+
+            if (!empty($request->input('invited_emails'))) {
+                $emails = explode(',', $request->input('invited_emails'));
+                BrandService::inviteUsersToBrand($emails, $brand, $emailService);
+            }
+
+            return redirect()->route('brands.index')->with('success', 'Бренд успішно створено!');
+
+        } catch (\Exception $e) {
+            Log::error('Brand creation failed', [
+                'error' => $e->getMessage(),
+                'data' => $request->except('_token')
+            ]);
+
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Показати сторінку одного бренду
      */
+    public function show(Brand $brand)
+    {
+        $availableRatings = config('others.rating');
+        return view('brands.show', [
+            'brand' => $brand,
+            'availableRatings' => $availableRatings
+        ]);
+    }
+
+
+    /**
+     * Показує форму для редагування бренду.
+     *
+     * @param  \App\Models\Brand  $brand
+     * @return \Illuminate\View\View
+     */
+    public function edit(Brand $brand)
+    {
+        try {
+            // Отримуємо список користувачів
+            $users = \App\Models\User::select('id', 'name')->get();
+
+            // Отримуємо ID пов'язаних користувачів
+            $selectedUsers = old('user_ids', $brand->users->pluck('id')->toArray());
+
+            // Доступні значення рейтингу
+            $ratings = config('others.rating');
+
+            return view('brands.edit', [
+                'brand' => $brand,
+                'users' => $users,
+                'selectedUsers' => $selectedUsers,
+                'ratings' => $ratings,
+                'currentRating' => old('rating', $brand->rating),
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Помилка при відображенні форми редагування бренду', [
+                'brand_id' => $brand->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()
+                ->route('brands.show', $brand)
+                ->with('error', 'Не вдалося завантажити форму редагування');
+        }
+    }
+
+    public function update(BrandRequest $request, Brand $brand)
+    {
+        try {
+            $validated = $request->validated();
+
+            if ($request->boolean('remove_image') && $brand->image_path) {
+                Storage::delete('public/' . $brand->image_path);
+                $validated['image_path'] = null;
+            }
+
+            if ($request->hasFile('image')) {
+                if ($brand->image_path) {
+                    Storage::delete('public/' . $brand->image_path);
+                }
+                $validated['image_path'] = $request->file('image')->store('brands', 'public');
+            }
+
+            BrandService::updateBrand($brand, $validated);
+
+            Log::info('Brand updated', ['brand_id' => $brand->id]);
+
+            return redirect()
+                ->route('brands.show', $brand)
+                ->with('success', 'Бренд успішно оновлено!');
+
+        } catch (\Exception $e) {
+            Log::error('Brand update failed', [
+                'brand_id' => $brand->id,
+                'error' => $e->getMessage()
+            ]);
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     public function destroy($id)  //TODO
     {
         //

@@ -1,20 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div class="container">
         <form method="post" action="{{ route('products.storekindsubkind') }}">
             @csrf
@@ -26,8 +12,19 @@
                 <a href="#" onclick="fillNameKindProduct('{{ $escapedKindProduct }}')">{{ $kind_product }}</a>
             @empty
             @endforelse
-            <label for="title_kind_product">Назва виду продукту</label>
-            <input id="title_kind_product" name="title_kind_product" placeholder="Введіть назву виду товару" value="{{ old('title_kind_product') }}">
+            <label for="title_kind_product">Назва виду товару</label>
+            <input
+                id="title_kind_product"
+                name="title_kind_product"
+                placeholder="Введіть назву виду товару"
+                value="{{ old('title_kind_product') }}"
+                class="form-control @error('title_kind_product') is-invalid @enderror"
+            >
+
+            @error('title_kind_product')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+
             <br><br>
             @forelse($arr_sub_kind_products as $sub_kind_product)
                 @php
@@ -36,8 +33,18 @@
                 <a href="#" onclick="fillNameSubKindProduct('{{ $escapedSubKindProduct }}')">{{ $sub_kind_product }}</a>
             @empty
             @endforelse
-            <label for="title_sub_kind_product">Назва підвиду продукту</label>
-            <input id="title_sub_kind_product" name="title_sub_kind_product" placeholder="Введіть підвиду товару" value="{{ old('title_sub_kind_product') }}">
+            <label for="title_sub_kind_product">Назва підвиду товару</label>
+            <input
+                id="title_sub_kind_product"
+                name="title_sub_kind_product"
+                placeholder="Введіть підвиду товару"
+                value="{{ old('title_sub_kind_product') }}"
+                class="form-control @error('title_sub_kind_product') is-invalid @enderror"
+            >
+
+            @error('title_sub_kind_product')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
             <br><br>
             <div class="col-auto learts-mb-20">
                 <button type="submit" class="btn btn-primary2">Зберегти</button>

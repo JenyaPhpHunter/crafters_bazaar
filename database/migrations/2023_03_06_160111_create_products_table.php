@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('title', 255)->nullable()->default(null)->comment("Назва товару");
             $table->unsignedBigInteger('sub_kind_product_id')->nullable()->default(null)->comment("Id підвиду товару");
             $table->text('content')->nullable()->default(null)->comment("Коментар до товару");
+            $table->foreignId('brand_id')->nullable()->default(null)->comment("Бренд товару");
             $table->text('links_networks')->nullable()->default(null)->comment("Посилання на товар");
             $table->unsignedBigInteger('price')->nullable()->default(null)->comment("Вартість");
             $table->unsignedBigInteger('discount')->nullable()->default(null)->comment("Знижка");

@@ -12,7 +12,7 @@ class ReviewController extends Controller
     public function store(Request $request, $productId)
     {
         $request->validate([
-            'rating' => 'required|in:' . implode(',', array_keys(\App\Constants\OthersConstants::RATING)),
+            'rating' => 'required|in:' . implode(',', array_keys(config('others.rating'))),
             'comment' => 'required|string|max:1000',
         ]);
 

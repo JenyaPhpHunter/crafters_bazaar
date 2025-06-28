@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
+use App\Mail\BrandInvitationMail;
+use App\Models\Brand;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\GenericMail;
+use Intervention\Image\Facades\Image;
+
 
 class EmailService
 {
-//    protected $userService;
-//
-//    public function __construct(UserService $userService)
-//    {
-//        $this->userService = $userService;
-//    }
     /**
      * Відправка електронного листа.
      *
@@ -22,9 +22,15 @@ class EmailService
      * @param string $content
      * @return void
      */
-    public function sendEmail($email, $titleEmail, $content)
+    public function sendEmail(Mailable $mailable, string $email): void
     {
-        Mail::to($email)->send(new GenericMail($titleEmail, $content));
+        Log::info("Відправлено листа на $email з класу " . get_class($mailable));
+        Mail::to($email)->queue($mailable);
+    }
+
+    public function sendBrandInvitationEmail(Brand $brand, string $email): void
+    {
+        $this->sendEmail(new BrandInvitationMail($brand), $email);
     }
 
     /**
@@ -135,9 +141,26 @@ class EmailService
     public function choiceRandomAdminEmail()
     {
 //        $adminSeller = User::where('role_id', '=',  4)->inRandomOrder()->first();
-        $adminSeller = User::where('role_id', '=',  1)->inRandomOrder()->first();
+        $adminSeller = User::where('role_id', '=',  1)->where('id', '!=',  1)->inRandomOrder()->first();
 
         return $adminSeller->email;
+    }
+
+    public function processImage(UploadedFile $file): string
+    {
+        $filename = 'brand_' . time() . '.jpg';
+        $path = public_path('images/brands/' . $filename);
+
+        // Зменшуємо зображення до ширини 300px і зберігаємо як JPEG з 75% якістю
+        $image = Image::make($file)
+            ->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })
+            ->encode('jpg', 75);
+
+        $image->save($path);
+
+        return 'images/brands/' . $filename;
     }
 
     /**

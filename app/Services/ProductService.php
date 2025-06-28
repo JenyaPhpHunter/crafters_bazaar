@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Controllers\ProductPhotoController;
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +11,40 @@ use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
-    public function createProduct($request, $function_name, $id = NULL)
+    const VALIDATION_RULES = [
+        'title' => 'nullable|string|max:255',
+        'sub_kind_product_id' => 'nullable|integer|exists:sub_kind_products,id',
+        'content' => 'nullable|string',
+        'brand_id' => 'nullable|integer|exists:brands,id',
+        'links_networks' => 'nullable|string',
+        'price' => 'nullable|integer|min:0',
+        'discount' => 'nullable|integer|min:0',
+        'stock_balance' => 'nullable|integer|min:0',
+        'color_id' => 'nullable|integer|exists:colors,id',
+        'term_creation' => 'nullable|integer|min:0',
+        'status_product_id' => 'required|integer|exists:status_products,id',
+        'user_id' => 'required|integer|exists:users,id',
+        'new' => 'nullable|boolean',
+        'featured' => 'nullable|boolean',
+        'active' => 'nullable|boolean',
+        'date_put_up_for_sale' => 'nullable|date',
+        'date_approve_sale' => 'nullable|date',
+        'admin_id' => 'nullable|integer|exists:users,id',
+        'additional_information' => 'nullable|string',
+    ];
+
+//class ProductService
+//{
+//    public const VALIDATION_RULES = [/* ... */];
+//    public const VALIDATION_MESSAGES = [/* ... */];
+//
+//    public function create(array $data): Product
+//    {
+//        return Product::create($data);
+//    }
+//}
+
+public function createProduct($request, $function_name, $id = NULL)
     {
         $data = $request->all();
         $user = User::find($data['user_id']);
@@ -25,6 +59,7 @@ class ProductService
                     'price' => 'required',
                     'stock_balance' => 'required',
                     'color_id' => 'required',
+                    'brand_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 ]);
 
                 if ($validator->fails()) {
@@ -39,6 +74,14 @@ class ProductService
             if (isset($data['sub_kind_product_id'])){
                 $product->sub_kind_product_id = $data['sub_kind_product_id'];
             }
+//            if ($request->file('brand_image') && $request->file('brand_image')->isValid()) {
+//                $brandImage = $request->file('brand_image');
+//            $brandImageName = 'brand_' . time() . '.' . $brandImage->getClientOriginalExtension();
+//            $brandImage->move(public_path('images/brands'), $brandImageName);
+//
+//            // Збереження шляху в моделі (наприклад)
+//            $product->brand_image = 'images/brands/' . $brandImageName;
+//            }
             $product->content = $data['content'];
             $product->price = $data['price'];
             $product->stock_balance = $data['stock_balance'];
@@ -53,18 +96,6 @@ class ProductService
                 $product_photo = new ProductPhotoController();
                 $product_photo->upload($request, $product->id);
             }
-
-//            // Обробити завантажені зображення
-//            if ($request->hasFile('product_photo')) {
-//                $photos = $request->file('product_photo');
-//                foreach ($photos as $photo) {
-//                    // Зберегти кожне зображення
-//                    $filename = $photo->store('photos'); // Зберегти зображення в папці "storage/app/products"
-//                    // Тут ви також можете виконати будь-які додаткові операції з файлами, наприклад, зберегти шляхи до зображень в базі даних.
-//                }
-//            }
-
-
         } elseif ($function_name = 'update'){
             $product = Product::query()->where('id',$id)->first();
             if(!$product){
@@ -88,6 +119,7 @@ class ProductService
                     'price' => 'required',
                     'stock_balance' => 'required',
                     'color_id' => 'required',
+                    'brand_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 ]);
                 if ($validator->fails()) {
                     throw new ValidationException($validator);
@@ -96,6 +128,17 @@ class ProductService
 
             if (isset($data['title'])){
                 $product->title = $data['title'];
+            }
+            if ($request->file('brand_image') && $request->file('brand_image')->isValid()) {
+                $brandImage = $request->file('brand_image');
+                $brandImageName = 'brand_' . time() . '.' . $brandImage->getClientOriginalExtension();
+                $brandImage->move(public_path('images/brands'), $brandImageName);
+                $newBrandModel = new Brand();
+                $newBrandModel->create();
+    //TODO зберегти або оновити фото бренду
+
+                // Збереження шляху в моделі (наприклад)
+//                $product->brand_image = 'images/brands/' . $brandImageName;
             }
             $product->sub_kind_product_id = $data['sub_kind_product_id'];
             $product->content = $data['content'];
@@ -122,5 +165,10 @@ class ProductService
 //        echo "<pre>";
 //        exit();
         return $product;
+    }
+
+    private function saveBrand()
+    {
+
     }
 }

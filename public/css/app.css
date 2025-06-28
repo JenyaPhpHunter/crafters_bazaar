@@ -169,3 +169,18 @@ nav ul li:hover > ul {
         background-color: #ccc;
     }
 }
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #40E0D0 !important;
+    border: 1px solid #1daaaa !important;
+    color: #fff !important;
+    font-weight: bold !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #ffffff !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #222 !important;
+}
+
+

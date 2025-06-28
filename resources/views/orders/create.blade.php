@@ -156,7 +156,7 @@
                     <div class="col-6 learts-mb-20">
                         <input type="text" id="bdTownOrRegion" name="region" placeholder="Область"
                                @if(!empty($user))
-                                   @if($user->region) value="{{ old('region', $user->region->name ?? '') }}"
+                                   @if($user->region) value="{{ old('region', $user->region->title ?? '') }}"
                                    @else value="{{ old('region') }}"
                                    @endif
                                @endif
@@ -173,7 +173,7 @@
                     <div class="col-6 learts-mb-20">
                         <input type="text" id="bdTownOrCity" name="city" placeholder="Населений пункт (місто/село)"
                                @if(!empty($user))
-                                   @if($user->city) value="{{ old('city', $user->city->name ?? '') }}"
+                                   @if($user->city) value="{{ old('city', $user->city->title ?? '') }}"
                                    @else value="{{ old('city') }}"
                                    @endif
                                @endif
@@ -202,7 +202,7 @@
                         // Функція фільтрації списку областей
                         function filterRegions() {
                             const searchText = townOrRegionInput.value.toLowerCase();
-                            const filteredRegions = regionsAndCities.filter(region => region.region_name.toLowerCase().includes(searchText));
+                            const filteredRegions = regionsAndCities.filter(region => region.region_title.toLowerCase().includes(searchText));
 
                             // Очищаємо список областей
                             regionList.innerHTML = "";
@@ -210,9 +210,9 @@
                             // Додаємо знайдені області до списку
                             filteredRegions.forEach(region => {
                                 const li = document.createElement("li");
-                                li.textContent = region.region_name;
+                                li.textContent = region.region_title;
                                 li.addEventListener("click", () => {
-                                    townOrRegionInput.value = region.region_name;
+                                    townOrRegionInput.value = region.region_title;
                                     regionList.innerHTML = ""; // Сховати список після вибору
                                 });
                                 regionList.appendChild(li);
@@ -223,7 +223,7 @@
                         function filterCities() {
                             const searchText = townOrCityInput.value.toLowerCase();
                             const selectedRegion = townOrRegionInput.value;
-                            const citiesInRegion = regionsAndCities.find(region => region.region_name === selectedRegion)?.cities || [];
+                            const citiesInRegion = regionsAndCities.find(region => region.region_title === selectedRegion)?.cities || [];
                             const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));
 
                             // Очищаємо список міст

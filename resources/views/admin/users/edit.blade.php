@@ -97,7 +97,7 @@
                         <div class="col-md-12">
                             <select class="search-select select2-basic" id="role_id" name="role_id">
                                 @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ old('role_id', $user->role_id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    <option value="{{ $role->id }}" {{ old('role_id', $user->role_id ?? null) == $role->id ? 'selected' : '' }}>{{ $role->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -110,7 +110,7 @@
                         <div class="col-md-12">
                             <select class="search-select select2-basic" id="category_user_id" name="category_user_id">
                                 @foreach($categories_user as $category_user)
-                                    <option value="{{ $category_user->id }}" {{ old('category_user_id', $user->category_user_id ?? null) == $category_user->id ? 'selected' : '' }}>{{ $category_user->name }}</option>
+                                    <option value="{{ $category_user->id }}" {{ old('category_user_id', $user->category_user_id ?? null) == $category_user->id ? 'selected' : '' }}>{{ $category_user->title }}</option>
                                 @endforeach
                             </select>
                         </div>

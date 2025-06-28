@@ -45,59 +45,71 @@
                         <div class="tab-pane fade {{ session('activeTab') == 'orders' ? 'show active' : '' }}" id="orders">
                             <div class="myaccount-content order">
                                 <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Замовлення</th>
-                                            <th>Дата</th>
-                                            <th>Статус</th>
-                                            <th>Всього</th>
-{{--                                            <th>Дія</th>--}}
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @php
-                                            $counter = 1;
-                                        @endphp
-                                        @foreach($orders as $order)
-                                            <tr>
-                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $counter }}</a></td>
-                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->updated_at }}</a></td>
-                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->status_order->name }}</a></td>
-                                                <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->sum_order }}</a></td>
-{{--                                                <td><a href="shopping-cart.html">View</a></td>--}}
+                                    @if($orders->isNotEmpty() && $sendingss->isNotEmpty())
+                                        <table class="table">
+                                            @if($orders->isNotEmpty())
+                                                <thead>
+                                                <tr>
+                                                    <th>Замовлення</th>
+                                                    <th>Дата</th>
+                                                    <th>Статус</th>
+                                                    <th>Всього</th>
+        {{--                                            <th>Дія</th>--}}
+                                                </tr>
+                                                </thead>
+                                                <tbody>
                                                 @php
-                                                    $counter ++;
+                                                    $counter = 1;
                                                 @endphp
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                        <thead>
-                                        <tr>
-                                            <th>Відправлення</th>
-                                            <th>Дата</th>
-                                            <th>Статус</th>
-                                            <th>Всього</th>
-                                            {{--                                            <th>Дія</th>--}}
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @php
-                                            $counter = 1;
-                                        @endphp
-                                        @foreach($orders as $order)
-                                            <tr>
-                                                <td>  1 </td>>
-                                                <td>  1 </td>>
-                                                <td>  1 </td>>
-                                                <td>  1 </td>>
+                                                @foreach($orders as $order)
+                                                    <tr>
+                                                        <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $counter }}</a></td>
+                                                        <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->updated_at }}</a></td>
+                                                        <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->status_order->name }}</a></td>
+                                                        <td><a href="{{ route('orders.show',['order' => $order->id]) }}">{{ $order->sum_order }}</a></td>
+        {{--                                                <td><a href="shopping-cart.html">View</a></td>--}}
+                                                        @php
+                                                            $counter ++;
+                                                        @endphp
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            @else
+                                                У Вас ще немає замовлень
+                                            @endif
+                                            @if($orders->isNotEmpty())
+                                                <thead>
+                                                <tr>
+                                                    <th>Відправлення</th>
+                                                    <th>Дата</th>
+                                                    <th>Статус</th>
+                                                    <th>Всього</th>
+                                                    {{--                                            <th>Дія</th>--}}
+                                                </tr>
+                                                </thead>
+                                                <tbody>
                                                 @php
-                                                    $counter ++;
+                                                    $counter = 1;
                                                 @endphp
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                                @foreach($sendings as $sending)
+                                                    <tr>
+                                                        <td>  1 </td>>
+                                                        <td>  1 </td>>
+                                                        <td>  1 </td>>
+                                                        <td>  1 </td>>
+                                                        @php
+                                                            $counter ++;
+                                                        @endphp
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            @else
+                                                У Вас ще немає відправок
+                                            @endif
+                                        </table>
+                                    @else
+                                        У Вас ще немає замовлень та відправок
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -150,31 +162,35 @@
                                         <div class="row learts-mb-n30">
                                             <div class="col-6 learts-mb-20">
                                                 <input type="text" id="bdTownOrRegion" name="region" placeholder="Область"
-                                                   @if(!empty($user))
-                                                        @if($user->region) value="{{ old('region', $user->region->name ?? '') }}"
-                                                        @else value="{{ old('region') }}"
+                                                       @php
+                                                           $regionValue = old('region', $user->region->title ?? '');
+                                                       @endphp
+
+                                                       @if(!empty($user))
+                                                           value="{{ $regionValue }}"
                                                        @endif
-                                                   @endif
                                                        class="form-control @error('region') is-invalid @enderror">
                                                 @error('region')
                                                 <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                    <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
                                                 <ul id="regionList"></ul>
                                             </div>
+
+                                            <!-- HTML для поля міст -->
                                             <div class="col-6 learts-mb-20">
                                                 <input type="text" id="bdTownOrCity" name="city" placeholder="Населений пункт (місто/село)"
                                                        @if(!empty($user))
-                                                           @if($user->city) value="{{ old('city', $user->city->name ?? '') }}"
+                                                           @if($user->city) value="{{ old('city', $user->city->title ?? '') }}"
                                                        @else value="{{ old('city') }}"
                                                        @endif
                                                        @endif
                                                        class="form-control @error('city') is-invalid @enderror">
                                                 @error('city')
                                                 <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                                 @enderror
                                                 <ul id="cityList"></ul>
                                             </div>
@@ -195,7 +211,7 @@
                                                 // Функція фільтрації списку областей
                                                 function filterRegions() {
                                                     const searchText = townOrRegionInput.value.toLowerCase();
-                                                    const filteredRegions = regionsAndCities.filter(region => region.region_name.toLowerCase().includes(searchText));
+                                                    const filteredRegions = regionsAndCities.filter(region => region.region_title.toLowerCase().includes(searchText));
 
                                                     // Очищаємо список областей
                                                     regionList.innerHTML = "";
@@ -203,9 +219,9 @@
                                                     // Додаємо знайдені області до списку
                                                     filteredRegions.forEach(region => {
                                                         const li = document.createElement("li");
-                                                        li.textContent = region.region_name;
+                                                        li.textContent = region.region_title;
                                                         li.addEventListener("click", () => {
-                                                            townOrRegionInput.value = region.region_name;
+                                                            townOrRegionInput.value = region.region_title;
                                                             regionList.innerHTML = ""; // Сховати список після вибору
                                                         });
                                                         regionList.appendChild(li);
@@ -216,7 +232,7 @@
                                                 function filterCities() {
                                                     const searchText = townOrCityInput.value.toLowerCase();
                                                     const selectedRegion = townOrRegionInput.value;
-                                                    const citiesInRegion = regionsAndCities.find(region => region.region_name === selectedRegion)?.cities || [];
+                                                    const citiesInRegion = regionsAndCities.find(region => region.region_title === selectedRegion)?.cities || [];
                                                     const filteredCities = citiesInRegion.filter(city => city.toLowerCase().includes(searchText));
 
                                                     // Очищаємо список міст
@@ -247,44 +263,46 @@
                                                     }
                                                 });
                                             </script>
+                                            @php
+                                                $addressParts = $user->getAddressParts();
+                                            @endphp
                                             <div class="col-6 learts-mb-20">
                                                 <label for="bdAddress1">Вулиця</label>
-                                                <input type="text" id="bdAddress1" name="street" placeholder="назва вулиці"
-                                                       value="{{ old('street', $address['street'] ?? '') }}"
+                                                <input type="text" id="bdAddress1" name="street" placeholder="вулиця"
+                                                       value="{{ old('street', $addressParts['street'] ?? '') }}"
                                                        class="form-control @error('street') is-invalid @enderror">
                                                 @error('street')
                                                 <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                                 @enderror
                                             </div>
                                             <div class="col-3 learts-mb-20">
                                                 <label for="bdHouseNumber">№ Будинку</label>
                                                 <input type="text" id="bdHouseNumber" name="home" placeholder="номер будинку"
-                                                       value="{{ old('home', $address['home'] ?? '') }}"
+                                                       value="{{ old('home', $addressParts['home'] ?? '') }}"
                                                        class="form-control @error('home') is-invalid @enderror">
                                                 @error('home')
                                                 <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                                 @enderror
                                             </div>
                                             <div class="col-3 learts-mb-20">
                                                 <label for="bdApartment">№ Квартири</label>
                                                 <input type="text" id="bdApartment" name="apartment" placeholder="номер квартири"
-                                                       value="{{ $address['apartment'] }}">
+                                                       value="{{ old('apartment', $addressParts['apartment'] ?? '') }}">
                                             </div>
-                                            <br>
-                                            <div class="col-12 learts-mb-30">
-                                                <button type="submit" class="btn btn-dark btn-outline-hover-dark">Зберегти зміни</button>
-                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="col-12 learts-mb-30">
+                                            <button type="submit" class="btn btn-dark btn-outline-hover-dark">Зберегти зміни</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <!-- Single Tab Content End -->
-
                         <!-- Single Tab Content Start -->
                         <div class="tab-pane fade {{ session('activeTab') == 'account-info' ? 'show active' : '' }}" id="account-info">
                             <div class="myaccount-content account-details">

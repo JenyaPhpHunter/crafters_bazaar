@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Mail;
+namespace Чернетка;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 
 class GenericMail extends Mailable
 {
@@ -32,13 +31,10 @@ class GenericMail extends Mailable
      */
     public function build()
     {
-//        $imagePath = 'photos/20240212_172557_11.jpg';
-        return $this->subject($this->titleEmail)
+        return $this
+            ->subject($this->titleEmail)
             ->view('emails.generic')
-//            ->attach($imagePath, [                         // якщо потрібно вкласти файл
-//                'as' => 'Example Image',
-//                'mime' => 'image/jpeg',
-//            ])
+            ->text('emails.generic_plain') // plain-text версія
             ->with('content', $this->content);
     }
 }

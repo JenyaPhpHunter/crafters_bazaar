@@ -32,13 +32,13 @@ class UserController extends Controller
         $arr_cities = [];
         $arr_region_cities = [];
         foreach ($cities as $city) {
-            $arr_cities[] = $city->name;
+            $arr_cities[] = $city->title;
             if (!isset($arr_region_cities[$city->region_id])) {
                 $region = Region::query()->find($city->region_id);
-                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
+                $arr_region_cities[$city->region_id]['region_title'] = $region->title;
                 $arr_region_cities[$city->region_id]['cities'] = [];
             }
-            $arr_region_cities[$city->region_id]['cities'][] = $city->name;
+            $arr_region_cities[$city->region_id]['cities'][] = $city->title;
         }
         $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
         collator_sort($collator, $arr_region_cities); // Виконуємо сортування
@@ -93,9 +93,9 @@ class UserController extends Controller
                     ->with('activeTab', 'address');
             }
 
-            $region = Region::query()->where('name', $request->input('region'))->first();
+            $region = Region::query()->where('title', $request->input('region'))->first();
             $user->region_id = $region->id;
-            $city = City::query()->where('name', $request->input('city'))->first();
+            $city = City::query()->where('title', $request->input('city'))->first();
             $user->city_id = $city->id;
             $addressParts = [
                 $request->post('street'),

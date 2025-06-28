@@ -4,14 +4,6 @@ namespace App\Constants;
 
 class OthersConstants
 {
-    const RATING = [
-        '1' => 'Дуже погано',
-        '2' => 'Погано',
-        '3' => 'Нормально',
-        '4' => 'Добре',
-        '5' => 'Дуже добре',
-    ];
-
     const ACTIONS = [
         'create' => 'Створення',
         'edit' => 'Редагування',
@@ -24,6 +16,7 @@ class OthersConstants
         'admin_kind_products' => ['name' => 'Види товарів', 'route' => 'admin_kind_products.index'],
         'admin_sub_kind_products' => ['name' => 'Підвиди товарів', 'route' => 'admin_sub_kind_products.index'],
         'products' => ['name' => 'Товари', 'route' => 'products.index'],
+        'brands' => ['name' => 'Бренди', 'route' => 'brands.index'],
         'admin_orders' => ['name' => 'Список замовлень', 'route' => 'admin_orders.index'],
         'admin_roles' => ['name' => 'Ролі', 'route' => 'admin_roles.index'],
         'admin_tags' => ['name' => 'Теги', 'route' => 'admin_tags.index'],
@@ -49,6 +42,7 @@ class OthersConstants
         'admin_kind_products' => ['name' => 'Створити вид товарів', 'route' => 'admin_kind_products.create' , 'icon' => 'fal fa-box-open'],
         'admin_sub_kind_products' => ['name' => 'Створити підвид товарів', 'route' => 'admin_sub_kind_products.create', 'icon' => 'fal fa-boxes'],
         'products' => ['name' => 'Створити товар', 'route' => 'products.create', 'icon' => 'fal fa-cube'],
+        'brands' => ['name' => 'Створити бренд', 'route' => 'brands.create', 'icon' => 'fal fa-cube'],
         'admin_orders' => ['name' => 'Створити замовлення', 'route' => 'admin_orders.create', 'icon' => 'fal fa-shopping-cart'],
         'admin_roles' => ['name' => 'Створити роль', 'route' => 'admin_roles.create', 'icon' => 'fal fa-user-shield'],
         'admin_tags' => ['name' => 'Створити тег', 'route' => 'admin_tags.create', 'icon' => 'fal fa-user-shield'],

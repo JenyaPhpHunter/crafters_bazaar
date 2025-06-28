@@ -92,95 +92,115 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="color_id" id="selectedColor" value="{{ $product->color_id }}">
-                        <label for="title">Назва</label>
-                        <br>
-                        <input id="title" name="title" type="text" class="product-title"
-                               placeholder="Введіть назву товару"
-                               value="{{ old('title', $product->title) }}"
-                        >
-                        @error('title')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <br>
-
-                        <label for="price">Вартість, грн</label>
-                        <br>
-                        <input type="number" id="price" name="price" min="0" step="1" class="product-title"
-                               placeholder="Введіть вартість товару" value="{{ old('price', $product->price) }}">
-                        @error('price')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <br>
-
-                        <label for="content">Інформація про товар</label>
-                        <br>
-                        <textarea id="content" name="content" rows="10" cols="50"
-                                  placeholder="Введіть опис товару, щоб зацікавити покупця">{{ old('content', $product->content) }}</textarea>
-                        @error('content')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <br>
-
-                        <label for="kind_product_id">Вид товару</label>
-                        <br>
-                        <div class="row mb-n3">
-                            <div class="col-lg-4 col-12 mb-3">
-                                <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
-                                    @foreach($kind_products as $kind_product)
-                                        <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $product->sub_kind_product->kind_product->id ?? null) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="row">
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="title">Назва</label>
+                                <br>
+                                <input id="title" name="title" type="text" class="product-title"
+                                       placeholder="Введіть назву товару"
+                                       value="{{ old('title', $product->title) }}"
+                                >
+                                @error('title')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="price">Вартість, грн</label>
+                                <br>
+                                <input type="number" id="price" name="price" min="0" step="1" class="product-title"
+                                       placeholder="Введіть вартість товару" value="{{ old('price', $product->price) }}">
+                                @error('price')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                        @error('kind_product_id')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <br>
-                        <button type="submit" name="action" value="add_kind" class="btn btn-primary3">
-                            <i class="fab fa-galactic-republic"></i> {{$action_types['add_kind']}}
-                        </button>
-                        <br><br>
-
-                        <label for="sub_kind_product_id">Підвид товару</label>
-                        <br>
-                        <div class="row mb-n3">
-                            <div class="col-lg-4 col-12 mb-3">
-                                <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
-                                    @foreach($sub_kind_products as $sub_kind_product)
-                                        <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', optional($product->sub_kind_product)->id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="row">
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="brand_image">Логотип бренду</label>
+                                <input type="file" name="brand_image" id="brand_image" accept="image/*" class="form-control">
+                                @error('brand_image')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="content">Інформація про товар</label>
+                                <br>
+                                <textarea id="content" name="content" rows="10" cols="50"
+                                          placeholder="Введіть опис товару, щоб зацікавити покупця">{{ old('content', $product->content) }}</textarea>
+                                @error('content')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                        @error('sub_kind_product_id')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
                         <br>
-                        <button type="submit" name="action" value="add_sub_kind" class="btn btn-primary3">
-                            <i class="fab fa-galactic-republic"></i> {{$action_types['add_sub_kind']}}
-                        </button>
-                        <br><br>
-
-                        <label for="quantity">Кількість виробів в наявності</label>
-                        <div class="product-quantity">
-                            <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                            <input type="text" class="input-qty" name="stock_balance" id="stock_balance" value="{{ old('stock_balance', $product->stock_balance) }}">
-                            <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                        <div class="row">
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="kind_product_id">Вид товару</label>
+                                <br>
+                                <div class="row mb-n3">
+                                    <div class="col-lg-4 col-12 mb-3">
+                                        <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
+                                            @foreach($kind_products as $kind_product)
+                                                <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $product->sub_kind_product->kind_product->id ?? null) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                @error('kind_product_id')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <br>
+                                <button type="submit" name="action" value="add_kind" class="btn btn-primary3">
+                                    <i class="fab fa-galactic-republic"></i> {{$action_types['add_kind']}}
+                                </button>
+                            </div>
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="sub_kind_product_id">Підвид товару</label>
+                                <br>
+                                <div class="row mb-n3">
+                                    <div class="col-lg-4 col-12 mb-3">
+                                        <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
+                                            @foreach($sub_kind_products as $sub_kind_product)
+                                                <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', optional($product->sub_kind_product)->id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                @error('sub_kind_product_id')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                                <br>
+                                <button type="submit" name="action" value="add_sub_kind" class="btn btn-primary3">
+                                    <i class="fab fa-galactic-republic"></i> {{$action_types['add_sub_kind']}}
+                                </button>
+                            </div>
                         </div>
-                        @error('stock_balance')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <br>
-                        <label for="quantity">Можу виробити цей товар ще</label>
-                        <input type="checkbox" id="can_produce" name="can_produce">
-                        <div id="termCreationWrapper" style="display: none;">
-                            <br>
-                            <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
-                            <div id="termCreationBlock">
-                                <div class="product-quantity">
+                        <div class="row">
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="quantity">В наявності (штук)</label>
+                                <div class="product-quantity d-flex align-items-center">
                                     <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                    <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', $product->term_creation) }}">
+                                    <input type="text" class="input-qty" name="stock_balance" id="stock_balance"
+                                           value="{{ old('stock_balance', $product->stock_balance) }}">
                                     <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                </div>
+                                @error('stock_balance')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 col-12 learts-mb-30">
+                                <label for="quantity">Можу виробити цей товар ще</label>
+                                <input type="checkbox" id="can_produce" name="can_produce">
+                                <div id="termCreationWrapper" style="display: none;">
+                                    <br>
+                                    <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
+                                    <div id="termCreationBlock">
+                                        <div class="product-quantity">
+                                            <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                            <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', $product->term_creation) }}">
+                                            <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,20 +251,33 @@
                                         class="btn btn-dark btn-outline-hover-dark">
                                     <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
                                 </button>
+                                <button type="submit" name="action" value="save"
+                                        class="btn btn-dark btn-outline-hover-dark">
+                                    <i class="fas fa-save"></i> {{ $action_types['save'] }}
+                                </button>
+                                <button type="button" onclick="deleteProduct()" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i> {{ $action_types['delete'] }}
+                                </button>
                             @endif
-                            <button type="submit" name="action" value="save"
-                                    class="btn btn-dark btn-outline-hover-dark">
-                                <i class="fas fa-save"></i> {{ $action_types['save'] }}
-                            </button>
                         </div>
                     </form>
-                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-outline-hover-danger" onclick="return confirm('Ви впевнені, що хочете видалити цей товар?');">
-                            <i class="fas fa-trash-alt"></i> {{ $action_types['delete'] }}
-                        </button>
-                    </form>
+                    <script>
+                        function deleteProduct() {
+                            if (confirm('Ви впевнені, що хочете видалити цей товар?')) {
+                                fetch('{{ route('products.destroy', $product->id) }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'X-HTTP-Method-Override': 'DELETE'
+                                    }
+                                }).then(response => {
+                                    if (response.redirected) {
+                                        window.location.href = response.url;
+                                    }
+                                });
+                            }
+                        }
+                    </script>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
                         @isset($user)
                             <div class="col-auto learts-mb-20">

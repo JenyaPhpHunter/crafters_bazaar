@@ -18,9 +18,13 @@ class BreadcrumbServiceProvider extends ServiceProvider
     {
         // Передача breadcrumbs у всі view
         View::composer('*', function ($view) {
+            if (!request()->route()) {
+                // Немає активного маршруту (наприклад, у черзі або консолі) — нічого не робимо
+                return;
+            }
             $currentRouteName = Route::currentRouteName(); // Отримуємо ім'я поточного маршруту
             $routeParameters = Route::current()->parameters(); // Отримуємо всі параметри маршруту як масив
-//// Далі можна обробити параметри в залежності від потреби
+            //// Далі можна обробити параметри в залежності від потреби
             foreach ($routeParameters as $key => $value) {
                 // $key — це ім'я параметра (наприклад, 'product' або 'forum_sub_category')
                 // $value — це значення параметра

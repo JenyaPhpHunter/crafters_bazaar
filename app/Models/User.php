@@ -101,4 +101,18 @@ class User extends Authenticatable
     {
         return $this->belongsTo(CategoryUser::class);
     }
+
+    public function getAddressParts(): array
+    {
+        if (empty($this->address)) {
+            return ['', '', ''];
+        }
+
+        $parts = explode(', ', $this->address);
+        return [
+            'street' => $parts[0] ?? '',
+            'home' => $parts[1] ?? '',
+            'apartment' => isset($parts[2]) ? str_replace('кв. ', '', $parts[2]) : ''
+        ];
+    }
 }

@@ -32,31 +32,31 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $role_id_user = $request->input('role');
-        if ($role_id_user){
-            $query = User::query()->with(['role', 'category_user'])->where('role_id', $role_id_user)->whereNull('deleted_at')->orderBy('id', 'desc');
+//        $this->seedie($request->all());
+        $role_id = $request->input('role_id');
+        if ($role_id){
+            $query = User::query()->with(['role', 'category_user'])->where('role_id', $role_id)->whereNull('deleted_at')->orderBy('id', 'desc');
         } else {
             $query = User::query()->with(['role', 'category_user'])->whereNull('deleted_at')->orderBy('id', 'desc');
         }
 
-        // Викликаємо метод filter і передаємо в нього $query і $request
         $users = $this->filter($query, $request)->get();
-//        $query = User::query()->with('role','category_user')->whereNull('deleted_at')->orderBy('id', 'desc');
-//        if ($request->input('pib') || $request->input('email') || $request->input('phone') || $request->input('role_id') || $request->input('category_user_id')){
-//            $sers = $this->filter($request);
-//        } else {
-//            if ($request->input('role')){
-//                $users = $query->where('role_id', $request->input('role'))->get();
-//            } else {
-//                $users = $query->get();
-//            }
-//        }
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
         $roles = Role::where('id', '>=', $user->role_id)->get();
         $categories = CategoryUser::where('id', '>=', $user->category_user_id)->get();
 
-        return view('admin.users.index',compact('users','roles','categories'));
+        $filters = $request->only([
+            'pib',
+            'email',
+            'phone',
+            'role_id',
+            'category_user_id'
+        ]);
+        $filters['role_id'] = (array) ($filters['role_id'] ?? []);
+        $filters['category_user_id'] = (array) ($filters['category_user_id'] ?? []);
+
+        return view('admin.users.index',compact('users','roles', 'categories', 'filters'));
     }
 
     /**
@@ -186,13 +186,13 @@ class UserController extends Controller
         $arr_cities = [];
         $arr_region_cities = [];
         foreach ($cities as $city) {
-            $arr_cities[] = $city->name;
+            $arr_cities[] = $city->title;
             if (!isset($arr_region_cities[$city->region_id])) {
                 $region = Region::query()->find($city->region_id);
-                $arr_region_cities[$city->region_id]['region_name'] = $region->name;
+                $arr_region_cities[$city->region_id]['region_title'] = $region->title;
                 $arr_region_cities[$city->region_id]['cities'] = [];
             }
-            $arr_region_cities[$city->region_id]['cities'][] = $city->name;
+            $arr_region_cities[$city->region_id]['cities'][] = $city->title;
         }
         $collator = collator_create('uk_UA'); // Створюємо колатор для української мови
         collator_sort($collator, $arr_region_cities); // Виконуємо сортування
