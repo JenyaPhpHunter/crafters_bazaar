@@ -150,19 +150,13 @@ class BrandController extends Controller
     public function edit(Brand $brand)
     {
         try {
-            // Отримуємо список користувачів
-            $users = \App\Models\User::select('id', 'name')->get();
+            $users = User::select('id', 'name')->get();
 
-            // Отримуємо ID пов'язаних користувачів
-            $selectedUsers = old('user_ids', $brand->users->pluck('id')->toArray());
-
-            // Доступні значення рейтингу
             $ratings = config('others.rating');
 
             return view('brands.edit', [
                 'brand' => $brand,
                 'users' => $users,
-                'selectedUsers' => $selectedUsers,
                 'ratings' => $ratings,
                 'currentRating' => old('rating', $brand->rating),
             ]);
@@ -214,8 +208,30 @@ class BrandController extends Controller
         }
     }
 
-    public function destroy($id)  //TODO
+    public function destroy($id)
     {
-        //
+        try {
+            $brand = Brand::findOrFail($id);
+
+            // Видалення зображення, якщо є
+            if ($brand->image_path) {
+                Storage::disk('public')->delete($brand->image_path);
+            }
+
+            $brand->delete();
+
+            return redirect()
+                ->route('brands.index')
+                ->with('success', 'Бренд успішно видалено!');
+        } catch (\Exception $e) {
+            \Log::error('Brand deletion failed', [
+                'brand_id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('brands.index')
+                ->with('error', 'Помилка при видаленні бренду');
+        }
     }
 }

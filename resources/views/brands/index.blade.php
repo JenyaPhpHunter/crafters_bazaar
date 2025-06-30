@@ -140,16 +140,18 @@
                                        title="Переглянути">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                    @can('update', $brand)
                                     <a href="{{ route('brands.edit', $brand) }}"
                                        class="btn btn-sm btn-outline-secondary"
                                        title="Редагувати">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    @endcan
                                     @can('delete', $brand)
                                         <form action="{{ route('brands.destroy', $brand) }}"
                                               method="POST"
                                               class="d-inline"
-                                              onsubmit="return confirm('Ви впевнені?')">
+                                              onsubmit="return confirm('Ви впевнені, що хочете видалити цей бренд?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

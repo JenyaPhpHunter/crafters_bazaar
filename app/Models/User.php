@@ -115,4 +115,25 @@ class User extends Authenticatable
             'apartment' => isset($parts[2]) ? str_replace('кв. ', '', $parts[2]) : ''
         ];
     }
+
+    public function isUser(): bool
+    {
+        return $this->role_id > 4;
+    }
+
+    public function isSeller(): bool
+    {
+        return $this->role_id === 4;
+    }
+
+    public function isLead(): bool
+    {
+        return $this->role_id === 3;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id < 3;
+    }
+
 }

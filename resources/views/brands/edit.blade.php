@@ -27,41 +27,40 @@
             </div>
 
             <div class="form-group mb-3">
-                <label>Поточне зображення:</label>
-                @if($brand->image_path)
-                    <img src="{{ asset('storage/' . $brand->image_path) }}" alt="{{ $brand->title }}" class="img-thumbnail mb-2" style="max-height: 200px;">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remove_image" name="remove_image">
-                        <label class="form-check-label" for="remove_image">Видалити зображення</label>
-                    </div>
-                @else
-                    <p>Зображення відсутнє</p>
-                @endif
+                <label for="image" class="form-label">Логотип бренду</label>
 
-                <label for="image" class="mt-2">Нове зображення</label>
-                <input type="file" class="form-control @error('image') is-invalid @enderror"
-                       id="image" name="image" accept="image/*">
-                @error('image')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <div class="row align-items-center">
+                    @if($brand->image_path)
+                        <div class="col-md-6">
+                            <img src="{{ asset('storage/' . $brand->image_path) }}"
+                                 alt="{{ $brand->title }}"
+                                 class="img-fluid mb-2"
+                                 style="max-height: 200px;"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#imageModal"
+                                 onclick="showImageModal('{{ asset('storage/' . $brand->image_path) }}')">
+                        </div>
+                    @endif
+
+                    <div class="col-md-6">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror"
+                               id="image" name="image" accept="image/*">
+                        @error('image')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+
+                        @if($brand->image_path)
+                            <div class="alert alert-warning mt-2 p-2">
+                                ⚠️ Нове зображення повністю видалить поточне зображення.
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
 
-            <select name="user_ids[]" multiple class="form-select">
-                @foreach($users as $user)
-                    <option value="{{ $user->id }}" @if(in_array($user->id, $selectedUsers)) selected @endif>
-                        {{ $user->name }}
-                    </option>
-                @endforeach
-            </select>
+            @include('brands.include.brand-rating', ['ratingValue' => $brand->rating, 'ratings' => config('others.rating')])
 
-            <select name="rating" class="form-select">
-                @foreach($ratings as $key => $value)
-                    <option value="{{ $key }}" @if($key == $currentRating) selected @endif>
-                        {{ $value }}
-                    </option>
-                @endforeach
-            </select>
-            @if($brand->creator)
+        @if($brand->creator)
                 <p><strong>Створено користувачем:</strong> {{ $brand->creator->name }}</p>
             @endif
 
@@ -69,4 +68,6 @@
             <a href="{{ route('brands.index') }}" class="btn btn-secondary">Скасувати</a>
         </form>
     </div>
+
+    @include('brands.include.image_modal')
 @endsection

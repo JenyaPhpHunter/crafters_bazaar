@@ -17,34 +17,29 @@
                          data-bs-target="#imageModal"
                          onclick="showImageModal('{{ asset('storage/' . $brand->image_path) }}')">
                 @endif
-                @if($brand->rating && config('others.rating.' . $brand->rating))
-                    <div class="mb-4">
-                        <h4>Рейтинг:</h4>
-                        <div>
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $brand->rating)
-                                    <i class="fas fa-star text-warning"></i> {{-- Заповнена зірка --}}
-                                @else
-                                    <i class="far fa-star text-muted"></i> {{-- Порожня зірка --}}
-                                @endif
-                            @endfor
-                        </div>
-                    </div>
-                @endif
+
+                @include('brands.include.brand-rating', ['ratingValue' => $brand->rating, 'ratings' => config('others.rating')])
+
                 @if($brand->creator)
                     <p><strong>Створено користувачем:</strong> {{ $brand->creator->name }}</p>
                 @endif
 
-
-                    <div class="mb-4">
+                <div class="mb-4">
                     <h4>Опис:</h4>
                     <p>{{ $brand->content ?? 'Опис відсутній' }}</p>
                 </div>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('brands.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left"></i> До списку
                     </a>
+
+                    @can('delete', $brand)
+                        <!-- Кнопка відкриття модалки -->
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                            <i class="fas fa-trash-alt"></i> Видалити
+                        </button>
+                    @endcan
 
                     @can('update', $brand)
                         <a href="{{ route('brands.edit', $brand->id) }}" class="btn btn-outline-primary">
