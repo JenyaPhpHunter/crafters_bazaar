@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\BrandInvitationMail;
 use App\Models\Brand;
 use App\Exceptions\BrandCreationException;
+use App\Models\BrandInvitation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
 
@@ -57,10 +58,6 @@ class BrandService
 
             $brand->update($updateData);
 
-//            if (array_key_exists('user_ids', $data)) {
-//                $brand->users()->sync($data['user_ids']);
-//            }
-
             DB::commit();
 
             return $brand;
@@ -85,12 +82,24 @@ class BrandService
     public static function inviteUsersToBrand(array $emails, Brand $brand, EmailService $emailService): void
     {
         foreach ($emails as $email) {
-            $trimmedEmail = trim($email);
-            if (!filter_var($trimmedEmail, FILTER_VALIDATE_EMAIL)) {
-                continue;
+            $email = trim($email);
+
+            $invitation = BrandInvitation::firstOrNew([
+                'brand_id' => $brand->id,
+                'email'    => $email,
+            ]);
+
+            if ($invitation->exists) {
+                // вже є — оновлюємо лічильник
+                $invitation->resent_count++;
+            } else {
+                $invitation->invited_by = auth()->id();
             }
 
-            $emailService->sendEmail(new BrandInvitationMail($brand), $trimmedEmail);
+            $invitation->last_sent_at = now();
+            $invitation->save();
+
+            $emailService->sendBrandInvitationEmail($brand, $email);
         }
     }
 

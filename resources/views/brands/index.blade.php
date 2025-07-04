@@ -135,17 +135,19 @@
 
                                 <td>{{ $brand->created_at->format('d.m.Y H:i') }}</td>
                                 <td class="text-nowrap">
-                                    <a href="{{ route('brands.show', $brand) }}"
-                                       class="btn btn-sm btn-outline-primary"
-                                       title="Переглянути">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                    @can('view', $brand)
+                                        <a href="{{ route('brands.show', $brand) }}"
+                                           class="btn btn-sm btn-outline-primary"
+                                           title="Переглянути">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    @endcan
                                     @can('update', $brand)
-                                    <a href="{{ route('brands.edit', $brand) }}"
-                                       class="btn btn-sm btn-outline-secondary"
-                                       title="Редагувати">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                        <a href="{{ route('brands.edit', $brand) }}"
+                                           class="btn btn-sm btn-outline-secondary"
+                                           title="Редагувати">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                     @endcan
                                     @can('delete', $brand)
                                         <form action="{{ route('brands.destroy', $brand) }}"

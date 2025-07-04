@@ -24,6 +24,65 @@
                     <p><strong>Створено користувачем:</strong> {{ $brand->creator->name }}</p>
                 @endif
 
+                @can('update', $brand)
+                    <div class="mt-5">
+                        <h4>Запросити нових користувачів до бренду</h4>
+                        <form action="{{ route('brands.invite', $brand->id) }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="invited_emails">Email-адреси через кому</label>
+                                <textarea name="invited_emails" id="invited_emails" class="form-control" rows="3" placeholder="user1@example.com, user2@example.com">{{ old('invited_emails') }}</textarea>
+                                @error('invited_emails')
+                                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary">Надіслати запрошення</button>
+                        </form>
+                    </div>
+                @endcan
+
+                @if(request()->has('email') && auth()->check() && auth()->user()->email === request()->query('email') && !$brand->users->contains(auth()->id()))
+                    <form action="{{ route('brands.join', $brand) }}" method="POST" class="mt-3">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Приєднатися до бренду</button>
+                    </form>
+                @endif
+
+                @if($brand->users->count())
+                    <div class="mt-4">
+                        <h4>Користувачі бренду:</h4>
+                        <ul class="list-group">
+                            @foreach($brand->users as $user)
+                                <li class="list-group-item">{{ $user->name }} ({{ $user->email }})</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @can('update', $brand)
+                    @if($brand->invitations->count())
+                        <div class="mt-4">
+                            <h5>Запрошені користувачі:</h5>
+                            <ul>
+                                @foreach($brand->invitations as $invitation)
+                                    <li>
+                                        {{ $invitation->email }}
+                                        @if($invitation->accepted_at)
+                                            <span class="text-success">(прийняв запрошення)</span>
+                                        @else
+                                            <span class="text-muted">(очікує)</span>
+                                            @if($invitation->resent_count > 0)
+                                                <span class="badge bg-warning text-dark">повторно: {{ $invitation->resent_count }} раз(ів)</span>
+                                            @endif
+                                            <span class="text-secondary ms-2">останнє: {{ $invitation->last_sent_at?->format('d.m.Y H:i') }}</span>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                @endcan
+
+
                 <div class="mb-4">
                     <h4>Опис:</h4>
                     <p>{{ $brand->content ?? 'Опис відсутній' }}</p>

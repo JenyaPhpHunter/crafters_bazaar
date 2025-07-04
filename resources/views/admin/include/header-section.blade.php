@@ -58,17 +58,8 @@
                             @foreach($roles as $role)
                                 <li><a href="{{ route('admin_users.index', ['role_id' => $role->id]) }}"><span class="menu-text">{{ $role->title }}</span></a></li>
                             @endforeach
-{{--                            <li><a href="{{ route('admin_users.index', ['role_id' => 5, 'category_user_id' => 3]) }}"><span class="menu-text">ВІП продавці</span></a></li>--}}
-{{--                            <li><a href="{{ route('admin_users.index', ['role_id' => 6, 'category_user_id' => 3]) }}"><span class="menu-text">Продавці</span></a></li>--}}
-{{--                            <li><a href="{{ route('admin_users.index', ['role_id' => 5, 'category_user_id' => 4]) }}"><span class="menu-text">ВІП покупці</span></a></li>--}}
-{{--                            <li><a href="{{ route('admin_users.index', ['role_id' => 6, 'category_user_id' => 4]) }}"><span class="menu-text">Покупці</span></a></li>--}}
                         </ul>
                     </li>
-{{--                        <ul class="sub-menu">--}}
-{{--                            @foreach($roles as $role)--}}
-{{--                                <li><a href="{{ route('admin_users.index', ['role' => $role->id]) }}"><span class="menu-text">{{ $role->name }}</span></a></li>--}}
-{{--                            @endforeach--}}
-{{--                        </ul>--}}
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
                         <ul class="sub-menu mega-menu">
                             @if(isset($statuses_products))
@@ -181,19 +172,6 @@
                             @endif
                         </ul>
                     </li>
-{{--                    @if($user->role_id == 1)--}}
-{{--                        <li class="has-children"><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Ролі</span></a>--}}
-{{--                            <ul class="sub-menu">--}}
-{{--                                <li><a href="{{ route('admin_roles.create') }}"><span class="menu-text">Створити роль</span></a></li>--}}
-{{--                                <li><a href="{{ route('admin_roles.index') }}"><span class="menu-text">Всі ролі</span></a></li>--}}
-{{--                                @if(isset($roles))--}}
-{{--                                    @foreach ($roles as $role)--}}
-{{--                                        <li><a href="{{ asset('portfolio-details.html') }}"><span class="menu-text">{{ $role->name }}</span></a></li>--}}
-{{--                                    @endforeach--}}
-{{--                                @endif--}}
-{{--                            </ul>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
                     @if($user->role_id == 1)
                         <li class="has-children"><a href="{{ route('admin_tags.index') }}"><span class="menu-text">Теги</span></a>
                             <ul class="sub-menu">
@@ -202,6 +180,19 @@
                                 @if(isset($tags))
                                     @foreach ($tags as $tag)
                                         <li><a href="{{ route('admin_tags.edit', ['admin_tag' => $tag]) }}"><span class="menu-text">{{ $tag->name }}</span></a></li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if($user->role_id == 1)
+                        <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди></span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{{ route('brands.create') }}"><span class="menu-text">Створити бренд</span></a></li>
+                                <li><a href="{{ route('brands.index') }}"><span class="menu-text">Всі бренди</span></a></li>
+                                @if(isset($brands))
+                                    @foreach ($brands as $brand)
+                                        <li><a href="{{ route('admin_tags.edit', ['admin_tag' => $brand]) }}"><span class="menu-text">{{ $brand->name }}</span></a></li>
                                     @endforeach
                                 @endif
                             </ul>

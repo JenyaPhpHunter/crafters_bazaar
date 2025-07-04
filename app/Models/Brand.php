@@ -24,4 +24,10 @@ class Brand extends Model
     {
         return $this->belongsTo(User::class, 'createdby');
     }
+
+    public function invitations()
+    {
+        return $this->hasMany(BrandInvitation::class);
+    }
+
 }

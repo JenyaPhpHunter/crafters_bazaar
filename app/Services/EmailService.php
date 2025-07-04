@@ -30,7 +30,7 @@ class EmailService
 
     public function sendBrandInvitationEmail(Brand $brand, string $email): void
     {
-        $this->sendEmail(new BrandInvitationMail($brand), $email);
+        $this->sendEmail(new BrandInvitationMail($brand, $email), $email);
     }
 
     /**

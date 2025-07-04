@@ -76,6 +76,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::resource('brands', BrandController::class);
+    Route::post('/brands/{brand}/invite', [BrandController::class, 'invite'])->name('brands.invite');
+    Route::get('/brands/{brand}/accept', [BrandController::class, 'acceptInvitation'])
+        ->name('brands.acceptInvitation');
+    Route::post('/brands/{brand}/join', [BrandController::class, 'join'])->name('brands.join');
 });
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
@@ -95,6 +99,7 @@ Route::post('wishlist/toCart', [WishController::class, 'toCart'])->name('wishlis
 Route::resource('orders', OrderController::class)->except(['index', 'store', 'create']);
 Route::post('/products/{productId}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::post('/subscribe', [UserController::class, 'toggleSubscriptionStatus'])->name('subscribe.toggle');
+
 
 require __DIR__.'/auth.php';
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');

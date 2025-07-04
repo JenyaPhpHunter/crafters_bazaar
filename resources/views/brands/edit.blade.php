@@ -60,6 +60,33 @@
 
             @include('brands.include.brand-rating', ['ratingValue' => $brand->rating, 'ratings' => config('others.rating')])
 
+            <label for="invited_emails">Запросити користувачів (Email-адреси через кому)</label>
+            <textarea name="invited_emails" id="invited_emails" class="form-control" rows="3" placeholder="user1@example.com, user2@example.com">{{ old('invited_emails') }}</textarea>
+            @error('invited_emails')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+
+            @if($brand->invitations->count())
+                <div class="mt-4">
+                    <h5>Запрошені користувачі:</h5>
+                    <ul>
+                        @foreach($brand->invitations as $invitation)
+                            <li>
+                                {{ $invitation->email }}
+                                @if($invitation->accepted_at)
+                                    <span class="text-success">(прийняв запрошення)</span>
+                                @else
+                                    <span class="text-muted">(очікує)</span>
+                                    @if($invitation->resent_count > 0)
+                                        <span class="badge bg-warning text-dark">повторно: {{ $invitation->resent_count }} раз(ів)</span>
+                                    @endif
+                                    <span class="text-secondary ms-2">останнє: {{ $invitation->last_sent_at?->format('d.m.Y H:i') }}</span>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         @if($brand->creator)
                 <p><strong>Створено користувачем:</strong> {{ $brand->creator->name }}</p>
             @endif
@@ -67,6 +94,17 @@
             <button type="submit" class="btn btn-primary">Оновити</button>
             <a href="{{ route('brands.index') }}" class="btn btn-secondary">Скасувати</a>
         </form>
+
+        @if($brand->users->count())
+            <div class="mt-4">
+                <h4>Користувачі бренду:</h4>
+                <ul class="list-group">
+                    @foreach($brand->users as $user)
+                        <li class="list-group-item">{{ $user->name }} ({{ $user->email }})</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 
     @include('brands.include.image_modal')

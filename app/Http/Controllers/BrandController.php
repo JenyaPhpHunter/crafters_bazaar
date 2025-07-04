@@ -133,6 +133,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
+        $brand->load(['creator', 'users']);
         $availableRatings = config('others.rating');
         return view('brands.show', [
             'brand' => $brand,
@@ -150,13 +151,11 @@ class BrandController extends Controller
     public function edit(Brand $brand)
     {
         try {
-            $users = User::select('id', 'name')->get();
-
+            $brand->load(['creator', 'users']);
             $ratings = config('others.rating');
 
             return view('brands.edit', [
                 'brand' => $brand,
-                'users' => $users,
                 'ratings' => $ratings,
                 'currentRating' => old('rating', $brand->rating),
             ]);
@@ -174,7 +173,7 @@ class BrandController extends Controller
         }
     }
 
-    public function update(BrandRequest $request, Brand $brand)
+    public function update(BrandRequest $request, Brand $brand, EmailService $emailService)
     {
         try {
             $validated = $request->validated();
@@ -189,6 +188,11 @@ class BrandController extends Controller
                     Storage::delete('public/' . $brand->image_path);
                 }
                 $validated['image_path'] = $request->file('image')->store('brands', 'public');
+            }
+
+            if (!empty($request->input('invited_emails'))) {
+                $emails = explode(',', $request->input('invited_emails'));
+                BrandService::inviteUsersToBrand($emails, $brand, $emailService);
             }
 
             BrandService::updateBrand($brand, $validated);
@@ -234,4 +238,65 @@ class BrandController extends Controller
                 ->with('error', 'Помилка при видаленні бренду');
         }
     }
+
+    public function invite(Request $request, Brand $brand, EmailService $emailService)
+    {
+        $this->authorize('update', $brand);
+
+        $request->validate([
+            'invited_emails' => 'required|string',
+        ]);
+
+        $emails = array_map('trim', explode(',', $request->input('invited_emails')));
+        BrandService::inviteUsersToBrand($emails, $brand, $emailService);
+
+        return redirect()->route('brands.show', $brand)->with('success', 'Запрошення надіслано.');
+    }
+
+    public function acceptInvitation(Request $request, Brand $brand)
+    {
+        $email = urldecode($request->query('email'));
+
+        $invitation = $brand->invitations()->where('email', $email)->first();
+
+        if (!auth()->check()) {
+            return redirect()->route('login-register')->with('info', 'Будь ласка, увійдіть, щоб приєднатися до бренду.');
+        }
+
+        if (strcasecmp(auth()->user()->email, $email) !== 0) {
+            return redirect()->route('brands.index')->with('error', 'Це запрошення не для вашого акаунта.');
+        }
+
+        $user = auth()->user();
+
+        if ($brand->users()->where('user_id', $user->id)->exists()) {
+            return redirect()->route('brands.show', $brand)->with('info', 'Ви вже є учасником цього бренду.');
+        }
+        // Додаємо до бренду
+        $brand->users()->attach($user->id);
+        $invitation->accepted_at = now();
+        $invitation->save();
+
+        // Якщо користувач увійшов і email збігається — додаємо
+        if (auth()->check() && strcasecmp(auth()->user()->email, $email) === 0) {
+            $brand->users()->syncWithoutDetaching([auth()->id()]);
+            return redirect()->route('brands.show', $brand)->with('success', 'Ви приєдналися до бренду!');
+        }
+    }
+
+    public function join(Brand $brand)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('message', 'Увійдіть для приєднання.');
+        }
+
+        $user = auth()->user();
+
+        if (!$brand->users->contains($user->id)) {
+            $brand->users()->attach($user->id);
+        }
+
+        return redirect()->route('brands.show', $brand)->with('success', 'Ви приєдналися до бренду!');
+    }
+
 }

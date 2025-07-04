@@ -239,6 +239,19 @@
                             @endisset
                         </ul>
                     </li>
+                    @if($user->role_id == 1)
+                        <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди></span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{{ route('brands.create') }}"><span class="menu-text">Створити бренд</span></a></li>
+                                <li><a href="{{ route('brands.index') }}"><span class="menu-text">Всі бренди</span></a></li>
+                                @if(isset($brands))
+                                    @foreach ($brands as $brand)
+                                        <li><a href="{{ route('admin_tags.edit', ['admin_tag' => $brand]) }}"><span class="menu-text">{{ $brand->name }}</span></a></li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
             </nav>
         </div>
