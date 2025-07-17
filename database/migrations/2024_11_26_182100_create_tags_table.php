@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->timestamps();
             $table->softDeletes();
         });

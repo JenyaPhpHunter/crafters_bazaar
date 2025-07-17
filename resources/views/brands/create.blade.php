@@ -34,11 +34,7 @@
                 @enderror
             </div>
 
-            <label for="invited_emails">Запросити користувачів (Email-адреси через кому)</label>
-            <textarea name="invited_emails" id="invited_emails" class="form-control" rows="3" placeholder="user1@example.com, user2@example.com">{{ old('invited_emails') }}</textarea>
-            @error('invited_emails')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            @include('brands.include.invite-form')
 
             <button type="submit" class="btn btn-primary">Створити</button>
             <a href="{{ route('brands.index') }}" class="btn btn-secondary">Скасувати</a>

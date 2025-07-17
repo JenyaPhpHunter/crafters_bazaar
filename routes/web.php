@@ -75,12 +75,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::delete('/brands/{brand}/users/{user}', [BrandController::class, 'removeUser'])
+        ->name('brands.removeUser');
     Route::resource('brands', BrandController::class);
     Route::post('/brands/{brand}/invite', [BrandController::class, 'invite'])->name('brands.invite');
     Route::get('/brands/{brand}/accept', [BrandController::class, 'acceptInvitation'])
         ->name('brands.acceptInvitation');
     Route::post('/brands/{brand}/join', [BrandController::class, 'join'])->name('brands.join');
+    Route::patch('/brands/{brand}/restore', [BrandController::class, 'restore'])
+        ->name('brands.restore');
+    Route::delete('/brands/{brand}/leave', [BrandController::class, 'leave'])->name('brands.leave');
+    Route::delete('/brands/{brand}/invitations/{invitation}', [BrandController::class, 'cancelInvitation'])
+        ->name('brands.cancelInvitation');
+
 });
+
 Route::get('/', [HomeController::class,'welcome'])->name('welcome');
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');

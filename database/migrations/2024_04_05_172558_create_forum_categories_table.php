@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('forum_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title')->comment('Назва категорії форума');
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('creator_id')->references('id')->on('users');
         });
     }
 
@@ -28,6 +31,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('forum_categories', function (Blueprint $table) {
+            $table->dropForeign(['creator_id']);
+        });
+
         Schema::dropIfExists('forum_categories');
     }
 };

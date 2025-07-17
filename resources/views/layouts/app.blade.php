@@ -129,6 +129,7 @@
 <!-- Main Activation JS -->
 <script src="{{ asset('js/main.js') }}"></script>
 <script src="{{ asset('js/styles.js') }}"></script>
+@stack('scripts')
 </body>
 
 </html>

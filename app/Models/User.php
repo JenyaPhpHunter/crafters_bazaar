@@ -97,9 +97,20 @@ class User extends Authenticatable
         return $this->hasMany(ForumPost::class);
     }
 
-    public function category_user()
+    public function brands()
     {
-        return $this->belongsTo(CategoryUser::class);
+        return $this->belongsToMany(Brand::class)->withTimestamps();
+    }
+
+    public function getFullName(): string
+    {
+        $parts = array_filter([
+            $this->surname ?? '',
+            $this->name ?? '',
+            $this->secondname ?? '',
+        ]);
+
+        return implode(' ', $parts);
     }
 
     public function getAddressParts(): array
@@ -115,25 +126,4 @@ class User extends Authenticatable
             'apartment' => isset($parts[2]) ? str_replace('кв. ', '', $parts[2]) : ''
         ];
     }
-
-    public function isUser(): bool
-    {
-        return $this->role_id > 4;
-    }
-
-    public function isSeller(): bool
-    {
-        return $this->role_id === 4;
-    }
-
-    public function isLead(): bool
-    {
-        return $this->role_id === 3;
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role_id < 3;
-    }
-
 }

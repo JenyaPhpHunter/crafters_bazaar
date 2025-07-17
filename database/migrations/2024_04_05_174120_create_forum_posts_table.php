@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('content')->comment('Контент поста');
             $table->unsignedBigInteger('forum_topic_id')->comment('Id теми форума');
-            $table->unsignedBigInteger('user_id')->comment('Id користувача');
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->unsignedBigInteger('answer_to')->nullable()->comment('Відповідь на пост Id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('forum_topic_id')->references('id')->on('forum_topics')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('creator_id')->references('id')->on('users');
             $table->foreign('answer_to')->references('id')->on('forum_posts')->onDelete('set null'); // Затриманий зовнішній ключ
         });
     }
@@ -37,7 +37,7 @@ return new class extends Migration
     {
         Schema::table('forum_posts', function (Blueprint $table) {
             $table->dropForeign(['forum_topic_id']);
-            $table->dropForeign(['user_id']);
+            $table->dropForeign(['creator_id']);
         });
 
         Schema::dropIfExists('forum_posts');

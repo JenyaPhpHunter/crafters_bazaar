@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('title')->comment('Назва підкатегорії форума');
             $table->unsignedBigInteger('forum_category_id')->comment('Id категорії форума');
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('forum_category_id')->references('id')->on('forum_categories')->onDelete('cascade');
+            $table->foreign('creator_id')->references('id')->on('users');
         });
     }
 
@@ -33,6 +35,7 @@ return new class extends Migration
     {
         Schema::table('forum_sub_categories', function (Blueprint $table) {
             $table->dropForeign(['forum_category_id']);
+            $table->dropForeign(['creator_id']);
         });
 
         Schema::dropIfExists('forum_sub_categories');

@@ -23,9 +23,11 @@ return new class extends Migration
                     ->nullable()
                     ->default(null)
                     ->comment("рейтинг бренду");
-            $table->integer('createdby')->comment('id ким створено/оновлено');
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('creator_id')->references('id')->on('users');
         });
     }
 
@@ -36,6 +38,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('brands', function (Blueprint $table) {
+            $table->dropForeign(['creator_id']);
+        });
+
         Schema::dropIfExists('brands');
     }
 };

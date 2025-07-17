@@ -2,26 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\ProductsConstants;
 use App\Exceptions\BrandCreationException;
 use App\Http\Requests\BrandRequest;
-use App\Mail\InviteToBrandMail;
 use App\Models\Brand;
-use App\Models\ForumCategory;
-use App\Models\ForumSubCategory;
-use App\Models\ForumTopic;
+use App\Models\BrandInvitation;
 use App\Models\User;
 use App\Services\BrandService;
-use App\Services\EmailService;
-use Illuminate\Database\QueryException;
+use App\Services\BrandImageService;
+use App\Services\BrandInvitationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+
+
 
 class BrandController extends Controller
 {
+    protected BrandInvitationService $invitationService;
+
+    public function __construct(BrandInvitationService $invitationService)
+    {
+        $this->invitationService = $invitationService;
+    }
+
     /**
      * Display a listing of the brands.
      *
@@ -31,54 +33,9 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         try {
-            // Отримуємо параметри фільтрації з запиту
-            $search = $request->input('search');
-            $sortField = $request->input('sort_by', 'created_at');
-            $sortDirection = $request->input('sort_dir', 'desc');
-            $perPage = $request->input('per_page', 10);
-            $ratingFilter = $request->input('rating');
+            $brands = BrandService::getFilteredBrands($request);
 
-            // Базовий запит з відношеннями
-            $query = Brand::with(['users:id,name'])
-                ->withCount('users');
-
-            // Застосовуємо пошук
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                        ->orWhere('content', 'like', "%{$search}%");
-                });
-            }
-
-            // Фільтр по рейтингу
-            if ($ratingFilter) {
-                $query->where('rating', $ratingFilter);
-            }
-
-            // Сортування
-            $validSortFields = ['title', 'created_at', 'updated_at', 'rating', 'users_count'];
-            $sortField = in_array($sortField, $validSortFields) ? $sortField : 'created_at';
-            $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
-
-            $query->orderBy($sortField, $sortDirection);
-
-            // Пагінація
-            $brands = $query->paginate($perPage)
-                ->appends($request->query());
-
-            // Отримуємо доступні рейтинги для фільтра
-            $availableRatings = config('others.rating');
-
-            return view('brands.index', [
-                'brands' => $brands,
-                'search' => $search,
-                'sortField' => $sortField,
-                'sortDirection' => $sortDirection,
-                'perPage' => $perPage,
-                'ratingFilter' => $ratingFilter,
-                'availableRatings' => $availableRatings,
-            ]);
-
+            return view('brands.index', $brands);
         } catch (\Exception $e) {
             Log::error('Помилка при отриманні списку брендів', [
                 'error' => $e->getMessage(),
@@ -103,25 +60,21 @@ class BrandController extends Controller
     }
 
 
-    public function store(BrandRequest $request, EmailService $emailService)
+    public function store(BrandRequest $request)
     {
         try {
             $data = $request->validated();
-            $data['image_path'] = BrandService::handleBrandImage($request->file('image'));
+            $data['image_path'] = BrandImageService::handle($request->file('image'));
 
             $brand = BrandService::createBrand($data);
-
-            if (!empty($request->input('invited_emails'))) {
-                $emails = explode(',', $request->input('invited_emails'));
-                BrandService::inviteUsersToBrand($emails, $brand, $emailService);
-            }
+            $this->invitationService->processInvitations($request->input('invited_emails'), $brand);
 
             return redirect()->route('brands.index')->with('success', 'Бренд успішно створено!');
-
-        } catch (\Exception $e) {
+        } catch (BrandCreationException $e) {
             Log::error('Brand creation failed', [
                 'error' => $e->getMessage(),
-                'data' => $request->except('_token')
+                'data' => $request->except('_token'),
+                'user_id' => auth()->id(),
             ]);
 
             return back()->withInput()->with('error', $e->getMessage());
@@ -133,12 +86,33 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        $brand->load(['creator', 'users']);
-        $availableRatings = config('others.rating');
-        return view('brands.show', [
-            'brand' => $brand,
-            'availableRatings' => $availableRatings
+        if ($brand->trashed()) {
+            return redirect()->route('brands.index')->with('error', 'Цей бренд вже видалено.');
+        }
+
+        $brand->load([
+            'users' => function ($query) {
+                $query->select('users.id', 'users.name', 'users.email');
+            },
+            'creator',
+            'invitations',
         ]);
+
+        $availableRatings = config('others.rating');
+
+        $isInvited = false;
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            $email = $user->email;
+
+            // Перевіряємо чи запрошено, але не приєднано
+            $isInvited = $brand->invitations->contains(function ($invitation) use ($email) {
+                    return strcasecmp($invitation->email, $email) === 0 && is_null($invitation->accepted_at);
+                }) && !$brand->users->contains($user->id);
+        }
+
+        return view('brands.show', compact('brand', 'availableRatings', 'isInvited'));
     }
 
 
@@ -150,59 +124,36 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
+        $this->authorize('update', $brand);
         try {
-            $brand->load(['creator', 'users']);
-            $ratings = config('others.rating');
+            $brand->load(['creator', 'invitations', 'users']);
 
             return view('brands.edit', [
                 'brand' => $brand,
-                'ratings' => $ratings,
+                'ratings' => config('others.rating'),
                 'currentRating' => old('rating', $brand->rating),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Помилка при відображенні форми редагування бренду', [
+            Log::error('Помилка при редагуванні бренду', [
                 'brand_id' => $brand->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error' => $e->getMessage()
             ]);
 
-            return redirect()
-                ->route('brands.show', $brand)
-                ->with('error', 'Не вдалося завантажити форму редагування');
+            return redirect()->route('brands.show', $brand)->with('error', 'Не вдалося завантажити форму редагування');
         }
     }
 
-    public function update(BrandRequest $request, Brand $brand, EmailService $emailService)
+    public function update(BrandRequest $request, Brand $brand)
     {
         try {
-            $validated = $request->validated();
-
-            if ($request->boolean('remove_image') && $brand->image_path) {
-                Storage::delete('public/' . $brand->image_path);
-                $validated['image_path'] = null;
-            }
-
-            if ($request->hasFile('image')) {
-                if ($brand->image_path) {
-                    Storage::delete('public/' . $brand->image_path);
-                }
-                $validated['image_path'] = $request->file('image')->store('brands', 'public');
-            }
-
-            if (!empty($request->input('invited_emails'))) {
-                $emails = explode(',', $request->input('invited_emails'));
-                BrandService::inviteUsersToBrand($emails, $brand, $emailService);
-            }
-
+            $validated = BrandImageService::processForUpdate($request, $brand);
             BrandService::updateBrand($brand, $validated);
+            $this->invitationService->processInvitations($request->input('invited_emails'), $brand);
 
             Log::info('Brand updated', ['brand_id' => $brand->id]);
 
-            return redirect()
-                ->route('brands.show', $brand)
-                ->with('success', 'Бренд успішно оновлено!');
-
+            return redirect()->route('brands.show', $brand)->with('success', 'Бренд успішно оновлено!');
         } catch (\Exception $e) {
             Log::error('Brand update failed', [
                 'brand_id' => $brand->id,
@@ -212,24 +163,16 @@ class BrandController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Brand $brand)
     {
         try {
-            $brand = Brand::findOrFail($id);
-
-            // Видалення зображення, якщо є
-            if ($brand->image_path) {
-                Storage::disk('public')->delete($brand->image_path);
-            }
-
+            BrandImageService::delete($brand);
             $brand->delete();
-
-            return redirect()
-                ->route('brands.index')
-                ->with('success', 'Бренд успішно видалено!');
+            //TODO видаляти цей бренд з усіх товарів, які в продажу
+            return redirect()->route('brands.index')->with('success', 'Бренд успішно видалено!');
         } catch (\Exception $e) {
             \Log::error('Brand deletion failed', [
-                'brand_id' => $id,
+                'brand_id' => $brand->id,
                 'error' => $e->getMessage(),
             ]);
 
@@ -239,64 +182,69 @@ class BrandController extends Controller
         }
     }
 
-    public function invite(Request $request, Brand $brand, EmailService $emailService)
+    public function restore(Brand $brand)
+    {
+        $this->authorize('delete', $brand);
+
+        $brand->restore();
+
+        return redirect()->route('brands.index')->with('success', 'Бренд успішно відновлено!');
+    }
+
+    public function invite(Request $request, Brand $brand)
     {
         $this->authorize('update', $brand);
 
-        $request->validate([
-            'invited_emails' => 'required|string',
-        ]);
-
-        $emails = array_map('trim', explode(',', $request->input('invited_emails')));
-        BrandService::inviteUsersToBrand($emails, $brand, $emailService);
+        try {
+            $this->invitationService->processInvitations($request->input('invited_emails'), $brand);
+        } catch (\Throwable $e) {
+            Log::error('Помилка при відправці запрошень', ['error' => $e->getMessage()]);
+            return redirect()->route('brands.show', $brand)->with('error', 'Не вдалося надіслати запрошення.');
+        }
 
         return redirect()->route('brands.show', $brand)->with('success', 'Запрошення надіслано.');
     }
 
     public function acceptInvitation(Request $request, Brand $brand)
     {
-        $email = urldecode($request->query('email'));
-
-        $invitation = $brand->invitations()->where('email', $email)->first();
-
-        if (!auth()->check()) {
-            return redirect()->route('login-register')->with('info', 'Будь ласка, увійдіть, щоб приєднатися до бренду.');
-        }
-
-        if (strcasecmp(auth()->user()->email, $email) !== 0) {
-            return redirect()->route('brands.index')->with('error', 'Це запрошення не для вашого акаунта.');
-        }
-
-        $user = auth()->user();
-
-        if ($brand->users()->where('user_id', $user->id)->exists()) {
-            return redirect()->route('brands.show', $brand)->with('info', 'Ви вже є учасником цього бренду.');
-        }
-        // Додаємо до бренду
-        $brand->users()->attach($user->id);
-        $invitation->accepted_at = now();
-        $invitation->save();
-
-        // Якщо користувач увійшов і email збігається — додаємо
-        if (auth()->check() && strcasecmp(auth()->user()->email, $email) === 0) {
-            $brand->users()->syncWithoutDetaching([auth()->id()]);
-            return redirect()->route('brands.show', $brand)->with('success', 'Ви приєдналися до бренду!');
-        }
+        return $this->invitationService->acceptInvitation($request, $brand);
     }
 
     public function join(Brand $brand)
     {
-        if (!auth()->check()) {
-            return redirect()->route('login')->with('message', 'Увійдіть для приєднання.');
-        }
-
-        $user = auth()->user();
-
-        if (!$brand->users->contains($user->id)) {
-            $brand->users()->attach($user->id);
-        }
-
-        return redirect()->route('brands.show', $brand)->with('success', 'Ви приєдналися до бренду!');
+        return $this->invitationService->join($brand);
     }
 
+    public function leave(Brand $brand)
+    {
+        //TODO видаляти цей бренд з усіх товарів, які в продажу цього користувача
+        return $this->invitationService->leave($brand);
+    }
+
+    public function removeUser(Brand $brand, User $user)
+    {
+        //TODO видаляти цей бренд з усіх товарів, які в продажу цього користувача
+        $this->authorize('update', $brand);
+
+        if ($user->id === $brand->creator_id) {
+            return redirect()->back()->with('error', 'Ви не можете видалити себе як автора бренду.');
+        }
+
+        $this->invitationService->removeUserFromBrand($brand, $user);
+
+        return redirect()->back()->with('success', 'Користувача та його запрошення видалено з бренду.');
+    }
+
+    public function cancelInvitation(Brand $brand, BrandInvitation $invitation)
+    {
+        $this->authorize('update', $brand);
+
+        if ($invitation->accepted_at !== null) {
+            return redirect()->back()->with('error', 'Запрошення вже прийнято і не може бути скасоване.');
+        }
+
+        $this->invitationService->cancelInvitation($brand, $invitation);
+
+        return redirect()->back()->with('success', 'Запрошення скасовано.');
+    }
 }

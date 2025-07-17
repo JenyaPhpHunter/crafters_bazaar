@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Mail\BrandInvitationMail;
+use App\Mail\InvitationCancelledMail;
+use App\Mail\UserJoinedBrandMail;
+use App\Mail\UserLeftBrandMail;
+use App\Mail\UserRemovedFromBrandMail;
 use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -24,13 +28,50 @@ class EmailService
      */
     public function sendEmail(Mailable $mailable, string $email): void
     {
-        Log::info("Відправлено листа на $email з класу " . get_class($mailable));
-        Mail::to($email)->queue($mailable);
+        try {
+            Log::info("Відправлено листа на $email з класу " . get_class($mailable));
+            Mail::to($email)->queue($mailable);
+        } catch (\Throwable $e) {
+            Log::error('Помилка при надсиланні листа: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
     }
 
     public function sendBrandInvitationEmail(Brand $brand, string $email): void
     {
         $this->sendEmail(new BrandInvitationMail($brand, $email), $email);
+    }
+
+    public function notifyOwnerUserJoined(Brand $brand, User $user): void
+    {
+        $creator = User::find($brand->creator_id);
+
+        if ($creator && $creator->email !== $user->email) {
+            $this->sendEmail(new UserJoinedBrandMail($brand, $user), $creator->email);
+        }
+    }
+
+
+    public function notifyOwnerUserLeft(Brand $brand, User $user): void
+    {
+        $creator = User::find($brand->creator_id);
+
+        if ($creator && $creator->email !== $user->email) {
+            $this->sendEmail(new UserLeftBrandMail($brand, $user), $creator->email);
+        }
+    }
+
+    public function notifyUserRemovedFromBrand(Brand $brand, User $user): void
+    {
+        if ($brand->creator_id !== $user->id) {
+            $this->sendEmail(new UserRemovedFromBrandMail($brand, $user), $user->email);
+        }
+    }
+
+    public function notifyInvitationCancelled(Brand $brand, string $email): void
+    {
+        $this->sendEmail(new InvitationCancelledMail($brand, $email), $email);
     }
 
     /**

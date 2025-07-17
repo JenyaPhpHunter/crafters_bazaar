@@ -239,7 +239,7 @@
                             @endisset
                         </ul>
                     </li>
-                    @if($user->role_id == 1)
+                    @if(isset($user) && $user->role_id != 9)
                         <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди></span></a>
                             <ul class="sub-menu">
                                 <li><a href="{{ route('brands.create') }}"><span class="menu-text">Створити бренд</span></a></li>

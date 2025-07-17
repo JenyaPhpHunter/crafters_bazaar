@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('color_id')->nullable()->comment("Id кольору");
             $table->unsignedBigInteger('term_creation')->nullable()->default(null)->comment("строк виготовлення");
             $table->unsignedBigInteger('status_product_id')->default(1)->comment("Статус товару");
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
+            $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
             $table->boolean('new')->unsigned()->default(1)->comment("Новий");
             $table->boolean('featured')->unsigned()->default(0)->comment("Рекомендований");
             $table->boolean('active')->unsigned()->default(1);
@@ -40,7 +40,7 @@ class CreateProductsTable extends Migration
             $table->foreign('sub_kind_product_id')->references('id')->on('sub_kind_products');
             $table->foreign('color_id')->references('id')->on('colors');
             $table->foreign('status_product_id')->references('id')->on('status_products');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('creator_id')->references('id')->on('users');
             $table->foreign('admin_id')->references('id')->on('users');
         });
     }
@@ -56,7 +56,7 @@ class CreateProductsTable extends Migration
             $table->dropForeign(['sub_kind_product_id']);
             $table->dropForeign(['color_id']);
             $table->dropForeign(['status_product_id']);
-            $table->dropForeign(['user_id']);
+            $table->dropForeign(['creator_id']);
             $table->dropForeign(['admin_id']);
         });
         Schema::dropIfExists('products');

@@ -29,8 +29,7 @@
            style="display: inline-block; padding: 12px 20px; background-color: #0d6efd; color: #fff; text-decoration: none; border-radius: 5px; margin-right: 10px;">
             Переглянути бренд
         </a>
-
-        <a href="{{ route('brands.acceptInvitation', ['brand' => $brand->id, 'email' => $email]) }}"
+        <a href="{{ config('app.url') }}/brands/{{ $brand->id }}/accept?email={{ urlencode($email) }}"
            style="display: inline-block; padding: 12px 20px; background-color: #28a745; color: #fff; text-decoration: none; border-radius: 5px;">
             Доєднатися до бренду
         </a>

@@ -51,4 +51,15 @@ class BrandRequest extends FormRequest
         //    'phone' => preg_replace('/[^0-9]/', '', $this->phone),
         //]);
     }
+
+    private function prepareEmails(?string $emails): ?string
+    {
+        if (!$emails) return null;
+
+        return collect(explode(',', $emails))
+            ->map(fn($e) => trim($e))
+            ->filter()
+            ->unique()
+            ->implode(',');
+    }
 }

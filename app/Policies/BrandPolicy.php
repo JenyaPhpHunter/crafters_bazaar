@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -20,29 +21,26 @@ class BrandPolicy
     }
 
     /**
-     * Приклад — чи може користувач переглядати бренд.
+     * Будь-хто може переглядати бренд.
      */
-    public function view(User $user)
+    public function view(User $user, Brand $brand)
     {
-        // Всі користувачі з роллю продавця або вище можуть переглядати
-        return $user->role_id >= 3;
+        return true;
     }
 
     /**
-     * Приклад — чи може користувач редагувати бренд.
+     * Тільки творець бренду може редагувати.
      */
-    public function update(User $user)
+    public function update(User $user, Brand $brand)
     {
-        return $user->role_id <= 3; // Адмін і редактор
+        return $brand->creator_id === $user->id;
     }
 
     /**
-     * Приклад — чи може користувач видаляти бренд.
+     * Тільки творець бренду може видаляти.
      */
-    public function delete(User $user)
+    public function delete(User $user, Brand $brand)
     {
-        return $user->role_id <= 2; // Тільки адміністратори
+        return $brand->creator_id === $user->id;
     }
-
-    // Додаткові методи за потреби...
 }

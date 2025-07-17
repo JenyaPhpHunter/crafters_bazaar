@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -26,6 +28,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Додаємо кастомне прив'язування моделі з підтримкою soft delete
+        $this->bindModelWithTrashed('brand', Brand::class);
+        $this->bindModelWithTrashed('product', Product::class);
+
         $this->configureRateLimiting();
 
         $this->routes(function () {
@@ -35,6 +41,17 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+        });
+    }
+
+
+    /**
+     * Прив'язка маршруту з підтримкою SoftDeletes
+     */
+    protected function bindModelWithTrashed(string $parameter, string $modelClass): void
+    {
+        Route::bind($parameter, function ($value) use ($modelClass) {
+            return $modelClass::withTrashed()->findOrFail($value);
         });
     }
 

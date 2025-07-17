@@ -9,12 +9,10 @@ class BrandInvitation extends Model
 {
     protected $fillable = ['brand_id', 'email', 'invited_by', 'accepted_at'];
 
-    protected $dates = ['last_sent_at'];
-
     protected $casts = [
         'last_sent_at' => 'datetime',
+        'accepted_at' => 'datetime',
     ];
-
 
     public function brand()
     {

@@ -6,14 +6,10 @@ use App\Models\Brand;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class BrandInvitationMail extends Mailable
+class InvitationCancelledMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public int $tries = 3;
-    public int $timeout = 10;
 
     public Brand $brand;
     public string $email;
@@ -26,8 +22,8 @@ class BrandInvitationMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Запрошення до бренду')
-            ->view('emails.brand_invitation')
+        return $this->subject("Запрошення до бренду «{$this->brand->title}» було скасовано")
+            ->view('emails.invitation_cancelled')
             ->with([
                 'brand' => $this->brand,
                 'email' => $this->email,

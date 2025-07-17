@@ -45,11 +45,6 @@ class AppServiceProvider extends ServiceProvider
         ], function ($view) {
             $user = Auth::user();
 
-//            $query_users = User::query()->whereNull('deleted_at');
-//            $users = $query_users->get();
-//            $sellers_buyers = $query_users->whereIn('role_id', [5,6])->get();
-//            $sellers = $query_users->where('category_user_id', 3)->get();
-//            $buyers = $query_users->where('category_user_id', 4)->get();
             $orders = AdminOrder::all();
             $statuses_orders = StatusOrder::all();
             $statuses_products = StatusProduct::all();
@@ -70,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
             $products_query = Product::whereNull('deleted_at');
             $products = $products_query->get();
             if($user){
-                $user_products = $products_query->where('user_id', $user->id)->get();
+                $user_products = $products_query->where('creator_id', $user->id)->get();
                 $roles = Role::where('id', '>=', $user->role_id)->get();
             } else {
                 $user_products = collect();
