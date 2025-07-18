@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="col d-md-none d-lg-block">
-                <p class="text-center my-2">Безкоштовна доставка при замовленні від 1000 евро!</p>
+                <p class="text-center my-2">Безкоштовна доставка</p>
             </div>
 
             <!-- Header Language & Currency Start -->
