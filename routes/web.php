@@ -111,6 +111,7 @@ Route::post('/subscribe', [UserController::class, 'toggleSubscriptionStatus'])->
 
 
 require __DIR__.'/auth.php';
+
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');
 
 //Route::view('/validation/debug', 'validation_debug')->name('validation.debug');
