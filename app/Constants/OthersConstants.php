@@ -29,7 +29,7 @@ class OthersConstants
         'forum_topics' => ['name' => 'Теми форума', 'route' => 'forum_topics.index'],
         'forum_posts' => ['name' => 'Пости форума', 'route' => 'forum_posts.index'],
         'users' => ['name' => 'Користвачі', 'route' => 'users.show'],
-        'sellers_buyers' => ['name' => 'Продавці та покупці', 'route' => 'sellers_buyers.index'],
+        'password' => ['name' => 'Скидання паролю', 'route' => 'password.request'],
     ];
 
     const FRIENDLY_BREADCRUMPS = [

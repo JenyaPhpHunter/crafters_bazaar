@@ -15,34 +15,39 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
 
-    public function loginRegister()
-    {
-        return view('auth.login-register',[
-
-        ]);
-    }
-
-    public function create(Request $request): View
+    public function loginRegister(Request $request)
     {
         if ($request->input('review_product_id')){
             session()->put('review_product_id', $request->input('review_product_id'));
 
-            return view('auth.login');
+            return view('auth.login-register');
         }
-        if($request->input('sendquestion') == 'sendquestion'){
-            $sendquestion = true;
-            $product_id = $request->input('product_id');
-            return view('auth.login', [
-                'sendquestion' => $sendquestion,
-                'product_id' => $product_id,
-            ]);
-        } else {
-            $sendquestion = false;
-            return view('auth.login', [
-                'sendquestion' => $sendquestion,
-            ]);
-        }
+
+        $sendQuestion = $request->input('sendQuestion') === 'sendQuestion';
+        $product_id = $sendQuestion ? $request->input('product_id') : null;
+
+        return view('auth.login-register', [
+            'sendQuestion' => $sendQuestion,
+            'product_id' => $product_id,
+        ]);
+
     }
+
+//    public function create(Request $request): View
+//    {
+//        if ($request->input('review_product_id')){
+//            session()->put('review_product_id', $request->input('review_product_id'));
+//
+//            return view('auth.login');
+//        }
+//        $sendQuestion = $request->input('sendQuestion') === 'sendQuestion';
+//        $product_id = $sendQuestion ? $request->input('product_id') : null;
+//
+//        return view('auth.login', [
+//            'sendQuestion' => $sendQuestion,
+//            'product_id' => $product_id,
+//        ]);
+//    }
 
     /**
      * Handle an incoming authentication request.
@@ -52,6 +57,7 @@ class AuthenticatedSessionController extends Controller
         // Отримуємо дані кошика з сесії перед регенерацією
         $cart = session()->get('cart', []);
         $review_product_id = session()->get('review_product_id', []);
+
         // Аутентифікація користувача
         $request->authenticate();
 
@@ -66,12 +72,10 @@ class AuthenticatedSessionController extends Controller
             ]));
         }
 
-        $user = User::where('email', $request->input('email'))->first();
-        if ($user->role_id < 5) {
-            return redirect()->intended('/admin');
-        } else {
-            return redirect()->intended();
-        }
+        $user = Auth::user();
+        return $user->role_id < 6
+            ? redirect()->intended('/admin')
+            : redirect()->intended();
     }
 
     /**

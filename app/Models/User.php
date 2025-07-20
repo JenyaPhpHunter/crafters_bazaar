@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Mail\ResetPasswordMail;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -55,11 +58,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $guarded = ['id']; // Заборонено змінювати `id`
-
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class);
     }
 
     public function role()
@@ -125,5 +126,14 @@ class User extends Authenticatable
             'home' => $parts[1] ?? '',
             'apartment' => isset($parts[2]) ? str_replace('кв. ', '', $parts[2]) : ''
         ];
+    }
+    public function sendPasswordResetNotification($token)
+    {
+        $url = url(route('password.reset', [
+            'token' => $token,
+            'email' => $this->email,
+        ], false));
+
+        Mail::to($this->email)->send(new ResetPasswordMail($url));
     }
 }

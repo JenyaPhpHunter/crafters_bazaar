@@ -56,6 +56,10 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
+        $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
         $user = User::find($request->user_id);
         if(!empty($request->input('kind_product_id'))){
             $selected_kind_product_id = $request->input('kind_product_id');
@@ -122,9 +126,9 @@ class ProductController extends Controller
         }
 
         $user = User::query()->where('id',$user_id)->first();
-        if ($user->role_id > 4) {
-            $user->category_user_id = 2;
-        }
+//        if ($user->role_id > 6) {
+//            $user->category_user_id = 2;
+//        }
         $user->save();
 
         if ($action === 'save') {
@@ -179,13 +183,10 @@ class ProductController extends Controller
         }
     }
 
-    public function show($id, Request $request)
+    public function show($product, Request $request)
     {
         $user_id = $request->input('user_id');
-        $product = Product::query()
-            ->with(['sub_kind_product.kind_product', 'color', 'status_product', 'user'])
-            ->where('id', $id)
-            ->first();
+        $product->load(['sub_kind_product.kind_product', 'color', 'status_product', 'user']);
         if ($product) {
             $filters = session()->get('filters', []);
             $query = Product::query()->where('status_product_id', 3);
@@ -234,7 +235,7 @@ class ProductController extends Controller
             }
             $next_product_id = $next_product ? $next_product->id : null;
         }
-        $dialogs = Dialog::where('product_id', $id)
+        $dialogs = Dialog::where('product_id', $product->id)
             ->with('user')
             ->orderByRaw('CASE WHEN answer_to IS NULL THEN 1 ELSE 0 END, answer_to')
             ->get();
@@ -259,12 +260,12 @@ class ProductController extends Controller
             }
         }
 
-        $creator = ($product->user_id == $user_id) ;
-        $photos = ProductPhoto::query()->where('product_id', $id)->get();
+        $creator = ($product->creator_id == $user_id) ;
+        $photos = ProductPhoto::query()->where('product_id', $product->id)->get();
         $kind_products = KindProduct::all();
         $featured_products = Product::query()->with('productphotos')->where('featured',1)->get();
         $action_types = ProductsConstants::ACTION_TYPES;
-        $reviews = Review::query()->where('product_id', $id)->get();
+        $reviews = Review::query()->where('product_id', $product->id)->get();
         $averageRating = $reviews->avg('rating') ?? 0; // Середній рейтинг
         $user = User::find($user_id);
         $api_gpt = new ApiService(env('OPENAI_API_KEY'));
@@ -289,6 +290,7 @@ class ProductController extends Controller
 
     public function edit($id, Request $request)
     {
+//        $this->seedie($id);
         $product = Product::query()
             ->with(['kind_product', 'sub_kind_product', 'productphotos'])
             ->where('id', $id)
@@ -511,8 +513,8 @@ class ProductController extends Controller
         $product->sub_kind_product_id = $sub_kind_product->id;
         $product->save();
 
-        $EmailService = new EmailService();
-        $EmailService->sendApproveKindSubkind($kind_product, $sub_kind_product, $product_id);
+//        $EmailService = new EmailService();
+//        $EmailService->sendApproveKindSubkind($kind_product, $sub_kind_product, $product_id);
 
         return redirect()->route('products.edit', ['product' => $product_id])
             ->with([

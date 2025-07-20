@@ -455,7 +455,7 @@
                                 </form>
                             </div>
                         @else
-                            <p class="note">Щоб залишити відгук, будь ласка, <a href="{{ route('login', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">увійдіть</a> або <a href="{{ route('register', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">зареєструйтесь</a>.</p>
+                            <p class="note">Щоб залишити відгук, будь ласка, <a href="{{ route('login-register', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">увійдіть</a> або <a href="{{ route('login-register', ['review_product_id' => $product->id]) }}" style="text-decoration: underline; color: blue;">зареєструйтесь</a>.</p>
                         @endauth
                     </div>
                 </div>

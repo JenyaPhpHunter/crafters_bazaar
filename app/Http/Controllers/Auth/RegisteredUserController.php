@@ -15,43 +15,39 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    public function create(Request $request)
-    {
-        if ($request->input('review_product_id')){
-            session()->put('review_product_id', $request->input('review_product_id'));
-        }
-
-        return view('auth.register');
-    }
+//    public function create(Request $request)
+//    {
+//        if ($request->input('review_product_id')){
+//            session()->put('review_product_id', $request->input('review_product_id'));
+//        }
+//
+//        return view('auth.register');
+//    }
 
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'numeric', 'unique:users'],
+            'phone' => ['required', 'string', 'max:20', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->phone = $request->input('phone');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->post('password'));
-        $user->role_id = 8;
-        $user->created_at = date("Y-m-d H:i:s");
-
-        $user->save();
+        $user = User::create([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'role_id' => 8,
+        ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        $review_product_id = session()->get('review_product_id', []);
-        if ($review_product_id) {
-            return redirect( route('products.show', [
-                'product' => $review_product_id
-            ]));
+        $productId = session()->pull('review_product_id');
+        if ($productId) {
+            return to_route('products.show', $productId);
         }
 
         return redirect()->intended();

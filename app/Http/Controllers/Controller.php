@@ -30,7 +30,7 @@ class Controller extends BaseController
         'forum_sub_categories.index',
         'forum_topics.index',
         'users.show',
-        'sellers_buyers.index',
+        'password.request',
     ];
 
 
@@ -74,6 +74,9 @@ class Controller extends BaseController
                 // У випадку, якщо ім'я роута не відповідає очікуваному формату
                 return [];
             }
+//                $this->see($class);
+//                $this->see($action);
+//                $this->seedie($routeName);
 
             $breadcrumbs = [];
             // Отримуємо базові значення з OthersConstants

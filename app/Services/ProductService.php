@@ -23,7 +23,7 @@ class ProductService
         'color_id' => 'nullable|integer|exists:colors,id',
         'term_creation' => 'nullable|integer|min:0',
         'status_product_id' => 'required|integer|exists:status_products,id',
-        'user_id' => 'required|integer|exists:users,id',
+        'creator_id' => 'required|integer|exists:users,id',
         'new' => 'nullable|boolean',
         'featured' => 'nullable|boolean',
         'active' => 'nullable|boolean',
@@ -87,7 +87,7 @@ public function createProduct($request, $function_name, $id = NULL)
             $product->stock_balance = $data['stock_balance'];
             $product->color_id = $data['color_id'];
             $product->term_creation = $data['term_creation'];
-            $product->user_id = $data['user_id'];
+            $product->creator_id = $data['user_id'];
             $product->created_at = date("Y-m-d H:i:s");
 
             $product->save();
@@ -146,8 +146,8 @@ public function createProduct($request, $function_name, $id = NULL)
             $product->stock_balance = $data['stock_balance'];
             $product->color_id = $data['color_id'];
             $product->term_creation = $data['term_creation'];
-            if ($user->role_id > 4) {
-                $product->user_id = $data['user_id'];
+            if ($user->role_id > 6) {
+                $product->creator_id = $data['user_id'];
             } else {
                 $product->admin_id = $data['user_id'];
             }

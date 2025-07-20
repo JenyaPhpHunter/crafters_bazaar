@@ -10,14 +10,10 @@ Route::middleware('guest')->group(function () {
         ->name('login-register');
 
     // Логін
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login-create');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])
         ->name('login');
 
     // Реєстрація
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register-create');
     Route::post('register', [RegisteredUserController::class, 'store'])
         ->name('register');
 });

@@ -17,15 +17,43 @@
             <!-- Header Language & Currency Start -->
             <div class="col d-none d-md-block">
                 <ul class="header-lan-curr text-white justify-content-end">
-                    <li><a href="#">Українська</a>
+                    @php
+                        $locales = [
+                            'uk' => 'Українська',
+                            'en' => 'English',
+                        ];
+
+                        $currentLocale = app()->getLocale();
+                    @endphp
+
+                    <li>
+                        <a href="#">{{ $locales[$currentLocale] }}</a>
                         <ul class="curr-lan-sub-menu">
-                            <li><a href="#">English</a></li>
+                            @foreach($locales as $code => $label)
+                                @if($code !== $currentLocale)
+                                    <li>
+                                        <a href="{{ route('locale.switch', $code) }}">{{ $label }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
                         </ul>
                     </li>
-                    <li><a href="#">UAH</a>
+
+                    @php
+                        $currencies = ['UAH', 'USD', 'EUR'];
+                        $currentCurrency = session('currency', 'UAH');
+                    @endphp
+
+                    <li>
+                        <a href="#">{{ $currentCurrency }}</a>
                         <ul class="curr-lan-sub-menu">
-                            <li><a href="#">USD</a></li>
-                            <li><a href="#">EUR</a></li>
+                            @foreach($currencies as $currency)
+                                @if($currency !== $currentCurrency)
+                                    <li>
+                                        <a href="{{ route('currency.switch', $currency) }}">{{ $currency }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
                         </ul>
                     </li>
                 </ul>

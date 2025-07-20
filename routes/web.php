@@ -111,6 +111,7 @@ Route::post('/subscribe', [UserController::class, 'toggleSubscriptionStatus'])->
 
 
 require __DIR__.'/auth.php';
+require __DIR__.'/lang-currency.php';
 
 //Route::get('/searchusers', [UserController::class, 'searchusers'])->name('searchusers');
 
