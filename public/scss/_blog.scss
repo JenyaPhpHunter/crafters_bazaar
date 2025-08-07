@@ -2,5 +2,5 @@
 /*  10. Blog CSS
 /*----------------------------------------*/
 
-@import "blog/blog";
-@import "blog/single-blog";
+@use "blog/blog" as *;
+@use "blog/single-blog" as *;

@@ -2,254 +2,827 @@
 
 @section('content')
 
-<!-- Single Products Section Start -->
-    <div class="section section-padding border-bottom">
-        <div class="container">
-            <div class="row learts-mb-n40">
+<div class="section section-fluid section-padding border-bottom">
+    <div class="container">
+        <div class="row learts-mb-n40">
+            <div class="col-lg-6 col-12 learts-mb-40">
+
+                @include('products.include.images')
+
+            <!-- Додаткова інформація -->
+            <div class="section section-padding border-bottom mt-4">
+                <div class="container">
+                    <label for="additional_information">Додаткова інформація</label>
+                    <textarea id="additional_information" name="additional_information" rows="10" class="form-control">
+                            {{ old('additional_information') }}
+                        </textarea>
+                    @include('products.include.tags_social')
+                </div>
+            </div>
+        </div>
+            <!-- Product Summery Start -->
+            <div class="col-lg-6 col-12 learts-mb-40">
+                <div class="product-summery product-summery-center">
+                    <form method="post" action="{{ route('products.store') }}" enctype="multipart/form-data">
+                        @csrf
+                    <h3 class="product-title">Decorative Christmas Fox</h3>
+                    <div class="product-price">£50.00</div>
+                    <div class="product-description">
+                        <p>From the Holiday Moments Collection This adorable brown fox looking over his right shoulder would be a wonderful accent in any holiday decor. Features faux fur, burlap and canvas creating a unique, textured appearance. The feeling when touched is smooth and lovable.</p>
+                        <p>Accented with a red plaid bow and a small pine spray and pine cone Dimensions: 8″H x 8″W x 3.75″D. Material(s): foam/fabric/plastic. Available colors: Red, Blue, Green, Yellow, Black, White, Grey and Pink. Gift wrapping is available for orders over $99 to the following states: Arizona, Florida, Washington DC and Los Angeles.</p>
+                    </div>
+                    <div class="product-variations">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td class="label"><span>Color</span></td>
+                                <td class="value">
+                                    <div class="product-colors">
+                                        <a href="#" data-bg-color="#000000"></a>
+                                        <a href="#" data-bg-color="#b2483c"></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><span>Size</span></td>
+                                <td class="value">
+                                    <div class="product-sizes">
+                                        <a href="#">Large</a>
+                                        <a href="#">Medium</a>
+                                        <a href="#">Small</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><span>Quantity</span></td>
+                                <td class="value">
+                                    <div class="product-quantity">
+                                        <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                        <input type="text" class="input-qty" value="1">
+                                        <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="product-buttons">
+                        <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Add to Wishlist"><i class="fal fa-heart"></i></a>
+                        <a href="#" class="btn btn-dark btn-outline-hover-dark"><i class="fal fa-shopping-cart"></i> Add to Cart</a>
+                        <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                    </div>
+                    <div class="product-brands">
+                        <span class="title">Brands</span>
+                        <div class="brands">
+                            <a href="#"><img src="{{ asset('images/brands/brand-5.webp') }}" alt=""></a>
+                            <a href="#"><img src="{{ asset('images/brands/brand-7.webp') }}" alt=""></a>
+                            <a href="#"><img src="{{ asset('images/brands/brand-8.webp') }}" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="product-meta">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td class="label"><span>SKU</span></td>
+                                <td class="value">040423</td>
+                            </tr>
+                            <tr>
+                                <td class="label"><span>Category</span></td>
+                                <td class="value">
+                                    <ul class="product-category">
+                                        <li><a href="#">Gift ideas</a></li>
+                                        <li><a href="#">Home Decor</a></li>
+                                        <li><a href="#">Kids & Babies</a></li>
+                                        <li><a href="#">Toys</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><span>Tags</span></td>
+                                <td class="value">
+                                    <ul class="product-tags">
+                                        <li><a href="#">handmade</a></li>
+                                        <li><a href="#">learts</a></li>
+                                        <li><a href="#">mug</a></li>
+                                        <li><a href="#">product</a></li>
+                                        <li><a href="#">learts</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label"><span>Share on</span></td>
+                                <td class="va">
+                                    <div class="product-share">
+                                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                                        <a href="#"><i class="fal fa-envelope"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Product Summery End -->
+
+        </div>
+    </div>
+
+</div>
+<!-- Single Products Section End -->
+
+<!-- Single Products Infomation Section Start -->
+<div class="section section-padding border-bottom">
+    <div class="container">
+
+        <ul class="nav product-info-tab-list">
+            <li><a class="active" data-bs-toggle="tab" href="#tab-description">Description</a></li>
+            <li><a data-bs-toggle="tab" href="#tab-pwb_tab">Brand</a></li>
+            <li><a data-bs-toggle="tab" href="#tab-additional_information">Additional information</a></li>
+            <li><a data-bs-toggle="tab" href="#tab-reviews">Reviews (2)</a></li>
+        </ul>
+        <div class="tab-content product-infor-tab-content">
+            <div class="tab-pane fade show active" id="tab-description">
+                <div class="row">
+                    <div class="col-lg-10 col-12 mx-auto">
+                        <p>From the Holiday Moments Collection This adorable brown fox looking over his right shoulder would be a wonderful accent in any holiday decor. Features faux fur, burlap and canvas creating a unique, textured appearance. Accented with a red plaid bow and a small pine spray and pine cone Dimensions: 8″H x 8″W x 3.75″D. Material(s): foam/fabric/plastic.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-pwb_tab">
+                <div class="row learts-mb-n30">
+                    <div class="col-12 learts-mb-30">
+                        <div class="row learts-mb-n10">
+                            <div class="col-lg-2 col-md-3 col-12 learts-mb-10">
+                                <img src="{{ asset('images/brands/brand-5.webp') }}" alt="">
+                            </div>
+                            <div class="col learts-mb-10">
+                                <p>Most people are not ready to immediately buy upon seeing an online ad or visiting a new website about eCommerce. But that’s not the story with us. We are here to take the lead and tackle all challenges. By retargeting the subject, we’ve been able to reach out to more customers worldwide and become one of the most favored brands in the industry.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 learts-mb-30">
+                        <div class="row learts-mb-n10">
+                            <div class="col-lg-2 col-md-3 col-12 learts-mb-10">
+                                <img src="{{ asset('images/brands/brand-7.webp') }}" alt="">
+                            </div>
+                            <div class="col learts-mb-10">
+                                <p>People think that when you own a fashion brand that sells a wide variety of clothing items and makes billions of dollars on a weekly basis like Love, you would be prone to arrogance. Love is the exception. We have put together a style guide for customers on our website, we’ve maintained the prices for years and been constantly improving our clothes’ quality.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 learts-mb-30">
+                        <div class="row learts-mb-n10">
+                            <div class="col-lg-2 col-md-3 col-12 learts-mb-10">
+                                <img src="{{ asset('images/brands/brand-8.webp') }}" alt="">
+                            </div>
+
+                            <div class="col learts-mb-10">
+                                <p>Prior to Houdini, there have been many clothing brands that achieved such a roaring success. However, there’s no other brand that can obtain such a precious position like us. We have successfully built our site to make more people know about our products as well as our motto. We’ve been the inspiration for many other small and medium-sized businesses.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-additional_information">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 col-12 mx-auto">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td>Color</td>
+                                    <td>Black, Dark Red</td>
+                                </tr>
+                                <tr>
+                                    <td>Size</td>
+                                    <td>Large, Medium, Small</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-reviews">
+                <div class="product-review-wrapper">
+                    <span class="title">2 reviews for Decorative Christmas Fox</span>
+                    <ul class="product-review-list">
+                        <li>
+                            <div class="product-review">
+                                <div class="thumb">
+                                    <img src="{{ asset('images/review/review-2.webp') }}" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="ratings">
+                                            <span class="star-rating">
+                                                <span class="rating-active" style="width: 100%;">ratings</span>
+                                            </span>
+                                    </div>
+                                    <div class="meta">
+                                        <h5 class="title">Scott James</h5>
+                                        <span class="date">November 27, 2020</span>
+                                    </div>
+                                    <p>Thanks for always keeping your WordPress themes up to date. Your level of support and dedication is second to none.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="product-review">
+                                <div class="thumb">
+                                    <img src="{{ asset('images/review/review-1.webp') }}" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="ratings">
+                                            <span class="star-rating">
+                                                <span class="rating-active" style="width: 80%;">ratings</span>
+                                            </span>
+                                    </div>
+                                    <div class="meta">
+                                        <h5 class="title">Edna Watson</h5>
+                                        <span class="date">November 27, 2020</span>
+                                    </div>
+                                    <p>Wonderful quality, and an awesome design !</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <span class="title">Add a review</span>
+                    <div class="review-form">
+                        <p class="note">Your email address will not be published. Required fields are marked *</p>
+                        <form action="#">
+                            <div class="row learts-mb-n30">
+                                <div class="col-md-6 col-12 learts-mb-30"><input type="text" placeholder="Name *"></div>
+                                <div class="col-md-6 col-12 learts-mb-30"><input type="email" placeholder="Email *"></div>
+                                <div class="col-12 learts-mb-10">
+                                    <div class="form-rating">
+                                        <span class="title">Your rating</span>
+                                        <span class="rating"><span class="star"></span></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 learts-mb-30"><textarea placeholder="Your Review *"></textarea></div>
+                                <div class="col-12 text-center learts-mb-30"><button class="btn btn-dark btn-outline-hover-dark">Submit</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Single Products Infomation Section End -->
+
+<!-- Recommended Products Section Start -->
+<div class="section section-padding">
+    <div class="container">
+
+        <!-- Section Title Start -->
+        <div class="section-title2 text-center">
+            <h2 class="title">You Might Also Like</h2>
+        </div>
+        <!-- Section Title End -->
+
+        <!-- Products Start -->
+        <div class="product-carousel">
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                                <span class="product-badges">
+                                    <span class="onsale">-13%</span>
+                                </span>
+                            <img src="{{ asset('images/product/s270/product-1.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-1-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Boho Beard Mug</a></h6>
+                        <span class="price">
+                                <span class="old">$45.00</span>
+                            <span class="new">$39.00</span>
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                            <img src="{{ asset('images/product/s270/product-2.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-2-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Motorized Tricycle</a></h6>
+                        <span class="price">
+                                $35.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                            <span class="product-badges">
+                                <span class="hot">hot</span>
+                            </span>
+                        <a href="product-details.html" class="image">
+                            <img src="{{ asset('images/product/s270/product-3.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-3-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Walnut Cutting Board</a></h6>
+                        <span class="price">
+                                $100.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                                <span class="product-badges">
+                                    <span class="onsale">-27%</span>
+                                </span>
+                            <img src="{{ asset('images/product/s270/product-4.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-4-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Pizza Plate Tray</a></h6>
+                        <span class="price">
+                                <span class="old">$30.00</span>
+                            <span class="new">$22.00</span>
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                            <img src="{{ asset('images/product/s270/product-5.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-5-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                        <div class="product-options">
+                            <ul class="colors">
+                                <li style="background-color: #c2c2c2;">color one</li>
+                                <li style="background-color: #374140;">color two</li>
+                                <li style="background-color: #8ea1b2;">color three</li>
+                            </ul>
+                            <ul class="sizes">
+                                <li>Large</li>
+                                <li>Medium</li>
+                                <li>Small</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Minimalist Ceramic Pot</a></h6>
+                        <span class="price">
+                                $120.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                            <img src="{{ asset('images/product/s270/product-6.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-6-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Clear Silicate Teapot</a></h6>
+                        <span class="price">
+                                $140.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                                <span class="product-badges">
+                                    <span class="hot">hot</span>
+                                </span>
+                            <img src="{{ asset('images/product/s270/product-7.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-7-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Lucky Wooden Elephant</a></h6>
+                        <span class="price">
+                                $35.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="product">
+                    <div class="product-thumb">
+                        <a href="product-details.html" class="image">
+                                <span class="product-badges">
+                                    <span class="outofstock"><i class="fal fa-frown"></i></span>
+                                <span class="hot">hot</span>
+                                </span>
+                            <img src="{{ asset('images/product/s270/product-8.webp') }}" alt="Product Image">
+                            <img class="image-hover" src="{{ asset('images/product/s270/product-8-hover.webp') }}" alt="Product Image">
+                        </a>
+                        <a href="wishlist.html" class="add-to-wishlist hintT-left" data-hint="Add to wishlist"><i class="far fa-heart"></i></a>
+                        <div class="product-options">
+                            <ul class="colors">
+                                <li style="background-color: #000000;">color one</li>
+                                <li style="background-color: #b2483c;">color two</li>
+                            </ul>
+                            <ul class="sizes">
+                                <li>Large</li>
+                                <li>Medium</li>
+                                <li>Small</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="title"><a href="product-details.html">Decorative Christmas Fox</a></h6>
+                        <span class="price">
+                                $50.00
+                            </span>
+                        <div class="product-buttons">
+                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Quick View"><i class="fal fa-search"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Add to Cart"><i class="fal fa-shopping-cart"></i></a>
+                            <a href="#" class="product-button hintT-top" data-hint="Compare"><i class="fal fa-random"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Products End -->
+
+    </div>
+</div>
+<!-- Recommended Products Section End -->
+
+<div class="footer2-section section section-padding">
+    <div class="container">
+        <div class="row learts-mb-n40">
+
+            <div class="col-lg-6 learts-mb-40">
+                <div class="widget-about">
+                    <img src="{{ asset('images/logo/logo-2.webp') }}" alt="">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod itaque recusandae commodi mollitia facere iure nisi, laudantium quis quas perferendis a minus dolores.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 learts-mb-40">
+                <div class="row">
+                    <div class="col">
+                        <ul class="widget-list">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Store location</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Orders</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <ul class="widget-list">
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Support Policy</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 learts-mb-40">
+                <ul class="widget-list">
+                    <li> <i class="fab fa-twitter"></i> <a href="https://www.twitter.com/">Twitter</a></li>
+                    <li> <i class="fab fa-facebook-f"></i> <a href="https://www.facebook.com/">Facebook</a></li>
+                    <li> <i class="fab fa-instagram"></i> <a href="https://www.instagram.com/">Instagram</a></li>
+                    <li> <i class="fab fa-youtube"></i> <a href="https://www.youtube.com/">Youtube</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="footer2-copyright section">
+    <div class="container">
+        <p class="copyright text-center">&copy; 2023 learts. All Rights Reserved</p>
+    </div>
+</div>
+<!-- Modal -->
+<div class="quickViewModal modal fade" id="quickViewModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button class="close" data-bs-dismiss="modal">&times;</button>
+            <div class="row learts-mb-n30">
+
                 <!-- Product Images Start -->
-                <div class="col-lg-6 col-12 learts-mb-40">
+                <div class="col-lg-6 col-12 learts-mb-30">
                     <div class="product-images">
-                        <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='[
-                            {"src": "{{ asset('images/product/single/1/product-zoom-1.webp') }}", "w": 700, "h": 1100},
-                            {"src": "{{ asset('images/product/single/1/product-zoom-2.webp') }}", "w": 700, "h": 1100},
-                            {"src": "{{ asset('images/product/single/1/product-zoom-3.webp') }}", "w": 700, "h": 1100},
-                            {"src": "{{ asset('images/product/single/1/product-zoom-4.webp') }}", "w": 700, "h": 1100}
-                        ]'><i class="far fa-expand"></i></button>
-                        <a href="https://www.youtube.com/watch?v=1jSsy7DtYgc"
-                           class="product-video-popup video-popup hintT-left" data-hint="Click to see video"><i
-                                class="fal fa-play"></i></a>
-                        <div class="product-gallery-slider">
-                            <div class="product-zoom"
-                                 data-image="{{ asset('images/product/single/1/product-zoom-1.webp') }}">
+                        <div class="product-gallery-slider-quickview">
+                            <div class="product-zoom" data-image="{{ asset('images/product/single/1/product-zoom-1.webp') }}">
                                 <img src="{{ asset('images/product/single/1/product-1.webp') }}" alt="">
                             </div>
-                            <div class="product-zoom"
-                                 data-image="{{ asset('images/product/single/1/product-zoom-2.webp') }}">
+                            <div class="product-zoom" data-image="{{ asset('images/product/single/1/product-zoom-2.webp') }}">
                                 <img src="{{ asset('images/product/single/1/product-2.webp') }}" alt="">
                             </div>
-                            <div class="product-zoom"
-                                 data-image="{{ asset('images/product/single/1/product-zoom-3.webp') }}">
+                            <div class="product-zoom" data-image="{{ asset('images/product/single/1/product-zoom-3.webp') }}">
                                 <img src="{{ asset('images/product/single/1/product-3.webp') }}" alt="">
                             </div>
-                            <div class="product-zoom"
-                                 data-image="{{ asset('images/product/single/1/product-zoom-4.webp') }}">
+                            <div class="product-zoom" data-image="{{ asset('images/product/single/1/product-zoom-4.webp') }}">
                                 <img src="{{ asset('images/product/single/1/product-4.webp') }}" alt="">
                             </div>
                         </div>
-                        <div class="product-thumb-slider">
-                            <div class="item">
-                                <img src="{{ asset('images/product/single/1/product-thumb-1.webp') }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset('images/product/single/1/product-thumb-2.webp') }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset('images/product/single/1/product-thumb-3.webp') }}" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="{{ asset('images/product/single/1/product-thumb-4.webp') }}" alt="">
-                            </div>
-                        </div>
                     </div>
-                    <!-- Single Products Infomation Section Start -->
-                    <div class="section section-padding border-bottom">
-                        <div class="container">
-{{--                            <label for="additional_information">Додаткова інформація</label>--}}
-{{--                            <textarea id="additional_information" name="additional_information" rows="10" cols="50"--}}
-{{--                                      placeholder="За необхідності внесіть додаткову інформацію про товар" style="border: 1px solid black; padding-left: 0.5em;">{{ old('additional_information') }}</textarea>--}}
-                            <div class="product-meta">
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td class="label"><span>Теги</span></td>
-                                        <td class="value">
-                                            <ul class="product-tags">
-                                                <li><a href="#">handmade</a></li>
-                                                <li><a href="#">learts</a></li>
-                                                <li><a href="#">mug</a></li>
-                                                <li><a href="#">product</a></li>
-                                                <li><a href="#">learts</a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label"><span>Поширити</span></td>
-                                        <td class="va">
-                                            <div class="product-share">
-                                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                                <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                                                <a href="#"><i class="fab fa-pinterest"></i></a>
-                                                <a href="#"><i class="fal fa-envelope"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Single Products Infomation Section End -->
                 </div>
                 <!-- Product Images End -->
 
                 <!-- Product Summery Start -->
-                <div class="col-lg-6 col-12 learts-mb-40">
-                    <div class="product-summery">
-                        <form method="post" action="{{ route('products.store') }}" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="color_id" id="selectedColor" value="">
-
-                            <label for="name">Назва</label>
-                            <br>
-                            <input id="title" name="title" type="text" class="product-title"
-                                   placeholder="Введіть назву товару" value="{{ old('name') }}">
-                            @error('title')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <br>
-
-                            <label for="price">Вартість, грн</label>
-                            <br>
-                            <input type="number" id="price" name="price" min="0" step="1" class="product-title"
-                                   placeholder="Введіть вартість товару" value="{{ old('price') }}">
-                            @error('price')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <br>
-
-                            <label for="content">Інформація про товар</label>
-                            <br>
-                            <textarea id="content" name="content" rows="10" cols="50"
-                                      placeholder="Введіть опис товару, щоб зацікавити покупця">{{ old('content') }}</textarea>
-                            @error('content')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <br>
-
-                            <label for="kind_product_id">Вид товару</label>
-                            <br>
-                            <div class="row mb-n3">
-                                <div class="col-lg-4 col-12 mb-3">
-                                    <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
-                                        @foreach($kind_products as $kind_product)
-                                            <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $selected_kind_product_id) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                <div class="col-lg-6 col-12 overflow-hidden position-relative learts-mb-30">
+                    <div class="product-summery customScroll">
+                        <div class="product-ratings">
+                                <span class="star-rating">
+                                <span class="rating-active" style="width: 100%;">ratings</span>
+                                </span>
+                            <a href="#reviews" class="review-link">(<span class="count">3</span> customer reviews)</a>
+                        </div>
+                        <h3 class="product-title">Cleaning Dustpan & Brush</h3>
+                        <div class="product-price">£38.00 – £50.00</div>
+                        <div class="product-description">
+                            <p>Easy clip-on handle – Hold the brush and dustpan together for storage; the dustpan edge is serrated to allow easy scraping off the hair without entanglement. High-quality bristles – no burr damage, no scratches, thick and durable, comfortable to remove dust and smaller particles.</p>
+                        </div>
+                        <div class="product-variations">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td class="label"><span>Size</span></td>
+                                    <td class="value">
+                                        <div class="product-sizes">
+                                            <a href="#">Large</a>
+                                            <a href="#">Medium</a>
+                                            <a href="#">Small</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><span>Color</span></td>
+                                    <td class="value">
+                                        <div class="product-colors">
+                                            <a href="#" data-bg-color="#000000"></a>
+                                            <a href="#" data-bg-color="#ffffff"></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><span>Quantity</span></td>
+                                    <td class="value">
+                                        <div class="product-quantity">
+                                            <span class="qty-btn minus"><i class="ti-minus"></i></span>
+                                            <input type="text" class="input-qty" value="1">
+                                            <span class="qty-btn plus"><i class="ti-plus"></i></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="product-buttons">
+                            <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark"><i class="fal fa-heart"></i></a>
+                            <a href="#" class="btn btn-dark btn-outline-hover-dark"><i class="fal fa-shopping-cart"></i> Add to Cart</a>
+                            <a href="#" class="btn btn-icon btn-outline-body btn-hover-dark"><i class="fal fa-random"></i></a>
+                        </div>
+                        <div class="product-brands">
+                            <span class="title">Brands</span>
+                            <div class="brands">
+                                <a href="#"><img src="{{ asset('images/brands/brand-3.webp') }}" alt=""></a>
+                                <a href="#"><img src="{{ asset('images/brands/brand-8.webp') }}" alt=""></a>
                             </div>
-                            @error('kind_product_id')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <br>
-                            <button type="submit" name="action" value="add_kind" class="btn btn-primary3">
-                                <i class="fab fa-galactic-republic"></i> {{ $action_types['add_kind'] }}
-                            </button>
-                            <br><br>
-
-                            <label for="sub_kind_product_id">Підвид товару</label>
-                            <br>
-                            <div class="row mb-n3">
-                                <div class="col-lg-4 col-12 mb-3">
-                                    <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
-                                        @foreach($sub_kind_products as $sub_kind_product)
-                                            <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', $selected_sub_kind_product_id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            @error('sub_kind_product_id')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                            <br>
-                            <button type="submit" name="action" value="add_sub_kind" class="btn btn-primary3">
-                                <i class="fab fa-galactic-republic"></i> {{ $action_types['add_sub_kind'] }}
-                            </button>
-                            <br><br>
-
-                            <label for="quantity">Кількість виробів в наявності</label>
-                            <div class="product-quantity">
-                                <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                <input type="text" class="input-qty" name="stock_balance" id="stockBalance" value="{{ old('stock_balance', 1) }}">
-                                <span class="qty-btn plus"><i class="ti-plus"></i></span>
-                                @error('stock_balance')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <br><br>
-                            <label for="quantity">Можу виробити цей товар ще</label>
-                            <input type="checkbox" id="can_produce" name="can_produce">
-                            <div id="termCreationWrapper" style="display: none;">
-                                <br>
-                                <label for="quantity_day">Кількість днів для виготовлення і відправки</label>
-                                <div id="termCreationBlock">
-                                    <div class="product-quantity">
-                                        <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                        <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', 0) }}">
-                                        <span class="qty-btn plus"><i class="ti-plus"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-
-                            <div class="product-variations">
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td class="label"><span>Колір</span></td>
-                                        <td class="value">
-                                            @foreach($colors as $key => $color)
-                                                <div
-                                                    class="circle"
-                                                    id="circle{{ $key + 1 }}"
-                                                    data-name="Circle {{ $key + 1 }}"
-                                                    data-color="{{ $color->code }}"
-                                                    onclick="selectColor(this)"
-                                                ></div>
-                                                <style>
-                                                    #circle{{ $key+1 }}  {
-                                                        background-color: {{ $color->code }};
-                                                    }
-                                                </style>
-                                            @endforeach
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <label for="product_photo" class="file-input-label">
-                                <i class="fas fa-image"></i> <span id="file-label">Виберіть фото</span>
-                            </label>
-                            <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
-                            <br><br>
-                            <div class="product-buttons">
-                                <button type="submit" name="action" value="put_up_for_sale"
-                                        class="btn btn-dark btn-outline-hover-dark">
-                                    <i class="fas fa-donate"></i> {{ $action_types['put_up_for_sale'] }}
-                                </button>
-                                <button type="submit" name="action" value="save"
-                                        class="btn btn-dark btn-outline-hover-dark">
-                                    <i class="fas fa-save"></i> {{ $action_types['save'] }}
-                                </button>
-                            </div>
-                        </form>
-                        @if($user)
-                            @if(empty($user->name) || empty($user->surname) || empty($user->email) || empty($user->phone))
-                                <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                                    <div class="col-auto learts-mb-20">
-                                        <a href="{{ route('users.show', ['user' => $user->id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a>
-                                    </div>
-                                    <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
-                                </div>
-                            @endif
-                        @endif
+                        </div>
+                        <div class="product-meta mb-0">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td class="label"><span>SKU</span></td>
+                                    <td class="value">0404019</td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><span>Category</span></td>
+                                    <td class="value">
+                                        <ul class="product-category">
+                                            <li><a href="#">Kitchen</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><span>Tags</span></td>
+                                    <td class="value">
+                                        <ul class="product-tags">
+                                            <li><a href="#">handmade</a></li>
+                                            <li><a href="#">learts</a></li>
+                                            <li><a href="#">mug</a></li>
+                                            <li><a href="#">product</a></li>
+                                            <li><a href="#">learts</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><span>Share on</span></td>
+                                    <td class="va">
+                                        <div class="product-share">
+                                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                            <a href="#"><i class="fab fa-twitter"></i></a>
+                                            <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                                            <a href="#"><i class="fal fa-envelope"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- Product Summery End -->
+
             </div>
         </div>
     </div>
-    <!-- Single Products Section End -->
+</div>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+     It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+        PhotoSwipe keeps only 3 of them in the DOM to save memory.
+        Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 @endsection
 
+{{--@extends('layouts.app')--}}
+
+{{--@section('content')--}}
+{{--    <div class="section section-padding border-bottom">--}}
+{{--        <div class="container">--}}
+{{--            <div class="row learts-mb-n40">--}}
+{{--                 Блок з фото товару та додатковою інформацією--}}
+{{--                <div class="col-lg-6 col-12 learts-mb-40">--}}
+{{--                    @include('products.include.images')--}}
+
+{{--                    <div class="section section-padding border-bottom">--}}
+{{--                        <div class="container">--}}
+{{--                            <label for="additional_information">Додаткова інформація</label>--}}
+{{--                            <textarea id="additional_information" name="additional_information" rows="10" class="form-control">--}}
+{{--                                {{ old('additional_information') }}--}}
+{{--                            </textarea>--}}
+{{--                            @include('products.include.tags_social')--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+{{--                 Блок з формою--}}
+{{--                <div class="col-lg-6 col-12 learts-mb-40">--}}
+{{--                    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">--}}
+{{--                        @csrf--}}
+
+{{--                        @include('products.include.title-price')--}}
+{{--                        @include('products.include.kind-subkind')--}}
+{{--                        @include('products.include.quantity')--}}
+{{--                        @include('products.include.produce')--}}
+{{--                        @include('products.include.colors')--}}
+{{--                        @include('products.include.file_upload')--}}
+{{--                        @include('products.include.buttons')--}}
+
+{{--                        @isset($user)--}}
+{{--                            @if(empty($user->name) || empty($user->surname) || empty($user->email) || empty($user->phone))--}}
+{{--                                <div class="alert alert-warning alert-dismissible fade show mt-4">--}}
+{{--                                    <a href="{{ route('users.show', $user) }}#account-info" class="btn btn-secondary">--}}
+{{--                                        Перейти в профіль--}}
+{{--                                    </a>--}}
+{{--                                    <p class="mt-2 mb-0">Заповніть обов'язкові поля профілю перед продажем</p>--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                        @endisset--}}
+{{--                    </form>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--@endsection--}}

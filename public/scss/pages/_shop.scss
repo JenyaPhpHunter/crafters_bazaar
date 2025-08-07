@@ -1,9 +1,10 @@
 /* 18.01. Shop Page CSS */
-@import "shop/toolbar";
-@import "shop/filter";
-@import "shop/cart-wishlist";
-@import "shop/checkout";
-@import "shop/order-tracking";
-@import "shop/login-register";
-@import "shop/lost-password";
-@import "shop/myaccount";
+
+@use "shop/toolbar" as *;
+@use "shop/filter" as *;
+@use "shop/cart-wishlist" as *;
+@use "shop/checkout" as *;
+@use "shop/order-tracking" as *;
+@use "shop/login-register" as *;
+@use "shop/lost-password" as *;
+@use "shop/myaccount" as *;

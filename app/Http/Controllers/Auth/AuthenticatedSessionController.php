@@ -73,9 +73,16 @@ class AuthenticatedSessionController extends Controller
         }
 
         $user = Auth::user();
-        return $user->role_id < 6
-            ? redirect()->intended('/admin')
-            : redirect()->intended();
+
+        // Отримаємо URL, куди користувач хотів перейти
+        $intendedUrl = url()->previous();
+
+        // Якщо URL був /login або /register — перенаправляємо на іншу сторінку
+        if (str_contains($intendedUrl, '/login-register')) {
+            return redirect($user->role_id < 6 ? '/admin' : route('welcome'));
+        }
+
+        return redirect()->intended();
     }
 
     /**

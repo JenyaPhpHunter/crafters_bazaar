@@ -1,3 +1,6 @@
+@use "../variabls" as *;
+@use "sass:color";
+
 /* Header Category */
 .header-categories {
     position: absolute;
@@ -100,7 +103,8 @@
         }
 
         &:hover {
-            background-color: darken($primary2, 5);
+            background-color: color.adjust($primary2, $lightness: -5%);
+
         }
     }
 }

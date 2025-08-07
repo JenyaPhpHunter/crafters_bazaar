@@ -1,3 +1,13 @@
+@use "../variabls" as *;
+@use "logo" as *;
+@use "lan-curr" as *;
+@use "tools" as *;
+@use "menu" as *;
+@use "offcanvas" as *;
+@use "overlay-menu" as *;
+@use "search" as *;
+@use "category" as *;
+
 /* 05.02 Main Header CSS */
 
 .header-section {
@@ -129,12 +139,3 @@ body.offside-header-left {
         }
     }
 }
-
-@import "logo";
-@import "lan-curr";
-@import "tools";
-@import "menu";
-@import "offcanvas";
-@import "overlay-menu";
-@import "search";
-@import "category";

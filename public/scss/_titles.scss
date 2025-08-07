@@ -2,6 +2,6 @@
 /*  07. Titles CSS
 /*----------------------------------------*/
 
-@import "titles/section-title";
-@import "titles/block-title";
-@import "titles/page-title";
+@use "titles/section-title" as *;
+@use "titles/block-title" as *;
+@use "titles/page-title" as *;

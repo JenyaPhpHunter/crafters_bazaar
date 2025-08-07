@@ -1,3 +1,6 @@
+@use "variabls" as *;
+@use "sass:color";
+
 /*----------------------------------------*/
 /*  17. Footer CSS
 /*----------------------------------------*/
@@ -58,7 +61,7 @@
     padding: 20px 0;
 
     color: #999999;
-    border-top: 1px solid darken(#F8F8F8, 5);
+    border-top: 1px solid color.adjust(#F8F8F8, $lightness: -5%);
     background-color: #F8F8F8;
 }
 

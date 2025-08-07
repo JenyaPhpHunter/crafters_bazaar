@@ -2,8 +2,8 @@
 /*  18. Other Pages CSS
 /*----------------------------------------*/
 
-@import "pages/shop";
-@import "pages/about-us";
-@import "pages/contact";
-@import "pages/404";
-@import "pages/coming-soon";
+@use "pages/shop" as *;
+@use "pages/about-us" as *;
+@use "pages/contact" as *;
+@use "pages/404" as *;
+@use "pages/coming-soon" as *;

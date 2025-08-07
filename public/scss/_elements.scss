@@ -2,10 +2,10 @@
 /*  04. Element CSS
 /*----------------------------------------*/
 
-@import "elements/button";
-@import "elements/tooltip";
-@import "elements/accordion";
-@import "elements/brand";
-@import "elements/icon-box";
-@import "elements/blockquote";
-@import "elements/form";
+@use "elements/button" as *;
+@use "elements/tooltip" as *;
+@use "elements/accordion" as *;
+@use "elements/brand" as *;
+@use "elements/icon-box" as *;
+@use "elements/blockquote" as *;
+@use "elements/form" as *;

@@ -2,7 +2,7 @@
 /*  08. Banner CSS
 /*----------------------------------------*/
 
-@import "banner/sale";
-@import "banner/category";
-@import "banner/parallax";
-@import "banner/other";
+@use "banner/sale" as *;
+@use "banner/category" as *;
+@use "banner/parallax" as *;
+@use "banner/other" as *;

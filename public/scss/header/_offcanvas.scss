@@ -1,3 +1,6 @@
+@use "../variabls" as *;
+@use "../mixins" as *;
+
 /* Body Style When OffCanvas Open */
 body.offcanvas-open {
     overflow: hidden;

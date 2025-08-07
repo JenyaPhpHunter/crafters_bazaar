@@ -1,3 +1,6 @@
+@use "../variabls" as *;
+@use "sass:color";
+
 /* 06.01. Home One Slider */
 .home1-slider {
     width: 100%;
@@ -266,7 +269,9 @@
 
         transform: scale(0.8);
 
-        border: 3px solid lighten($primary3, 20);
+
+        border: 3px solid color.adjust($primary3, $lightness: 20%);
+
         border-radius: 50%;
     }
 

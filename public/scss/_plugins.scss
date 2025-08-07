@@ -2,11 +2,11 @@
 /*  03. Plugin Custom CSS
 /*----------------------------------------*/
 
-@import "plugins/imageZoom";
-@import "plugins/irs";
-@import "plugins/parfect-scroll";
-@import "plugins/photoSwipe";
-@import "plugins/product-360";
-@import "plugins/select2";
-@import "plugins/slick";
-@import "plugins/swiper";
+@use "plugins/imageZoom" as *;
+@use "plugins/irs" as *;
+@use "plugins/parfect-scroll" as *;
+@use "plugins/photoSwipe" as *;
+@use "plugins/product-360" as *;
+@use "plugins/select2" as *;
+@use "plugins/slick" as *;
+@use "plugins/swiper" as *;

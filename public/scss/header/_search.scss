@@ -1,3 +1,6 @@
+@use "../variabls" as *;
+@use "../mixins" as *;
+
 /* Header Two Search */
 .header2-search {
     & form {

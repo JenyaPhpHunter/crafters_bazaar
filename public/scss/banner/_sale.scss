@@ -1,13 +1,13 @@
 /* 08.01. Sale Banner CSS */
 
-@import "sale/banner1";
-@import "sale/banner2";
-@import "sale/banner3";
-@import "sale/banner4";
-@import "sale/banner5";
-@import "sale/banner6";
-@import "sale/banner7";
-@import "sale/banner8";
-@import "sale/banner9";
-@import "sale/banner10";
-@import "sale/banner11";
+@use "sale/banner1" as *;
+@use "sale/banner2" as *;
+@use "sale/banner3" as *;
+@use "sale/banner4" as *;
+@use "sale/banner5" as *;
+@use "sale/banner6" as *;
+@use "sale/banner7" as *;
+@use "sale/banner8" as *;
+@use "sale/banner9" as *;
+@use "sale/banner10" as *;
+@use "sale/banner11" as *;

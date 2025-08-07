@@ -1,4 +1,8 @@
+@use "../variabls" as *;
+@use "sass:color";
+
 /* 04.04 Button CSS */
+
 
 .btn {
     font-weight: 400;
@@ -64,8 +68,8 @@ $value in $templateColors {
         }
 
         &:hover {
-            border-color: darken($value, 7.5%);
-            background-color: darken($value, 7.5%);
+            border-color: color.adjust($value, $lightness: -7.5%);
+            background-color: color.adjust($value, $lightness: -7.5%);
 
             @if $name==warning or $name==light {
                 color: $heading-color;

@@ -1,3 +1,9 @@
+@use "variabls" as *;
+@use "product/product" as *;
+@use "product/deal-product" as *;
+@use "product/single-product" as *;
+@use "product/quick-view" as *;
+
 /*----------------------------------------*/
 /*  09. Product CSS
 /*----------------------------------------*/
@@ -202,8 +208,3 @@
         }
     }
 }
-
-@import "product/product";
-@import "product/deal-product";
-@import "product/single-product";
-@import "product/quick-view";
