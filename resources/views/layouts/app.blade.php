@@ -53,33 +53,40 @@
 @include('include.offcanvas-search-section')
 @include('include.offcanvas-wishlist-section')
 <div class="offcanvas-overlay"></div>
-@isset($includeSliderMain)
-    @include($user && $user->role_id < 5 ? 'admin.include.slider-main' : 'include.slider-main')
-@endisset
-@isset($includeFeatureSection)
-    @include($user && $user->role_id < 5 ? 'admin.include.feature-section' : 'include.feature-section')
-@endisset
-@isset($includeCategoryBannerSection)
-    @include($user && $user->role_id < 5 ? 'admin.include.category-banner-section' : 'include.category-banner-section')
-@endisset
-@isset($includeSaleBanner)
-    @include($user && $user->role_id < 5 ? 'admin.include.sale-banner' : 'include.sale-banner')
-@endisset
-@isset($includeProductSection)
-    @include($user && $user->role_id < 5 ? 'admin.include.product-section' : 'include.product-section')
-@endisset
-@isset($includeDealDay)
-    @include($user && $user->role_id < 5 ? 'admin.include.deal-day' : 'include.deal-day')
-@endisset
-@isset($includeListProductSection)
-    @include($user && $user->role_id < 5 ? 'admin.include.list-product-section' : 'include.list-product-section')
-@endisset
-@isset($includeInstagramSection)
-    @include($user && $user->role_id < 5 ? 'admin.include.instagram-section' : 'include.instagram-section')
-@endisset
-@isset($includeRecommendedProducts)
-    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')
-@endisset
+{{--@include('include.slider-main')--}}
+{{--@include('include.feature-section')--}}
+{{--@include('include.category-banner-section')--}}
+{{--@include('include.product-section')--}}
+{{--@include('include.list-product-section')--}}
+{{--@include('include.instagram-section')--}}
+
+{{--@isset($includeSliderMain)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.slider-main' : 'include.slider-main')--}}
+{{--@endisset--}}
+{{--@isset($includeFeatureSection)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.feature-section' : 'include.feature-section')--}}
+{{--@endisset--}}
+{{--@isset($includeCategoryBannerSection)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.category-banner-section' : 'include.category-banner-section')--}}
+{{--@endisset--}}
+{{--@isset($includeSaleBanner)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.sale-banner' : 'include.sale-banner')--}}
+{{--@endisset--}}
+{{--@isset($includeProductSection)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.product-section' : 'include.product-section')--}}
+{{--@endisset--}}
+{{--@isset($includeDealDay)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.deal-day' : 'include.deal-day')--}}
+{{--@endisset--}}
+{{--@isset($includeListProductSection)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.list-product-section' : 'include.list-product-section')--}}
+{{--@endisset--}}
+{{--@isset($includeInstagramSection)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.instagram-section' : 'include.instagram-section')--}}
+{{--@endisset--}}
+{{--@isset($includeRecommendedProducts)--}}
+{{--    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')--}}
+{{--@endisset--}}
 
 @include('components.breadcrumps')
 @yield('content')
