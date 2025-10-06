@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::get('/products/{uri}/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
+    Route::get('/products/create-kind-subkind', [ProductController::class, 'createkindsubkind'])->name('products.createkindsubkind');
     Route::post('/products/storekindsubkind', [ProductController::class, 'storekindsubkind'])->name('products.storekindsubkind');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::resource('forum_categories', ForumCategoryController::class);
