@@ -1,127 +1,67 @@
-
 $(document).ready(function() {
     $('.buy-btn').click(function(e) {
         e.preventDefault();
-        $(this).siblings('.product-details').show();
+        $(this).siblings('.product-details').slideDown(400);
     });
-});
-
-function updateFileLabel(input) {
-    var fileLabel = document.getElementById('file-label');
-    if (input.files.length > 0) {
-        fileLabel.textContent = input.files[0].name;
-    } else {
-        fileLabel.textContent = 'Виберіть фото';
+    // Оновлення лабела для завантаження файлу
+    function updateFileLabel(input) {
+        var fileLabel = document.getElementById('file-label');
+        if (input.files.length > 0) {
+            fileLabel.textContent = input.files.length + ' фото обрано';
+            fileLabel.style.backgroundColor = '#006666';
+            fileLabel.style.color = '#F5F5DC';
+        } else {
+            fileLabel.textContent = 'Виберіть фото';
+            fileLabel.style.backgroundColor = '#00CED1';
+            fileLabel.style.color = '#D2B48C';
+        }
     }
-}
-
+});
 function selectColor(circle) {
-    // Знімаємо виділення з усіх кружечків
     var circles = document.querySelectorAll('.circle');
-    circles.forEach(function (c) {
+    circles.forEach(function(c) {
         c.classList.remove('selected');
+        c.style.transform = 'scale(1)';
     });
-
-    // Виділяємо вибраний кружечок
     circle.classList.add('selected');
-
-    // Отримуємо id кружка з його id
-    var selectedColor = circle.id.replace('circle', '');
-    document.getElementById('selectedColor').value = selectedColor;
+    circle.style.transform = 'scale(1.1)';
+    document.getElementById('selectedColor').value = circle.dataset.id;
+    setTimeout(() => circle.style.transform = 'scale(1)', 200);
 }
-
-// function selectSize(sizeLink) {
-//     // Знімаємо виділення з усіх розмірів
-//     var sizeLinks = document.querySelectorAll('.product-sizes a');
-//     var sizeId = sizeLink.getAttribute('data-size-id');
-//     sizeLinks.forEach(function (link) {
-//         link.classList.remove('selected');
-//     });
-//
-//     // Виділяємо обраний розмір
-//     sizeLink.classList.add('selected');
-//     document.getElementById('selected_size').value = sizeId;
-//
-//     // Тепер ви можете зберегти це значення у прихованому полі або використовувати його інакше в вашій формі
-// }
-
-// у списку категорій форума при наведенні відображає підкатегорії
-    document.addEventListener('DOMContentLoaded', function() {
+// Категорії
+document.addEventListener('DOMContentLoaded', function() {
     var categoryContainers = document.querySelectorAll('.category-container');
-
     categoryContainers.forEach(function(container) {
-    container.addEventListener('click', function() {
-    var categoryId = container.id.split('-')[1];
-    var subcategories = document.getElementById('subcategories-' + categoryId);
-    if (subcategories.classList.contains('subcategories-visible')) {
-    subcategories.classList.remove('subcategories-visible');
-} else {
-    subcategories.classList.add('subcategories-visible');
-}
+        container.addEventListener('click', function() {
+            var categoryId = container.id.split('-')[1];
+            var subcategories = document.getElementById('subcategories-' + categoryId);
+            if (subcategories.classList.contains('subcategories-visible')) {
+                subcategories.classList.remove('subcategories-visible');
+                subcategories.style.opacity = '0';
+            } else {
+                subcategories.classList.add('subcategories-visible');
+                subcategories.style.opacity = '1';
+            }
+        });
+    });
 });
-});
-});
-
-
-// при створенні чи редагванні товару при відмічанні чекбоксу can_produce відкриває вікно term_creation та при знятті чекбоксу can_produce призначає term_creation = 0
+// Кількість та термін
 document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('can_produce');
-    const termCreationWrapper = document.getElementById('termCreationWrapper');
-    if (termCreationWrapper) {
-        const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
-
-        // Function to toggle the visibility of the term creation wrapper
+    const termCreationContainer = document.getElementById('term_creation_container');
+    if (termCreationContainer) {
+        const termCreationInput = termCreationContainer.querySelector('input[name="term_creation"]');
         function toggleTermCreationWrapper() {
             if (checkbox.checked) {
-                termCreationWrapper.style.display = 'block';
+                termCreationContainer.style.display = 'block';
+                termCreationContainer.classList.add('animate__fadeIn');
             } else {
-                termCreationWrapper.style.display = 'none';
-                termCreationInput.value = 0; // Set term_creation to 0 when the checkbox is unchecked
+                termCreationContainer.style.display = 'none';
+                termCreationInput.value = 0;
             }
         }
-
-        // Initial check when the page loads
-        if (parseInt(termCreationInput.value) > 0) {
-            checkbox.checked = true;
-        }
+        if (parseInt(termCreationInput.value) > 0) checkbox.checked = true;
         toggleTermCreationWrapper();
-
-        // Add an event listener to the checkbox
         checkbox.addEventListener('change', toggleTermCreationWrapper);
     }
 });
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     const checkbox = document.getElementById('can_produce');
-//     const termCreationWrapper = document.getElementById('termCreationWrapper');
-//
-//     // Перевіряємо, чи існують необхідні елементи перед доступом до них
-//     if (checkbox && termCreationWrapper) {
-//         const termCreationInput = termCreationWrapper.querySelector('input[name="term_creation"]');
-//
-//         if (termCreationInput) {
-//             // Функція для перемикання видимості блоку term_creation
-//             function toggleTermCreationWrapper() {
-//                 if (checkbox.checked) {
-//                     termCreationWrapper.style.display = 'block';
-//                 } else {
-//                     termCreationWrapper.style.display = 'none';
-//                     termCreationInput.value = 0; // Встановити значення 0, якщо чекбокс не відмічений
-//                 }
-//             }
-//
-//             // Початкова перевірка при завантаженні сторінки
-//             if (parseInt(termCreationInput.value) > 0) {
-//                 checkbox.checked = true;
-//             }
-//             toggleTermCreationWrapper();
-//
-//             // Додаємо обробник подій для чекбоксу
-//             checkbox.addEventListener('change', toggleTermCreationWrapper);
-//         } else {
-//             console.error('Element input[name="term_creation"] not found inside #termCreationWrapper');
-//         }
-//     } else {
-//         console.error('Element #can_produce or #termCreationWrapper not found');
-//     }
-// });

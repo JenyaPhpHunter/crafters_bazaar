@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "product/create-product" as *;
 @use "product/product" as *;
 @use "product/deal-product" as *;
 @use "product/single-product" as *;

@@ -1,0 +1,231 @@
+@use "sass:color";
+@use "../variables" as *;
+
+// Стиль для topbar з бежевим фоном
+.topbar-section.section.border-bottom {
+    height: 40px; // Зменшена висота
+    padding: 5px 0; // Зменшено внутрішні відступи
+    border-bottom: 1px solid $primary; // Бірюзова межа
+    background-color: $primary3; // Бежевий фон
+}
+
+// Стиль для меню з бежевим фоном
+.site-main-menu.justify-content-center.menu-height-60 {
+    background-color: $primary3; // Бежевий колір
+    height: 60px; // Зберігаємо висоту
+}
+
+// Стиль для site-menu-section з бежевим фоном
+.site-menu-section.section.border-top {
+    border-top: 1px solid $primary; // Бірюзова межа
+    background-color: $primary3; // Бежевий фон
+}
+
+// Стиль для sticky-header з бежевим фоном
+.sticky-header.section.bg-white.section-fluid.d-none.d-xl-block.is-sticky {
+    background-color: $primary3; // Бежевий фон замість білого
+    border: none; // Прибрано межі, якщо вони були
+}
+
+// Основний контейнер
+.section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn {
+    background-color: transparent; // Прибрано бежевий колір
+    border-color: $secondary; // Темний бежевий для межі
+    padding: 20px 0; // Зменшено зовнішні відступи для компактності
+    animation: fadeInUp 1s ease-out;
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
+
+// Форма та елементи
+.product-summery.product-summery-center.animate__animated.animate__slideInRight {
+    border: none; // Прибрано обрамлення
+    background-color: transparent; // Прибрано background-color
+    padding: 0; // Прибрано внутрішні відступи, якщо не потрібні
+
+    .form-control {
+        border: 2px solid $primary; // Бірюзовий
+        background-color: transparent; // Прибрано бежевий фон для input/select
+        color: $secondary; // Темний бежевий
+        border-radius: 5px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+        animation: pulseBorder 2s infinite;
+
+        &:focus {
+            border-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+            box-shadow: 0 0 10px $primary2; // Світлий бірюзовий
+            transform: scale(1.02);
+            animation: none;
+        }
+
+        &:not(:focus) {
+            animation: pulseBorder 2s infinite;
+        }
+    }
+
+    .btn {
+        background-color: $primary; // Бірюзовий
+        color: $primary3; // Бежевий
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+            transform: translateY(-2px);
+        }
+    }
+
+    .alert {
+        background-color: $primary3; // Бежевий
+        border: 1px solid $secondary; // Темний бежевий
+        color: $secondary; // Темний бежевий
+        border-radius: 5px;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    .file-upload-label {
+        background-color: $primary; // Бірюзовий
+        color: $primary3; // Бежевий
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+        }
+    }
+}
+
+// Анімація пульсації рамки для неактивних полів
+@keyframes pulseBorder {
+    0% { border-color: $primary; } // Бірюзовий
+    50% { border-color: color.adjust($primary, $lightness: 10%); }
+    100% { border-color: $primary; } // Бірюзовий
+}
+
+// Зображення та прев'ю
+.product-images.vertical.animate__animated.animate__fadeIn {
+    border: none; // Прибрано пунктир
+    background-color: transparent; // Прибрано background-color
+    padding: 15px;
+    position: relative; // Додано для контролю накладання
+    display: flex; // Гнучкий контейнер для вирівнювання
+
+    .product-thumb-slider-vertical {
+        position: relative; // Змінили на relative для гнучкості
+        width: 200px; // Збільшено ширину для мініатюр
+        min-height: 300px; // Мінімальна висота, щоб умістити мініатюри
+        overflow-y: auto; // Додано прокрутку, якщо мініатюр більше
+        z-index: 10; // Зверху основного фото
+
+        .item {
+            width: 190px; // Збільшено розмір мініатюр
+            height: 190px; // Збільшено висоту мініатюр
+            margin-bottom: 10px; // Відступ між мініатюрами
+            overflow: hidden; // Щоб фото не вилазили
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; // Масштабування зображень
+            }
+        }
+    }
+
+    .product-gallery-slider {
+        margin-left: 50px; // Відступ для основного фото, враховуючи ширину мініатюр
+        flex: 1; // Займає залишковий простір
+        min-height: 100px; // Мінімальна висота, щоб відповідати мініатюрам
+        position: relative;
+        z-index: 5; // Під мініатюрами
+
+        .product-zoom {
+            height: 100%; // Адаптується до контейнера
+            width: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; // Масштабування основного фото
+            }
+        }
+    }
+
+    &:hover {
+        box-shadow: 0 0 15px rgba(0, 108, 102, 0.3); // Збережено ефект тіні
+    }
+
+    .preview-item {
+        border: 1px solid $primary2; // Світлий бірюзовий
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+// Кольори та бренди
+.product-variations .circle {
+    border: 2px solid $primary; // Бірюзовий
+    transition: all 0.3s ease;
+
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+        box-shadow: 0 0 10px $primary; // Бірюзовий
+        transform: scale(1.1);
+    }
+}
+
+.brand-item {
+    border: 1px solid $primary; // Бірюзовий
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    transition: all 0.3s ease;
+
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+        background-color: $primary3; // Бежевий
+        transform: scale(1.05);
+    }
+
+    &:hover {
+        border-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+        box-shadow: 0 0 10px rgba(0, 108, 102, 0.3);
+    }
+}
+
+// Кнопки
+.product-buttons-centered .btn {
+    background-color: $primary; // Бірюзовий
+    color: $primary3; // Бежевий
+    padding: 12px 25px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: color.adjust($primary, $lightness: -30%); // Темно-бірюзовий
+        transform: translateY(-3px);
+    }
+}
+
+// Анімації загальні
+.animate__animated {
+    transition: all 0.5s ease;
+}
+
+@keyframes bounceIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
