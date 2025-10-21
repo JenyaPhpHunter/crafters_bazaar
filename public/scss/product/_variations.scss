@@ -1,0 +1,32 @@
+@use "sass:color"; // Імпортує модуль sass:color для роботи з функціями маніпуляції кольорами, наприклад, color.adjust
+@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+
+.product-variations .circle { // Визначає стилі для елементів із класом .circle всередині блоку .product-variations
+    border: 2px solid $primary; // Встановлює рамку товщиною 2px із кольором зі змінної $primary
+    transition: $transition; // Використовує змінну $transition для плавного переходу всіх змін стилів
+
+    &.selected { // Стилі для елементів .circle із класом .selected
+        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30% за допомогою функції color.adjust
+        box-shadow: 0 0 10px $primary; // Додає тінь із кольором $primary для ефекту підсвічування
+        transform: scale(1.1); // Збільшує елемент на 10% для візуального виділення
+    }
+}
+
+.brand-item { // Визначає стилі для елементів із класом .brand-item
+    border: 1px solid $primary; // Встановлює рамку товщиною 1px із кольором зі змінної $primary
+    border-radius: 5px; // Закруглює кути елемента до 5px
+    padding: 10px; // Встановлює внутрішні відступи 10px з усіх боків
+    margin: 5px; // Встановлює зовнішні відступи 5px з усіх боків
+    transition: $transition; // Використовує змінну $transition для плавного переходу всіх змін стилів
+
+    &.selected { // Стилі для елементів .brand-item із класом .selected
+        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
+        background-color: $primary3; // Встановлює фоновий колір зі змінної $primary3
+        transform: scale(1.05); // Збільшує елемент на 5% для візуального виділення
+    }
+
+    &:hover { // Стилі для стану наведення на елемент .brand-item
+        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
+        box-shadow: 0 0 10px rgba(0, 108, 102, 0.3); // Додає тінь із зеленуватим відтінком для ефекту підсвічування
+    }
+}

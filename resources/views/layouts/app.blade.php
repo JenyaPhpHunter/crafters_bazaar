@@ -38,11 +38,11 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @stack('styles')
-    <style>
-        body.modal-open {
-            padding-right: 0 !important;
-        }
-    </style>
+{{--    <style>--}}
+{{--        body.modal-open {--}}
+{{--            padding-right: 0 !important;--}}
+{{--        }--}}
+{{--    </style>--}}
 </head>
 
 <body>

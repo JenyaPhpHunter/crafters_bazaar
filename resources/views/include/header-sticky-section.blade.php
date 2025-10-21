@@ -6,7 +6,12 @@
             <!-- Header Logo Start -->
             <div class="col-xl-auto col">
                 <div class="header-logo">
-                    <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo-2.webp') }}" alt="Crafters bazaar"></a>
+                    @php
+                        $route = isset($user) && $user->role_id < 5 ? 'dashboard' : 'welcome';
+                    @endphp
+                    <a href="{{ route($route) }}">
+                        <img src="{{ asset('images/logo/new_logo2.webp') }}" alt="Handmade Luxury Logo">
+                    </a>
                 </div>
             </div>
             <!-- Header Logo End -->
@@ -104,14 +109,14 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Марафони</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="portfolio-3-columns.html"><span class="menu-text">Portfolio 3 Columns</span></a></li>
-                                <li><a href="portfolio-4-columns.html"><span class="menu-text">Portfolio 4 Columns</span></a></li>
-                                <li><a href="portfolio-5-columns.html"><span class="menu-text">Portfolio 5 Columns</span></a></li>
-                                <li><a href="portfolio-details.html"><span class="menu-text">Portfolio Details</span></a></li>
-                            </ul>
-                        </li>
+{{--                        <li class="has-children"><a href="#"><span class="menu-text">Марафони</span></a>--}}
+{{--                            <ul class="sub-menu">--}}
+{{--                                <li><a href="portfolio-3-columns.html"><span class="menu-text">Portfolio 3 Columns</span></a></li>--}}
+{{--                                <li><a href="portfolio-4-columns.html"><span class="menu-text">Portfolio 4 Columns</span></a></li>--}}
+{{--                                <li><a href="portfolio-5-columns.html"><span class="menu-text">Portfolio 5 Columns</span></a></li>--}}
+{{--                                <li><a href="portfolio-details.html"><span class="menu-text">Portfolio Details</span></a></li>--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
                         <li class="has-children"><a href="#"><span class="menu-text">Форум</span></a>
                             <ul class="sub-menu">
                                 <li class="has-children"><a href="{{ route('forum_categories.index') }}"><span class="menu-text">Всі категорії</span></a>
@@ -180,6 +185,19 @@
                                 @endisset
                             </ul>
                         </li>
+                        @if(isset($user) && $user->role_id != 9)
+                            <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди></span></a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ route('brands.create') }}"><span class="menu-text">Створити бренд</span></a></li>
+                                    <li><a href="{{ route('brands.index') }}"><span class="menu-text">Всі бренди</span></a></li>
+                                    @if(isset($brands))
+                                        @foreach ($brands as $brand)
+                                            <li><a href="{{ route('admin_tags.edit', ['admin_tag' => $brand]) }}"><span class="menu-text">{{ $brand->name }}</span></a></li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </nav>
             </div>
@@ -195,15 +213,19 @@
                             <a href="{{ route('login-register') }}"><i class="fal fa-user"></i>&nbsp;Увійти</a>
                         @endif
                     </div>
-                    <div class="header-search d-none d-sm-block">
-                        <a href="#offcanvas-search" class="offcanvas-toggle"><i class="fal fa-search"></i></a>
-                    </div>
                     <div class="header-wishlist">
                         <a href="{{ route('wishlist.index') }}"><span class="wishlist-count">{{ $wishItemsCount }}</span><i class="fal fa-heart"></i></a>
                     </div>
                     <div class="header-cart">
                         <a href="{{ route('carts.index') }}" class="offcanvas-toggle"><span class="cart-count">{{ $cartItemsCount }}</span><i class="fal fa-shopping-cart"></i></a>
                     </div>
+                    @isset($user)
+                        <div class="header-status">
+                            <a href="{{ route('orders.index') }}">
+                                <i class="fa fa-truck"></i>Статус замовлення
+                            </a>
+                        </div>
+                    @endisset
                     <div class="mobile-menu-toggle d-xl-none">
                         <a href="#offcanvas-mobile-menu" class="offcanvas-toggle">
                             <svg viewBox="0 0 800 600">

@@ -1,0 +1,15 @@
+@use "sass:color"; // Імпортує модуль sass:color для роботи з функціями маніпуляції кольорами, наприклад, color.adjust
+@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+
+.product-buttons-centered .btn { // Визначає стилі для кнопок із класом .btn всередині блоку .product-buttons-centered
+    background-color: $primary; // Встановлює фоновий колір кнопки зі змінної $primary
+    color: $primary3; // Встановлює колір тексту кнопки зі змінної $primary3
+    padding: 12px 25px; // Встановлює внутрішні відступи: 12px зверху/знизу, 25px зліва/справа
+    border-radius: 5px; // Закруглює кути кнопки до 5px
+    transition: $transition; // Використовує змінну $transition для плавного переходу всіх змін стилів
+
+    &:hover { // Стилі для стану наведення на кнопку
+        background-color: color.adjust($primary, $lightness: -30%); // Затемнює фоновий колір на 30% за допомогою функції color.adjust
+        transform: translateY(-3px); // Зміщує кнопку вгору на 3px для ефекту підйому
+    }
+}

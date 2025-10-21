@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../components/animations" as *;
 @use "logo" as *;
 @use "lan-curr" as *;
 @use "tools" as *;
@@ -8,11 +9,13 @@
 @use "search" as *;
 @use "category" as *;
 
-/* 05.02 Main Header CSS */
-
+/* Main Header CSS with Animations and Color Palette */
 .header-section {
     position: relative;
     z-index: 98;
+    background-color: $white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.5s ease-out;
 
     & .container,
     & .container-fluid {
@@ -31,7 +34,6 @@
                 &:first-child,
                 &:last-child {
                     flex: 1 0 210px;
-
                     max-width: 210px;
                 }
             }
@@ -42,9 +44,7 @@
         position: absolute;
         top: 0;
         left: 0;
-
         width: 100%;
-
         background-color: transparent !important;
     }
 }
@@ -55,13 +55,11 @@
     z-index: 99;
     top: 0;
     left: 0;
-
     width: 100%;
-
     transition: $transition;
     transform: translateY(-100%);
-
-    border-bottom: 1px solid rgba($black, 0.075);
+    background-color: #F4EDE7;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     & .container,
     & .container-fluid {
@@ -81,7 +79,6 @@
                     &:first-child,
                     &:last-child {
                         flex: 1 0 210px;
-
                         max-width: 210px;
                     }
                 }
@@ -91,26 +88,18 @@
 
     &.is-sticky {
         transform: translateY(0);
+        animation: fadeInUp 0.5s ease-out;
     }
 }
 
 /* Mobile Header */
 .mobile-header {
-}
+    background-color: $white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.5s ease-out;
 
-
-body.offside-header-left {
-    margin-left: 400px;
-
-    @media #{$laptop-device} {
-        margin-left: 300px;
-    }
-
-    @media #{$desktop-device,
-    $tablet-device,
-    $large-mobile
-    } {
-        margin-left: 0;
+    & .header-tools {
+        animation: slideInRight 0.6s ease-out;
     }
 }
 
@@ -119,23 +108,28 @@ body.offside-header-left {
     position: absolute;
     top: 0;
     right: 15px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 200px;
     height: 100%;
-
     border-right: 1px solid #DEE2E6;
     border-left: 1px solid #DEE2E6;
 
     & p {
         font-size: 16px;
         font-weight: 600;
+        color: $secondary;
+        transition: all 0.3s ease;
 
         & i {
             margin-right: 10px;
+            color: $primary;
+        }
+
+        &:hover {
+            color: $primary;
+            transform: translateY(-2px);
         }
     }
 }

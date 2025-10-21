@@ -6,15 +6,12 @@
             <!-- Header Logo Start -->
             <div class="col-auto">
                 <div class="header-logo justify-content-center">
-                    @isset($user)
-                        @if ($user->role_id < 5)
-                            <a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
-                        @else
-                            <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
-                        @endif
-                    @else
-                        <a href="{{ route('welcome') }}"><img src="{{ asset('images/logo/logo.webp') }}" alt="Learts Logo"></a>
-                    @endisset
+                    @php
+                        $route = isset($user) && $user->role_id < 5 ? 'dashboard' : 'welcome';
+                    @endphp
+                    <a href="{{ route($route) }}">
+                        <img src="{{ asset('images/logo/new_logo.webp') }}" alt="Handmade Luxury Logo">
+                    </a>
                 </div>
             </div>
             <!-- Header Logo End -->
@@ -26,7 +23,9 @@
                     <form action="{{ route('products.filter') }}" method="GET">
                         <div class="row g-0">
                             <div class="col">
-                                <input type="text" name="search" placeholder="Пошук товарів...">
+                                <div class="input-wrapper">
+                                    <input type="text" name="search" class="form-control" placeholder="Пошук товарів...">
+                                </div>
                             </div>
                             <button type="submit"><i class="fal fa-search"></i></button>
                         </div>
@@ -60,7 +59,7 @@
                 @isset($user)
                 <div class="header-status">
                     <a href="{{ route('orders.index') }}">
-                        <p><i class="fa fa-truck"></i>Статус замовлення</p>
+                        <i class="fa fa-truck"></i>Статус замовлення
                     </a>
                 </div>
                 @endisset

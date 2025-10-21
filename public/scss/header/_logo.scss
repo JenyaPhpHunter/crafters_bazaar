@@ -1,13 +1,39 @@
-/* Header Logo */
+@use "../variables" as *;
+@use "../components/animations" as *;
+
+/* Header Logo with Animations */
 .header-logo {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
     & a {
         display: flex;
+        animation: bounceIn 0.6s ease-out;
+    }
+
+    & img {
+        transition: all 0.3s ease;
+        border-radius: 5px;
+    }
+
+    &:hover {
+        & img {
+            animation: scalePulse 1.5s infinite;
+            border: 2px solid $primary;
+        }
+    }
+
+    /* Sticky and Mobile Header Logo Adjustments */
+    .sticky-header &,
+    .mobile-header & {
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        & img {
+            max-height: 50px; /* Smaller logo for sticky/mobile */
+        }
     }
 }

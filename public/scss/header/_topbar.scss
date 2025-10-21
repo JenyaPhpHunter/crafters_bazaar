@@ -1,123 +1,263 @@
-@use "../variables" as *;
+@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+@use "sass:color"; // Імпортує модуль sass:color для роботи з кольорами (наприклад, функція color.adjust)
+@use "../components/animations" as *;
 
-/* 05.01 Topbar CSS */
+// 05.01 Topbar CSS // Коментар, що позначає початок секції стилів для верхньої панелі (Topbar)
 
-/* Topbar Section */
-.topbar-section {
-    font-size: 16px;
-    font-weight: 400;
+/* Topbar Section */ // Коментар для секції стилів верхньої панелі
+.topbar-section { // Визначає стилі для блоку верхньої панелі
+    font-size: 14px; // Встановлює розмір шрифту 14 пікселів
+    font-weight: 400; // Встановлює товщину шрифту (нормальна)
+    position: relative; // Встановлює відносне позиціонування для блоку
+    z-index: 101; // Встановлює високий z-index для відображення поверх інших елементів
+    background-color: $primary3; // Встановлює фоновий колір зі змінної $primary3
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає легку тінь для ефекту глибини
+    transition: all 0.3s ease; // Додає плавний перехід для всіх змін стилів за 0.3 секунди
+    padding: 5px 0; // Встановлює внутрішні відступи 5px зверху та знизу
+    min-height: 40px; // Встановлює мінімальну висоту блоку 40 пікселів
 
-    position: relative;
-    z-index: 101;
+    &.section-fluid { // Визначає стилі для модифікатора класу .section-fluid
+        @media only screen and (min-width: 1500px) { // Медіа-запит для екранів ширше 1500px
+            padding-right: 55px; // Встановлює правий відступ 55px
+            padding-left: 55px; // Встановлює лівий відступ 55px
 
-    &.section-fluid {
-        @media only screen and (min-width: 1500px) {
-            padding-right: 55px;
-            padding-left: 55px;
-
-            & .container,
-            & .container-fluid {
-                max-width: 100%;
+            & .container, // Стилі для елемента з класом .container всередині .section-fluid
+            & .container-fluid { // Стилі для елемента з класом .container-fluid всередині .section-fluid
+                max-width: 100%; // Встановлює максимальну ширину контейнера 100%
             }
         }
 
-        @media #{$laptop-device} {
-            padding-right: 35px;
-            padding-left: 35px;
+        @media #{$laptop-device} { // Медіа-запит для пристроїв, визначених змінною $laptop-device
+            padding-right: 35px; // Встановлює правий відступ 35px
+            padding-left: 35px; // Встановлює лівий відступ 35px
 
-            & .container,
-            & .container-fluid {
-                max-width: 100%;
+            & .container, // Стилі для елемента .container всередині .section-fluid
+            & .container-fluid { // Стилі для елемента .container-fluid всередині .section-fluid
+                max-width: 100%; // Встановлює максимальну ширину контейнера 100%
             }
         }
 
-        @media #{$desktop-device} {
-            padding-right: 0;
-            padding-left: 0;
+        @media #{$desktop-device} { // Медіа-запит для пристроїв, визначених змінною $desktop-device
+            padding-right: 0; // Прибирає правий відступ
+            padding-left: 0; // Прибирає лівий відступ
 
-            & .container {
-                max-width: 960px;
+            & .container { // Стилі для елемента .container всередині .section-fluid
+                max-width: 960px; // Встановлює максимальну ширину контейнера 960px
             }
         }
 
-        @media #{$tablet-device} {
-            padding-right: 0;
-            padding-left: 0;
+        @media #{$tablet-device} { // Медіа-запит для пристроїв, визначених змінною $tablet-device
+            padding-right: 0; // Прибирає правий відступ
+            padding-left: 0; // Прибирає лівий відступ
 
-            & .container {
-                max-width: 720px;
+            & .container { // Стилі для елемента .container всередині .section-fluid
+                max-width: 720px; // Встановлює максимальну ширину контейнера 720px
+            }
+        }
+
+        &:hover { // Стилі для стану наведення на .section-fluid
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Збільшує тінь для ефекту підйому
+            background-color: color.adjust($primary3, $lightness: -5%); // Затемнює фоновий колір на 5%
+        }
+    }
+}
+
+/* Topbar Content */ // Коментар для секції контенту верхньої панелі
+.topbar-content { // Визначає стилі для блоку контенту верхньої панелі
+    display: flex; // Встановлює flex-контейнер для розташування дочірніх елементів
+    align-items: center; // Вирівнює дочірні елементи по вертикалі по центру
+    justify-content: space-between; // Розподіляє дочірні елементи по краях контейнера
+    width: 100%; // Встановлює ширину блоку на 100%
+    flex-wrap: nowrap; // Запобігає перенесенню дочірніх елементів на новий рядок
+}
+
+/* Contact Info */ // Коментар для секції контактної інформації
+.contact-info { // Визначає стилі для блоку контактної інформації
+    flex-shrink: 0; // Забороняє зменшення блоку при стисканні
+    margin-right: auto; // Відсуває блок максимально праворуч у flex-контейнері
+}
+
+.topbar-menu { // Визначає стилі для блоку меню верхньої панелі
+    & .menu-list { // Стилі для списку меню всередині .topbar-menu
+        display: flex; // Встановлює flex-контейнер для елементів списку
+        align-items: center; // Вирівнює елементи списку по вертикалі по центру
+        margin: 0; // Прибирає зовнішні відступи списку
+        padding: 0; // Прибирає внутрішні відступи списку
+        list-style: none; // Прибирає стандартні маркери списку
+
+        & .menu-item { // Стилі для елементів списку меню
+            position: relative; // Встановлює відносне позиціонування для псевдоелементів
+            margin-right: 10px; // Додає правий відступ 10px між елементами
+            padding: 0 5px; // Додає горизонтальні відступи 5px
+            transition: all 0.3s ease; // Додає плавний перехід для всіх змін стилів
+
+            &:last-child { // Стилі для останнього елемента списку
+                margin-right: 0; // Прибирає правий відступ для останнього елемента
+            }
+
+            &::after { // Додає псевдоелемент для вертикального роздільника
+                position: absolute; // Абсолютне позиціонування псевдоелемента
+                top: 50%; // Розташовує псевдоелемент по центру вертикально
+                right: 0; // Притискає псевдоелемент до правого краю
+                width: 1px; // Встановлює ширину роздільника 1px
+                height: 12px; // Встановлює висоту роздільника 12px
+                content: ""; // Порожній вміст псевдоелемента
+                transform: translateY(-50%); // Центрує псевдоелемент по вертикалі
+                background-color: color.adjust($primary3, $lightness: -20%); // Встановлює колір роздільника
+                transition: all 0.3s ease; // Додає плавний перехід для змін псевдоелемента
+            }
+
+            &:last-child::after { // Прибирає псевдоелемент для останнього пункту меню
+                display: none; // Ховає роздільник для останнього елемента
+            }
+
+            & .menu-link { // Стилі для посилань у пунктах меню
+                color: $secondary; // Встановлює колір тексту зі змінної $secondary
+                text-decoration: none; // Прибирає підкреслення посилань
+                font-weight: 500; // Встановлює товщину шрифту (середня)
+                font-size: 13px; // Встановлює розмір шрифту 13px
+                display: flex; // Встановлює flex-контейнер для вмісту посилання
+                align-items: center; // Вирівнює вміст посилання по вертикалі
+                transition: all 0.3s ease; // Додає плавний перехід для змін стилів
+
+                & i { // Стилі для іконок всередині посилань
+                    font-size: 12px; // Встановлює розмір іконки 12px
+                    margin-right: 5px; // Додає правий відступ 5px від іконки до тексту
+                    color: $primary; // Встановлює колір іконки зі змінної $primary
+                    transition: all 0.3s ease; // Додає плавний перехід для змін іконки
+                }
+
+                &:hover { // Стилі для стану наведення на посилання
+                    color: $primary; // Змінює колір тексту на $primary
+                    transform: translateY(-1px); // Злегка піднімає посилання вгору
+
+                    & i { // Стилі для іконки при наведенні
+                        color: color.adjust($primary, $lightness: -20%); // Затемнює колір іконки на 20%
+                        transform: scale(1.1); // Збільшує іконку на 10%
+                    }
+                }
+            }
+
+            &:hover::after { // Стилі для псевдоелемента при наведенні
+                height: 15px; // Збільшує висоту роздільника до 15px
+                background-color: $primary; // Змінює колір роздільника на $primary
             }
         }
     }
 }
 
-/* Topbar Menu */
-.topbar-menu {
-    & ul {
-        font-weight: 400;
+/* Promo Text */ // Коментар для секції промо-тексту
+.free-shipping-wrapper { // Визначає стилі для блоку промо-тексту
+    text-align: center; // Центрує текст у блоці
+    flex-grow: 1; // Дозволяє блоку розтягуватися для заповнення доступного простору
+    max-width: 50%; // Обмежує максимальну ширину блоку до 50%
+    white-space: normal; // Дозволяє тексту переноситися на кілька рядків
+}
 
-        display: flex;
-        flex-wrap: wrap;
+.promo-text { // Визначає стилі для тексту промо-акції
+    font-size: 16px; // Встановлює розмір шрифту 16px
+    font-weight: 600; // Встановлює товщину шрифту (жирний)
+    color: $primary; // Встановлює колір тексту зі змінної $primary
+    background: linear-gradient(90deg, rgba(245, 232, 199, 0.8), rgba(245, 232, 199, 0.5)); // Додає градієнтний фон
+    padding: 3px 10px; // Встановлює внутрішні відступи 3px зверху/знизу, 10px з боків
+    border-radius: 15px; // Закруглює кути блоку до 15px
+    display: inline-block; // Встановлює блочно-рядковий режим відображення
+    animation: breathe 2s infinite; // Замінено pulse на breathe з періодом 2 секунди
+    max-width: 100%; // Обмежує максимальну ширину до 100%
+}
 
-        margin: 0;
-        padding-left: 0;
+/* Language & Currency */ // Коментар для секції вибору мови та валюти
+.language-currency { // Визначає стилі для блоку вибору мови та валюти
+    flex-shrink: 0; // Забороняє зменшення блоку при стисканні
+    margin-left: auto; // Відсуває блок максимально ліворуч у flex-контейнері
+    white-space: nowrap; // Запобігає перенесенню тексту на новий рядок
+}
 
-        list-style: none;
+.header-lan-curr { // Визначає стилі для контейнера вибору мови та валюти
+    display: flex; // Встановлює flex-контейнер для дочірніх елементів
+    align-items: center; // Вирівнює дочірні елементи по вертикалі по центру
 
-        & li {
-            position: relative;
+    & .lan-item, // Стилі для елементів вибору мови
+    & .curr-item { // Стилі для елементів вибору валюти
+        position: relative; // Встановлює відносне позиціонування для дочірніх елементів
+        margin-left: 10px; // Додає лівий відступ 10px між елементами
 
-            margin-right: 15px;
-            padding-top: 10px;
-            padding-right: 15px;
-            padding-bottom: 10px;
+        & .dropdown-toggle { // Стилі для кнопки випадаючого меню
+            color: $secondary; // Встановлює колір тексту зі змінної $secondary
+            text-decoration: none; // Прибирає підкреслення посилання
+            font-weight: 500; // Встановлює товщину шрифту (середня)
+            font-size: 13px; // Встановлює розмір шрифту 13px
+            padding: 3px 8px; // Встановлює внутрішні відступи 3px зверху/знизу, 8px з боків
+            display: flex; // Встановлює flex-контейнер для вмісту кнопки
+            align-items: center; // Вирівнює вміст кнопки по вертикалі
+            transition: all 0.3s ease; // Додає плавний перехід для змін стилів
 
-            &::after {
-                position: absolute;
-                top: 50%;
-                right: 0;
-
-                width: 1px;
-                height: 15px;
-
-                content: "";
-                transform: translateY(-50%);
-
-                background-color: #D8D8D8;
+            &:hover, // Стилі для стану наведення
+            &:focus { // Стилі для стану фокусу
+                color: $primary; // Змінює колір тексту на $primary
+                background-color: color.adjust($primary3, $lightness: -10%); // Затемнює фон на 10%
+                border-radius: 15px; // Закруглює кути кнопки до 15px
             }
 
-            &:last-child {
-                margin-right: 0;
-                padding-right: 0;
-
-                &::after {
-                    display: none;
-                }
+            & i { // Стилі для іконки всередині кнопки
+                font-size: 10px; // Встановлює розмір іконки 10px
+                margin-left: 3px; // Додає лівий відступ 3px від тексту до іконки
+                transition: all 0.3s ease; // Додає плавний перехід для змін іконки
             }
 
-            & a {
-                & i {
-                    font-size: 14px;
+            &:after { // Прибирає стандартну стрілку Bootstrap для випадаючого меню
+                display: none; // Ховає псевдоелемент стрілки
+            }
+        }
 
-                    margin-right: 10px;
+        & .curr-lan-sub-menu { // Стилі для випадаючого підменю
+            position: absolute; // Абсолютне позиціонування підменю
+            top: 100%; // Розташовує підменю під кнопкою
+            right: 0; // Притискає підменю до правого краю
+            min-width: 100px; // Встановлює мінімальну ширину підменю 100px
+            background-color: $white; // Встановлює білий фон зі змінної $white
+            border: 1px solid color.adjust($primary3, $lightness: -20%); // Додає рамку з затемненим кольором
+            border-radius: 5px; // Закруглює кути підменю до 5px
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); // Додає тінь для ефекту глибини
+            padding: 3px 0; // Встановлює внутрішні відступи 3px зверху/знизу
+            display: none; // Ховає підменю за замовчуванням
+            z-index: 100; // Встановлює z-index для відображення поверх інших елементів
+            animation: fadeInUp 0.3s ease-out; // Застосовує анімацію появи підменю
+
+            &.dropdown-menu { // Стилі для класу .dropdown-menu
+                display: none; // Ховає підменю за замовчуванням (для Bootstrap)
+            }
+
+            &.show { // Стилі для стану видимості підменю
+                display: block; // Показує підменю, коли додано клас .show
+            }
+
+            & .dropdown-item { // Стилі для пунктів випадаючого меню
+                padding: 3px 10px; // Встановлює внутрішні відступи 3px зверху/знизу, 10px з боків
+                color: $secondary; // Встановлює колір тексту зі змінної $secondary
+                font-weight: 500; // Встановлює товщину шрифту (середня)
+                font-size: 12px; // Встановлює розмір шрифту 12px
+                transition: all 0.3s ease; // Додає плавний перехід для змін стилів
+
+                &:hover { // Стилі для стану наведення на пункт меню
+                    color: $primary; // Змінює колір тексту на $primary
+                    background-color: color.adjust($primary3, $lightness: -5%); // Затемнює фон на 5%
                 }
             }
         }
+
+        &:hover .curr-lan-sub-menu, // Показує підменю при наведенні
+        &.show .curr-lan-sub-menu { // Показує підменю, коли додано клас .show
+            display: block; // Відображає підменю
+        }
     }
-}
 
-/* Topbar Language & Currency */
-.header-lan-curr {
-    & ~ ul {
-        & li {
-            &:last-child {
-                margin-right: 15px;
-                padding-right: 15px;
+    & ~ ul .menu-item:last-child::after { // Стилі для псевдоелемента останнього пункту меню після .header-lan-curr
+        display: block !important; // Примусово показує роздільник для останнього пункту
+        transition: all 0.3s ease; // Додає плавний перехід для змін псевдоелемента
 
-                &::after {
-                    display: block !important;
-                }
-            }
+        &:hover { // Стилі для псевдоелемента при наведенні
+            background-color: $primary; // Змінює колір роздільника на $primary
         }
     }
 }

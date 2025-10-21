@@ -1,45 +1,59 @@
 @use "../variables" as *;
+@use "../components/animations" as *;
+@use "sass:color";
 
 /* Header Tools/Action Buttons */
 .header-tools {
     display: flex;
+    animation: fadeInUp 0.6s ease-out;
 
     & > div {
         margin-left: 25px;
 
         & a {
             position: relative;
-
             display: flex;
-
-            color: $heading-color;
+            color: $secondary !important; /* Темно-бежевий (#D2B48C) для header-login, header-wishlist, header-cart */
+            animation: bounceIn 0.6s ease-out;
+            transition: all 0.3s ease;
 
             & span {
                 font-size: 13px;
                 font-weight: 700;
                 line-height: 1rem;
-
                 position: absolute;
                 z-index: 1;
                 top: 0;
                 right: 0;
-
                 min-width: 16px;
                 height: 16px;
                 padding: 0 3px;
-
                 text-align: center;
-
                 color: $white;
                 border-radius: 14px;
-                background-color: $primary;
+                background-color: $primary; /* Бірюзовий фон (#6FC5C5) */
+                animation: scalePulse 2s infinite;
+                transition: all 0.3s ease;
             }
 
             & i {
                 font-size: 20px;
                 line-height: 32px;
-
                 display: block;
+                color: $secondary !important; /* Темно-бежевий для іконок (#D2B48C) */
+                transition: all 0.3s ease;
+            }
+
+            &:hover {
+                color: $primary !important; /* Бірюзовий при наведенні (#6FC5C5) */
+                transform: translateY(-2px);
+                & i {
+                    color: color.scale($primary, $lightness: -10%) !important; /* Темніший бірюзовий */
+                    transform: scale(1.1);
+                }
+                & span {
+                    background-color: color.scale($primary, $lightness: -10%);
+                }
             }
         }
 
@@ -64,6 +78,31 @@
         }
     }
 
+    /* Status Order Link */
+    .header-section .col-auto .header-status a {
+        color: $secondary !important; /* Темно-бежевий (#D2B48C) для "Статус замовлення" */
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.6s ease-out;
+
+        & i {
+            margin-right: 5px;
+            color: $secondary !important; /* Темно-бежевий для іконки (#D2B48C) */
+            transition: all 0.3s ease;
+        }
+
+        &:hover {
+            color: $primary !important; /* Бірюзовий при наведенні (#6FC5C5) */
+            transform: translateY(-2px);
+            & i {
+                color: color.scale($primary, $lightness: -10%) !important; /* Темніший бірюзовий */
+            }
+        }
+    }
+
     @media #{$small-mobile} {
         & > div {
             margin-left: 15px;
@@ -77,20 +116,17 @@
         position: absolute;
         top: 50%;
         left: 50%;
-
         width: 50px;
         height: 60px;
         margin-top: -2px;
         margin-left: -2px;
-
         cursor: pointer;
         transform: translate3d(-50%, -50%, 0);
 
         & path {
             transition: stroke-dashoffset 0.5s cubic-bezier(0.250, -0.250, 0.750, 1.250), stroke-dasharray 0.5s cubic-bezier(0.250, -0.250, 0.750, 1.250);
-
             fill: none;
-            stroke: $heading-color;
+            stroke: $primary;
             stroke-dashoffset: 0;
             stroke-linecap: round;
             stroke-width: 30px;

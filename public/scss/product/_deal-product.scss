@@ -1,87 +1,32 @@
-@use "../variables" as *;
+@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
 
-/* 09.02. Deal Product CSS */
-
-/* Deal Priduct Image */
-.product-deal-image {
-    & img {
-        animation: dealImage 2s linear infinite alternate both;
+/* Deal Product Image */ // Коментар, що позначає секцію стилів для зображення продукту акції
+.product-deal-image { // Визначає стилі для блоку зображення продукту акції
+    & img { // Стилі для зображень всередині блоку .product-deal-image
+        animation: dealImage 2s linear infinite alternate both; // Застосовує анімацію dealImage з тривалістю 2 секунди, лінійною зміною, безкінечним повторенням, зворотним відтворенням і збереженням кінцевого стану
     }
 }
 
-@keyframes dealImage {
-    0% {
-        transform: translateY(0);
+/* Deal Product Animation */ // Коментар, що позначає секцію анімації для продукту акції
+@keyframes dealImage { // Визначає анімацію dealImage
+    0% { // Початковий стан анімації
+        transform: translateY(0); // Зображення розташовано у вихідній позиції (без зміщення по осі Y)
     }
-
-    100% {
-        transform: translateY(-40px);
+    100% { // Кінцевий стан анімації
+        transform: translateY(-40px); // Зображення зміщується вгору на 40px
     }
 }
 
-/* Deal Priduct Content */
-.product-deal-content {
-    max-width: 525px;
+/* Deal Product Content */ // Коментар, що позначає секцію стилів для вмісту продукту акції
+.product-deal-content { // Визначає стилі для блоку вмісту продукту акції
+    max-width: 525px; // Встановлює максимальну ширину блоку 525px
 
-    & .title {
-        font-size: 40px;
-        font-weight: 400;
+    & .desc { // Стилі для блоку опису всередині .product-deal-content
+        max-width: 460px; // Встановлює максимальну ширину опису 460px
+        margin-bottom: 30px; // Додає нижній відступ 30px
 
-        margin-bottom: 20px;
-
-        &::after {
-            padding-left: 10px;
-
-            content: url("../images/title/title-decor-right.webp");
-        }
-    }
-
-    & .desc {
-        max-width: 460px;
-        margin-bottom: 30px;
-
-        & p {
-        }
-    }
-
-    & .countdown1 {
-        margin-bottom: 55px;
-    }
-
-    & .btn {
-    }
-
-    @media #{$desktop-device} {
-        & .title {
-            font-size: 34px;
-        }
-
-        & .countdown1 {
-            margin-bottom: 45px;
-        }
-    }
-
-    @media #{$large-mobile} {
-        & .title {
-            &::after {
-                display: none;
-            }
-        }
-    }
-
-    @media #{$small-mobile} {
-        & .title {
-            font-size: 34px;
-        }
-
-        & .countdown1 {
-            margin-bottom: 40px;
-        }
-    }
-
-    @media #{$extra-small-mobile} {
-        & .title {
-            font-size: 28px;
+        & p { // Стилі для параграфів всередині блоку .desc
+            // Порожній блок, можливо, для майбутніх стилів параграфів
         }
     }
 }

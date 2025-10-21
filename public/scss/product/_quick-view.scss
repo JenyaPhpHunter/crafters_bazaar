@@ -1,77 +1,104 @@
-@use "../variables" as *;
+@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
 
-/* 09.04. Quick View CSS */
+/* Quick View Modal */ // Коментар, що позначає секцію стилів для модального вікна швидкого перегляду
+.quickViewModal { // Визначає стилі для модального вікна швидкого перегляду
+    & .product-gallery-slider-quickview { // Стилі для слайдера галереї в модальному вікні швидкого перегляду
+        margin: 0; // Прибирає зовнішні відступи
+        padding: 0; // Прибирає внутрішні відступи
 
-.quickViewModal {
-    & .modal-dialog {
-        width: calc(100% - 30px);
-        max-width: 1200px;
+        & .slick-list { // Стилі для контейнера списку слайдів (Slick Slider)
+            margin: 0; // Прибирає зовнішні відступи для списку слайдів
 
-        & .modal-content {
-            padding: 30px;
-
-            & .close {
-                font-size: 30px;
-                font-weight: 300;
-
-                position: absolute;
-                top: 0;
-                right: 0;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                width: 40px;
-                height: 40px;
-
-                border: none;
-                border-radius: 50%;
-                background-color: transparent;
-            }
-
-            @media only screen and (min-width: 992px) {
-                & .product-summery {
-                    position: absolute;
-                    right: 15px;
-                    left: 15px;
-
-                    overflow-x: hidden;
-                    overflow-y: auto;
-
-                    height: 100%;
+            & .slick-slide { // Стилі для окремих слайдів
+                & > div { // Стилі для вмісту слайду
+                    padding: 0; // Прибирає внутрішні відступи
                 }
             }
         }
-    }
 
-    @media #{$extra-small-mobile} {
-        & .modal-dialog {
-            & .modal-content {
-                padding: 20px;
-            }
+        & .slick-dots { // Стилі для навігаційних точок слайдера (Slick Slider)
+            position: absolute; // Абсолютне позиціонування точок
+            bottom: 40px; // Розташовує точки на 40px від нижнього краю
+            left: 0; // Притискає точки до лівого краю
+            width: 100%; // Встановлює ширину 100% для розміщення точок по всій ширині
         }
     }
 }
 
-.product-gallery-slider-quickview {
-    margin: 0;
-    padding: 0;
-
-    & .slick-list {
-        margin: 0;
-        & .slick-slide {
-            & > div {
-                padding: 0;
-            }
-        }
-    }
-
-    & .slick-dots {
-        position: absolute;
-        bottom: 40px;
-        left: 0;
-
-        width: 100%;
-    }
-}
+//@use "../variables" as *;
+//
+///* 09.04. Quick View CSS */
+//
+//.quickViewModal {
+//    & .modal-dialog {
+//        width: calc(100% - 30px);
+//        max-width: 1200px;
+//
+//        & .modal-content {
+//            padding: 30px;
+//
+//            & .close {
+//                font-size: 30px;
+//                font-weight: 300;
+//
+//                position: absolute;
+//                top: 0;
+//                right: 0;
+//
+//                display: flex;
+//                align-items: center;
+//                justify-content: center;
+//
+//                width: 40px;
+//                height: 40px;
+//
+//                border: none;
+//                border-radius: 50%;
+//                background-color: transparent;
+//            }
+//
+//            @media only screen and (min-width: 992px) {
+//                & .product-summery {
+//                    position: absolute;
+//                    right: 15px;
+//                    left: 15px;
+//
+//                    overflow-x: hidden;
+//                    overflow-y: auto;
+//
+//                    height: 100%;
+//                }
+//            }
+//        }
+//    }
+//
+//    @media #{$extra-small-mobile} {
+//        & .modal-dialog {
+//            & .modal-content {
+//                padding: 20px;
+//            }
+//        }
+//    }
+//}
+//
+//.product-gallery-slider-quickview {
+//    margin: 0;
+//    padding: 0;
+//
+//    & .slick-list {
+//        margin: 0;
+//        & .slick-slide {
+//            & > div {
+//                padding: 0;
+//            }
+//        }
+//    }
+//
+//    & .slick-dots {
+//        position: absolute;
+//        bottom: 40px;
+//        left: 0;
+//
+//        width: 100%;
+//    }
+//}

@@ -1,5 +1,7 @@
 @use "../variables" as *;
 @use "../mixins" as *;
+@use "../components/animations" as *;
+@use "sass:color";
 
 /* Header Two Search */
 .header2-search {
@@ -9,20 +11,18 @@
         & input[type="text"] {
             font-size: 16px;
             line-height: 19px;
-
             width: 100%;
             height: 40px;
             margin: 0;
             padding-right: 10px;
             padding-left: 30px;
-
             color: $heading-color;
             border: none;
             background-color: transparent;
+            animation: fadeInUp 0.5s ease-out;
 
-@include placeholder {
+            @include placeholder {
                 letter-spacing: 0.5px;
-
                 color: #ABABAB;
             }
         }
@@ -31,19 +31,21 @@
             position: absolute;
             top: 0;
             left: 0;
-
             display: block;
-
             width: 30px;
             height: 40px;
             padding: 0;
-
             text-align: center;
-
-            color: #ABABAB;
+            color: $primary;
+            transition: all 0.3s ease;
 
             & i {
                 line-height: 40px;
+            }
+
+            &:hover {
+                color: color.scale($primary, $lightness: -10%);
+                transform: scale(1.1);
             }
         }
     }
@@ -62,91 +64,102 @@
     width: 100%;
     max-width: 650px;
     margin: auto;
+    animation: fadeInUp 0.5s ease-out;
 
     & form {
         position: relative;
+        width: 100%; // Повна ширина форми
 
-        & .select2 {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1;
+        & .input-wrapper {
+            position: relative;
+            width: 100%; // Повна ширина обгортки
 
-            width: 170px !important;
-            padding: 7px 0;
+            &::before {
+                content: "\f002"; // Іконка пошуку (FontAwesome)
+                font-family: $fontAwesome5Pro;
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $primary;
+                font-size: 16px;
+                z-index: 1;
+            }
 
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            & input[type="text"] {
+                font-size: 16px;
+                line-height: 26px;
+                width: 100%;
+                padding: 10px 50px 10px 40px; // Відступи для іконки та кнопки
+                color: $body-color;
+                border: 2px solid $primary;
+                border-radius: 5px;
+                background-color: $white;
+                box-sizing: border-box; // Враховує рамку та відступи
+                transition: all 0.3s ease;
+                animation: breathe 2s infinite; // Синхронізовано з promo-text
 
-            color: $heading-color;
-            border: none;
+                &:focus {
+                    border-color: color.scale($primary, $lightness: -10%);
+                    background-color: color.scale($white, $lightness: -5%);
+                    box-shadow: 0 0 8px rgba($primary, 0.5);
+                    transform: scale(1.02);
+                    animation: none;
+                    outline: none;
+                }
 
-            & .selection {
-                & .select2-selection {
-                    height: auto;
-                    padding: 5px 0;
+                @include placeholder {
+                    letter-spacing: 0.5px;
+                    color: #ABABAB;
+                    transition: color 0.3s ease;
+                }
 
-                    border: none !important;
-                    border-radius: 0;
-                    background-color: $white;
-
-                    & .select2-selection__rendered {
-                        font-weight: 500;
-                        line-height: inherit;
-
-                        position: relative;
-
-                        display: flex;
-                        overflow: visible;
-                        align-items: center;
-
-                        height: 100%;
-                        padding-left: 0;
-
-                        opacity: 0.8;
-
-                        &::before {
-                            font-family: $fontAwesome5Pro;
-                            font-weight: 700;
-
-                            position: absolute;
-                            top: 50%;
-                            right: 5px;
-
-                            content: "\f0d7";
-                            transform: translateY(-50%);
-                        }
-                    }
-
-                    & .select2-selection__arrow {
-                        display: none;
-                    }
+                &:focus::placeholder {
+                    color: color.scale(#ABABAB, $lightness: -20%);
                 }
             }
         }
 
-        & input[type="text"] {
-            font-size: 16px;
-            line-height: 26px;
-
-            width: 100%;
-            padding: 10px 20px;
-
-            color: $body-color;
-            border-width: 2px;
-            border-style: solid;
-            border-color: transparent transparent #EDEDED;
-        }
-
         & button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 30px;
-            margin-left: -30px;
+            height: 30px;
             padding: 0;
-
             text-align: center;
-
-            color: $heading-color;
+            color: $primary;
             border: none;
             background-color: transparent;
+            transition: all 0.3s ease;
+
+            & i {
+                font-size: 18px;
+                line-height: 30px;
+            }
+
+            &:hover {
+                color: color.scale($primary, $lightness: -10%);
+                transform: translateY(-50%) scale(1.2);
+            }
+
+            &:active {
+                transform: translateY(-50%) scale(0.95);
+            }
         }
+    }
+
+    @media #{$laptop-device} {
+        max-width: 500px;
+    }
+
+    @media #{$tablet-device}, #{$large-mobile} {
+        max-width: 400px;
+    }
+
+    @media #{$small-mobile}, #{$extra-small-mobile} {
+        max-width: 100%;
+        padding: 0 10px;
     }
 }

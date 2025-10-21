@@ -4,7 +4,7 @@
     <div class="section section-fluid section-padding border-bottom animate__animated animate__fadeIn">
         <div class="container">
             <div class="row learts-mb-n40">
-                <div class="col-lg-6 col-12 learts-mb-40">
+                <div class="col-lg-6 col-12 learts-mb-40 animate__animated animate__slideInRight">
                     @include('products.include.images')
                     @include('products.include.additional-info')
                 </div>

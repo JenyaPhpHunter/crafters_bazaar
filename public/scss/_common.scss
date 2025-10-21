@@ -1,4 +1,6 @@
+@use "sass:color";
 @use "variables" as *;
+@use "components/animations" as *;
 
 /*----------------------------------------*/
 /*  01. Template default CSS
@@ -35,20 +37,14 @@ body,
 }
 
 body {
-    font-family: $body-font,
-    Arial,
-    Helvetica,
-    sans-serif;
+    font-family: $body-font, Arial, Helvetica, sans-serif;
     font-size: 18px;
     font-weight: 300;
     font-style: normal;
     line-height: 1.75;
-
     position: relative;
-
     visibility: visible;
     overflow-x: hidden;
-
     color: $body-color;
     background-color: $white;
 }
@@ -59,15 +55,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $heading-font,
-    Arial,
-    Helvetica,
-    sans-serif;
+    font-family: $heading-font, Arial, Helvetica, sans-serif;
     font-weight: 600;
     line-height: 1.2;
-
     margin-top: 0;
-
     color: $heading-color;
 }
 
@@ -78,7 +69,6 @@ h6 {
 .h5,
 .h6 {
     line-height: inherit;
-
     margin: 0;
 }
 
@@ -89,13 +79,10 @@ p:last-child {
 a,
 button {
     line-height: inherit;
-
     display: inline-block;
-
     cursor: pointer;
     text-decoration: none;
-
-    color: inherit;
+    color: $secondary;
 }
 
 a,
@@ -111,14 +98,12 @@ input {
 
 a:focus {
     text-decoration: none;
-
     color: inherit;
     outline: none;
 }
 
 a:hover {
     text-decoration: none;
-
     color: $primary;
 }
 
@@ -159,7 +144,6 @@ hr {
 .section,
 .main-wrapper {
     float: left;
-
     width: 100%;
 }
 
@@ -184,9 +168,7 @@ hr {
         }
     }
 
-    @media #{$desktop-device,
-    $tablet-device
-    } {
+    @media #{$desktop-device, $tablet-device} {
         padding-right: 25px;
         padding-left: 25px;
 
@@ -218,6 +200,7 @@ hr {
         }
     }
 }
+
 .container {
     padding-right: 15px;
     padding-left: 15px;
@@ -233,10 +216,7 @@ hr {
     }
 }
 
-
-
-@each $name,
-$color in $templateColors {
+@each $name, $color in $templateColors {
     // Background Color
     .bg-#{$name} {
         background-color: $color !important;
@@ -265,12 +245,9 @@ $color in $templateColors {
         z-index: -1;
         top: 0;
         left: 0;
-
         width: 100%;
         height: 100%;
-
         content: "";
-
         background-color: $black;
     }
 }
@@ -293,7 +270,6 @@ $color in $templateColors {
 /* Other */
 body.homepage-bg1 {
     padding: 0 15px 15px !important;
-
     background-color: #F4EDE7;
 
     & .topbar-section {
@@ -302,9 +278,7 @@ body.homepage-bg1 {
 
     &.offcanvas-open {
         padding-right: 32px !important;
-        @media #{$tablet-device,
-        $large-mobile
-        } {
+        @media #{$tablet-device, $large-mobile} {
             padding-right: 15px !important;
         }
     }
@@ -314,12 +288,9 @@ body.homepage-bg1 {
 #scrollUp {
     right: 25px;
     bottom: 25px;
-
     width: 40px;
     height: 40px;
-
     text-align: center;
-
     color: $white;
     background-color: $primary;
 
@@ -343,5 +314,112 @@ body.homepage-bg1 {
 
     &:hover {
         filter: grayscale(0);
+    }
+}
+
+/* Form Styles */
+.form-control {
+    border: 2px solid $primary;
+    background-color: transparent;
+    color: $secondary;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    transition: $transition;
+    animation: pulseBorder 2s infinite;
+
+    &:focus {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px $primary2;
+        transform: scale(1.02);
+        animation: none;
+        outline: none;
+    }
+}
+
+.title-input {
+    @extend .form-control;
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+input[type="number"] {
+    @extend .form-control;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+.form-label {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    color: $secondary;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.additional-info-form textarea {
+    @extend .form-control;
+    width: 100%;
+    resize: vertical;
+
+    &:focus {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px $primary2;
+        transform: scale(1.02);
+        outline: none;
+    }
+}
+
+/* Modal Styles */
+.modal-dialog {
+    width: calc(100% - 30px);
+    max-width: 1200px;
+
+    & .modal-content {
+        padding: 30px;
+
+        & .close {
+            font-size: 30px;
+            font-weight: 300;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: transparent;
+        }
+
+        @media only screen and (min-width: 992px) {
+            & .product-summery {
+                position: absolute;
+                right: 15px;
+                left: 15px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                height: 100%;
+            }
+        }
+    }
+
+    @media #{$extra-small-mobile} {
+        & .modal-content {
+            padding: 20px;
+        }
     }
 }
