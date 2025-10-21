@@ -1,165 +1,165 @@
-@use "../variables" as *;
-@use "../mixins" as *;
-@use "../components/animations" as *;
-@use "sass:color";
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "../mixins" as *; // Імпортує файл mixins з батьківської директорії та робить усі його міксину доступними
+@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
+@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
 
 /* Header Two Search */
-.header2-search {
-    & form {
-        position: relative;
+.header2-search { // Визначає стилі для блоку пошуку в заголовку типу 2
+    & form { // Стилі для форми всередині
+        position: relative; // Встановлює відносне позиціонування
 
-        & input[type="text"] {
-            font-size: 16px;
-            line-height: 19px;
-            width: 100%;
-            height: 40px;
-            margin: 0;
-            padding-right: 10px;
-            padding-left: 30px;
-            color: $heading-color;
-            border: none;
-            background-color: transparent;
-            animation: fadeInUp 0.5s ease-out;
+        & input[type="text"] { // Стилі для текстового поля
+            font-size: 16px; // Розмір шрифту
+            line-height: 19px; // Висота рядка
+            width: 100%; // Ширина 100%
+            height: 40px; // Висота
+            margin: 0; // Прибирає зовнішні відступи
+            padding-right: 10px; // Правий внутрішній відступ
+            padding-left: 30px; // Лівий внутрішній відступ
+            color: $heading-color; // Колір тексту
+            border: none; // Прибирає рамку
+            background-color: transparent; // Прозорий фон
+            animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
 
-            @include placeholder {
-                letter-spacing: 0.5px;
-                color: #ABABAB;
+            @include placeholder { // Застосовує міксин placeholder
+                letter-spacing: 0.5px; // Інтервал між літерами
+                color: #ABABAB; // Колір плейсхолдера
             }
         }
 
-        & .btn {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 30px;
-            height: 40px;
-            padding: 0;
-            text-align: center;
-            color: $primary;
-            transition: all 0.3s ease;
+        & .btn { // Стилі для кнопки всередині
+            position: absolute; // Абсолютне позиціонування
+            top: 0; // Прикріплює до верху
+            left: 0; // Прикріплює ліворуч
+            display: block; // Відображає як блок
+            width: 30px; // Ширина
+            height: 40px; // Висота
+            padding: 0; // Прибирає внутрішні відступи
+            text-align: center; // Центрує текст
+            color: $primary; // Колір тексту
+            transition: all 0.3s ease; // Плавний перехід
 
-            & i {
-                line-height: 40px;
+            & i { // Стилі для іконки всередині
+                line-height: 40px; // Висота рядка
             }
 
-            &:hover {
-                color: color.scale($primary, $lightness: -10%);
-                transform: scale(1.1);
+            &:hover { // Стилі при наведенні на кнопку
+                color: color.scale($primary, $lightness: -10%); // Змінює колір
+                transform: scale(1.1); // Збільшує розмір
             }
         }
     }
 
-    @media #{$laptop-device} {
-        & form {
-            & input[type="text"] {
-                width: 135px;
+    @media #{$laptop-device} { // Медіа-запит для ноутбуків
+        & form { // Стилі для форми
+            & input[type="text"] { // Стилі для текстового поля
+                width: 135px; // Змінює ширину
             }
         }
     }
 }
 
 /* Header Six Search */
-.header6-search {
-    width: 100%;
-    max-width: 650px;
-    margin: auto;
-    animation: fadeInUp 0.5s ease-out;
+.header6-search { // Визначає стилі для блоку пошуку в заголовку типу 6
+    width: 100%; // Ширина 100%
+    max-width: 650px; // Максимальна ширина
+    margin: auto; // Центрує елемент
+    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
 
-    & form {
-        position: relative;
-        width: 100%; // Повна ширина форми
+    & form { // Стилі для форми всередині
+        position: relative; // Встановлює відносне позиціонування
+        width: 100%; // Ширина 100%
 
-        & .input-wrapper {
-            position: relative;
-            width: 100%; // Повна ширина обгортки
+        & .input-wrapper { // Стилі для обгортки поля
+            position: relative; // Встановлює відносне позиціонування
+            width: 100%; // Ширина 100%
 
-            &::before {
-                content: "\f002"; // Іконка пошуку (FontAwesome)
-                font-family: $fontAwesome5Pro;
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: $primary;
-                font-size: 16px;
-                z-index: 1;
+            &::before { // Стилі для псевдоелемента ::before
+                content: "\f002"; // Код іконки пошуку (FontAwesome)
+                font-family: $fontAwesome5Pro; // Шрифт для іконки
+                position: absolute; // Абсолютне позиціонування
+                left: 15px; // Зсуває ліворуч
+                top: 50%; // Центрує по вертикалі
+                transform: translateY(-50%); // Центрує вертикально
+                color: $primary; // Колір
+                font-size: 16px; // Розмір шрифту
+                z-index: 1; // Встановлює рівень поверхні
             }
 
-            & input[type="text"] {
-                font-size: 16px;
-                line-height: 26px;
-                width: 100%;
-                padding: 10px 50px 10px 40px; // Відступи для іконки та кнопки
-                color: $body-color;
-                border: 2px solid $primary;
-                border-radius: 5px;
-                background-color: $white;
+            & input[type="text"] { // Стилі для текстового поля
+                font-size: 16px; // Розмір шрифту
+                line-height: 26px; // Висота рядка
+                width: 100%; // Ширина 100%
+                padding: 10px 50px 10px 40px; // Внутрішні відступи
+                color: $body-color; // Колір тексту
+                border: 2px solid $primary; // Рамка
+                border-radius: 5px; // Закруглені кути
+                background-color: $white; // Колір фону
                 box-sizing: border-box; // Враховує рамку та відступи
-                transition: all 0.3s ease;
-                animation: breathe 2s infinite; // Синхронізовано з promo-text
+                transition: all 0.3s ease; // Плавний перехід
+                animation: breathe 2s infinite; // Застосовує анімацію breathe
 
-                &:focus {
-                    border-color: color.scale($primary, $lightness: -10%);
-                    background-color: color.scale($white, $lightness: -5%);
-                    box-shadow: 0 0 8px rgba($primary, 0.5);
-                    transform: scale(1.02);
-                    animation: none;
-                    outline: none;
+                &:focus { // Стилі при фокусі
+                    border-color: color.scale($primary, $lightness: -10%); // Змінює колір рамки
+                    background-color: color.scale($white, $lightness: -5%); // Змінює колір фону
+                    box-shadow: 0 0 8px rgba($primary, 0.5); // Додає тінь
+                    transform: scale(1.02); // Збільшує розмір
+                    animation: none; // Прибирає анімацію
+                    outline: none; // Прибирає обводку
                 }
 
-                @include placeholder {
-                    letter-spacing: 0.5px;
-                    color: #ABABAB;
-                    transition: color 0.3s ease;
+                @include placeholder { // Застосовує міксин placeholder
+                    letter-spacing: 0.5px; // Інтервал між літерами
+                    color: #ABABAB; // Колір плейсхолдера
+                    transition: color 0.3s ease; // Плавна зміна кольору
                 }
 
-                &:focus::placeholder {
-                    color: color.scale(#ABABAB, $lightness: -20%);
+                &:focus::placeholder { // Стилі для плейсхолдера при фокусі
+                    color: color.scale(#ABABAB, $lightness: -20%); // Змінює колір
                 }
             }
         }
 
-        & button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            text-align: center;
-            color: $primary;
-            border: none;
-            background-color: transparent;
-            transition: all 0.3s ease;
+        & button { // Стилі для кнопки всередині
+            position: absolute; // Абсолютне позиціонування
+            right: 10px; // Зсуває праворуч
+            top: 50%; // Центрує по вертикалі
+            transform: translateY(-50%); // Центрує вертикально
+            width: 30px; // Ширина
+            height: 30px; // Висота
+            padding: 0; // Прибирає внутрішні відступи
+            text-align: center; // Центрує текст
+            color: $primary; // Колір тексту
+            border: none; // Прибирає рамку
+            background-color: transparent; // Прозорий фон
+            transition: all 0.3s ease; // Плавний перехід
 
-            & i {
-                font-size: 18px;
-                line-height: 30px;
+            & i { // Стилі для іконки всередині
+                font-size: 18px; // Розмір шрифту
+                line-height: 30px; // Висота рядка
             }
 
-            &:hover {
-                color: color.scale($primary, $lightness: -10%);
-                transform: translateY(-50%) scale(1.2);
+            &:hover { // Стилі при наведенні
+                color: color.scale($primary, $lightness: -10%); // Змінює колір
+                transform: translateY(-50%) scale(1.2); // Збільшує розмір
             }
 
-            &:active {
-                transform: translateY(-50%) scale(0.95);
+            &:active { // Стилі при натисканні
+                transform: translateY(-50%) scale(0.95); // Зменшує розмір
             }
         }
     }
 
-    @media #{$laptop-device} {
-        max-width: 500px;
+    @media #{$laptop-device} { // Медіа-запит для ноутбуків
+        max-width: 500px; // Змінює максимальну ширину
     }
 
-    @media #{$tablet-device}, #{$large-mobile} {
-        max-width: 400px;
+    @media #{$tablet-device}, #{$large-mobile} { // Медіа-запит для планшетів і великих мобільних
+        max-width: 400px; // Змінює максимальну ширину
     }
 
-    @media #{$small-mobile}, #{$extra-small-mobile} {
-        max-width: 100%;
-        padding: 0 10px;
+    @media #{$small-mobile}, #{$extra-small-mobile} { // Медіа-запит для маленьких і дуже маленьких мобільних
+        max-width: 100%; // Максимальна ширина 100%
+        padding: 0 10px; // Внутрішні відступи
     }
 }

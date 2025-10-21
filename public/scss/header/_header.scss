@@ -1,135 +1,135 @@
-@use "../variables" as *;
-@use "../components/animations" as *;
-@use "logo" as *;
-@use "lan-curr" as *;
-@use "tools" as *;
-@use "menu" as *;
-@use "offcanvas" as *;
-@use "overlay-menu" as *;
-@use "search" as *;
-@use "category" as *;
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
+@use "logo" as *; // Імпортує файл logo з поточної директорії і робить усі його змінні/функції доступними
+@use "lan-curr" as *; // Імпортує файл lan-curr з поточної директорії і робить усі його змінні/функції доступними
+@use "tools" as *; // Імпортує файл tools з поточної директорії і робить усі його змінні/функції доступними
+@use "menu" as *; // Імпортує файл menu з поточної директорії і робить усі його змінні/функції доступними
+@use "offcanvas" as *; // Імпортує файл offcanvas з поточної директорії і робить усі його змінні/функції доступними
+@use "overlay-menu" as *; // Імпортує файл overlay-menu з поточної директорії і робить усі його змінні/функції доступними
+@use "search" as *; // Імпортує файл search з поточної директорії і робить усі його змінні/функції доступними
+@use "category" as *; // Імпортує файл category з поточної директорії і робить усі його змінні/функції доступними
 
 /* Main Header CSS with Animations and Color Palette */
-.header-section {
-    position: relative;
-    z-index: 98;
-    background-color: $white;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-    animation: fadeInUp 0.5s ease-out;
+.header-section { // Визначає стилі для секції заголовка
+    position: relative; // Встановлює відносне позиціонування
+    z-index: 98; // Встановлює рівень поверхні
+    background-color: $white; // Колір фону білий
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає тінь
+    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
 
-    & .container,
-    & .container-fluid {
-        position: relative;
+    & .container, // Стилі для контейнера всередині
+    & .container-fluid { // Стилі для контейнера-fluid всередині
+        position: relative; // Встановлює відносне позиціонування
     }
 
-    & .row {
-        & > [class*="col"] {
-            position: static;
+    & .row { // Стилі для рядка всередині
+        & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+            position: static; // Встановлює статичне позиціонування
         }
     }
 
-    &.header-menu-center {
-        & .row {
-            & > [class*="col"] {
-                &:first-child,
-                &:last-child {
-                    flex: 1 0 210px;
-                    max-width: 210px;
+    &.header-menu-center { // Стилі для .header-section із класом header-menu-center
+        & .row { // Стилі для рядка всередині
+            & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+                &:first-child, // Стилі для першого елемента
+                &:last-child { // Стилі для останнього елемента
+                    flex: 1 0 210px; // Гнучкість і мінімальна ширина
+                    max-width: 210px; // Максимальна ширина
                 }
             }
         }
     }
 
-    &.header-transparent {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: transparent !important;
+    &.header-transparent { // Стилі для .header-section із класом header-transparent
+        position: absolute; // Встановлює абсолютне позиціонування
+        top: 0; // Прикріплює до верху
+        left: 0; // Прикріплює ліворуч
+        width: 100%; // Ширина 100%
+        background-color: transparent !important; // Прозорий фон
     }
 }
 
 /* Sticky Header */
-.sticky-header {
-    position: fixed;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    width: 100%;
-    transition: $transition;
-    transform: translateY(-100%);
-    background-color: #F4EDE7;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.sticky-header { // Визначає стилі для фіксованого заголовка
+    position: fixed; // Фіксує позицію
+    z-index: 99; // Встановлює рівень поверхні вище
+    top: 0; // Прикріплює до верху
+    left: 0; // Прикріплює ліворуч
+    width: 100%; // Ширина 100%
+    transition: $transition; // Плавний перехід
+    transform: translateY(-100%); // Зсуває вгору за межі екрана
+    background-color: #F4EDE7; // Колір фону
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Додає тінь
 
-    & .container,
-    & .container-fluid {
-        position: relative;
+    & .container, // Стилі для контейнера всередині
+    & .container-fluid { // Стилі для контейнера-fluid всередині
+        position: relative; // Встановлює відносне позиціонування
     }
 
-    & .row {
-        & > [class*="col"] {
-            position: static;
+    & .row { // Стилі для рядка всередині
+        & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+            position: static; // Встановлює статичне позиціонування
         }
     }
 
-    &.header-menu-center {
-        & .row {
-            @media only screen and (min-width: 1200px) {
-                & > [class*="col"] {
-                    &:first-child,
-                    &:last-child {
-                        flex: 1 0 210px;
-                        max-width: 210px;
+    &.header-menu-center { // Стилі для .sticky-header із класом header-menu-center
+        & .row { // Стилі для рядка всередині
+            @media only screen and (min-width: 1200px) { // Медіа-запит для екранів від 1200px
+                & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+                    &:first-child, // Стилі для першого елемента
+                    &:last-child { // Стилі для останнього елемента
+                        flex: 1 0 210px; // Гнучкість і мінімальна ширина
+                        max-width: 210px; // Максимальна ширина
                     }
                 }
             }
         }
     }
 
-    &.is-sticky {
-        transform: translateY(0);
-        animation: fadeInUp 0.5s ease-out;
+    &.is-sticky { // Стилі для .sticky-header із класом is-sticky
+        transform: translateY(0); // Повертає в початкову позицію
+        animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
     }
 }
 
 /* Mobile Header */
-.mobile-header {
-    background-color: $white;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-    animation: fadeInUp 0.5s ease-out;
+.mobile-header { // Визначає стилі для мобільного заголовка
+    background-color: $white; // Колір фону білий
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає тінь
+    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
 
-    & .header-tools {
-        animation: slideInRight 0.6s ease-out;
+    & .header-tools { // Стилі для .header-tools всередині
+        animation: slideInRight 0.6s ease-out; // Застосовує анімацію slideInRight
     }
 }
 
 /* Header Call */
-.header-call {
-    position: absolute;
-    top: 0;
-    right: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 100%;
-    border-right: 1px solid #DEE2E6;
-    border-left: 1px solid #DEE2E6;
+.header-call { // Визначає стилі для блоку дзвінка в заголовку
+    position: absolute; // Встановлює абсолютне позиціонування
+    top: 0; // Прикріплює до верху
+    right: 15px; // Зсуває праворуч
+    display: flex; // Використовує гнучке вирівнювання
+    align-items: center; // Центрує по вертикалі
+    justify-content: center; // Центрує по горизонталі
+    width: 200px; // Ширина
+    height: 100%; // Висота 100%
+    border-right: 1px solid #DEE2E6; // Права рамка
+    border-left: 1px solid #DEE2E6; // Ліва рамка
 
-    & p {
-        font-size: 16px;
-        font-weight: 600;
-        color: $secondary;
-        transition: all 0.3s ease;
+    & p { // Стилі для абзаців всередині
+        font-size: 16px; // Розмір шрифту
+        font-weight: 600; // Товщина шрифту
+        color: $secondary; // Колір тексту
+        transition: all 0.3s ease; // Плавний перехід
 
-        & i {
-            margin-right: 10px;
-            color: $primary;
+        & i { // Стилі для іконок всередині
+            margin-right: 10px; // Відступ праворуч
+            color: $primary; // Колір іконки
         }
 
-        &:hover {
-            color: $primary;
-            transform: translateY(-2px);
+        &:hover { // Стилі при наведенні на p
+            color: $primary; // Змінює колір тексту
+            transform: translateY(-2px); // Зсуває вгору
         }
     }
 }

@@ -1,39 +1,39 @@
-@use "../variables" as *;
-@use "../components/animations" as *;
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
 
 /* Header Logo with Animations */
-.header-logo {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 10px;
-    padding-bottom: 10px;
+.header-logo { // Визначає стилі для блоку логотипу в заголовку
+    display: flex; // Використовує гнучке вирівнювання
+    align-items: center; // Центрує елементи по вертикалі
+    justify-content: flex-start; // Вирівнює елементи по лівому краю
+    padding-top: 10px; // Верхній внутрішній відступ
+    padding-bottom: 10px; // Нижній внутрішній відступ
 
-    & a {
-        display: flex;
-        animation: bounceIn 0.6s ease-out;
+    & a { // Стилі для посилання всередині
+        display: flex; // Використовує гнучке вирівнювання
+        animation: bounceIn 0.6s ease-out; // Застосовує анімацію bounceIn
     }
 
-    & img {
-        transition: all 0.3s ease;
-        border-radius: 5px;
+    & img { // Стилі для зображення всередині
+        transition: all 0.3s ease; // Плавний перехід для всіх властивостей
+        border-radius: 5px; // Закруглені кути
     }
 
-    &:hover {
-        & img {
-            animation: scalePulse 1.5s infinite;
-            border: 2px solid $primary;
+    &:hover { // Стилі при наведенні на .header-logo
+        & img { // Стилі для зображення при наведенні
+            animation: scalePulse 1.5s infinite; // Застосовує анімацію scalePulse
+            border: 2px solid $primary; // Додає рамку з кольором $primary
         }
     }
 
     /* Sticky and Mobile Header Logo Adjustments */
-    .sticky-header &,
-    .mobile-header & {
-        padding-top: 10px;
-        padding-bottom: 10px;
+    .sticky-header &, // Стилі для .header-logo всередині .sticky-header
+    .mobile-header & { // Стилі для .header-logo всередині .mobile-header
+        padding-top: 10px; // Верхній внутрішній відступ
+        padding-bottom: 10px; // Нижній внутрішній відступ
 
-        & img {
-            max-height: 50px; /* Smaller logo for sticky/mobile */
+        & img { // Стилі для зображення всередині
+            max-height: 50px; // Максимальна висота логотипу
         }
     }
 }

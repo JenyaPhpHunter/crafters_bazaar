@@ -1,93 +1,93 @@
-@use "../variables" as *;
-@use "sass:color";
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
 
 /* Header Category */
-.header-categories {
-    position: absolute;
-    top: 0;
-    left: 15px;
+.header-categories { // Визначає стилі для блоку категорій у заголовку
+    position: absolute; // Встановлює абсолютне позиціонування
+    top: 0; // Прикріплює до верхньої частини
+    left: 15px; // Зсуває вліво на 15 пікселів
 
-    & .category-toggle {
-        font-family: $futura;
-        line-height: 30px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        padding: 15px 35px;
-        padding-right: 70px;
-        letter-spacing: 0.1px;
-        color: $white;
-        border: none;
-        background-color: $heading-color;
+    & .category-toggle { // Стилі для кнопки перемикання категорій
+        font-family: $futura; // Встановлює шрифт із змінної $futura
+        line-height: 30px; // Висота рядка
+        position: relative; // Встановлює відносне позиціонування
+        display: flex; // Використовує гнучке вирівнювання
+        align-items: center; // Центрує елементи по вертикалі
+        padding: 15px 35px; // Відступи всередині (зліва/праворуч)
+        padding-right: 70px; // Додатковий відступ праворуч
+        letter-spacing: 0.1px; // Інтервал між літерами
+        color: $white; // Колір тексту білий
+        border: none; // Прибирає рамку
+        background-color: $heading-color; // Колір фону з змінної $heading-color
 
-        & i {
-            line-height: 1;
-            margin-right: 10px;
+        & i { // Стилі для іконки всередині кнопки
+            line-height: 1; // Висота рядка для іконки
+            margin-right: 10px; // Відступ праворуч від іконки
         }
 
-        &::after {
-            font-family: $fontAwesome5Pro;
-            font-weight: 700;
-            line-height: 12px;
-            position: absolute;
-            top: 50%;
-            right: 30px;
-            width: 12px;
-            margin-top: -6px;
-            content: "\f0d7";
-            transition: $transition;
+        &::after { // Стилі для псевдоелемента після кнопки (стрілка)
+            font-family: $fontAwesome5Pro; // Шрифт для іконки
+            font-weight: 700; // Товщина шрифту
+            line-height: 12px; // Висота рядка
+            position: absolute; // Абсолютне позиціонування
+            top: 50%; // Центрує по вертикалі
+            right: 30px; // Зсуває праворуч
+            width: 12px; // Ширина елемента
+            margin-top: -6px; // Зміщення для центрування
+            content: "\f0d7"; // Код іконки (стрілка вниз)
+            transition: $transition; // Плавний перехід
         }
 
-        &.active {
-            &::after {
-                transform: rotateX(180deg);
+        &.active { // Стилі для кнопки в активному стані
+            &::after { // Змінює псевдоелемент при активному стані
+                transform: rotateX(180deg); // Повертає стрілку на 180 градусів
             }
         }
     }
 
-    & + .site-main-menu {
-        padding: 0 200px 0 270px;
+    & + .site-main-menu { // Стилі для меню, що йде одразу після .header-categories
+        padding: 0 200px 0 270px; // Відступи з усіх боків
     }
 }
 
 /* Category List */
-.header-category-list {
-    display: none;
-    width: 100%;
-    margin: 0;
-    padding-left: 0;
-    list-style: none;
-    background-color: $primary2;
+.header-category-list { // Визначає стилі для списку категорій
+    display: none; // Приховує список за замовчуванням
+    width: 100%; // Ширина 100%
+    margin: 0; // Прибирає зовнішні відступи
+    padding-left: 0; // Прибирає лівий внутрішній відступ
+    list-style: none; // Прибирає маркери списку
+    background-color: $primary2; // Колір фону з змінної $primary2
 
-    & li {
-        padding: 0 35px;
-        border-bottom: 1px solid $primary2;
+    & li { // Стилі для елементів списку
+        padding: 0 35px; // Відступи зліва і справа
+        border-bottom: 1px solid $primary2; // Нижня рамка такого ж кольору
 
-        & a {
-            font-size: 16px;
-            font-weight: 400;
-            display: flex;
-            align-items: center;
-            margin-bottom: -1px;
-            padding: 15px 0;
-            color: $white;
-            border-bottom: 1px dashed rgba($white, 0.3);
+        & a { // Стилі для посилань всередині li
+            font-size: 16px; // Розмір шрифту
+            font-weight: 400; // Нормальна товщина шрифту
+            display: flex; // Гнучке вирівнювання
+            align-items: center; // Центрування по вертикалі
+            margin-bottom: -1px; // Зміщення знизу
+            padding: 15px 0; // Вертикальні відступи
+            color: $white; // Колір тексту білий
+            border-bottom: 1px dashed rgba($white, 0.3); // Пунктирна нижня рамка
 
-            & img {
-                margin-right: 20px;
+            & img { // Стилі для зображень у посиланнях
+                margin-right: 20px; // Відступ праворуч від зображення
             }
         }
 
-        &:last-child {
-            border-bottom: none;
+        &:last-child { // Стилі для останнього елемента списку
+            border-bottom: none; // Прибирає нижню рамку
 
-            & a {
-                border: none;
+            & a { // Стилі для посилання в останньому li
+                border: none; // Прибирає рамку
             }
         }
 
-        &:hover {
-            background-color: color.scale($primary2, $lightness: -5%);
+        &:hover { // Стилі при наведенні на li
+            background-color: color.scale($primary2, $lightness: -5%); // Змінює колір фону, зменшуючи світлість
         }
     }
 }

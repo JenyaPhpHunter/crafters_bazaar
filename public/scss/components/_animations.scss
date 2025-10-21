@@ -1,83 +1,83 @@
-@use "sass:color";
-@use "../variables" as *;
+@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
 
 /* General Animation Styles */
-.animate__animated {
-    transition: all 0.5s ease;
+.animate__animated { // Визначає клас для елементів із загальними анімаційними стилями
+    transition: all 0.5s ease; // Встановлює плавний перехід для всіх властивостей тривалістю 0.5 секунди
 }
 
 /* Fade In Up Animation */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+@keyframes fadeInUp { // Визначає ключові кадри анімації fadeInUp (з’явлення знизу з прозорості)
+    from { // Початковий стан анімації
+        opacity: 0; // Елемент повністю прозорий
+        transform: translateY(20px); // Зсуває елемент униз на 20 пікселів
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    to { // Кінцевий стан анімації
+        opacity: 1; // Елемент стає повністю видимим
+        transform: translateY(0); // Повертає елемент у початкову позицію
     }
 }
 
 /* Bounce In Animation */
-@keyframes bounceIn {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
+@keyframes bounceIn { // Визначає ключові кадри анімації bounceIn (пружне з’явлення)
+    from { // Початковий стан анімації
+        transform: scale(0.8); // Зменшує розмір елемента до 80%
+        opacity: 0; // Елемент повністю прозорий
     }
-    to {
-        transform: scale(1);
-        opacity: 1;
+    to { // Кінцевий стан анімації
+        transform: scale(1); // Повертає елемент до нормального розміру
+        opacity: 1; // Елемент стає повністю видимим
     }
 }
 
 /* Slide In Right Animation */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
+@keyframes slideInRight { // Визначає ключові кадри анімації slideInRight (з’явлення справа)
+    from { // Початковий стан анімації
+        transform: translateX(100%); // Зсуває елемент праворуч на 100% його ширини
+        opacity: 0; // Елемент повністю прозорий
     }
-    to {
-        transform: translateX(0);
-        opacity: 1;
+    to { // Кінцевий стан анімації
+        transform: translateX(0); // Повертає елемент у початкову позицію
+        opacity: 1; // Елемент стає повністю видимим
     }
 }
 
 /* Scale Pulse Animation */
-@keyframes scalePulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba($primary, 0.7);
+@keyframes scalePulse { // Визначає ключові кадри анімації scalePulse (пульсація розміром і тінню)
+    0% { // Початковий стан анімації
+        transform: scale(1); // Нормальний розмір елемента
+        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Початкова тінь із прозорістю 70%
     }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 10px 5px rgba($primary, 0.4);
+    50% { // Середина анімації
+        transform: scale(1.05); // Збільшує розмір елемента на 5%
+        box-shadow: 0 0 10px 5px rgba($primary, 0.4); // Розширює тінь із меншою прозорістю
     }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba($primary, 0.7);
+    100% { // Кінцевий стан анімації
+        transform: scale(1); // Повертає до нормального розміру
+        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Повертає тінь до початкового стану
     }
 }
 
 /* Animation for Form Border */
-@keyframes pulseBorder {
-    0% { border-color: $primary; }
-    50% { border-color: color.scale($primary, $lightness: 10%); }
-    100% { border-color: $primary; }
+@keyframes pulseBorder { // Визначає ключові кадри анімації pulseBorder (пульсація рамки)
+    0% { border-color: $primary; } // Початковий колір рамки береться з змінної $primary
+    50% { border-color: color.scale($primary, $lightness: 10%); } // Середина анімації: збільшує світлість на 10%
+    100% { border-color: $primary; } // Кінцевий стан: повертає початковий колір
 }
 
 /* Breathing Animation */
-@keyframes breathe {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 5px rgba($primary, 0.2);
+@keyframes breathe { // Визначає ключові кадри анімації breathe (дихання елемента)
+    0% { // Початковий стан анімації
+        transform: scale(1); // Нормальний розмір елемента
+        box-shadow: 0 0 5px rgba($primary, 0.2); // Легка тінь із прозорістю 20%
     }
-    50% {
-        transform: scale(1.03);
-        box-shadow: 0 0 10px rgba($primary, 0.4);
+    50% { // Середина анімації
+        transform: scale(1.03); // Збільшує розмір на 3%
+        box-shadow: 0 0 10px rgba($primary, 0.4); // Посилює тінь із прозорістю 40%
     }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 5px rgba($primary, 0.2);
+    100% { // Кінцевий стан анімації
+        transform: scale(1); // Повертає до нормального розміру
+        box-shadow: 0 0 5px rgba($primary, 0.2); // Повертає початкову тінь
     }
 }
 

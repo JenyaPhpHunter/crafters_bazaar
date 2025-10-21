@@ -1,118 +1,118 @@
-@use "../variables" as *;
-@use "../components/animations" as *;
-@use "sass:color";
+@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
+@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
 
 /* Site Menu Section */
-.site-menu-section {
-    border-top: 1px dashed #DEDEDE;
-    background-color: $white;
+.site-menu-section { // Визначає стилі для секції меню сайту
+    border-top: 1px dashed #DEDEDE; // Встановлює пунктирну верхню рамку
+    background-color: $white; // Колір фону білий
 }
 
 /* Site Main Menu */
-.site-main-menu {
-    font-weight: 400;
-    display: flex;
+.site-main-menu { // Визначає стилі для головного меню сайту
+    font-weight: 400; // Встановлює нормальну товщину шрифту
+    display: flex; // Використовує гнучке вирівнювання
 
-    & > ul {
-        font-size: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        margin-bottom: 0;
-        padding-left: 0;
-        list-style: none;
+    & > ul { // Стилі для першого рівня списку ul
+        font-size: 16px; // Розмір шрифту
+        display: flex; // Використовує гнучке вирівнювання
+        flex-wrap: wrap; // Дозволяє перенесення елементів
+        margin-bottom: 0; // Прибирає нижній відступ
+        padding-left: 0; // Прибирає лівий внутрішній відступ
+        list-style: none; // Прибирає маркери списку
 
-        & > li {
-            letter-spacing: 1.5px;
-            animation: slideInRight 0.6s ease-out;
+        & > li { // Стилі для елементів першого рівня li
+            letter-spacing: 1.5px; // Інтервал між літерами
+            animation: slideInRight 0.6s ease-out; // Застосовує анімацію slideInRight
 
-            & > a {
-                line-height: 1.5;
-                position: relative;
-                display: flex;
-                padding: 25px;
-                text-transform: uppercase;
-                color: $secondary;
+            & > a { // Стилі для посилань всередині li
+                line-height: 1.5; // Висота рядка
+                position: relative; // Відносне позиціонування
+                display: flex; // Використовує гнучке вирівнювання
+                padding: 25px; // Внутрішні відступи
+                text-transform: uppercase; // Перетворює текст у верхній регістр
+                color: $secondary; // Колір тексту
 
-                & > .menu-text {
-                    position: relative;
+                & > .menu-text { // Стилі для елемента .menu-text
+                    position: relative; // Відносне позиціонування
 
-                    &::after {
-                        position: absolute;
-                        bottom: -3px;
-                        left: 0;
-                        width: 100%;
-                        height: 1px;
-                        content: "";
-                        transition: transform 0.5s cubic-bezier(0.8, 0, 0.2, 1);
-                        transform: scale3d(0, 1, 1);
-                        transform-origin: 100% 50%;
-                        background-color: $primary;
+                    &::after { // Стилі для псевдоелемента ::after
+                        position: absolute; // Абсолютне позиціонування
+                        bottom: -3px; // Зсуває вниз
+                        left: 0; // Прикріплює ліворуч
+                        width: 100%; // Ширина 100%
+                        height: 1px; // Висота
+                        content: ""; // Порожній вміст
+                        transition: transform 0.5s cubic-bezier(0.8, 0, 0.2, 1); // Плавний перехід
+                        transform: scale3d(0, 1, 1); // Початковий масштаб
+                        transform-origin: 100% 50%; // Початок трансформації
+                        background-color: $primary; // Колір фону
                     }
                 }
             }
 
-            &.has-children {
-                & > a {
-                    &::before {
-                        font-family: $fontAwesome5Pro;
-                        font-size: 12px;
-                        position: absolute;
-                        top: 50%;
-                        right: 10px;
-                        content: "\f107";
-                        transform: translateY(-50%);
-                        opacity: 0.6;
-                        color: $primary;
+            &.has-children { // Стилі для li з класом has-children
+                & > a { // Стилі для посилання всередині
+                    &::before { // Стилі для псевдоелемента ::before
+                        font-family: $fontAwesome5Pro; // Шрифт для іконки
+                        font-size: 12px; // Розмір шрифту
+                        position: absolute; // Абсолютне позиціонування
+                        top: 50%; // Центрує по вертикалі
+                        right: 10px; // Зсуває праворуч
+                        content: "\f107"; // Код іконки
+                        transform: translateY(-50%); // Центрує вертикально
+                        opacity: 0.6; // Прозорість
+                        color: $primary; // Колір
                     }
                 }
             }
 
-            &.align-left {
-                & > .sub-menu {
-                    right: 0;
-                    left: auto;
+            &.align-left { // Стилі для li з класом align-left
+                & > .sub-menu { // Стилі для підменю
+                    right: 0; // Прикріплює праворуч
+                    left: auto; // Прибирає ліве вирівнювання
                 }
             }
 
-            &:hover {
-                & > a {
-                    color: $primary;
+            &:hover { // Стилі при наведенні на li
+                & > a { // Стилі для посилання
+                    color: $primary; // Змінює колір тексту
 
-                    & > .menu-text {
-                        &::after {
-                            transform: scale3d(1, 1, 1);
-                            transform-origin: 0 50%;
+                    & > .menu-text { // Стилі для .menu-text
+                        &::after { // Змінює псевдоелемент
+                            transform: scale3d(1, 1, 1); // Розтягує до повного розміру
+                            transform-origin: 0 50%; // Змінює точку початку
                         }
                     }
                 }
 
-                & > .sub-menu {
-                    z-index: 99;
-                    top: 100%;
-                    visibility: visible;
-                    opacity: 1;
+                & > .sub-menu { // Стилі для підменю
+                    z-index: 99; // Встановлює рівень поверхні
+                    top: 100%; // Зсуває вниз
+                    visibility: visible; // Робить видимим
+                    opacity: 1; // Повна непрозорість
                 }
             }
         }
     }
 
-    &.menu-height-100 {
-        & > ul {
-            & > li {
-                & > a {
-                    padding-top: 38px;
-                    padding-bottom: 38px;
+    &.menu-height-100 { // Стилі для .site-main-menu з класом menu-height-100
+        & > ul { // Стилі для ul
+            & > li { // Стилі для li
+                & > a { // Стилі для посилання
+                    padding-top: 38px; // Верхній відступ
+                    padding-bottom: 38px; // Нижній відступ
                 }
             }
         }
     }
 
-    &.menu-height-60 {
-        & > ul {
-            & > li {
-                & > a {
-                    padding-top: 18px;
-                    padding-bottom: 18px;
+    &.menu-height-60 { // Стилі для .site-main-menu з класом menu-height-60
+        & > ul { // Стилі для ul
+            & > li { // Стилі для li
+                & > a { // Стилі для посилання
+                    padding-top: 18px; // Верхній відступ
+                    padding-bottom: 18px; // Нижній відступ
                 }
             }
         }
@@ -120,188 +120,188 @@
 }
 
 /* Sub Menu */
-.sub-menu {
-    position: absolute;
-    z-index: 9;
-    top: 150%;
-    visibility: hidden;
-    min-width: 280px;
-    margin: 0;
-    padding: 20px 0;
-    list-style: none;
-    transition: $transition;
-    letter-spacing: 0;
-    opacity: 0;
-    background-color: $white;
-    box-shadow: -1px 10px 80px -15px rgba($black, 0.3);
-    animation: fadeInUp 0.3s ease-out;
+.sub-menu { // Визначає стилі для підменю
+    position: absolute; // Абсолютне позиціонування
+    z-index: 9; // Встановлює рівень поверхні
+    top: 150%; // Зсуває вниз
+    visibility: hidden; // Приховує за замовчуванням
+    min-width: 280px; // Мінімальна ширина
+    margin: 0; // Прибирає зовнішні відступи
+    padding: 20px 0; // Вертикальні внутрішні відступи
+    list-style: none; // Прибирає маркери списку
+    transition: $transition; // Плавний перехід
+    letter-spacing: 0; // Інтервал між літерами
+    opacity: 0; // Початкова прозорість
+    background-color: $white; // Колір фону
+    box-shadow: -1px 10px 80px -15px rgba($black, 0.3); // Додає тінь
+    animation: fadeInUp 0.3s ease-out; // Застосовує анімацію fadeInUp
 
-    & li {
-        line-height: 3.125;
-        position: relative;
+    & li { // Стилі для елементів li всередині
+        line-height: 3.125; // Висота рядка
+        position: relative; // Відносне позиціонування
 
-        & a {
-            position: relative;
-            display: block;
-            padding: 0 30px;
-            color: $secondary;
+        & a { // Стилі для посилань всередині
+            position: relative; // Відносне позиціонування
+            display: block; // Відображає як блок
+            padding: 0 30px; // Внутрішні відступи
+            color: $secondary; // Колір тексту
 
-            &:not(.mega-menu-title) {
-                & .menu-text {
-                    position: relative;
+            &:not(.mega-menu-title) { // Виключає .mega-menu-title
+                & .menu-text { // Стилі для .menu-text
+                    position: relative; // Відносне позиціонування
 
-                    &::after {
-                        position: absolute;
-                        top: calc(50% + 10px);
-                        left: 0;
-                        width: 100%;
-                        height: 1px;
-                        content: "";
-                        transition: $transition;
-                        opacity: 0;
-                        background-color: $primary;
+                    &::after { // Стилі для псевдоелемента ::after
+                        position: absolute; // Абсолютне позиціонування
+                        top: calc(50% + 10px); // Зсуває вниз
+                        left: 0; // Прикріплює ліворуч
+                        width: 100%; // Ширина 100%
+                        height: 1px; // Висота
+                        content: ""; // Порожній вміст
+                        transition: $transition; // Плавний перехід
+                        opacity: 0; // Початкова прозорість
+                        background-color: $primary; // Колір фону
                     }
                 }
             }
 
-            &:hover {
-                color: $primary;
-                & .menu-text {
-                    &::after {
-                        opacity: 0.2;
+            &:hover { // Стилі при наведенні на a
+                color: $primary; // Змінює колір тексту
+                & .menu-text { // Стилі для .menu-text
+                    &::after { // Змінює псевдоелемент
+                        opacity: 0.2; // Змінює прозорість
                     }
                 }
             }
         }
 
-        &.has-children {
-            & > a {
-                &::before {
-                    font-family: $fontAwesome5Pro;
-                    font-size: 12px;
-                    position: absolute;
-                    top: 50%;
-                    right: 30px;
-                    content: "\f105";
-                    transform: translateY(-50%);
-                    opacity: 0.6;
-                    color: $primary;
+        &.has-children { // Стилі для li з класом has-children
+            & > a { // Стилі для посилання
+                &::before { // Стилі для псевдоелемента ::before
+                    font-family: $fontAwesome5Pro; // Шрифт для іконки
+                    font-size: 12px; // Розмір шрифту
+                    position: absolute; // Абсолютне позиціонування
+                    top: 50%; // Центрує по вертикалі
+                    right: 30px; // Зсуває праворуч
+                    content: "\f105"; // Код іконки
+                    transform: translateY(-50%); // Центрує вертикально
+                    opacity: 0.6; // Прозорість
+                    color: $primary; // Колір
                 }
             }
 
-            &.align-left {
-                & > a {
-                    &::before {
-                        content: "\f104";
+            &.align-left { // Стилі для has-children з класом align-left
+                & > a { // Стилі для посилання
+                    &::before { // Змінює псевдоелемент
+                        content: "\f104"; // Код іншої іконки
                     }
                 }
 
-                & > .sub-menu {
-                    right: 100%;
-                    left: auto;
+                & > .sub-menu { // Стилі для підменю
+                    right: 100%; // Зсуває праворуч
+                    left: auto; // Прибирає ліве вирівнювання
                 }
             }
         }
 
-        & > .sub-menu {
-            top: 100%;
-            left: 100%;
+        & > .sub-menu { // Стилі для вкладеного підменю
+            top: 100%; // Зсуває вниз
+            left: 100%; // Зсуває праворуч
         }
 
-        &:hover {
-            & > a {
-                color: $primary;
+        &:hover { // Стилі при наведенні на li
+            & > a { // Стилі для посилання
+                color: $primary; // Змінює колір тексту
             }
 
-            & > .sub-menu {
-                top: 0;
-                visibility: visible;
-                opacity: 1;
+            & > .sub-menu { // Стилі для підменю
+                top: 0; // Повертає в початкову позицію
+                visibility: visible; // Робить видимим
+                opacity: 1; // Повна непрозорість
             }
         }
     }
 
-    &.mega-menu {
-        right: auto;
-        left: 15px;
-        display: flex;
-        flex-wrap: wrap;
-        width: 1170px;
-        margin: 0;
-        padding: 30px 30px 30px 10px;
-        list-style: none;
-        background: linear-gradient(90deg, $primary3, color.scale($primary3, $lightness: -5%));
+    &.mega-menu { // Стилі для підменю з класом mega-menu
+        right: auto; // Прибирає праве вирівнювання
+        left: 15px; // Зсуває ліворуч
+        display: flex; // Використовує гнучке вирівнювання
+        flex-wrap: wrap; // Дозволяє перенесення
+        width: 1170px; // Фіксована ширина
+        margin: 0; // Прибирає зовнішні відступи
+        padding: 30px 30px 30px 10px; // Внутрішні відступи
+        list-style: none; // Прибирає маркери списку
+        background: linear-gradient(90deg, $primary3, color.scale($primary3, $lightness: -5%)); // Градієнт фону
 
-        & > li {
-            flex: 1 0 25%;
-            padding: 0 10px 0 30px;
-            border-right: 1px solid rgba($primary, 0.2);
+        & > li { // Стилі для елементів li всередині
+            flex: 1 0 25%; // Гнучкість і мінімальна ширина
+            padding: 0 10px 0 30px; // Внутрішні відступи
+            border-right: 1px solid rgba($primary, 0.2); // Права рамка
 
-            &:last-child {
-                border: none;
+            &:last-child { // Стилі для останнього li
+                border: none; // Прибирає рамку
             }
 
-            & > a {
-                padding: 0;
+            & > a { // Стилі для посилання
+                padding: 0; // Прибирає внутрішні відступи
 
-                &.mega-menu-title {
-                    font-size: 18px;
-                    font-weight: 500;
-                    line-height: 1.2;
-                    margin-bottom: 16px;
-                    letter-spacing: 0.01em;
-                    color: $heading-color;
+                &.mega-menu-title { // Стилі для a з класом mega-menu-title
+                    font-size: 18px; // Розмір шрифту
+                    font-weight: 500; // Товщина шрифту
+                    line-height: 1.2; // Висота рядка
+                    margin-bottom: 16px; // Нижній відступ
+                    letter-spacing: 0.01em; // Інтервал між літерами
+                    color: $heading-color; // Колір тексту
                 }
             }
 
-            &:hover {
-                & > a {
-                    color: $primary;
+            &:hover { // Стилі при наведенні на li
+                & > a { // Стилі для посилання
+                    color: $primary; // Змінює колір тексту
                 }
             }
 
-            & ul {
-                margin: 0;
-                padding: 0;
-                list-style: none;
+            & ul { // Стилі для вкладеного ul
+                margin: 0; // Прибирає зовнішні відступи
+                padding: 0; // Прибирає внутрішні відступи
+                list-style: none; // Прибирає маркери списку
 
-                & li {
-                    line-height: 3.125;
-                    position: relative;
+                & li { // Стилі для елементів li всередині ul
+                    line-height: 3.125; // Висота рядка
+                    position: relative; // Відносне позиціонування
 
-                    & a {
-                        padding: 0;
-                        color: $secondary;
+                    & a { // Стилі для посилань
+                        padding: 0; // Прибирає внутрішні відступи
+                        color: $secondary; // Колір тексту
 
-                        &:hover {
-                            color: $primary;
+                        &:hover { // Стилі при наведенні
+                            color: $primary; // Змінює колір тексту
                         }
                     }
 
-                    & > img {
-                        position: absolute;
-                        z-index: 99;
-                        top: 50%;
-                        left: 40%;
-                        visibility: hidden;
-                        width: 250px;
-                        height: auto;
-                        transform: translateY(-40%);
-                        opacity: 0;
-                        border-radius: 5px;
-                        box-shadow: 0 10px 25px rgba($black, 0.2);
-                        animation: fadeInUp 0.3s ease-out;
+                    & > img { // Стилі для зображення всередині li
+                        position: absolute; // Абсолютне позиціонування
+                        z-index: 99; // Встановлює рівень поверхні
+                        top: 50%; // Центрує по вертикалі
+                        left: 40%; // Зсуває ліворуч
+                        visibility: hidden; // Приховує за замовчуванням
+                        width: 250px; // Ширина
+                        height: auto; // Автоматична висота
+                        transform: translateY(-40%); // Зміщення для центрування
+                        opacity: 0; // Початкова прозорість
+                        border-radius: 5px; // Закруглені кути
+                        box-shadow: 0 10px 25px rgba($black, 0.2); // Додає тінь
+                        animation: fadeInUp 0.3s ease-out; // Застосовує анімацію
                     }
 
-                    &:hover {
-                        & > a {
-                            color: $primary;
+                    &:hover { // Стилі при наведенні на li
+                        & > a { // Стилі для посилання
+                            color: $primary; // Змінює колір тексту
                         }
 
-                        & > img {
-                            visibility: visible;
-                            transform: translateY(-50%);
-                            opacity: 1;
+                        & > img { // Змінює зображення
+                            visibility: visible; // Робить видимим
+                            transform: translateY(-50%); // Центрує вертикально
+                            opacity: 1; // Повна непрозорість
                         }
                     }
                 }

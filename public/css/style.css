@@ -2961,7 +2961,7 @@ fieldset legend {
   padding-bottom: 10px;
 }
 .sticky-header .header-logo img, .mobile-header .header-logo img {
-  max-height: 50px; /* Smaller logo for sticky/mobile */
+  max-height: 50px;
 }
 
 /* Header Language & Currency */
@@ -3063,7 +3063,7 @@ fieldset legend {
 .header-tools > div a {
   position: relative;
   display: flex;
-  color: #D2B48C !important; /* Темно-бежевий (#D2B48C) для header-login, header-wishlist, header-cart */
+  color: #D2B48C !important;
   animation: bounceIn 0.6s ease-out;
   transition: all 0.3s ease;
 }
@@ -3081,7 +3081,7 @@ fieldset legend {
   text-align: center;
   color: #FFFFFF;
   border-radius: 14px;
-  background-color: #6fc5c5; /* Бірюзовий фон (#6FC5C5) */
+  background-color: #6fc5c5;
   animation: scalePulse 2s infinite;
   transition: all 0.3s ease;
 }
@@ -3089,15 +3089,15 @@ fieldset legend {
   font-size: 20px;
   line-height: 32px;
   display: block;
-  color: #D2B48C !important; /* Темно-бежевий для іконок (#D2B48C) */
+  color: #D2B48C !important;
   transition: all 0.3s ease;
 }
 .header-tools > div a:hover {
-  color: #6fc5c5 !important; /* Бірюзовий при наведенні (#6FC5C5) */
+  color: #6fc5c5 !important;
   transform: translateY(-2px);
 }
 .header-tools > div a:hover i {
-  color: rgb(89.0435643564, 188.1564356436, 188.1564356436) !important; /* Темніший бірюзовий */
+  color: rgb(89.0435643564, 188.1564356436, 188.1564356436) !important;
   transform: scale(1.1);
 }
 .header-tools > div a:hover span {
@@ -3117,7 +3117,7 @@ fieldset legend {
   /* Status Order Link */
 }
 .header-tools .header-section .col-auto .header-status a {
-  color: #D2B48C !important; /* Темно-бежевий (#D2B48C) для "Статус замовлення" */
+  color: #D2B48C !important;
   font-size: 14px;
   font-weight: 500;
   display: flex;
@@ -3127,15 +3127,15 @@ fieldset legend {
 }
 .header-tools .header-section .col-auto .header-status a i {
   margin-right: 5px;
-  color: #D2B48C !important; /* Темно-бежевий для іконки (#D2B48C) */
+  color: #D2B48C !important;
   transition: all 0.3s ease;
 }
 .header-tools .header-section .col-auto .header-status a:hover {
-  color: #6fc5c5 !important; /* Бірюзовий при наведенні (#6FC5C5) */
+  color: #6fc5c5 !important;
   transform: translateY(-2px);
 }
 .header-tools .header-section .col-auto .header-status a:hover i {
-  color: rgb(89.0435643564, 188.1564356436, 188.1564356436) !important; /* Темніший бірюзовий */
+  color: rgb(89.0435643564, 188.1564356436, 188.1564356436) !important;
 }
 @media only screen and (max-width: 575px) {
   .header-tools > div {
