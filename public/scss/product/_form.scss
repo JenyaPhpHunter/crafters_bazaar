@@ -1,76 +1,46 @@
-@use "sass:color"; // Імпорт модуля sass:color для роботи з функціями типу color.adjust
-@use "../variables" as *; // Імпорт змінних (шрифти, кольори, $primary, $futura тощо)
-@use "../components/animations" as *; // Імпорт анімацій із _animations.scss
+@use "sass:color";
+@use "../variables" as *;
 
-// Базовий стиль для всіх полів форми
-.form-field {
-    margin-bottom: 2.5rem; // Єдиний відступ знизу
-    width: 100%; // На всю ширину контейнера
-
-    .form-label { // Мітка для всіх полів
-        display: block; // Блочний елемент
-        font-family: $heading-font; // Єдиний шрифт заголовків
-        font-size: 1.1rem; // Єдиний розмір шрифту
-        font-weight: 500; // Напівжирний
-        color: #000; // Чорний колір за замовчуванням
-        margin-bottom: 0.75rem; // Відступ під міткою
-        text-align: center; // Центрування тексту
-        transition: all 0.3s ease; // Плавна анімація
-
-        span { // Обгортка для анімації
-            display: inline-block; // Для transform
-            animation: fadeInUp 0.6s ease-out; // Анімація появи з _animations.scss
-        }
-    }
-}
-
-.form-label.label-focused {
-    color: $primary; // Бірюзовий колір
-    transform: translateY(-4px); // Підняття мітки
-    transition: all 0.3s ease; // Плавна анімація
-}
-
-// Стиль для "Назва" та "Ціна"
+// Стиль для "Назва" та "Вартість"
 .form-group-title-price {
-    @extend .form-field; // Спадкування базового стилю
+    @extend .form-field !optional; // Використано !optional для уникнення помилки
 
     .input-group {
-        position: relative; // Для позиціонування "грн"
+        position: relative;
 
-        .form-control-wide-center { // Основне поле (назва або ціна)
-            width: 100%; // На всю ширину контейнера
-            font-family: $futura; // Єдиний шрифт
-            font-size: 20px; // Єдиний розмір
-            font-weight: 500; // Напівжирний
-            text-align: center !important; // Завжди по центру
-            padding: 1rem 1.25rem; // Внутрішні відступи
-            border: 2px solid #e0e0e0; // Єдина рамка
-            border-radius: 12px; // Єдині кути
-            background-color: #fafafa; // Єдиний фон
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Єдина тінь
-            transition: all 0.3s ease; // Єдина анімація
-            color: $heading-color; // Єдиний колір тексту
-            min-height: 58px; // Єдина висота
-            line-height: 1.4; // Єдина висота рядка
-            outline: none; // Без обведення
-            cursor: text; // Курсор
-            position: relative; // Для плейсхолдера
-            white-space: normal; // Перенос рядків
-            padding-right: 5rem !important; // Місце під "грн"
-            animation: fadeInUp 0.6s ease-out; // Анімація появи
-            animation-iteration-count: 1; // Один раз
+        .form-control-wide-center {
+            width: 100%;
+            font-family: $futura;
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center !important;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            color: $heading-color;
+            min-height: 58px;
+            line-height: 1.4;
+            outline: none;
+            cursor: text;
+            position: relative;
+            white-space: normal;
+            padding-right: 5rem !important;
+            animation: fadeInUp 0.6s ease-out;
+            animation-iteration-count: 1;
 
-            &:focus { // При фокусі
-                border-color: $primary; // Бірюзовий колір
-                background-color: #fff; // Білий фон
-                box-shadow: 0 0 0 4px rgba($primary, 0.15); // Тінь
-                animation: pulseBorder 1.5s infinite; // Пульсація рамки
+            &:focus {
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                animation: pulseBorder 1.5s infinite;
             }
 
-            // Плейсхолдер
             &:empty::before {
                 content: attr(data-placeholder);
-                color: #aaa; // Сірий, як у плейсхолдері
+                color: #aaa;
                 font-style: italic;
                 font-size: 18px;
                 position: absolute;
@@ -87,7 +57,7 @@
             }
         }
 
-        .currency-label { // Мітка валюти
+        .currency-label {
             position: absolute;
             right: 1.25rem;
             top: 50%;
@@ -101,79 +71,78 @@
             transition: color 0.3s ease;
 
             &:has(.price-input:focus) & {
-                color: $primary; // Бірюзовий при фокусі
+                color: $primary;
             }
         }
     }
 
-    // Анімація мітки при фокусі
     &:has(.form-control-wide-center:focus) .form-label {
-        color: $primary; // Бірюзовий
-        transform: translateY(-4px); // Підняття
+        color: $primary;
+        transform: translateY(-4px);
     }
 }
 
 // Стиль для custom dropdown
 .custom-dropdown-wrapper {
-    @extend .form-field; // Спадкування базового стилю
+    @extend .form-field !optional; // Використано !optional для уникнення помилки
     display: flex;
     align-items: center;
     gap: 15px;
-    width: 100%; // Селект + кнопка на всю ширину
+    width: 100%;
 
     .custom-dropdown {
-        flex: 1; // Селект займає доступний простір
-        max-width: 100%; // Однакова ширина для всіх селектів
+        flex: 1;
+        max-width: 100%;
         position: relative;
 
         .dropdown-search {
             width: 100%;
-            padding: 1rem 1.25rem; // Єдині відступи
-            border: 2px solid #e0e0e0; // Єдина рамка
-            border-radius: 12px; // Єдині кути
-            font-family: $futura; // Єдиний шрифт
-            font-size: 20px; // Єдиний розмір
-            background-color: #fafafa; // Єдиний фон
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Єдина тінь
-            transition: all 0.3s ease; // Єдина анімація
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: $futura;
+            font-size: 20px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
             display: none;
-            animation: fadeInUp 0.6s ease-out; // Анімація появи
-            animation-iteration-count: 1; // Один раз
+            animation: fadeInUp 0.6s ease-out;
+            animation-iteration-count: 1;
 
             &:focus {
-                border-color: $primary; // Бірюзовий
-                background-color: #fff; // Білий фон
-                box-shadow: 0 0 0 4px rgba($primary, 0.15); // Тінь
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
                 outline: none;
-                animation: pulseBorder 1.5s infinite; // Пульсація рамки
+                animation: pulseBorder 1.5s infinite;
             }
         }
 
         .dropdown-selected {
-            padding: 1rem 1.25rem; // Єдині відступи
-            border: 2px solid #e0e0e0; // Єдина рамка
-            border-radius: 12px; // Єдині кути
-            background-color: #fafafa; // Єдиний фон
-            font-family: $futura; // Єдиний шрифт
-            font-size: 20px; // Єдиний розмір
-            font-weight: 500; // Напівжирний
-            color: #aaa; // Сірий, як у плейсхолдері
-            cursor: pointer; // Курсор
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Єдина тінь
-            transition: all 0.3s ease; // Єдина анімація
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            font-family: $futura;
+            font-size: 20px;
+            font-weight: 500;
+            color: #aaa;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            min-height: 58px; // Єдина висота
-            animation: fadeInUp 0.6s ease-out; // Анімація появи
-            animation-iteration-count: 1; // Один раз
+            min-height: 58px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-iteration-count: 1;
 
             &.selected-value {
-                color: #000; // Чорний колір для обраного значення
+                color: #000;
             }
 
             &:hover {
-                border-color: $primary; // Бірюзовий при наведенні
+                border-color: $primary;
             }
 
             &:after {
@@ -184,10 +153,10 @@
             }
 
             &:focus {
-                border-color: $primary; // Бірюзовий
-                background-color: #fff; // Білий фон
-                box-shadow: 0 0 0 4px rgba($primary, 0.15); // Тінь
-                animation: pulseBorder 1.5s infinite; // Пульсація рамки
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                animation: pulseBorder 1.5s infinite;
             }
         }
 
@@ -196,10 +165,10 @@
             top: 100%;
             left: 0;
             right: 0;
-            border: 2px solid #e0e0e0; // Єдина рамка
-            border-radius: 12px; // Єдині кути
-            background-color: #fff; // Єдиний фон
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Єдина тінь
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             max-height: 200px;
             overflow-y: auto;
             z-index: 1000;
@@ -209,24 +178,24 @@
             margin: 5px 0 0;
 
             li {
-                padding: 1rem 1.25rem; // Єдині відступи
-                font-family: $futura; // Єдиний шрифт
-                font-size: 20px; // Єдиний розмір
-                color: $heading-color; // Єдиний колір
-                cursor: pointer; // Курсор
+                padding: 1rem 1.25rem;
+                font-family: $futura;
+                font-size: 20px;
+                color: $heading-color;
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                animation: fadeInUp 0.3s ease-out; // Анімація для опцій
-                animation-iteration-count: 1; // Один раз
+                animation: fadeInUp 0.3s ease-out;
+                animation-iteration-count: 1;
 
                 i {
-                    color: $primary; // Єдиний колір іконок
+                    color: $primary;
                 }
 
                 &:hover, &.selected {
-                    background-color: rgba($primary, 0.1); // Єдиний фон при наведенні
-                    color: $primary; // Єдиний колір при наведенні
+                    background-color: rgba($primary, 0.1);
+                    color: $primary;
                 }
             }
         }
@@ -246,38 +215,35 @@
     }
 
     .btn-add {
-        flex-shrink: 0; // Кнопка не стискається
-        padding: 12px 25px; // Єдиний розмір
-        background-color: $primary; // Єдиний колір
-        color: $white; // Єдиний колір тексту
-        border-radius: 12px; // Єдині кути
-        font-family: $futura; // Єдиний шрифт
-        font-size: 16px; // Єдиний розмір шрифту
-        font-weight: 500; // Напівжирний
-        transition: all 0.3s ease; // Плавна анімація
+        flex-shrink: 0;
+        padding: 12px 25px;
+        background-color: $primary;
+        color: $white;
+        border-radius: 12px;
+        font-family: $futura;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         gap: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Єдина тінь
-        animation: scalePulse 1.5s infinite; // Анімація пульсації
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        animation: scalePulse 1.5s infinite;
 
         i {
-            font-size: 16px; // Єдина іконка
+            font-size: 16px;
         }
 
         &:hover {
-            background-color: color.adjust($primary, $lightness: -20%); // Затемнення
-            transform: translateY(-2px); // Підняття
-            box-shadow: 0 6px 15px rgba($primary, 0.3); // Посилена тінь
+            background-color: color.adjust($primary, $lightness: -20%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba($primary, 0.3);
         }
     }
 }
 
-// Анімація мітки при фокусі на dropdown
 .custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label,
 .form-group-title-price:has(.form-control-wide-center:focus) .form-label {
-    color: $primary; // Бірюзовий
-    transform: translateY(-4px); // Підняття
+    color: $primary;
+    transform: translateY(-4px);
 }
-
-

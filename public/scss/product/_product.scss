@@ -1,798 +1,702 @@
-@use "sass:color"; // Імпортує модуль sass:color для роботи з функціями маніпуляції кольорами, наприклад, color.adjust
-@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+@use "sass:color";
+@use "../variables" as *;
 
 // Основний контейнер
-.section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn { // Стилі для секції з класами .section, .section-fluid, .section-padding, .border-bottom, .animate__animated, .animate__fadeIn
-    background-color: transparent; // Встановлює прозорий фон
-    border-color: $secondary; // Встановлює колір нижньої рамки зі змінної $secondary
-    padding: 20px 0; // Встановлює вертикальні відступи 20px
-}
-
-// Форми та елементи
-.form-control { // Визначає базові стилі для елементів форми
-    border: 2px solid $primary; // Встановлює рамку товщиною 2px із кольором $primary
-    background-color: transparent; // Встановлює прозорий фон
-    color: $secondary; // Встановлює колір тексту зі змінної $secondary
-    font-family: "Arial", sans-serif; // Встановлює шрифт Arial
-    font-size: 14px; // Встановлює розмір шрифту 14px
-    border-radius: 5px; // Закруглює кути до 5px
-    padding: 10px 15px; // Встановлює внутрішні відступи: 10px зверху/знизу, 15px зліва/справа
-    transition: $transition; // Використовує змінну для плавного переходу
-    animation: pulseBorder 2s infinite; // Застосовує анімацію pulseBorder з тривалістю 2 секунди та безкінечним повторенням
-
-    &:focus { // Стилі для стану фокусу
-        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
-        box-shadow: 0 0 10px $primary2; // Додає тінь із кольором $primary2
-        transform: scale(1.02); // Збільшує елемент на 2%
-        animation: none; // Скасовує анімацію при фокусі
-        outline: none; // Прибирає стандартний контур браузера
-    }
-
-    &:not(:focus) { // Стилі для стану без фокусу
-        animation: pulseBorder 2s infinite; // Відновлює анімацію pulseBorder
-    }
-}
-
-.title-input { // Стилі для поля вводу з класом .title-input
-    @extend .form-control; // Наслідує стилі від .form-control
-    font-size: 16px; // Перевизначає розмір шрифту на 16px
-    font-family: "Times New Roman", Times, serif; // Перевизначає шрифт на Times New Roman
-}
-
-.additional-info-form textarea { // Стилі для текстового поля в блоці .additional-info-form
-    @extend .form-control; // Наслідує стилі від .form-control
-    width: 100%; // Встановлює ширину 100%
-    resize: vertical; // Дозволяє змінювати розмір тільки по вертикалі
-
-    &:focus { // Стилі для стану фокусу текстового поля
-        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
-        box-shadow: 0 0 10px $primary2; // Додає тінь із кольором $primary2
-        transform: scale(1.02); // Збільшує елемент на 2%
-        outline: none; // Прибирає стандартний контур браузера
-    }
-}
-
-input[type="number"] { // Стилі для полів вводу типу number
-    @extend .form-control; // Наслідує стилі від .form-control
-    -moz-appearance: textfield; // Прибирає стандартні стрілки для числових полів у Firefox
-    appearance: textfield; // Прибирає стандартні стрілки для числових полів у сучасних браузерах
-
-    &::-webkit-inner-spin-button, // Стилі для внутрішньої стрілки числового поля в WebKit-браузерах
-    &::-webkit-outer-spin-button { // Стилі для зовнішньої стрілки числового поля в WebKit-браузерах
-        -webkit-appearance: none; // Прибирає стандартні стрілки
-        margin: 0; // Прибирає відступи
-    }
-}
-
-.form-label { // Стилі для міток форм
-    font-family: "Arial", sans-serif; // Встановлює шрифт Arial
-    font-size: 14px; // Встановлює розмір шрифту 14px
-    color: $secondary; // Встановлює колір тексту зі змінної $secondary
-    margin-bottom: 5px; // Додає нижній відступ 5px
-    display: block; // Робить мітку блочним елементом
-}
-
-.form-section { // Стилі для секції форми
-    margin-bottom: 20px; // Додає нижній відступ 20px
+.section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn {
+    background-color: transparent;
+    border-color: $secondary;
+    padding: 20px 0;
 }
 
 // Зображення та прев'ю
-.product-images { // Визначає стилі для блоку зображень продукту
-    position: relative; // Встановлює відносне позиціонування
-    margin-bottom: 48px; // Додає нижній відступ 48px
+.product-images {
+    position: relative;
+    margin-bottom: 48px;
 
-    &.vertical { // Стилі для модифікатора .vertical
-        padding-left: 210px; // Встановлює лівий відступ 210px
-
-        @media #{$laptop-device} { padding-left: 140px; } // Зменшує лівий відступ до 140px для ноутбуків
-        @media #{$desktop-device} { padding-left: 110px; } // Зменшує лівий відступ до 110px для десктопів
-        @media #{$tablet-device} { padding-left: 155px; } // Встановлює лівий відступ 155px для планшетів
-        @media #{$large-mobile} { padding-left: 110px; } // Встановлює лівий відступ 110px для великих мобільних
-        @media #{$small-mobile} { padding-left: 95px; } // Зменшує лівий відступ до 95px для малих мобільних
-        @media #{$extra-small-mobile} { padding-left: 75px; } // Зменшує лівий відступ до 75px для дуже малих мобільних
+    &.vertical {
+        padding-left: 210px;
+        @media #{$laptop-device} { padding-left: 140px; }
+        @media #{$desktop-device} { padding-left: 110px; }
+        @media #{$tablet-device} { padding-left: 155px; }
+        @media #{$large-mobile} { padding-left: 110px; }
+        @media #{$small-mobile} { padding-left: 95px; }
+        @media #{$extra-small-mobile} { padding-left: 75px; }
     }
-}
 
-.product-images.vertical.animate__animated.animate__fadeIn { // Стилі для блоку зображень із класами .vertical, .animate__animated, .animate__fadeIn
-    border: none; // Прибирає рамку
-    background-color: transparent; // Встановлює прозорий фон
-    padding: 15px; // Встановлює відступи 15px
-    position: relative; // Встановлює відносне позиціонування
-    display: flex; // Встановлює flex-контейнер
+    &.vertical.animate__animated.animate__fadeIn {
+        border: none;
+        background-color: transparent;
+        padding: 15px;
+        position: relative;
+        display: flex;
 
-    .product-thumb-slider-vertical { // Стилі для вертикального слайдера мініатюр
-        position: relative; // Встановлює відносне позиціонування
-        width: 200px; // Встановлює ширину 200px
-        min-height: 300px; // Встановлює мінімальну висоту 300px
-        overflow-y: auto; // Додає вертикальну прокрутку
-        z-index: 10; // Піднімає слайдер над іншими елементами
+        .product-thumb-slider-vertical {
+            position: relative;
+            width: 200px;
+            min-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
 
-        .item { // Стилі для елементів слайдера (мініатюр)
-            width: 190px; // Встановлює ширину 190px
-            height: 190px; // Встановлює висоту 190px
-            margin-bottom: 10px; // Додає нижній відступ 10px
-            overflow: hidden; // Ховає вміст за межами контейнера
+            .item {
+                width: 190px;
+                height: 190px;
+                margin-bottom: 10px;
+                overflow: hidden;
 
-            img { // Стилі для зображень у мініатюрах
-                width: 100%; // Встановлює ширину 100%
-                height: 100%; // Встановлює висоту 100%
-                object-fit: cover; // Масштабує зображення, обрізаючи зайве
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
             }
         }
-    }
 
-    .product-gallery-slider { // Стилі для основного слайдера галереї
-        margin-left: 50px; // Додає лівий відступ 50px
-        flex: 1; // Займає весь доступний простір
-        min-height: 100px; // Встановлює мінімальну висоту 100px
-        position: relative; // Встановлює відносне позиціонування
-        z-index: 5; // Розташовує нижче вертикального слайдера
+        .product-gallery-slider {
+            margin-left: 50px;
+            flex: 1;
+            min-height: 100px;
+            position: relative;
+            z-index: 5;
 
-        .product-zoom { // Стилі для блоку зуму зображення
-            height: 100%; // Встановлює висоту 100%
-            width: 100%; // Встановлює ширину 100%
+            .product-zoom {
+                height: 100%;
+                width: 100%;
 
-            img { // Стилі для зображень у блоці зуму
-                width: 100%; // Встановлює ширину 100%
-                height: 100%; // Встановлює висоту 100%
-                object-fit: cover; // Масштабує зображення, обрізаючи зайве
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
             }
         }
-    }
 
-    &:hover { // Стилі для стану наведення
-        box-shadow: 0 0 15px rgba(0, 108, 102, 0.3); // Додає тінь із зеленуватим відтінком
-    }
+        &:hover {
+            box-shadow: 0 0 15px rgba(0, 108, 102, 0.3);
+        }
 
-    .preview-item { // Стилі для елементів попереднього перегляду
-        border: 1px solid $primary2; // Встановлює рамку з кольором $primary2
-        border-radius: 5px; // Закруглює кути до 5px
-        padding: 5px; // Встановлює внутрішні відступи 5px
-        margin: 5px; // Встановлює зовнішні відступи 5px
-        transition: $transition; // Використовує змінну для плавного переходу
+        .preview-item {
+            border: 1px solid $primary2;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+            transition: $transition;
 
-        &:hover { // Стилі для стану наведення
-            transform: scale(1.05); // Збільшує елемент на 5%
+            &:hover {
+                transform: scale(1.05);
+            }
         }
     }
 }
 
 // Кольори та бренди
-.product-variations .circle { // Стилі для елементів .circle у блоці .product-variations
-    border: 2px solid $primary; // Встановлює рамку товщиною 2px із кольором $primary
-    transition: $transition; // Використовує змінну для плавного переходу
+.product-variations .circle {
+    border: 2px solid $primary;
+    transition: $transition;
 
-    &.selected { // Стилі для вибраного елемента .circle
-        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
-        box-shadow: 0 0 10px $primary; // Додає тінь із кольором $primary
-        transform: scale(1.1); // Збільшує елемент на 10%
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px $primary;
+        transform: scale(1.1);
     }
 }
 
-.brand-item { // Стилі для елементів .brand-item
-    border: 1px solid $primary; // Встановлює рамку товщиною 1px із кольором $primary
-    border-radius: 5px; // Закруглює кути до 5px
-    padding: 10px; // Встановлює внутрішні відступи 10px
-    margin: 5px; // Встановлює зовнішні відступи 5px
-    transition: $transition; // Використовує змінну для плавного переходу
+.brand-item {
+    border: 1px solid $primary;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    transition: $transition;
 
-    &.selected { // Стилі для вибраного елемента .brand-item
-        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
-        background-color: $primary3; // Встановлює фон із кольором $primary3
-        transform: scale(1.05); // Збільшує елемент на 5%
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%);
+        background-color: $primary3;
+        transform: scale(1.05);
     }
 
-    &:hover { // Стилі для стану наведення
-        border-color: color.adjust($primary, $lightness: -30%); // Затемнює колір рамки на 30%
-        box-shadow: 0 0 10px rgba(0, 108, 102, 0.3); // Додає тінь із зеленуватим відтінком
+    &:hover {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px rgba(0, 108, 102, 0.3);
     }
 }
 
 // Кнопки
-.product-buttons-centered .btn { // Стилі для кнопок .btn у блоці .product-buttons-centered
-    background-color: $primary; // Встановлює фон із кольором $primary
-    color: $primary3; // Встановлює колір тексту із кольором $primary3
-    padding: 12px 25px; // Встановлює відступи: 12px зверху/знизу, 25px зліва/справа
-    border-radius: 5px; // Закруглює кути до 5px
-    transition: $transition; // Використовує змінну для плавного переходу
+.product-buttons-centered .btn {
+    background-color: $primary;
+    color: $primary3;
+    padding: 12px 25px;
+    border-radius: 5px;
+    transition: $transition;
 
-    &:hover { // Стилі для стану наведення
-        background-color: color.adjust($primary, $lightness: -30%); // Затемнює фон на 30%
-        transform: translateY(-3px); // Піднімає кнопку на 3px
+    &:hover {
+        background-color: color.adjust($primary, $lightness: -30%);
+        transform: translateY(-3px);
     }
 }
 
-// Product Summery
-.product-summery { // Визначає стилі для блоку підсумкової інформації
-    position: relative; // Встановлює відносне позиціонування
+// Product CSS
+.product {
+    position: relative;
 
-    &-center { // Стилі для центрального вирівнювання
-        text-align: center; // Центрує текст
-
-        & .product-ratings { justify-content: center; } // Центрує рейтинги
-        & .product-variations { justify-content: center; // Центрує варіації продукту
-            & table tbody tr td.label { text-align: right; } // Вирівнює мітки таблиці праворуч
-            & table tbody tr td.value { text-align: left; } // Вирівнює значення таблиці ліворуч
-        }
-        & .product-buttons { justify-content: center; } // Центрує кнопки
-        & .product-brands .brands { justify-content: center; } // Центрує бренди
-        & .product-meta { justify-content: center; // Центрує метадані
-            & table tbody tr td.label { text-align: right; } // Вирівнює мітки таблиці праворуч
-            & table tbody tr td.value { text-align: left; } // Вирівнює значення таблиці ліворуч
-        }
-    }
-}
-
-// Product CSS (з _product.scss)
-.product { // Визначає стилі для блоку продукту
-    position: relative; // Встановлює відносне позиціонування
-
-    &:hover { // Стилі для стану наведення
-        & .product-thumb { // Стилі для блоку .product-thumb
-            & .image { // Стилі для блоку зображення
-                & img { // Стилі для зображень
-                    &.image-hover { // Стилі для зображення при наведенні
-                        z-index: 1; // Піднімає зображення
-                        visibility: visible; // Робить зображення видимим
-                        transform: scale(1); // Повертає зображення до нормального розміру
-                        opacity: 1; // Робить зображення повністю непрозорим
+    &:hover {
+        & .product-thumb {
+            & .image {
+                & img {
+                    &.image-hover {
+                        z-index: 1;
+                        visibility: visible;
+                        transform: scale(1);
+                        opacity: 1;
                     }
                 }
             }
 
-            & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань"
-                z-index: 2; // Піднімає кнопку
-                visibility: visible; // Робить кнопку видимою
-                transform: translateY(0); // Повертає кнопку у вихідну позицію
-                opacity: 1; // Робить кнопку повністю непрозорою
+            & .add-to-wishlist {
+                z-index: 2;
+                visibility: visible;
+                transform: translateY(0);
+                opacity: 1;
             }
 
-            & .product-options { // Стилі для блоку опцій
-                visibility: visible; // Робить опції видимими
-                transform: translateY(0); // Повертає опції у вихідну позицію
-                opacity: 1; // Робить опції повністю непрозорими
-            }
-        }
-
-        & .product-info { // Стилі для блоку інформації
-            & .title, // Стилі для заголовка
-            & .price { // Стилі для ціни
-                visibility: hidden; // Ховає заголовок і ціну
-                transform: translateY(-20px); // Зміщує вгору на 20px
-                opacity: 0; // Робить прозорими
-            }
-
-            & .product-buttons { // Стилі для кнопок
-                visibility: visible; // Робить кнопки видимими
-                transform: translateY(0); // Повертає кнопки у вихідну позицію
-                opacity: 1; // Робить кнопки повністю непрозорими
+            & .product-options {
+                visibility: visible;
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
-        & .product2-info { // Стилі для альтернативного блоку інформації
-            & .title, // Стилі для заголовка
-            & .price { // Стилі для ціни
-                visibility: hidden; // Ховає заголовок і ціну
-                transform: translateY(-20px); // Зміщує вгору на 20px
-                opacity: 0; // Робить прозорими
+        & .product-info {
+            & .title,
+            & .price {
+                visibility: hidden;
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            & .product-buttons {
+                visibility: visible;
+                transform: translateY(0);
+                opacity: 1;
             }
         }
 
-        & .product2-buttons { // Стилі для альтернативних кнопок
-            visibility: visible; // Робить кнопки видимими
-            transform: translateY(-50%); // Центрує кнопки по вертикалі
-            opacity: 1; // Робить кнопки повністю непрозорими
+        & .product2-info {
+            & .title,
+            & .price {
+                visibility: hidden;
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+        }
+
+        & .product2-buttons {
+            visibility: visible;
+            transform: translateY(-50%);
+            opacity: 1;
         }
     }
 }
 
 /* Product Thumbnail */
-.product-thumb { // Визначає стилі для блоку мініатюр продукту
-    position: relative; // Встановлює відносне позиціонування
-    z-index: 2; // Піднімає блок над іншими елементами
-    margin: 0; // Прибирає зовнішні відступи
+.product-thumb {
+    position: relative;
+    z-index: 2;
+    margin: 0;
 
-    & .image { // Стилі для контейнера зображення
-        position: relative; // Встановлює відносне позиціонування
-        display: block; // Робить контейнер блочним
-        overflow: hidden; // Ховає вміст за межами контейнера
+    & .image {
+        position: relative;
+        display: block;
+        overflow: hidden;
 
-        & img { // Стилі для зображень
-            z-index: 3; // Піднімає основне зображення
-            width: 100%; // Встановлює ширину 100%
+        & img {
+            z-index: 3;
+            width: 100%;
 
-            &.image-hover { // Стилі для зображення при наведенні
-                position: absolute; // Абсолютне позиціонування
-                z-index: 4; // Піднімає над основним зображенням
-                top: 0; // Розташовує у верхньому лівому куті
-                left: 0; // Розташовує у верхньому лівому куті
-                visibility: hidden; // Ховає за замовчуванням
-                transition-duration: 0.7s; // Встановлює тривалість переходу 0.7 секунди
-                transform: scale(1.1); // Збільшує на 10%
-                opacity: 0; // Робить прозорим
+            &.image-hover {
+                position: absolute;
+                z-index: 4;
+                top: 0;
+                left: 0;
+                visibility: hidden;
+                transition-duration: 0.7s;
+                transform: scale(1.1);
+                opacity: 0;
             }
         }
     }
 
-    & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань"
-        position: absolute; // Абсолютне позиціонування
-        z-index: 7; // Піднімає кнопку над іншими елементами
-        top: 15px; // Відступ зверху 15px
-        right: 15px; // Відступ справа 15px
-        visibility: hidden; // Ховає кнопку
-        width: 48px; // Встановлює ширину 48px
-        height: 48px; // Встановлює висоту 48px
-        transition: $transition; // Використовує змінну для плавного переходу
-        transform: translateY(10px); // Зміщує вниз на 10px
-        text-align: center; // Центрує вміст
-        opacity: 0; // Робить прозорою
-        color: $primary; // Встановлює колір із $primary
+    & .add-to-wishlist {
+        position: absolute;
+        z-index: 7;
+        top: 15px;
+        right: 15px;
+        visibility: hidden;
+        width: 48px;
+        height: 48px;
+        transition: $transition;
+        transform: translateY(10px);
+        text-align: center;
+        opacity: 0;
+        color: $primary;
 
-        & i { // Стилі для іконки
-            font-size: 24px; // Встановлює розмір іконки 24px
-            line-height: 48px; // Вирівнює іконку по вертикалі
+        & i {
+            font-size: 24px;
+            line-height: 48px;
         }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань"
-            visibility: visible; // Робить кнопку видимою
-            transform: translateY(0); // Повертає у вихідну позицію
-            opacity: 1; // Робить повністю непрозорою
+    @media #{$tablet-device, $large-mobile} {
+        & .add-to-wishlist {
+            visibility: visible;
+            transform: translateY(0);
+            opacity: 1;
         }
     }
 }
 
 /* Product Badges */
-.product-badges { // Визначає стилі для бейджів продукту
-    position: absolute; // Абсолютне позиціонування
-    top: 20px; // Відступ зверху 20px
-    left: 20px; // Відступ зліва 20px
-    display: flex; // Встановлює flex-контейнер
-    flex-direction: column; // Розташовує бейджи вертикально
-    margin-bottom: -12px; // Компенсує відступ між бейджами
+.product-badges {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: -12px;
 
-    & span { // Стилі для окремих бейджів
-        font-weight: 400; // Встановлює товщину шрифту (нормальна)
-        line-height: 48px; // Вирівнює текст по вертикалі
-        z-index: 5; // Піднімає бейджі над іншими елементами
-        width: 48px; // Встановлює ширину 48px
-        height: 48px; // Встановлює висоту 48px
-        margin-bottom: 12px; // Додає нижній відступ 12px
-        text-align: center; // Центрує текст
-        text-transform: lowercase; // Переводить текст у нижній регістр
-        color: $white; // Встановлює білий колір тексту
-        border-radius: 50%; // Робить бейдж круглим
+    & span {
+        font-weight: 400;
+        line-height: 48px;
+        z-index: 5;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        text-align: center;
+        text-transform: lowercase;
+        color: $white;
+        border-radius: 50%;
 
-        &.onsale { background-color: #98D8CA; } // Колір фону для бейджа "onsale"
-        &.hot { background-color: #C61932; } // Колір фону для бейджа "hot"
-        &.outofstock { background-color: $heading-color; } // Колір фону для бейджа "outofstock"
-        &.new { background-color: #ef8f8d; } // Колір фону для бейджа "new"
+        &.onsale { background-color: #98D8CA; }
+        &.hot { background-color: #C61932; }
+        &.outofstock { background-color: $heading-color; }
+        &.new { background-color: #ef8f8d; }
     }
 }
 
 /* Product Extra Options */
-.product-options { // Визначає стилі для блоку додаткових опцій продукту
-    position: absolute; // Абсолютне позиціонування
-    z-index: 7; // Піднімає блок над іншими елементами
-    bottom: 20px; // Відступ знизу 20px
-    left: 20px; // Відступ зліва 20px
-    visibility: hidden; // Ховає блок
-    width: calc(100% - 40px); // Встановлює ширину з урахуванням відступів
-    padding: 15px 10px; // Встановлює внутрішні відступи
-    transition: $transition; // Використовує змінну для плавного переходу
-    transform: translateY(50%); // Зміщує вниз на 50%
-    opacity: 0; // Робить прозорим
-    background-color: $white; // Встановлює білий фон
+.product-options {
+    position: absolute;
+    z-index: 7;
+    bottom: 20px;
+    left: 20px;
+    visibility: hidden;
+    width: calc(100% - 40px);
+    padding: 15px 10px;
+    transition: $transition;
+    transform: translateY(50%);
+    opacity: 0;
+    background-color: $white;
 
-    & ul { // Стилі для списків опцій
-        display: flex; // Встановлює flex-контейнер
-        align-items: center; // Вирівнює елементи по вертикалі
-        flex-wrap: wrap; // Дозволяє переносити елементи
-        justify-content: center; // Центрує елементи
-        margin: 0; // Прибирає зовнішні відступи
-        padding: 0; // Прибирає внутрішні відступи
-        list-style: none; // Прибирає маркери списку
-        color: $heading-color; // Встановлює колір тексту
+    & ul {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        color: $heading-color;
 
-        &:not(:last-child) { margin-bottom: 10px; } // Додає нижній відступ для всіх списків, крім останнього
+        &:not(:last-child) { margin-bottom: 10px; }
 
-        & li { // Стилі для елементів списку
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            line-height: 1; // Встановлює висоту рядка
-            margin: 0 4px; // Додає горизонтальні відступи 4px
-            padding: 0; // Прибирає внутрішні відступи
-            cursor: pointer; // Змінює курсор на вказівник
-            transition: $transition; // Використовує змінну для плавного переходу
+        & li {
+            font-weight: 400;
+            line-height: 1;
+            margin: 0 4px;
+            padding: 0;
+            cursor: pointer;
+            transition: $transition;
         }
 
-        &.colors { // Стилі для списку кольорів
-            & li { // Стилі для елементів кольорів
-                width: 18px; // Встановлює ширину 18px
-                height: 18px; // Встановлює висоту 18px
-                text-indent: -9999px; // Ховає текст
-                border: 1px solid #DDDDDD; // Додає рамку
-                border-radius: 50%; // Робить елемент круглим
+        &.colors {
+            & li {
+                width: 18px;
+                height: 18px;
+                text-indent: -9999px;
+                border: 1px solid #DDDDDD;
+                border-radius: 50%;
 
-                & img { // Стилі для зображень кольорів
-                    display: block; // Робить зображення блочним
-                    width: 100%; // Встановлює ширину 100%
-                    border-radius: 50%; // Робить зображення круглим
+                & img {
+                    display: block;
+                    width: 100%;
+                    border-radius: 50%;
                 }
 
-                &.active { // Стилі для активного кольору
-                    border: 2px solid $primary; // Встановлює товщу рамку з кольором $primary
+                &.active {
+                    border: 2px solid $primary;
                 }
             }
         }
 
-        &.sizes { // Стилі для списку розмірів
-            & li { // Стилі для елементів розмірів
-                padding-bottom: 3px; // Додає нижній відступ 3px
-                opacity: 0.5; // Робить напівпрозорим
+        &.sizes {
+            & li {
+                padding-bottom: 3px;
+                opacity: 0.5;
 
-                &:hover, // Стилі при наведенні
-                &.active { // Стилі для активного розміру
-                    opacity: 1; // Робить повністю непрозорим
+                &:hover,
+                &.active {
+                    opacity: 1;
                 }
             }
         }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        display: none; // Ховає блок опцій
+    @media #{$tablet-device, $large-mobile} {
+        display: none;
     }
 }
 
 /* Product Information */
-.product-info { // Визначає стилі для блоку інформації про продукт
-    position: relative; // Встановлює відносне позиціонування
-    z-index: 3; // Піднімає блок над іншими елементами
-    text-align: center; // Центрує текст
+.product-info {
+    position: relative;
+    z-index: 3;
+    text-align: center;
 
-    &:not(:first-child) { margin-top: 28px; } // Додає верхній відступ для всіх, крім першого блоку
+    &:not(:first-child) { margin-top: 28px; }
 
-    & .title { // Стилі для заголовка
-        font-family: $futura; // Використовує шрифт $futura
-        font-size: 18px; // Встановлює розмір шрифту 18px
-        font-weight: 400; // Встановлює товщину шрифту (нормальна)
-        margin-bottom: 12px; // Додає нижній відступ 12px
-        transition: $transition; // Використовує змінну для плавного переходу
+    & .title {
+        font-family: $futura;
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 12px;
+        transition: $transition;
 
-        & a { // Стилі для посилання в заголовку
-            color: $body-light; // Встановлює колір тексту
-            &:hover { color: $heading-color; } // Змінює колір при наведенні
+        & a {
+            color: $body-light;
+            &:hover { color: $heading-color; }
         }
     }
 
-    & .price { // Стилі для ціни
-        font-size: 16px; // Встановлює розмір шрифту 16px
-        font-weight: 600; // Встановлює товщину шрифту (жирний)
-        line-height: 1; // Встановлює висоту рядка
-        display: flex; // Встановлює flex-контейнер
-        align-items: center; // Вирівнює елементи по вертикалі
-        justify-content: center; // Центрує елементи
-        transition: $transition; // Використовує змінну для плавного переходу
-        color: $heading-color; // Встановлює колір тексту
+    & .price {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: $transition;
+        color: $heading-color;
 
-        & span { // Стилі для елементів ціни
-            &.old { text-decoration: line-through; color: #AAAAAA; } // Стилі для старої ціни
-            &.new { margin-left: 10px; color: $primary; } // Стилі для нової ціни
+        & span {
+            &.old { text-decoration: line-through; color: #AAAAAA; }
+            &.new { margin-left: 10px; color: $primary; }
         }
     }
 
-    & .product-buttons { // Стилі для блоку кнопок
-        position: absolute; // Абсолютне позиціонування
-        z-index: 5; // Піднімає блок над іншими
-        top: 0; // Розташовує зверху
-        right: 0; // Притискає до правого краю
-        left: 0; // Притискає до лівого краю
-        display: flex; // Встановлює flex-контейнер
-        visibility: hidden; // Ховає кнопки
-        align-items: center; // Вирівнює кнопки по вертикалі
-        flex-wrap: wrap; // Дозволяє переносити кнопки
-        justify-content: center; // Центрує кнопки
-        transition: $transition; // Використовує змінну для плавного переходу
-        transform: translateY(50%); // Зміщує вниз на 50%
-        opacity: 0; // Робить прозорим
+    & .product-buttons {
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        visibility: hidden;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        transition: $transition;
+        transform: translateY(50%);
+        opacity: 0;
 
-        & .product-button { // Стилі для окремих кнопок
-            width: 48px; // Встановлює ширину 48px
-            height: 48px; // Встановлює висоту 48px
-            margin: 0 5px; // Додає горизонтальні відступи 5px
-            text-align: center; // Центрує вміст
-            color: $white; // Встановлює білий колір тексту
-            border-radius: 50%; // Робить кнопку круглою
-            background-color: $heading-color; // Встановлює фоновий колір
+        & .product-button {
+            width: 48px;
+            height: 48px;
+            margin: 0 5px;
+            text-align: center;
+            color: $white;
+            border-radius: 50%;
+            background-color: $heading-color;
 
-            & i { // Стилі для іконки
-                font-size: 16px; // Встановлює розмір іконки 16px
-                line-height: 48px; // Вирівнює іконку по вертикалі
+            & i {
+                font-size: 16px;
+                line-height: 48px;
             }
 
-            &:hover { background-color: $primary; } // Змінює фон при наведенні
+            &:hover { background-color: $primary; }
         }
     }
 
-    & .product-rating { // Стилі для блоку рейтингу
-        line-height: 1; // Встановлює висоту рядка
-        display: flex; // Встановлює flex-контейнер
-        justify-content: center; // Центрує рейтинг
-        margin-top: 20px; // Додає верхній відступ 20px
+    & .product-rating {
+        line-height: 1;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
 
-        & .rating { // Стилі для контейнера рейтингу
-            font-size: 12px; // Встановлює розмір шрифту 12px
-            position: relative; // Встановлює відносне позиціонування
-            display: block; // Робить контейнер блочним
+        & .rating {
+            font-size: 12px;
+            position: relative;
+            display: block;
 
-            &::before { // Псевдоелемент для порожніх зірок
-                font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                font-size: 12px; // Встановлює розмір зірок 12px
-                font-weight: 300; // Встановлює товщину (світлі зірки)
-                line-height: 1; // Встановлює висоту рядка
-                content: "    "; // Відображає п’ять порожніх зірок
-                color: #ABABAB; // Встановлює сірий колір
+            &::before {
+                font-family: $fontAwesome5Pro;
+                font-size: 12px;
+                font-weight: 300;
+                line-height: 1;
+                content: "    ";
+                color: #ABABAB;
             }
 
-            & .rating-active { // Стилі для активних зірок
-                font-size: 0; // Ховає текст
-                position: absolute; // Абсолютне позиціонування
-                top: 0; // Розташовує зверху
-                left: 0; // Притискає до лівого краю
-                display: block; // Робить блочним
-                overflow: hidden; // Ховає зайвий вміст
-                height: 100%; // Встановлює висоту 100%
+            & .rating-active {
+                font-size: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                overflow: hidden;
+                height: 100%;
 
-                &::before { // Псевдоелемент для заповнених зірок
-                    font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                    font-size: 12px; // Встановлює розмір зірок 12px
-                    font-weight: 900; // Встановлює товщину (жирні зірки)
-                    line-height: 1; // Встановлює висоту рядка
-                    content: "    "; // Відображає п’ять заповнених зірок
-                    white-space: nowrap; // Запобігає перенесенню
-                    color: #F5CC26; // Встановлює жовтий колір
+                &::before {
+                    font-family: $fontAwesome5Pro;
+                    font-size: 12px;
+                    font-weight: 900;
+                    line-height: 1;
+                    content: "    ";
+                    white-space: nowrap;
+                    color: #F5CC26;
                 }
             }
         }
     }
 
-    & .product-stock-status { // Стилі для блоку статусу запасів
-        margin-top: 15px; // Додає верхній відступ 15px
+    & .product-stock-status {
+        margin-top: 15px;
 
-        & .bar { // Стилі для прогрес-бару
-            display: block; // Робить блочним
-            float: left; // Вирівнює ліворуч
-            width: 100%; // Встановлює ширину 100%
-            height: 7px; // Встановлює висоту 7px
-            border-radius: 50px; // Закруглює кути
-            background-color: #EDEDED; // Встановлює сірий фон
+        & .bar {
+            display: block;
+            float: left;
+            width: 100%;
+            height: 7px;
+            border-radius: 50px;
+            background-color: #EDEDED;
 
-            & .progress { // Стилі для заповненої частини прогрес-бару
-                display: block; // Робить блочним
-                height: 100%; // Встановлює висоту 100%
-                border-radius: 50px; // Закруглює кути
-                background-color: #F8796C; // Встановлює червоний колір
+            & .progress {
+                display: block;
+                height: 100%;
+                border-radius: 50px;
+                background-color: #F8796C;
             }
         }
 
-        & > span { // Стилі для текстових елементів статусу
-            font-size: 16px; // Встановлює розмір шрифту 16px
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            line-height: 1; // Встановлює висоту рядка
-            display: block; // Робить блочним
-            margin-top: 12px; // Додає верхній відступ 12px
-            color: $body-light; // Встановлює колір тексту
+        & > span {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1;
+            display: block;
+            margin-top: 12px;
+            color: $body-light;
 
-            & span { // Стилі для вкладених елементів span
-                font-weight: 600; // Встановлює товщину шрифту (жирний)
-                color: $heading-color; // Встановлює колір тексту
+            & span {
+                font-weight: 600;
+                color: $heading-color;
             }
 
-            &.sold { float: left; } // Вирівнює елемент "продано" ліворуч
-            &.available { float: right; } // Вирівнює елемент "доступно" праворуч
+            &.sold { float: left; }
+            &.available { float: right; }
         }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        & .title, // Стилі для заголовка
-        & .price, // Стилі для ціни
-        & .product-buttons { // Стилі для кнопок
-            visibility: visible !important; // Примусово показує елементи
-            transform: translateY(0) !important; // Повертає у вихідну позицію
-            opacity: 1 !important; // Робить повністю непрозорими
+    @media #{$tablet-device, $large-mobile} {
+        & .title,
+        & .price,
+        & .product-buttons {
+            visibility: visible !important;
+            transform: translateY(0) !important;
+            opacity: 1 !important;
         }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        & .product-buttons { // Стилі для блоку кнопок
-            position: static; // Знімає абсолютне позиціонування
-            margin-top: 15px; // Додає верхній відступ 15px
+    @media #{$tablet-device, $large-mobile} {
+        & .product-buttons {
+            position: static;
+            margin-top: 15px;
         }
     }
 }
 
 /* Product2 Information */
-.product2-info { // Визначає стилі для альтернативного блоку інформації
-    position: absolute; // Абсолютне позиціонування
-    z-index: 3; // Піднімає над іншими елементами
-    bottom: 0; // Притискає до нижнього краю
-    left: 0; // Притискає до лівого краю
-    padding: 0 25px 25px; // Встановлює відступи
-    text-align: left; // Вирівнює текст ліворуч
+.product2-info {
+    position: absolute;
+    z-index: 3;
+    bottom: 0;
+    left: 0;
+    padding: 0 25px 25px;
+    text-align: left;
 
-    & .title { // Стилі для заголовка
-        font-family: $futura; // Використовує шрифт $futura
-        font-size: 18px; // Встановлює розмір шрифту 18px
-        font-weight: 400; // Встановлює товщину шрифту (нормальна)
-        margin-bottom: 12px; // Додає нижній відступ 12px
-        transition: $transition; // Використовує змінну для плавного переходу
+    & .title {
+        font-family: $futura;
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 12px;
+        transition: $transition;
 
-        & a { // Стилі для посилання
-            color: $body-light; // Встановлює колір тексту
-            &:hover { color: $heading-color; } // Змінює колір при наведенні
+        & a {
+            color: $body-light;
+            &:hover { color: $heading-color; }
         }
     }
 
-    & .price { // Стилі для ціни
-        font-size: 16px; // Встановлює розмір шрифту 16px
-        font-weight: 600; // Встановлює товщину шрифту (жирний)
-        line-height: 1; // Встановлює висоту рядка
-        display: flex; // Встановлює flex-контейнер
-        align-items: center; // Вирівнює елементи по вертикалі
-        justify-content: flex-start; // Вирівнює елементи ліворуч
-        transition: $transition; // Використовує змінну для плавного переходу
-        color: $heading-color; // Встановлює колір тексту
+    & .price {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        transition: $transition;
+        color: $heading-color;
 
-        & span { // Стилі для елементів ціни
-            &.old { text-decoration: line-through; color: #AAAAAA; } // Стилі для старої ціни
-            &.new { margin-left: 10px; color: $primary; } // Стилі для нової ціни
+        & span {
+            &.old { text-decoration: line-through; color: #AAAAAA; }
+            &.new { margin-left: 10px; color: $primary; }
         }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        position: static; // Знімає абсолютне позиціонування
-        margin-top: 28px; // Додає верхній відступ 28px
-        padding: 0; // Прибирає відступи
-        text-align: center; // Центрує текст
+    @media #{$tablet-device, $large-mobile} {
+        position: static;
+        margin-top: 28px;
+        padding: 0;
+        text-align: center;
 
-        & .title, // Стилі для заголовка
-        & .price { // Стилі для ціни
-            visibility: visible !important; // Примусово показує елементи
-            justify-content: center; // Центрує вміст
-            transform: translateY(0) !important; // Повертає у вихідну позицію
-            opacity: 1 !important; // Робить повністю непрозорими
+        & .title,
+        & .price {
+            visibility: visible !important;
+            justify-content: center;
+            transform: translateY(0) !important;
+            opacity: 1 !important;
         }
     }
 }
 
 /* Product2 Action Buttons */
-.product2-buttons { // Визначає стилі для альтернативного блоку кнопок
-    position: absolute; // Абсолютне позиціонування
-    z-index: 5; // Піднімає над іншими елементами
-    top: 50%; // Центрує по вертикалі
-    left: 0; // Притискає до лівого краю
-    display: flex; // Встановлює flex-контейнер
-    visibility: hidden; // Ховає кнопки
-    align-items: center; // Вирівнює кнопки по вертикалі
-    flex-wrap: wrap; // Дозволяє переносити кнопки
-    justify-content: center; // Центрує кнопки
-    width: 100%; // Встановлює ширину 100%
-    transition: $transition; // Використовує змінну для плавного переходу
-    opacity: 0; // Робить прозорим
+.product2-buttons {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    left: 0;
+    display: flex;
+    visibility: hidden;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    transition: $transition;
+    opacity: 0;
 
-    & .product-button { // Стилі для окремих кнопок
-        width: 48px; // Встановлює ширину 48px
-        height: 48px; // Встановлює висоту 48px
-        margin: 0 5px; // Додає горизонтальні відступи 5px
-        text-align: center; // Центрує вміст
-        color: $white; // Встановлює білий колір тексту
-        border-radius: 50%; // Робить кнопку круглою
-        background-color: $heading-color; // Встановлює фоновий колір
+    & .product-button {
+        width: 48px;
+        height: 48px;
+        margin: 0 5px;
+        text-align: center;
+        color: $white;
+        border-radius: 50%;
+        background-color: $heading-color;
 
-        & i { // Стилі для іконки
-            font-size: 16px; // Встановлює розмір іконки 16px
-            line-height: 48px; // Вирівнює іконку по вертикалі
+        & i {
+            font-size: 16px;
+            line-height: 48px;
         }
 
-        &:hover { background-color: $primary; } // Змінює фон при наведенні
+        &:hover { background-color: $primary; }
     }
 
-    @media #{$tablet-device}, // Медіа-запит для планшетів
-    #{$large-mobile} { // Медіа-запит для великих мобільних
-        position: static; // Знімає абсолютне позиціонування
-        visibility: visible !important; // Примусово показує кнопки
-        margin-top: 15px; // Додає верхній відступ 15px
-        transform: translateY(0) !important; // Повертає у вихідну позицію
-        opacity: 1 !important; // Робить повністю непрозорими
+    @media #{$tablet-device, $large-mobile} {
+        position: static;
+        visibility: visible !important;
+        margin-top: 15px;
+        transform: translateY(0) !important;
+        opacity: 1 !important;
     }
 }
 
 /* List Product */
-.list-product { // Визначає стилі для продукту у форматі списку
-    display: flex !important; // Встановлює flex-контейнер
-    flex-wrap: wrap; // Дозволяє переносити елементи
+.list-product {
+    display: flex !important;
+    flex-wrap: wrap;
 
-    & .thumbnail { // Стилі для блоку мініатюри
-        flex: 0 0 140px; // Фіксує ширину 140px
-        padding-right: 20px; // Додає правий відступ 20px
+    & .thumbnail {
+        flex: 0 0 140px;
+        padding-right: 20px;
 
-        & a { // Стилі для посилання
-            display: block; // Робить посилання блочним
+        & a {
+            display: block;
 
-            & img { // Стилі для зображення
-                width: 100%; // Встановлює ширину 100%
+            & img {
+                width: 100%;
             }
         }
     }
 
-    & .content { // Стилі для блоку вмісту
-        flex: 1 0 calc(100% - 140px); // Займає залишковий простір
+    & .content {
+        flex: 1 0 calc(100% - 140px);
 
-        & .title { // Стилі для заголовка
-            font-family: $futura; // Використовує шрифт $futura
-            font-size: 18px; // Встановлює розмір шрифту 18px
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            margin-bottom: 12px; // Додає нижній відступ 12px
-            transition: $transition; // Використовує змінну для плавного переходу
+        & .title {
+            font-family: $futura;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            transition: $transition;
 
-            & a { // Стилі для посилання
-                color: $body-light; // Встановлює колір тексту
-                &:hover { color: $heading-color; } // Змінює колір при наведенні
+            & a {
+                color: $body-light;
+                &:hover { color: $heading-color; }
             }
         }
 
-        & .price { // Стилі для ціни
-            font-size: 14px; // Встановлює розмір шрифту 14px
-            font-weight: 600; // Встановлює товщину шрифту (жирний)
-            line-height: 1; // Встановлює висоту рядка
-            display: flex; // Встановлює flex-контейнер
-            align-items: center; // Вирівнює елементи по вертикалі
-            margin-bottom: 8px; // Додає нижній відступ 8px
-            transition: $transition; // Використовує змінну для плавного переходу
-            color: $heading-color; // Встановлює колір тексту
+        & .price {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            transition: $transition;
+            color: $heading-color;
 
-            &:last-child { margin-bottom: 0; } // Прибирає нижній відступ для останнього елемента
+            &:last-child { margin-bottom: 0; }
 
-            & span { // Стилі для елементів ціни
-                &.old { text-decoration: line-through; color: #AAAAAA; } // Стилі для старої ціни
-                &.new { margin-left: 10px; color: $primary; } // Стилі для нової ціни
+            & span {
+                &.old { text-decoration: line-through; color: #AAAAAA; }
+                &.new { margin-left: 10px; color: $primary; }
             }
         }
 
-        & .ratting { // Стилі для рейтингу
-            line-height: 1; // Встановлює висоту рядка
-            position: relative; // Встановлює відносне позиціонування
-            display: inline-flex; // Встановлює inline-flex контейнер
+        & .ratting {
+            line-height: 1;
+            position: relative;
+            display: inline-flex;
 
-            &::before { // Псевдоелемент для порожніх зірок
-                font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                font-size: 11px; // Встановлює розмір зірок 11px
-                font-weight: 300; // Встановлює товщину (світлі зірки)
-                line-height: 1; // Встановлює висоту рядка
-                content: "    "; // Відображає п’ять порожніх зірок
-                color: #AAAAAA; // Встановлює сірий колір
+            &::before {
+                font-family: $fontAwesome5Pro;
+                font-size: 11px;
+                font-weight: 300;
+                line-height: 1;
+                content: "    ";
+                color: #AAAAAA;
             }
 
-            & .rate { // Стилі для активних зірок
-                position: absolute; // Абсолютне позиціонування
-                top: 0; // Розташовує зверху
-                left: 0; // Притискає до лівого краю
-                display: inline-flex; // Встановлює inline-flex контейнер
-                overflow: hidden; // Ховає зайвий вміст
-                white-space: nowrap; // Запобігає перенесенню
-                color: #F5CC26; // Встановлює жовтий колір
+            & .rate {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: inline-flex;
+                overflow: hidden;
+                white-space: nowrap;
+                color: #F5CC26;
 
-                &::before { // Псевдоелемент для заповнених зірок
-                    font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                    font-size: 11px; // Встановлює розмір зірок 11px
-                    font-weight: 700; // Встановлює товщину (жирні зірки)
-                    line-height: 1; // Встановлює висоту рядка
-                    content: "    "; // Відображає п’ять заповнених зірок
+                &::before {
+                    font-family: $fontAwesome5Pro;
+                    font-size: 11px;
+                    font-weight: 700;
+                    line-height: 1;
+                    content: "    ";
                 }
             }
         }
@@ -800,6 +704,29 @@ input[type="number"] { // Стилі для полів вводу типу numbe
 }
 
 /* Product Wishlist Button Animation */
-[data-name="mojs-shape"] { // Стилі для елемента з атрибутом data-name="mojs-shape" (ймовірно, для анімації Mo.js)
-    z-index: 99; // Встановлює високий z-index для відображення над іншими елементами
+[data-name="mojs-shape"] {
+    z-index: 99;
+}
+
+// Product Summery
+.product-summery {
+    position: relative;
+
+    &-center {
+        text-align: center;
+
+        & .product-ratings { justify-content: center; }
+        & .product-variations {
+            justify-content: center;
+            & table tbody tr td.label { text-align: right; }
+            & table tbody tr td.value { text-align: left; }
+        }
+        & .product-buttons { justify-content: center; }
+        & .product-brands .brands { justify-content: center; }
+        & .product-meta {
+            justify-content: center;
+            & table tbody tr td.label { text-align: right; }
+            & table tbody tr td.value { text-align: left; }
+        }
+    }
 }

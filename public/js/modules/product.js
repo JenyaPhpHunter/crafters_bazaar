@@ -58,26 +58,17 @@
         }
     });
 
-    // === КАСТОМНА ЛОГІКА ФОРМ ===
-    $(document).ready(function() {
+    // === КАСТОМНА ЛОГІКА ПРОДУКТІВ ===
+    $(document).ready(function () {
         // Buy button
-        $('.buy-btn').click(function(e) {
+        $('.buy-btn').on('click', function (e) {
             e.preventDefault();
             $(this).siblings('.product-details').slideDown(400);
         });
-
-        // File label update
-        const fileInput = document.getElementById('file-input'); // ← ЗМІНИ НА СВІЙ ID
-        if (fileInput) {
-            fileInput.addEventListener('change', function() {
-                updateFileLabel(this);
-            });
-            updateFileLabel(fileInput); // початковий стан
-        }
     });
 
     // === ГЛОБАЛЬНІ ФУНКЦІЇ ===
-    window.updateFileLabel = function(input) {
+    window.updateFileLabel = function (input) {
         const fileLabel = document.getElementById('file-label');
         if (!fileLabel) return;
 
@@ -92,7 +83,7 @@
         }
     };
 
-    window.selectColor = function(circle) {
+    window.selectColor = function (circle) {
         document.querySelectorAll('.circle').forEach(c => {
             c.classList.remove('selected');
             c.style.transform = 'scale(1)';
@@ -104,9 +95,9 @@
     };
 
     // === КАТЕГОРІЇ ===
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.category-container').forEach(container => {
-            container.addEventListener('click', function() {
+            container.addEventListener('click', function () {
                 const categoryId = this.id.split('-')[1];
                 const subcategories = document.getElementById('subcategories-' + categoryId);
                 subcategories.classList.toggle('subcategories-visible');
@@ -134,8 +125,15 @@
         }
     });
 
-    // === ЕКСПОРТ ===
+    // === ІНІЦІАЛІЗАЦІЯ ПРОДУКТІВ ===
     window.Learts = window.Learts || {};
-    Learts.product = { init: () => {} };
+    Learts.product = Learts.product || {};
+    Learts.product.init = function () {
+        // Ніяких дій при ініціалізації, якщо потрібно — додай
+    };
+
+    $(document).ready(function () {
+        Learts.product.init();
+    });
 
 })(jQuery);

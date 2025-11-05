@@ -67,8 +67,8 @@
                                 <li><a href="{{ route('products.filter', ['sort_by' => 'popularity'] + request()->except('sort_by')) }}">Популярність</a></li>
                                 <li><a href="{{ route('products.filter', ['sort_by' => 'rating'] + request()->except('sort_by')) }}">Середня оцінка</a></li>
                                 <li><a href="{{ route('products.filter', ['sort_by' => 'newness'] + request()->except('sort_by')) }}">Новизна</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Ціна: від низької до високої</a></li>
-                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Ціна: від високої до низької</a></li>
+                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_up'] + request()->except('sort_by')) }}">Вартість: від низької до високої</a></li>
+                                <li><a href="{{ route('products.filter', ['sort_by' => 'price_down'] + request()->except('sort_by')) }}">Вартість: від високої до низької</a></li>
                             </ul>
                         </div>
                         <!-- Sort by End -->

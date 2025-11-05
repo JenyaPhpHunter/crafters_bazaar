@@ -4,21 +4,18 @@
 /*----------------------------------------*/
 /*  01. Template default CSS
 /*----------------------------------------*/
-@mixin placeholder { // Визначає міксин для стилізації плейсхолдерів
-    &::-webkit-input-placeholder { // Стилі для плейсхолдера в Webkit-браузерах
-        @content // Вміст, який буде вставлено
+@mixin placeholder {
+    &::-webkit-input-placeholder {
+        @content
     }
-
-    &:-moz-placeholder { // Стилі для плейсхолдера в старіших версіях Firefox
-        @content // Вміст, який буде вставлено
+    &:-moz-placeholder {
+        @content
     }
-
-    &::-moz-placeholder { // Стилі для плейсхолдера в нових версіях Firefox
-        @content // Вміст, який буде вставлено
+    &::-moz-placeholder {
+        @content
     }
-
-    &:-ms-input-placeholder { // Стилі для плейсхолдера в Internet Explorer
-        @content // Вміст, який буде вставлено
+    &:-ms-input-placeholder {
+        @content
     }
 }
 
@@ -26,26 +23,26 @@
 *,
 *::after,
 *::before {
-    box-sizing: border-box; // Встановлює модель обчислення розміру
+    box-sizing: border-box;
 }
 
 html,
 body,
 .site-wrapper {
-    height: 100%; // Встановлює висоту 100%
+    height: 100%;
 }
 
 body {
-    font-family: $body-font, Arial, Helvetica, sans-serif; // Встановлює шрифт
-    font-size: 18px; // Розмір шрифту
-    font-weight: 300; // Товщина шрифту
-    font-style: normal; // Нормальний стиль шрифту
-    line-height: 1.75; // Висота рядка
-    position: relative; // Відносне позиціонування
-    visibility: visible; // Елемент видимий
-    overflow-x: hidden; // Приховує горизонтальну прокрутку
-    color: $body-color; // Колір тексту з змінної
-    background-color: $white; // Колір фону білий
+    font-family: $body-font, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    font-style: normal;
+    line-height: 1.75;
+    position: relative;
+    visibility: visible;
+    overflow-x: hidden;
+    color: $body-color;
+    background-color: $white;
 }
 
 h1,
@@ -54,11 +51,11 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $heading-font, Arial, Helvetica, sans-serif; // Встановлює шрифт
-    font-weight: 600; // Товщина шрифту
-    line-height: 1.2; // Висота рядка
-    margin-top: 0; // Прибирає верхній відступ
-    color: $heading-color; // Колір тексту з змінної
+    font-family: $heading-font, Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+    color: $heading-color;
 }
 
 .h1,
@@ -67,360 +64,266 @@ h6 {
 .h4,
 .h5,
 .h6 {
-    line-height: inherit; // Спадкує висоту рядка
-    margin: 0; // Прибирає всі відступи
+    line-height: inherit;
+    margin: 0;
 }
 
 p:last-child {
-    margin-bottom: 0; // Прибирає нижній відступ
+    margin-bottom: 0;
 }
 
 a,
 button {
-    line-height: inherit; // Спадкує висоту рядка
-    display: inline-block; // Відображає як інлайн-блок
-    cursor: pointer; // Змінює курсор на вказівник
-    text-decoration: none; // Прибирає підкреслення
-    color: $secondary; // Колір тексту з змінної
+    line-height: inherit;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    color: $secondary;
 }
 
 a,
 button,
 img,
 input {
-    transition: $transition; // Плавний перехід із змінної
+    transition: $transition;
 }
 
 *:focus {
-    outline: none !important; // Прибирає обводку
+    outline: none !important;
 }
 
 a:focus {
-    text-decoration: none; // Прибирає підкреслення
-    color: inherit; // Спадкує колір
-    outline: none; // Прибирає обводку
+    text-decoration: none;
+    color: inherit;
+    outline: none;
 }
 
 a:hover {
-    text-decoration: none; // Прибирає підкреслення
-    color: $primary; // Змінює колір на $primary
+    text-decoration: none;
+    color: $primary;
 }
 
 button,
 input[type="submit"] {
-    cursor: pointer; // Змінює курсор на вказівник
+    cursor: pointer;
 }
 
 img {
-    max-width: 100%; // Максимальна ширина 100%
-}
-
-input,
-textarea {
-    @include placeholder { // Застосовує міксин placeholder
-        opacity: 1; // Встановлює повну непрозорість
-    }
+    max-width: 100%;
 }
 
 ul {
     &:last-child {
-        margin-bottom: 0; // Прибирає нижній відступ
-    }
-
-    & li {
+        margin-bottom: 0;
     }
 }
 
 hr {
-    border-top-width: 2px; // Встановлює товщину верхньої рамки
+    border-top-width: 2px;
 }
 
 /* Common Classes */
 .fix {
-    overflow: hidden; // Приховує переповнення
+    overflow: hidden;
 }
 
 .section,
 .main-wrapper {
-    float: left; // Встановлює плаваюче вирівнювання вліво
-    width: 100%; // Ширина 100%
+    float: left;
+    width: 100%;
 }
 
 .section-fluid {
-    @media only screen and (min-width: 1500px) { // Медіа-запит для екранів від 1500px
-        padding-right: 55px; // Правий відступ
-        padding-left: 55px; // Лівий відступ
-
+    @media only screen and (min-width: 1500px) {
+        padding-right: 55px;
+        padding-left: 55px;
         & > .container,
         & > .container-fluid {
-            max-width: 100%; // Максимальна ширина 100%
+            max-width: 100%;
         }
     }
-
-    @media #{$laptop-device} { // Медіа-запит для ноутбуків
-        padding-right: 35px; // Правий відступ
-        padding-left: 35px; // Лівий відступ
-
+    @media #{$laptop-device} {
+        padding-right: 35px;
+        padding-left: 35px;
         & > .container,
         & > .container-fluid {
-            max-width: 100%; // Максимальна ширина 100%
+            max-width: 100%;
         }
     }
-
-    @media #{$desktop-device, $tablet-device} { // Медіа-запит для десктопів і планшетів
-        padding-right: 25px; // Правий відступ
-        padding-left: 25px; // Лівий відступ
-
+    @media #{$desktop-device, $tablet-device} {
+        padding-right: 25px;
+        padding-left: 25px;
         & > .container,
         & > .container-fluid {
-            max-width: 100%; // Максимальна ширина 100%
+            max-width: 100%;
         }
     }
 }
 
 /* Bootstrap Override */
 .row {
-    margin-top: 0; // Прибирає верхній відступ
-    margin-right: -15px; // Зміщення праворуч
-    margin-left: -15px; // Зміщення ліворуч
+    margin-top: 0;
+    margin-right: -15px;
+    margin-left: -15px;
     & > [class*="col"] {
-        padding-right: 15px; // Правий внутрішній відступ
-        padding-left: 15px; // Лівий внутрішній відступ
+        padding-right: 15px;
+        padding-left: 15px;
         &:not([class*="learts-mt-"]) {
-            margin-top: 0; // Прибирає верхній відступ
+            margin-top: 0;
         }
     }
     &.g-0 {
-        margin-right: 0; // Прибирає правий відступ
-        margin-left: 0; // Прибирає лівий відступ
+        margin-right: 0;
+        margin-left: 0;
         & > [class*="col"] {
-            padding-right: 0; // Прибирає правий внутрішній відступ
-            padding-left: 0; // Прибирає лівий внутрішній відступ
+            padding-right: 0;
+            padding-left: 0;
         }
     }
 }
 
 .container {
-    padding-right: 15px; // Правий внутрішній відступ
-    padding-left: 15px; // Лівий внутрішній відступ
-    @media only screen and (min-width: 1200px) { // Медіа-запит для екранів від 1200px
-        max-width: 1200px; // Максимальна ширина
+    padding-right: 15px;
+    padding-left: 15px;
+    @media only screen and (min-width: 1200px) {
+        max-width: 1200px;
     }
-
-    @media #{$small-mobile} { // Медіа-запит для маленьких мобільних
-        max-width: 450px; // Максимальна ширина
+    @media #{$small-mobile} {
+        max-width: 450px;
     }
-    @media #{$extra-small-mobile} { // Медіа-запит для дуже маленьких мобільних
-        max-width: 350px; // Максимальна ширина
+    @media #{$extra-small-mobile} {
+        max-width: 350px;
     }
 }
 
-@each $name, $color in $templateColors { // Цикл для створення класів на основі $templateColors
-    // Background Color
-    .bg-#{$name} { // Клас для фону
-        background-color: $color !important; // Встановлює колір фону
+@each $name, $color in $templateColors {
+    .bg-#{$name} {
+        background-color: $color !important;
     }
-
-    // Text Color
-    .text-#{$name} { // Клас для тексту
-        color: $color !important; // Встановлює колір тексту
+    .text-#{$name} {
+        color: $color !important;
     }
 }
 
 /* Font Weight */
-@for $i from 1 through 9 { // Цикл для створення класів ваги шрифту
-    .fw-#{100 * $i} { // Клас для ваги шрифту
-        font-weight: 100 * $i; // Встановлює вагу шрифту
+@for $i from 1 through 9 {
+    .fw-#{100 * $i} {
+        font-weight: 100 * $i;
     }
 }
 
 /* Overlay */
 [data-overlay] {
-    position: relative; // Відносне позиціонування
-    z-index: 1; // Зсуває рівень поверхні
-
+    position: relative;
+    z-index: 1;
     &::before {
-        position: absolute; // Абсолютне позиціонування
-        z-index: -1; // Зсуває рівень нижче
-        top: 0; // Прикріплює до верху
-        left: 0; // Прикріплює до лівого краю
-        width: 100%; // Ширина 100%
-        height: 100%; // Висота 100%
-        content: ""; // Порожній вміст
-        background-color: $black; // Колір фону чорний
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background-color: $black;
     }
 }
 
-@for $i from 0 through 20 { // Цикл для створення рівнів прозорості
-    [data-overlay="#{$i * 5}"] { // Вибір елементів із атрибутом data-overlay
+@for $i from 0 through 20 {
+    [data-overlay="#{$i * 5}"] {
         &::before {
-            opacity: 0.05 * $i; // Встановлює прозорість
+            opacity: 0.05 * $i;
         }
     }
 }
 
 /* Background Image */
 [data-bg-image] {
-    background-repeat: no-repeat; // Забороняє повторення фону
-    background-position: center center; // Центрує фон
-    background-size: cover; // Масштабує фон, щоб покрити весь елемент
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 /* Other */
 body.homepage-bg1 {
-    padding: 0 15px 15px !important; // Встановлює відступи
-    background-color: #F4EDE7; // Колір фону
-
+    padding: 0 15px 15px !important;
+    background-color: #F4EDE7;
     & .topbar-section {
-        background-color: #F4EDE7 !important; // Колір фону
+        background-color: #F4EDE7 !important;
     }
-
     &.offcanvas-open {
-        padding-right: 32px !important; // Правий відступ
-        @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних
-            padding-right: 15px !important; // Змінює правий відступ
+        padding-right: 32px !important;
+        @media #{$tablet-device, $large-mobile} {
+            padding-right: 15px !important;
         }
     }
 }
 
 /* Scroll Up */
 #scrollUp {
-    right: 25px; // Правий відступ
-    bottom: 25px; // Нижній відступ
-    width: 40px; // Ширина
-    height: 40px; // Висота
-    text-align: center; // Центрує текст
-    color: $white; // Колір тексту
-    background-color: $primary; // Колір фону
-
+    right: 25px;
+    bottom: 25px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: $white;
+    background-color: $primary;
     & i {
-        line-height: 40px; // Висота рядка
+        line-height: 40px;
     }
 }
 
 /* Border Style */
 .border-top-dashed {
-    border-top: 1px dashed #D2D2D2; // Встановлює пунктирну верхню рамку
+    border-top: 1px dashed #D2D2D2;
 }
 
 .border-bottom-dashed {
-    border-bottom: 1px dashed #D2D2D2; // Встановлює пунктирну нижню рамку
+    border-bottom: 1px dashed #D2D2D2;
 }
 
 /* Image Over Gray Scale */
 .img-hover-color {
-    filter: grayscale(100); // Застосовує градацію сірого на 100%
-
+    filter: grayscale(100);
     &:hover {
-        filter: grayscale(0); // Повертає кольори
-    }
-}
-
-/* Form Styles */
-.form-control {
-    border: 2px solid $primary; // Встановлює рамку
-    background-color: transparent; // Прозорий фон
-    color: $secondary; // Колір тексту
-    font-family: "Arial", sans-serif; // Шрифт
-    font-size: 14px; // Розмір шрифту
-    border-radius: 5px; // Закруглені кути
-    padding: 10px 15px; // Внутрішні відступи
-    transition: $transition; // Плавний перехід
-    animation: pulseBorder 2s infinite; // Анімація пульсації рамки
-
-    &:focus {
-        border-color: color.adjust($primary, $lightness: -30%); // Змінює колір рамки
-        box-shadow: 0 0 10px $primary2; // Додає тінь
-        transform: scale(1.02); // Збільшує розмір
-        animation: none; // Прибирає анімацію
-        outline: none; // Прибирає обводку
-    }
-}
-
-.title-input {
-    @extend .form-control; // Розширює стилі з .form-control
-    font-size: 16px; // Змінює розмір шрифту
-    font-family: "Times New Roman", Times, serif; // Змінює шрифт
-}
-
-input[type="number"] {
-    @extend .form-control; // Розширює стилі з .form-control
-    -moz-appearance: textfield; // Прибирає стрілки в Firefox
-    appearance: textfield; // Прибирає стрілки в інших браузерах
-
-    &::-webkit-inner-spin-button, // Стилі для внутрішніх стрілок у Webkit
-    &::-webkit-outer-spin-button { // Стилі для зовнішніх стрілок у Webkit
-        -webkit-appearance: none; // Прибирає стандартний вигляд
-        margin: 0; // Прибирає відступи
-    }
-}
-
-// Перевизначення для form-label у custom dropdown
-.form-label {
-    font-family: "Arial", sans-serif; // Зберігаємо шрифт
-    font-size: 14px; // Зберігаємо розмір
-    margin-bottom: 5px; // Зберігаємо відступ
-    display: block; // Зберігаємо як блок
-    color: #000; // Встановлюємо чорний колір за замовчуванням
-    transition: color 0.3s ease; // Додаємо перехід для плавної зміни кольору
-}
-
-.form-section {
-    margin-bottom: 20px; // Нижній відступ
-}
-
-.additional-info-form textarea {
-    @extend .form-control; // Розширює стилі з .form-control
-    width: 100%; // Ширина 100%
-    resize: vertical; // Дозволяє змінювати висоту
-
-    &:focus {
-        border-color: color.adjust($primary, $lightness: -30%); // Змінює колір рамки
-        box-shadow: 0 0 10px $primary2; // Додає тінь
-        transform: scale(1.02); // Збільшує розмір
-        outline: none; // Прибирає обводку
+        filter: grayscale(0);
     }
 }
 
 /* Modal Styles */
 .modal-dialog {
-    width: calc(100% - 30px); // Ширина з урахуванням відступу
-    max-width: 1200px; // Максимальна ширина
-
+    width: calc(100% - 30px);
+    max-width: 1200px;
     & .modal-content {
-        padding: 30px; // Внутрішні відступи
-
+        padding: 30px;
         & .close {
-            font-size: 30px; // Розмір шрифту
-            font-weight: 300; // Товщина шрифту
-            position: absolute; // Абсолютне позиціонування
-            top: 0; // Прикріплює до верху
-            right: 0; // Прикріплює праворуч
-            display: flex; // Гнучке вирівнювання
-            align-items: center; // Центрує по вертикалі
-            justify-content: center; // Центрує по горизонталі
-            width: 40px; // Ширина
-            height: 40px; // Висота
-            border: none; // Прибирає рамку
-            border-radius: 50%; // Робить круглим
-            background-color: transparent; // Прозорий фон
+            font-size: 30px;
+            font-weight: 300;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: transparent;
         }
-
         @media only screen and (min-width: 992px) {
             & .product-summery {
-                position: absolute; // Абсолютне позиціонування
-                right: 15px; // Правий відступ
-                left: 15px; // Лівий відступ
-                overflow-x: hidden; // Приховує горизонтальну прокрутку
-                overflow-y: auto; // Дозволяє вертикальну прокрутку
-                height: 100%; // Висота 100%
+                position: absolute;
+                right: 15px;
+                left: 15px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                height: 100%;
             }
         }
     }
-
     @media #{$extra-small-mobile} {
         & .modal-content {
-            padding: 20px; // Зменшує внутрішні відступи
+            padding: 20px;
         }
     }
 }

@@ -113,26 +113,10 @@ img {
   max-width: 100%;
 }
 
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-  opacity: 1;
-}
-input:-moz-placeholder,
-textarea:-moz-placeholder {
-  opacity: 1;
-}
-input::-moz-placeholder,
-textarea::-moz-placeholder {
-  opacity: 1;
-}
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  opacity: 1;
-}
-
 ul:last-child {
   margin-bottom: 0;
 }
+
 hr {
   border-top-width: 2px;
 }
@@ -528,64 +512,6 @@ body.homepage-bg1.offcanvas-open {
 }
 .img-hover-color:hover {
   filter: grayscale(0);
-}
-
-/* Form Styles */
-.form-control, .additional-info-form textarea, input[type=number], .title-input {
-  border: 2px solid #6fc5c5;
-  background-color: transparent;
-  color: #D2B48C;
-  font-family: "Arial", sans-serif;
-  font-size: 14px;
-  border-radius: 5px;
-  padding: 10px 15px;
-  transition: all 0.5s ease 0s;
-  animation: pulseBorder 2s infinite;
-}
-.form-control:focus, .additional-info-form textarea:focus, input[type=number]:focus, .title-input:focus {
-  border-color: rgb(44.504950495, 110.495049505, 110.495049505);
-  box-shadow: 0 0 10px #00CED1;
-  transform: scale(1.02);
-  animation: none;
-  outline: none;
-}
-
-.title-input {
-  font-size: 16px;
-  font-family: "Times New Roman", Times, serif;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.form-label {
-  font-family: "Arial", sans-serif;
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: block;
-  color: #000;
-  transition: color 0.3s ease;
-}
-
-.form-section {
-  margin-bottom: 20px;
-}
-
-.additional-info-form textarea {
-  width: 100%;
-  resize: vertical;
-}
-.additional-info-form textarea:focus {
-  border-color: rgb(44.504950495, 110.495049505, 110.495049505);
-  box-shadow: 0 0 10px #00CED1;
-  transform: scale(1.02);
-  outline: none;
 }
 
 /* Modal Styles */
@@ -10065,11 +9991,70 @@ body.offcanvas-open .sticky-header {
   width: 100%;
 }
 
-.form-field, .custom-dropdown-wrapper, .form-group-title-price {
+.form-control, input[type=number], .additional-info-form textarea, .title-input {
+  border: 2px solid #6fc5c5;
+  background-color: transparent;
+  color: #D2B48C;
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: all 0.5s ease 0s;
+  animation: pulseBorder 2s infinite;
+}
+.form-control:focus, input[type=number]:focus, .additional-info-form textarea:focus, .title-input:focus {
+  border-color: rgb(44.504950495, 110.495049505, 110.495049505);
+  box-shadow: 0 0 10px #00CED1;
+  transform: scale(1.02);
+  animation: none;
+  outline: none;
+}
+.form-control:not(:focus), input[type=number]:not(:focus), .additional-info-form textarea:not(:focus), .title-input:not(:focus) {
+  animation: pulseBorder 2s infinite;
+}
+
+.title-input {
+  font-size: 16px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.additional-info-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+.additional-info-form textarea:focus {
+  border-color: rgb(44.504950495, 110.495049505, 110.495049505);
+  box-shadow: 0 0 10px #00CED1;
+  transform: scale(1.02);
+  outline: none;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-label {
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  color: #D2B48C;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-field {
   margin-bottom: 2.5rem;
   width: 100%;
 }
-.form-field .form-label, .custom-dropdown-wrapper .form-label, .form-group-title-price .form-label {
+.form-field .form-label {
   display: block;
   font-family: "Marcellus", serif;
   font-size: 1.1rem;
@@ -10079,7 +10064,7 @@ body.offcanvas-open .sticky-header {
   text-align: center;
   transition: all 0.3s ease;
 }
-.form-field .form-label span, .custom-dropdown-wrapper .form-label span, .form-group-title-price .form-label span {
+.form-field .form-label span {
   display: inline-block;
   animation: fadeInUp 0.6s ease-out;
 }

@@ -16,7 +16,7 @@
 
 <div class="form-group-title-price mt-5">
     <label for="price" class="form-label">
-        <span class="animate__animated animate__fadeIn">Ціна</span>
+        <span class="animate__animated animate__fadeIn">Вартість</span>
     </label>
     <div class="input-group input-group-lg position-relative">
         <div
