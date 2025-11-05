@@ -32,4 +32,28 @@ class ProductPhoto extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function getUrlAttribute()
+    {
+        // Формуємо повний шлях: path/filename.ext
+        return asset('storage/products/' . $this->path . '/' . $this->filename . '.' . $this->ext);
+    }
+
+    public function getZoomUrlAttribute()
+    {
+        $zoomPath = $this->zoom_path . '/' . $this->zoom_filename . '.' . $this->zoom_ext;
+        $fullPath = public_path('storage/products/' . $zoomPath);
+        return file_exists($fullPath)
+            ? asset('storage/products/' . $zoomPath)
+            : $this->url;
+    }
+
+    public function getThumbUrlAttribute()
+    {
+        $thumbPath = $this->small_path . '/' . $this->small_filename . '.' . $this->small_ext;
+        $fullPath = public_path('storage/products/' . $thumbPath);
+        return file_exists($fullPath)
+            ? asset('storage/products/' . $thumbPath)
+            : $this->url;
+    }
+
 }

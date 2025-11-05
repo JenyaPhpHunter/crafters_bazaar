@@ -1,6 +1,5 @@
 @use "sass:color"; // Імпортує модуль sass:color для роботи з функціями маніпуляції кольорами, наприклад, color.adjust
 @use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
-@use "../components/animations"; // Імпортує модуль анімацій із файлу "../components/animations"
 
 // Основний контейнер
 .section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn { // Стилі для секції з класами .section, .section-fluid, .section-padding, .border-bottom, .animate__animated, .animate__fadeIn

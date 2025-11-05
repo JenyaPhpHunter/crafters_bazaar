@@ -1,97 +1,22 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Charmonman:wght@400;700&family=Marcellus&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap");
-/* General Animation Styles */
-.animate__animated {
-  transition: all 0.5s ease;
+/* Визначаємо локальний шрифт Rubik для weight 400 (звичайний) */
+@font-face {
+  font-family: "Rubik";
+  src: url("../fonts/Rubik-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-
-/* Fade In Up Animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Визначаємо локальний шрифт Rubik для weight 500 (середній) */
+@font-face {
+  font-family: "Rubik";
+  src: url("../fonts/Rubik-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
-/* Bounce In Animation */
-@keyframes bounceIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-/* Slide In Right Animation */
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-/* Scale Pulse Animation */
-@keyframes scalePulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px 5px rgba(111, 197, 197, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
-  }
-}
-/* Animation for Form Border */
-@keyframes pulseBorder {
-  0% {
-    border-color: #6fc5c5;
-  }
-  50% {
-    border-color: rgb(125.4, 202.8, 202.8);
-  }
-  100% {
-    border-color: #6fc5c5;
-  }
-}
-/* Breathing Animation */
-@keyframes breathe {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 5px rgba(111, 197, 197, 0.2);
-  }
-  50% {
-    transform: scale(1.03);
-    box-shadow: 0 0 10px rgba(111, 197, 197, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 5px rgba(111, 197, 197, 0.2);
-  }
-}
-/* Pulse Animation */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.03);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+/* Fallback: якщо локальний шрифт не завантажиться, використовуємо системний */
 /*----------------------------------------*/
 /*  01. Template default CSS
 /*----------------------------------------*/
@@ -109,7 +34,7 @@ body,
 }
 
 body {
-  font-family: "Rubik", sans-serif, Arial, Helvetica, sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif, Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: 300;
   font-style: normal;
@@ -642,9 +567,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .form-label {
   font-family: "Arial", sans-serif;
   font-size: 14px;
-  color: #D2B48C;
   margin-bottom: 5px;
   display: block;
+  color: #000;
+  transition: color 0.3s ease;
 }
 
 .form-section {
@@ -701,6 +627,98 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   }
 }
 
+/* General Animation Styles */
+.animate__animated {
+  transition: all 0.5s ease;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Bounce In Animation */
+@keyframes bounceIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* Slide In Right Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+/* Scale Pulse Animation */
+@keyframes scalePulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 5px rgba(111, 197, 197, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
+  }
+}
+/* Animation for Form Border */
+@keyframes pulseBorder {
+  0% {
+    border-color: #6fc5c5;
+  }
+  50% {
+    border-color: rgb(125.4, 202.8, 202.8);
+  }
+  100% {
+    border-color: #6fc5c5;
+  }
+}
+/* Breathing Animation */
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(111, 197, 197, 0.2);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(111, 197, 197, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(111, 197, 197, 0.2);
+  }
+}
+/* Pulse Animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 /*----------------------------------------*/
 /*  02. Template Spacing CSS
 /*----------------------------------------*/
@@ -1114,11 +1132,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 /* 03.02. Ion Range Slider */
 .irs--learts {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   margin: 7px 0 40px;
 }
 .irs--learts .irs {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   position: relative;
   width: 100%;
 }
@@ -2297,7 +2315,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   display: block;
 }
 .icon-box1 .inner .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -2332,7 +2350,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   overflow: hidden;
 }
 .icon-box2 .inner .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -2384,7 +2402,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   display: block;
 }
 .icon-box3 .inner .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -2425,7 +2443,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   display: block;
 }
 .icon-box4 .inner .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -2460,7 +2478,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   padding-left: 20px;
 }
 .icon-box5 .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 24px;
   font-weight: 400;
   margin-bottom: 10px;
@@ -4066,7 +4084,7 @@ body.offcanvas-open .sticky-header {
   margin-top: 15px;
 }
 .overlay-menu > ul > li > a {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-weight: 400;
   line-height: 1.75;
   text-transform: uppercase;
@@ -4087,7 +4105,7 @@ body.offcanvas-open .sticky-header {
   margin-top: 15px;
 }
 .overlay-menu > ul .sub-menu > li > a {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-weight: 400;
   line-height: 1.75;
   text-transform: uppercase;
@@ -4289,7 +4307,7 @@ body.offcanvas-open .sticky-header {
   left: 15px;
 }
 .header-categories .category-toggle {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   line-height: 30px;
   position: relative;
   display: flex;
@@ -4453,6 +4471,194 @@ body.offcanvas-open .sticky-header {
   transform: translateY(-2px);
 }
 
+/* Оновлена анімація для заголовка */
+@keyframes compactBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+/* Оновлена анімація для хлібних крихт */
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+/* Анімація для hover-ефекту кнопок */
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 8px 4px rgba(111, 197, 197, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(111, 197, 197, 0.7);
+  }
+}
+/* Стилі для секції хлібних крихт */
+.page-title-section {
+  padding: 15px 0;
+  background-color: #F8F9FD;
+  border-bottom: 1px solid rgba(111, 197, 197, 0.2);
+}
+
+/* Стилі для контейнера заголовка */
+.page-title {
+  display: flex;
+  align-items: center;
+}
+
+/* Стилі для заголовка */
+.title {
+  margin: 0;
+  color: #6fc5c5;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  animation: compactBounceIn 0.6s ease-out;
+}
+
+/* Стилі для контейнера хлібних крихт */
+.breadcrumb-container {
+  margin-top: 8px;
+}
+
+/* Стилі для списку хлібних крихт */
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  font-size: 14px;
+}
+
+/* Стилі для елементів хлібних крихт */
+.breadcrumb-item {
+  margin-right: 10px;
+  color: #7E7E7E;
+  opacity: 0;
+}
+
+/* Клас для активованих елементів хлібних крихт */
+.breadcrumb-item.animate__fadeInRight {
+  opacity: 1;
+  animation: fadeInRight 0.4s ease-out forwards;
+}
+
+/* Стилі для роздільника */
+.breadcrumb-divider {
+  color: #7E7E7E;
+  margin-right: 10px;
+}
+
+/* Стилі для посилань у хлібних крихтах */
+.breadcrumb-item a {
+  color: #00CED1;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover-ефекти для посилань */
+.breadcrumb-item a:hover {
+  color: rgb(0, 185.4, 188.1);
+  transform: translateY(-1px);
+}
+
+/* Стилі для контейнера кнопок */
+.button-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Стилі для кнопок */
+.btn-primary2 {
+  background-color: #6fc5c5;
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover-ефекти для кнопок */
+.btn-primary2:hover {
+  background-color: rgb(89.0435643564, 188.1564356436, 188.1564356436);
+  transform: scale(1.05);
+  animation: buttonPulse 0.6s ease-out;
+}
+
+/* Стилі для іконок у кнопках */
+.btn-primary2 i {
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+/* Стилі для алертів */
+.alert {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Стилі для алерту помилки */
+.alert-danger {
+  background-color: #F44336;
+  color: #FFFFFF;
+}
+
+/* Стилі для алерту успіху */
+.alert-success {
+  background-color: #4CAF50;
+  color: #FFFFFF;
+}
+
+/* Адаптивність для планшетів */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .button-container {
+    justify-content: flex-start;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .breadcrumb {
+    font-size: 13px;
+  }
+}
+/* Адаптивність для мобільних пристроїв */
+@media only screen and (max-width: 767px) {
+  .title {
+    font-size: 20px;
+  }
+  .breadcrumb {
+    font-size: 12px;
+  }
+  .btn-primary2 {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
 /*----------------------------------------*/
 /*  06. Slider CSS
 /*----------------------------------------*/
@@ -5016,7 +5222,7 @@ body.offcanvas-open .sticky-header {
   max-height: 100%;
 }
 .home2-slide-item .slide-product .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 20px;
   font-weight: 400;
   line-height: 1.2;
@@ -5312,7 +5518,7 @@ body.offcanvas-open .sticky-header {
   opacity: 0;
 }
 .home2-slide-content .sub-title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.25;
@@ -5733,7 +5939,7 @@ body.offcanvas-open .sticky-header {
   transform: translateY(-50%);
 }
 .home4-slide-content .category {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 1;
@@ -6039,7 +6245,7 @@ body.offcanvas-open .sticky-header {
   color: #454545;
 }
 .home5-slide3-content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 60px;
   font-weight: 600;
   line-height: 1.25;
@@ -6326,7 +6532,7 @@ body.offcanvas-open .sticky-header {
   color: #454545;
 }
 .home7-slide1-content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 55px;
   font-weight: 500;
   line-height: 1.25;
@@ -7685,7 +7891,7 @@ body.offcanvas-open .sticky-header {
   margin-bottom: 48px;
 }
 .sale-banner3 .title::before {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 100px;
   font-weight: 700;
   line-height: 1;
@@ -8027,7 +8233,7 @@ body.offcanvas-open .sticky-header {
   color: #696969;
 }
 .sale-banner7 .inner .content .sub-title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 34px;
   font-weight: 700;
   line-height: 1;
@@ -8317,7 +8523,7 @@ body.offcanvas-open .sticky-header {
   color: #333333;
 }
 .category-banner1 .inner .content .title .number {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   line-height: 1;
   position: relative;
@@ -8379,7 +8585,7 @@ body.offcanvas-open .sticky-header {
   margin: 0;
 }
 .category-banner2 .inner .content .title .number {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   line-height: 1;
   position: relative;
@@ -8387,7 +8593,7 @@ body.offcanvas-open .sticky-header {
   color: #333333;
 }
 .category-banner2 .banner-desc {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 600;
   position: absolute;
@@ -8467,7 +8673,7 @@ body.offcanvas-open .sticky-header {
   margin: 0;
 }
 .category-banner3 .inner .content .title .number {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   line-height: 1;
   position: relative;
@@ -8670,7 +8876,7 @@ body.offcanvas-open .sticky-header {
   color: #FFFFFF;
 }
 .category-banner6 .inner .content .title .number {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   line-height: 1;
   position: relative;
@@ -8747,7 +8953,7 @@ body.offcanvas-open .sticky-header {
   color: #333333;
 }
 .parallax-banner-1 .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 56px;
   font-weight: 600;
   line-height: 1.25;
@@ -8799,7 +9005,7 @@ body.offcanvas-open .sticky-header {
   margin-bottom: 30px;
 }
 .parallax-banner-4 .content a {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -8931,7 +9137,7 @@ body.offcanvas-open .sticky-header {
   text-align: center;
 }
 .video-banner .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 34px;
   font-weight: 400;
   margin-bottom: 70px;
@@ -9253,7 +9459,7 @@ body.offcanvas-open .sticky-header {
   margin-top: 28px;
 }
 .product-info .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 12px;
@@ -9400,100 +9606,6 @@ body.offcanvas-open .sticky-header {
   }
 }
 
-.product2-info {
-  position: absolute;
-  z-index: 3;
-  bottom: 0;
-  left: 0;
-  padding: 0 25px 25px;
-  text-align: left;
-}
-.product2-info .title {
-  font-family: "Rubik", sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 12px;
-  transition: all 0.5s ease 0s;
-}
-.product2-info .title a {
-  color: #7E7E7E;
-}
-.product2-info .title a:hover {
-  color: #333333;
-}
-.product2-info .price {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  transition: all 0.5s ease 0s;
-  color: #333333;
-}
-.product2-info .price span.old {
-  text-decoration: line-through;
-  color: #AAAAAA;
-}
-.product2-info .price span.new {
-  margin-left: 10px;
-  color: #6fc5c5;
-}
-@media only screen and (min-width: 768px) and (max-width: 991px), only screen and (max-width: 767px) {
-  .product2-info {
-    position: static;
-    margin-top: 28px;
-    padding: 0;
-    text-align: center;
-  }
-  .product2-info .title, .product2-info .price {
-    visibility: visible !important;
-    justify-content: center;
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-  }
-}
-
-.product2-buttons {
-  position: absolute;
-  z-index: 5;
-  top: 50%;
-  left: 0;
-  display: flex;
-  visibility: hidden;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  transition: all 0.5s ease 0s;
-  opacity: 0;
-}
-.product2-buttons .product-button {
-  width: 48px;
-  height: 48px;
-  margin: 0 5px;
-  text-align: center;
-  color: #FFFFFF;
-  border-radius: 50%;
-  background-color: #333333;
-}
-.product2-buttons .product-button i {
-  font-size: 16px;
-  line-height: 48px;
-}
-.product2-buttons .product-button:hover {
-  background-color: #6fc5c5;
-}
-@media only screen and (min-width: 768px) and (max-width: 991px), only screen and (max-width: 767px) {
-  .product2-buttons {
-    position: static;
-    visibility: visible !important;
-    margin-top: 15px;
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-  }
-}
-
 .list-product {
   display: flex !important;
   flex-wrap: wrap;
@@ -9512,7 +9624,7 @@ body.offcanvas-open .sticky-header {
   flex: 1 0 calc(100% - 140px);
 }
 .list-product .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 12px;
@@ -9678,15 +9790,6 @@ body.offcanvas-open .sticky-header {
   position: relative;
   z-index: 5;
 }
-.product-images.vertical.animate__animated.animate__fadeIn .product-gallery-slider .product-zoom {
-  height: 100%;
-  width: 100%;
-}
-.product-images.vertical.animate__animated.animate__fadeIn .product-gallery-slider .product-zoom img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 .product-images.vertical.animate__animated.animate__fadeIn:hover {
   box-shadow: 0 0 15px rgba(0, 108, 102, 0.3);
 }
@@ -9699,6 +9802,48 @@ body.offcanvas-open .sticky-header {
 }
 .product-images.vertical.animate__animated.animate__fadeIn .preview-item:hover {
   transform: scale(1.05);
+}
+
+/* === НОВИЙ БЛОК: КНОПКА ЗУМУ === */
+.product-zoom {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.product-zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.product-zoom .product-gallery-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #6fc5c5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.5s ease 0s;
+  opacity: 0;
+}
+.product-zoom .product-gallery-popup:hover {
+  background: #6fc5c5;
+  color: white;
+  transform: scale(1.1);
+  opacity: 1;
+}
+.product-zoom .product-gallery-popup i {
+  font-size: 18px;
+}
+.product-zoom:hover .product-gallery-popup {
+  opacity: 1;
 }
 
 .product-variations .circle {
@@ -9918,6 +10063,246 @@ body.offcanvas-open .sticky-header {
   bottom: 40px;
   left: 0;
   width: 100%;
+}
+
+.form-field, .custom-dropdown-wrapper, .form-group-title-price {
+  margin-bottom: 2.5rem;
+  width: 100%;
+}
+.form-field .form-label, .custom-dropdown-wrapper .form-label, .form-group-title-price .form-label {
+  display: block;
+  font-family: "Marcellus", serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.form-field .form-label span, .custom-dropdown-wrapper .form-label span, .form-group-title-price .form-label span {
+  display: inline-block;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.form-label.label-focused {
+  color: #6fc5c5;
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+}
+
+.form-group-title-price .input-group {
+  position: relative;
+}
+.form-group-title-price .input-group .form-control-wide-center {
+  width: 100%;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center !important;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  color: #333333;
+  min-height: 58px;
+  line-height: 1.4;
+  outline: none;
+  cursor: text;
+  position: relative;
+  white-space: normal;
+  padding-right: 5rem !important;
+  animation: fadeInUp 0.6s ease-out;
+  animation-iteration-count: 1;
+}
+.form-group-title-price .input-group .form-control-wide-center:focus {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+  animation: pulseBorder 1.5s infinite;
+}
+.form-group-title-price .input-group .form-control-wide-center:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  font-style: italic;
+  font-size: 18px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.form-group-title-price .input-group .form-control-wide-center:not(:empty)::before {
+  opacity: 0;
+  transform: translate(-50%, -60%);
+}
+.form-group-title-price .input-group .currency-label {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333333;
+  pointer-events: none;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+.form-group-title-price .input-group .currency-label:has(.price-input:focus) .form-group-title-price .input-group .currency-label {
+  color: #6fc5c5;
+}
+.form-group-title-price:has(.form-control-wide-center:focus) .form-label {
+  color: #6fc5c5;
+  transform: translateY(-4px);
+}
+
+.custom-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+.custom-dropdown-wrapper .custom-dropdown {
+  flex: 1;
+  max-width: 100%;
+  position: relative;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-search {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: none;
+  animation: fadeInUp 0.6s ease-out;
+  animation-iteration-count: 1;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-search:focus {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+  outline: none;
+  animation: pulseBorder 1.5s infinite;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected {
+  padding: 1rem 1.25rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fafafa;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #aaa;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  animation: fadeInUp 0.6s ease-out;
+  animation-iteration-count: 1;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected.selected-value {
+  color: #000;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:hover {
+  border-color: #6fc5c5;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:after {
+  content: "▼";
+  font-size: 12px;
+  color: #333333;
+  transition: transform 0.3s ease;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:focus {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+  animation: pulseBorder 1.5s infinite;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li {
+  padding: 1rem 1.25rem;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.3s ease-out;
+  animation-iteration-count: 1;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li i {
+  color: #6fc5c5;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li:hover, .custom-dropdown-wrapper .custom-dropdown .dropdown-options li.selected {
+  background-color: rgba(111, 197, 197, 0.1);
+  color: #6fc5c5;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-selected:after {
+  transform: rotate(180deg);
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-options {
+  display: block;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search {
+  display: block;
+  margin-bottom: 5px;
+}
+.custom-dropdown-wrapper .btn-add {
+  flex-shrink: 0;
+  padding: 12px 25px;
+  background-color: #6fc5c5;
+  color: #FFFFFF;
+  border-radius: 12px;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: scalePulse 1.5s infinite;
+}
+.custom-dropdown-wrapper .btn-add i {
+  font-size: 16px;
+}
+.custom-dropdown-wrapper .btn-add:hover {
+  background-color: rgb(59.1485148515, 146.8514851485, 146.8514851485);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(111, 197, 197, 0.3);
+}
+
+.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label,
+.form-group-title-price:has(.form-control-wide-center:focus) .form-label {
+  color: #6fc5c5;
+  transform: translateY(-4px);
 }
 
 /*----------------------------------------*/
@@ -10307,7 +10692,7 @@ body.offcanvas-open .sticky-header {
   padding-left: 20px;
 }
 .comment .content .name {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 700;
   line-height: 1;
@@ -10413,7 +10798,7 @@ body.offcanvas-open .sticky-header {
   color: #6fc5c5;
 }
 .team .content .name {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 600;
   color: #333333;
@@ -10480,7 +10865,7 @@ body.offcanvas-open .sticky-header {
   text-align: left;
 }
 .testimonial .author .content .name {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 1;
@@ -10540,7 +10925,7 @@ body.offcanvas-open .sticky-header {
   text-align: left;
 }
 .testimonial2 .author .content .name {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 1;
@@ -10847,7 +11232,7 @@ body.offcanvas-open .sticky-header {
 
 /* Widget Title */
 .widget-title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 24px;
   font-weight: 400;
   line-height: 1;
@@ -11000,7 +11385,7 @@ body.offcanvas-open .sticky-header {
   flex: 1 0 calc(100% - 120px);
 }
 .widget-products .product .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 12px;
@@ -11092,7 +11477,7 @@ body.offcanvas-open .sticky-header {
   flex: 1 0 calc(100% - 120px);
 }
 .widget-blogs .widget-blog .content .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 400;
   margin-bottom: 16px;
@@ -11716,7 +12101,7 @@ body.offcanvas-open .sticky-header {
   margin-bottom: 30px;
 }
 .cart-totals table tbody tr {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-weight: 700;
   color: #333333;
 }
@@ -12312,7 +12697,7 @@ body.offcanvas-open .sticky-header {
 /* 18.03. Contact Page CSS */
 /* Contact Information */
 .contact-info .title {
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.5;

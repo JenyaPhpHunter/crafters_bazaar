@@ -1,81 +1,117 @@
-@use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+@use "../variables" as *;
 
-.product-images { // Визначає стилі для блоку зображень продукту
-    position: relative; // Встановлює відносне позиціонування для дочірніх елементів
-    margin-bottom: 48px; // Додає нижній відступ 48px
+.product-images {
+    position: relative;
+    margin-bottom: 48px;
 
-    &.vertical { // Стилі для модифікатора класу .vertical
-        padding-left: 210px; // Встановлює лівий відступ 210px для вертикального розташування
+    &.vertical {
+        padding-left: 210px;
 
-        @media #{$laptop-device} { padding-left: 140px; } // Зменшує лівий відступ до 140px для пристроїв типу ноутбук
-        @media #{$desktop-device} { padding-left: 110px; } // Зменшує лівий відступ до 110px для десктопів
-        @media #{$tablet-device} { padding-left: 155px; } // Встановлює лівий відступ 155px для планшетів
-        @media #{$large-mobile} { padding-left: 110px; } // Встановлює лівий відступ 110px для великих мобільних пристроїв
-        @media #{$small-mobile} { padding-left: 95px; } // Зменшує лівий відступ до 95px для малих мобільних пристроїв
-        @media #{$extra-small-mobile} { padding-left: 75px; } // Зменшує лівий відступ до 75px для дуже малих мобільних пристроїв
+        @media #{$laptop-device} { padding-left: 140px; }
+        @media #{$desktop-device} { padding-left: 110px; }
+        @media #{$tablet-device} { padding-left: 155px; }
+        @media #{$large-mobile} { padding-left: 110px; }
+        @media #{$small-mobile} { padding-left: 95px; }
+        @media #{$extra-small-mobile} { padding-left: 75px; }
+
+        &.animate__animated.animate__fadeIn {
+            border: none;
+            background-color: transparent;
+            padding: 15px;
+            position: relative;
+            display: flex;
+
+            .product-thumb-slider-vertical {
+                position: relative;
+                width: 200px;
+                min-height: 300px;
+                overflow-y: auto;
+                z-index: 10;
+
+                .item {
+                    width: 190px;
+                    height: 190px;
+                    margin-bottom: 10px;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+            }
+
+            .product-gallery-slider {
+                margin-left: 50px;
+                flex: 1;
+                min-height: 100px;
+                position: relative;
+                z-index: 5;
+            }
+
+            &:hover {
+                box-shadow: 0 0 15px rgba(0, 108, 102, 0.3);
+            }
+
+            .preview-item {
+                border: 1px solid $primary2;
+                border-radius: 5px;
+                padding: 5px;
+                margin: 5px;
+                transition: $transition;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}
+
+/* === НОВИЙ БЛОК: КНОПКА ЗУМУ === */
+.product-zoom {
+    position: relative;
+    display: block;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
-    &.vertical.animate__animated.animate__fadeIn { // Стилі для блоку з класами .vertical, .animate__animated і .animate__fadeIn
-        border: none; // Прибирає рамку
-        background-color: transparent; // Встановлює прозорий фон
-        padding: 15px; // Встановлює відступи 15px з усіх боків
-        position: relative; // Встановлює відносне позиціонування
-        display: flex; // Встановлює flex-контейнер для дочірніх елементів
+    .product-gallery-popup {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid $primary;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: $transition;
+        opacity: 0; // ховаємо за замовчуванням
 
-        .product-thumb-slider-vertical { // Стилі для вертикального слайдера мініатюр
-            position: relative; // Встановлює відносне позиціонування
-            width: 200px; // Встановлює ширину слайдера 200px
-            min-height: 300px; // Встановлює мінімальну висоту 300px
-            overflow-y: auto; // Додає вертикальну прокрутку при переповненні
-            z-index: 10; // Піднімає слайдер над іншими елементами
-
-            .item { // Стилі для елементів слайдера (мініатюр)
-                width: 190px; // Встановлює ширину мініатюри 190px
-                height: 190px; // Встановлює висоту мініатюри 190px
-                margin-bottom: 10px; // Додає нижній відступ 10px між мініатюрами
-                overflow: hidden; // Ховає вміст, що виходить за межі
-
-                img { // Стилі для зображень у мініатюрах
-                    width: 100%; // Встановлює ширину зображення 100%
-                    height: 100%; // Встановлює висоту зображення 100%
-                    object-fit: cover; // Масштабує зображення, щоб воно заповнило контейнер, обрізаючи зайве
-                }
-            }
+        &:hover {
+            background: $primary;
+            color: white;
+            transform: scale(1.1);
+            opacity: 1;
         }
 
-        .product-gallery-slider { // Стилі для основного слайдера галереї
-            margin-left: 50px; // Додає лівий відступ 50px
-            flex: 1; // Займає весь доступний простір у flex-контейнері
-            min-height: 100px; // Встановлює мінімальну висоту 100px
-            position: relative; // Встановлює відносне позиціонування
-            z-index: 5; // Розташовує слайдер нижче вертикального слайдера мініатюр
-
-            .product-zoom { // Стилі для блоку зуму зображення
-                height: 100%; // Встановлює висоту 100%
-                width: 100%; // Встановлює ширину 100%
-
-                img { // Стилі для зображень у блоці зуму
-                    width: 100%; // Встановлює ширину зображення 100%
-                    height: 100%; // Встановлює висоту зображення 100%
-                    object-fit: cover; // Масштабує зображення, щоб воно заповнило контейнер, обрізаючи зайве
-                }
-            }
+        i {
+            font-size: 18px;
         }
+    }
 
-        &:hover { // Стилі для стану наведення на блок
-            box-shadow: 0 0 15px rgba(0, 108, 102, 0.3); // Додає тінь із зеленуватим відтінком для ефекту підйому
-        }
-
-        .preview-item { // Стилі для елементів попереднього перегляду
-            border: 1px solid $primary2; // Додає рамку зі змінної $primary2
-            border-radius: 5px; // Закруглює кути до 5px
-            padding: 5px; // Встановлює внутрішні відступи 5px
-            margin: 5px; // Встановлює зовнішні відступи 5px
-            transition: $transition; // Використовує змінну для плавного переходу
-
-            &:hover { // Стилі для стану наведення на елемент попереднього перегляду
-                transform: scale(1.05); // Збільшує елемент на 5% для ефекту наближення
-            }
-        }
+    &:hover .product-gallery-popup {
+        opacity: 1; // показуємо при наведенні
     }
 }

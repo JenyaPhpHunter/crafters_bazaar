@@ -122,3 +122,8 @@ $tablet-device: "only screen and (min-width: 768px) and (max-width: 991px)";
 $large-mobile: "only screen and (max-width: 767px)";
 $small-mobile: "only screen and (max-width: 575px)";
 $extra-small-mobile: "only screen and (max-width: 479px)";
+
+// Font Family (оновлюємо $futura з fallback)
+$futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; // Rubik з системними fallback
+$body-font: $futura;
+$heading-font: $marcellus;

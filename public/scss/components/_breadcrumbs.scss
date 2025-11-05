@@ -1,0 +1,195 @@
+@use "sass:color"; // Імпортуємо модуль для роботи з кольорами
+@use "../variables" as *; // Імпортуємо змінні з _variables.scss
+
+/* Оновлена анімація для заголовка */
+@keyframes compactBounceIn {
+    0% {
+        opacity: 0; // Початкова прозорість
+        transform: scale(0.8) translateY(10px); // Зменшення та зсув униз
+    }
+    60% {
+        opacity: 0.7; // Часткова прозорість
+        transform: scale(1.05); // Легке збільшення
+    }
+    100% {
+        opacity: 1; // Повна видимість
+        transform: scale(1) translateY(0); // Нормальний розмір і позиція
+    }
+}
+
+/* Оновлена анімація для хлібних крихт */
+@keyframes fadeInRight {
+    0% {
+        opacity: 0; // Початкова прозорість
+        transform: translateX(20px); // Зсув праворуч
+    }
+    100% {
+        opacity: 1; // Повна видимість
+        transform: translateX(0); // Повернення в початкову позицію
+    }
+}
+
+/* Анімація для hover-ефекту кнопок */
+@keyframes buttonPulse {
+    0% {
+        transform: scale(1); // Нормальний розмір
+        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Початкова тінь
+    }
+    50% {
+        transform: scale(1.03); // Легке збільшення
+        box-shadow: 0 0 8px 4px rgba($primary, 0.4); // Розширена тінь
+    }
+    100% {
+        transform: scale(1); // Повернення до нормального розміру
+        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Повернення тіні
+    }
+}
+
+/* Стилі для секції хлібних крихт */
+.page-title-section {
+    padding: 15px 0; // Компактні відступи зверху та знизу
+    background-color: $grey; // Сірий фон (#F8F9FD)
+    border-bottom: 1px solid rgba($primary, 0.2); // Тонка бірюзова межа знизу
+}
+
+/* Стилі для контейнера заголовка */
+.page-title {
+    display: flex; // Flexbox для вирівнювання
+    align-items: center; // Вирівнювання по вертикалі
+}
+
+/* Стилі для заголовка */
+.title {
+    margin: 0; // Прибираємо всі відступи
+    color: $primary; // Бірюзовий колір (#6fc5c5)
+    font-family: $futura; // Шрифт Rubik для сучасного вигляду
+    font-size: 28px; // Компактніший розмір шрифту
+    font-weight: 500; // Помірна товщина
+    animation: compactBounceIn 0.6s ease-out; // Оновлена анімація появи
+}
+
+/* Стилі для контейнера хлібних крихт */
+.breadcrumb-container {
+    margin-top: 8px; // Менший відступ зверху
+}
+
+/* Стилі для списку хлібних крихт */
+.breadcrumb {
+    list-style: none; // Прибираємо маркери списку
+    display: flex; // Горизонтальне розташування
+    padding: 0; // Прибираємо внутрішні відступи
+    font-size: 14px; // Компактний розмір шрифту
+}
+
+/* Стилі для елементів хлібних крихт */
+.breadcrumb-item {
+    margin-right: 10px; // Менший відступ між елементами
+    color: $body-light; // Світло-сірий колір (#7E7E7E)
+    opacity: 0; // Початкова прозорість для анімації
+}
+
+/* Клас для активованих елементів хлібних крихт */
+.breadcrumb-item.animate__fadeInRight {
+    opacity: 1; // Повна видимість після анімації
+    animation: fadeInRight 0.4s ease-out forwards; // Анімація з’явлення справа
+}
+
+/* Стилі для роздільника */
+.breadcrumb-divider {
+    color: $body-light; // Світло-сірий колір (#7E7E7E)
+    margin-right: 10px; // Відступ праворуч
+}
+
+/* Стилі для посилань у хлібних крихтах */
+.breadcrumb-item a {
+    color: $primary2; // Світлий бірюзовий (#00CED1)
+    text-decoration: none; // Прибираємо підкреслення
+    transition: color 0.3s ease, transform 0.3s ease; // Плавний перехід для кольору та трансформації
+}
+
+/* Hover-ефекти для посилань */
+.breadcrumb-item a:hover {
+    color: color.scale($primary2, $lightness: -10%); // Темніший бірюзовий при наведенні
+    transform: translateY(-1px); // Легке підняття
+}
+
+/* Стилі для контейнера кнопок */
+.button-container {
+    display: flex; // Flexbox для розташування кнопок
+    flex-direction: row; // Горизонтальне розташування (для компактності)
+    flex-wrap: wrap; // Перенос кнопок на новий рядок, якщо не вміщаються
+    gap: 10px; // Відступ між кнопками
+    justify-content: flex-end; // Вирівнювання по правому краю
+}
+
+/* Стилі для кнопок */
+.btn-primary2 {
+    background-color: $primary; // Бірюзовий фон (#6fc5c5)
+    color: $white; // Білий текст
+    padding: 8px 16px; // Компактніші відступи
+    border-radius: 6px; // Злегка закруглені кути
+    text-decoration: none; // Прибираємо підкреслення
+    display: inline-flex; // Flex для вирівнювання тексту та іконки
+    align-items: center; // Вирівнювання по вертикалі
+    transition: background-color 0.3s ease, transform 0.3s ease; // Плавний перехід
+}
+
+/* Hover-ефекти для кнопок */
+.btn-primary2:hover {
+    background-color: color.scale($primary, $lightness: -10%); // Темніший бірюзовий
+    transform: scale(1.05); // Легке збільшення
+    animation: buttonPulse 0.6s ease-out; // Пульсація при наведенні
+}
+
+/* Стилі для іконок у кнопках */
+.btn-primary2 i {
+    margin-left: 8px; // Менший відступ від тексту
+    font-size: 14px; // Компактніший розмір іконки
+}
+
+/* Стилі для алертів */
+.alert {
+    padding: 12px; // Компактніші відступи
+    border-radius: 6px; // Закруглення кутів
+    margin-bottom: 15px; // Менший відступ знизу
+    animation: fadeInUp 0.5s ease-out; // Анімація появи знизу
+}
+
+/* Стилі для алерту помилки */
+.alert-danger {
+    background-color: $danger; // Червоний фон (#F44336)
+    color: $white; // Білий текст
+}
+
+/* Стилі для алерту успіху */
+.alert-success {
+    background-color: $success; // Зелений фон (#4CAF50)
+    color: $white; // Білий текст
+}
+
+/* Адаптивність для планшетів */
+@media #{$tablet-device} {
+    .button-container {
+        justify-content: flex-start; // Вирівнювання кнопок ліворуч
+    }
+    .title {
+        font-size: 24px; // Ще менший розмір шрифту
+    }
+    .breadcrumb {
+        font-size: 13px; // Компактніший текст для хлібних крихт
+    }
+}
+
+/* Адаптивність для мобільних пристроїв */
+@media #{$large-mobile} {
+    .title {
+        font-size: 20px; // Найменший розмір шрифту
+    }
+    .breadcrumb {
+        font-size: 12px; // Найменший текст для хлібних крихт
+    }
+    .btn-primary2 {
+        padding: 6px 12px; // Ще компактніші кнопки
+        font-size: 14px; // Менший текст кнопок
+    }
+}

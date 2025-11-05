@@ -1,50 +1,35 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Головна сторінка</title>
+    <title>@yield('title', 'Головна сторінка')</title>
     <meta name="robots" content="noindex, follow"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.webp') }}">
 
-    <!-- CSS
-	============================================ -->
-
-    <!-- Vendor CSS (Bootstrap & Icon Font) -->
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/font-awesome-pro.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/themify-icons.css') }}">
 
-    <!-- Plugins CSS (All Plugins Files) -->
+    <!-- Plugins -->
     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/swiper.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/ion.rangeSlider.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/plugins/photoswipe.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/plugins/photoswipe-default-skin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/magnific-popup.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/slick.css') }}">
 
-    <!-- Main Style CSS -->
-    {{--    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->--}}
-
-    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
-    <!-- <link rel="stylesheet" href="{{ asset('css/vendor/vendor.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/plugins/plugins.min.css') }}"> -->
+    <!-- Твій скомпільований CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    @stack('styles')
-{{--    <style>--}}
-{{--        body.modal-open {--}}
-{{--            padding-right: 0 !important;--}}
-{{--        }--}}
-{{--    </style>--}}
-</head>
 
+    @stack('styles')
+</head>
 <body>
 @include('include.topbar-section')
 @include('include.header-section')
@@ -87,23 +72,23 @@
 {{--@isset($includeRecommendedProducts)--}}
 {{--    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')--}}
 {{--@endisset--}}
-
 @include('components.breadcrumps')
 @yield('content')
 @include('include.footer')
 
-<!-- BEGIN: Page JS-->
+<!-- Page JS -->
 @yield('page-script')
-<!-- END: Page JS-->
 
-<!-- JS
-============================================ -->
-
-<!-- Vendors JS -->
+<!-- JS Vendors -->
 <script src="{{ asset('js/vendor/modernizr-3.6.0.min.js') }}"></script>
 <script src="{{ asset('js/vendor/jquery-3.4.1.min.js') }}"></script>
 <script src="{{ asset('js/vendor/jquery-migrate-3.1.0.min.js') }}"></script>
 <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Plugins JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
@@ -116,11 +101,9 @@
 <script src="{{ asset('js/plugins/jquery.ajaxchimp.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.countdown.min.js') }}"></script>
 <script src="{{ asset('js/plugins/imagesloaded.pkgd.min.js') }}"></script>
-<script src="{{ asset('js/plugins/isotope.pkgd.min.j') }}s"></script>
+<script src="{{ asset('js/plugins/isotope.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.matchHeight-min.js') }}"></script>
 <script src="{{ asset('js/plugins/ion.rangeSlider.min.js') }}"></script>
-<script src="{{ asset('js/plugins/photoswipe.min.js') }}"></script>
-<script src="{{ asset('js/plugins/photoswipe-ui-default.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.zoom.min.js') }}"></script>
 <script src="{{ asset('js/plugins/ResizeSensor.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.sticky-sidebar.min.js') }}"></script>
@@ -130,15 +113,20 @@
 <script src="{{ asset('js/plugins/scrollax.min.js') }}"></script>
 <script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
 
-<!-- Use the minified version files listed below for better performance and remove the files listed above -->
-<!-- <script src="{{ asset('js/vendor/vendor.min.js') }}"></script>
-<script src="{{ asset('js/plugins/plugins.min.js') }}"></script> -->
+<!-- Модулі (обов'язково в такому порядку!) -->
+<script src="{{ asset('js/modules/utils.js') }}"></script>
+<script src="{{ asset('js/modules/ui.js') }}"></script>
+<script src="{{ asset('js/modules/sliders.js') }}"></script>
+<script src="{{ asset('js/modules/product.js') }}"></script>
+<script src="{{ asset('js/modules/forms.js') }}"></script>
+<script src="{{ asset('js/modules/layout.js') }}"></script>
 
-<!-- Main Activation JS -->
+<!-- Точка входу -->
 <script src="{{ asset('js/main.js') }}"></script>
-<script src="{{ asset('js/styles.js') }}"></script>
+{{--<script src="{{ asset('js/styles.js') }}"></script>--}}
+
 @stack('scripts')
 </body>
-
 </html>
+
 

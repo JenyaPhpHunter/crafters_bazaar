@@ -2,65 +2,62 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\Controller;
+use App\Services\BreadcrumbManager;
+use App\Services\UrlService;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Route; // Додаємо імпорт Route
 use Illuminate\Support\ServiceProvider;
 
 class BreadcrumbServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
+     * Реєструємо сервіси для всіх view.
      */
-    public function boot()
+    public function boot(): void
     {
-        // Передача breadcrumbs у всі view
         View::composer('*', function ($view) {
+            // Перевіряємо, чи існує активний маршрут
             if (!request()->route()) {
-                // Немає активного маршруту (наприклад, у черзі або консолі) — нічого не робимо
-                return;
-            }
-            $currentRouteName = Route::currentRouteName(); // Отримуємо ім'я поточного маршруту
-            $routeParameters = Route::current()->parameters(); // Отримуємо всі параметри маршруту як масив
-            //// Далі можна обробити параметри в залежності від потреби
-            foreach ($routeParameters as $key => $value) {
-                // $key — це ім'я параметра (наприклад, 'product' або 'forum_sub_category')
-                // $value — це значення параметра
-                $firstParameterValue = [
-                    $key => $value
-                ];
-            }
-//            echo "<pre>";
-//            print_r($routeParameters);
-//            echo "</pre>";
-//            die();
-            // Якщо ви хочете отримати перший параметр без імені:
-//            $firstParameterValue = reset($routeParameters); // Значення першого параметра (якщо такий є)
-            // Генеруємо breadcrumbs за допомогою глобального методу
-            $controller = app(Controller::class);
-            $breadcrumbs = $controller->getBreadcrumbs($currentRouteName);
-            if (!empty($firstParameterValue)){
-                $buttons = $controller->getButtons($currentRouteName, $firstParameterValue);
-            } else {
-                $buttons = $controller->getButtons($currentRouteName);
+                return; // Виходимо, якщо маршрут відсутній
             }
 
+            // Отримуємо ім’я поточного маршруту
+            $currentRouteName = Route::currentRouteName();
+            // Отримуємо параметри маршруту
+            $routeParameters = Route::current()->parameters();
 
-            // Передаємо breadcrumbs у всі view
+            // Створюємо екземпляр UrlService
+            $urlService = app(UrlService::class);
+
+            // Генеруємо хлібні крихти через UrlService
+            $breadcrumbs = $urlService->getBreadcrumbs();
+
+            // Отримуємо контролер поточного маршруту (якщо є)
+            $controller = Route::current()->getController();
+            // Генеруємо кнопки через BreadcrumbManager
+            $breadcrumbManager = app(BreadcrumbManager::class);
+            $firstParameter = !empty($routeParameters) ? reset($routeParameters) : null;
+            $buttons = $breadcrumbManager->getButtons($currentRouteName, $firstParameter, $controller);
+
+            // Передаємо дані у всі view
             $view->with('breadcrumbs', $breadcrumbs)
                 ->with('buttons', $buttons);
         });
     }
 
     /**
-     * Register any application services.
-     *
-     * @return void
+     * Реєстрація сервісів.
      */
-    public function register()
+    public function register(): void
     {
-        //
+        // Реєструємо BreadcrumbManager як singleton
+        $this->app->singleton(BreadcrumbManager::class, function () {
+            return new BreadcrumbManager();
+        });
+
+        // Реєструємо UrlService як singleton
+        $this->app->singleton(UrlService::class, function () {
+            return new UrlService();
+        });
     }
 }

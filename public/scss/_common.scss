@@ -1,6 +1,5 @@
 @use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
 @use "variables" as *; // Імпортує файл variables і робить усі його змінні доступними без префікса
-@use "components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
 
 /*----------------------------------------*/
 /*  01. Template default CSS
@@ -24,19 +23,19 @@
 }
 
 /* Common Style */
-*, // Включає всі елементи
-*::after, // Включає псевдоелементи ::after
-*::before { // Включає псевдоелементи ::before
+*,
+*::after,
+*::before {
     box-sizing: border-box; // Встановлює модель обчислення розміру
 }
 
-html, // Стилі для тегу html
-body, // Стилі для тегу body
-.site-wrapper { // Стилі для класу site-wrapper
+html,
+body,
+.site-wrapper {
     height: 100%; // Встановлює висоту 100%
 }
 
-body { // Стилі для тіла документа
+body {
     font-family: $body-font, Arial, Helvetica, sans-serif; // Встановлює шрифт
     font-size: 18px; // Розмір шрифту
     font-weight: 300; // Товщина шрифту
@@ -49,12 +48,12 @@ body { // Стилі для тіла документа
     background-color: $white; // Колір фону білий
 }
 
-h1, // Стилі для заголовка h1
-h2, // Стилі для заголовка h2
-h3, // Стилі для заголовка h3
-h4, // Стилі для заголовка h4
-h5, // Стилі для заголовка h5
-h6 { // Стилі для заголовка h6
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: $heading-font, Arial, Helvetica, sans-serif; // Встановлює шрифт
     font-weight: 600; // Товщина шрифту
     line-height: 1.2; // Висота рядка
@@ -62,22 +61,22 @@ h6 { // Стилі для заголовка h6
     color: $heading-color; // Колір тексту з змінної
 }
 
-.h1, // Стилі для класу .h1
-.h2, // Стилі для класу .h2
-.h3, // Стилі для класу .h3
-.h4, // Стилі для класу .h4
-.h5, // Стилі для класу .h5
-.h6 { // Стилі для класу .h6
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
     line-height: inherit; // Спадкує висоту рядка
     margin: 0; // Прибирає всі відступи
 }
 
-p:last-child { // Стилі для останнього елемента p
+p:last-child {
     margin-bottom: 0; // Прибирає нижній відступ
 }
 
-a, // Стилі для тегу a
-button { // Стилі для тегу button
+a,
+button {
     line-height: inherit; // Спадкує висоту рядка
     display: inline-block; // Відображає як інлайн-блок
     cursor: pointer; // Змінює курсор на вказівник
@@ -85,75 +84,75 @@ button { // Стилі для тегу button
     color: $secondary; // Колір тексту з змінної
 }
 
-a, // Стилі для тегу a
-button, // Стилі для тегу button
-img, // Стилі для тегу img
-input { // Стилі для тегу input
+a,
+button,
+img,
+input {
     transition: $transition; // Плавний перехід із змінної
 }
 
-*:focus { // Стилі для всіх елементів у фокусі
+*:focus {
     outline: none !important; // Прибирає обводку
 }
 
-a:focus { // Стилі для посилань у фокусі
+a:focus {
     text-decoration: none; // Прибирає підкреслення
     color: inherit; // Спадкує колір
     outline: none; // Прибирає обводку
 }
 
-a:hover { // Стилі для посилань при наведенні
+a:hover {
     text-decoration: none; // Прибирає підкреслення
     color: $primary; // Змінює колір на $primary
 }
 
-button, // Стилі для тегу button
-input[type="submit"] { // Стилі для кнопок типу submit
+button,
+input[type="submit"] {
     cursor: pointer; // Змінює курсор на вказівник
 }
 
-img { // Стилі для зображень
+img {
     max-width: 100%; // Максимальна ширина 100%
 }
 
-input, // Стилі для тегу input
-textarea { // Стилі для тегу textarea
+input,
+textarea {
     @include placeholder { // Застосовує міксин placeholder
         opacity: 1; // Встановлює повну непрозорість
     }
 }
 
-ul { // Стилі для списків ul
-    &:last-child { // Стилі для останнього ul
+ul {
+    &:last-child {
         margin-bottom: 0; // Прибирає нижній відступ
     }
 
-    & li { // Стилі для елементів li всередині ul
+    & li {
     }
 }
 
-hr { // Стилі для горизонтальної лінії hr
+hr {
     border-top-width: 2px; // Встановлює товщину верхньої рамки
 }
 
 /* Common Classes */
-.fix { // Стилі для класу fix
+.fix {
     overflow: hidden; // Приховує переповнення
 }
 
-.section, // Стилі для класу section
-.main-wrapper { // Стилі для класу main-wrapper
+.section,
+.main-wrapper {
     float: left; // Встановлює плаваюче вирівнювання вліво
     width: 100%; // Ширина 100%
 }
 
-.section-fluid { // Стилі для класу section-fluid
+.section-fluid {
     @media only screen and (min-width: 1500px) { // Медіа-запит для екранів від 1500px
         padding-right: 55px; // Правий відступ
         padding-left: 55px; // Лівий відступ
 
-        & > .container, // Стилі для дочірнього контейнера
-        & > .container-fluid { // Стилі для дочірнього контейнера-fluid
+        & > .container,
+        & > .container-fluid {
             max-width: 100%; // Максимальна ширина 100%
         }
     }
@@ -162,8 +161,8 @@ hr { // Стилі для горизонтальної лінії hr
         padding-right: 35px; // Правий відступ
         padding-left: 35px; // Лівий відступ
 
-        & > .container, // Стилі для дочірнього контейнера
-        & > .container-fluid { // Стилі для дочірнього контейнера-fluid
+        & > .container,
+        & > .container-fluid {
             max-width: 100%; // Максимальна ширина 100%
         }
     }
@@ -172,36 +171,36 @@ hr { // Стилі для горизонтальної лінії hr
         padding-right: 25px; // Правий відступ
         padding-left: 25px; // Лівий відступ
 
-        & > .container, // Стилі для дочірнього контейнера
-        & > .container-fluid { // Стилі для дочірнього контейнера-fluid
+        & > .container,
+        & > .container-fluid {
             max-width: 100%; // Максимальна ширина 100%
         }
     }
 }
 
 /* Bootstrap Override */
-.row { // Стилі для класу row
+.row {
     margin-top: 0; // Прибирає верхній відступ
     margin-right: -15px; // Зміщення праворуч
     margin-left: -15px; // Зміщення ліворуч
-    & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+    & > [class*="col"] {
         padding-right: 15px; // Правий внутрішній відступ
         padding-left: 15px; // Лівий внутрішній відступ
-        &:not([class*="learts-mt-"]) { // Виключає елементи з класами learts-mt-
+        &:not([class*="learts-mt-"]) {
             margin-top: 0; // Прибирає верхній відступ
         }
     }
-    &.g-0 { // Стилі для row із класом g-0
+    &.g-0 {
         margin-right: 0; // Прибирає правий відступ
         margin-left: 0; // Прибирає лівий відступ
-        & > [class*="col"] { // Стилі для дочірніх елементів із класами col
+        & > [class*="col"] {
             padding-right: 0; // Прибирає правий внутрішній відступ
             padding-left: 0; // Прибирає лівий внутрішній відступ
         }
     }
 }
 
-.container { // Стилі для класу container
+.container {
     padding-right: 15px; // Правий внутрішній відступ
     padding-left: 15px; // Лівий внутрішній відступ
     @media only screen and (min-width: 1200px) { // Медіа-запит для екранів від 1200px
@@ -236,11 +235,11 @@ hr { // Стилі для горизонтальної лінії hr
 }
 
 /* Overlay */
-[data-overlay] { // Стилі для елементів із атрибутом data-overlay
+[data-overlay] {
     position: relative; // Відносне позиціонування
     z-index: 1; // Зсуває рівень поверхні
 
-    &::before { // Стилі для псевдоелемента ::before
+    &::before {
         position: absolute; // Абсолютне позиціонування
         z-index: -1; // Зсуває рівень нижче
         top: 0; // Прикріплює до верху
@@ -254,29 +253,29 @@ hr { // Стилі для горизонтальної лінії hr
 
 @for $i from 0 through 20 { // Цикл для створення рівнів прозорості
     [data-overlay="#{$i * 5}"] { // Вибір елементів із атрибутом data-overlay
-        &::before { // Стилі для псевдоелемента ::before
+        &::before {
             opacity: 0.05 * $i; // Встановлює прозорість
         }
     }
 }
 
 /* Background Image */
-[data-bg-image] { // Стилі для елементів із атрибутом data-bg-image
+[data-bg-image] {
     background-repeat: no-repeat; // Забороняє повторення фону
     background-position: center center; // Центрує фон
     background-size: cover; // Масштабує фон, щоб покрити весь елемент
 }
 
 /* Other */
-body.homepage-bg1 { // Стилі для body із класом homepage-bg1
+body.homepage-bg1 {
     padding: 0 15px 15px !important; // Встановлює відступи
     background-color: #F4EDE7; // Колір фону
 
-    & .topbar-section { // Стилі для елемента .topbar-section
+    & .topbar-section {
         background-color: #F4EDE7 !important; // Колір фону
     }
 
-    &.offcanvas-open { // Стилі для body із класом offcanvas-open
+    &.offcanvas-open {
         padding-right: 32px !important; // Правий відступ
         @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних
             padding-right: 15px !important; // Змінює правий відступ
@@ -285,7 +284,7 @@ body.homepage-bg1 { // Стилі для body із класом homepage-bg1
 }
 
 /* Scroll Up */
-#scrollUp { // Стилі для елемента з id scrollUp
+#scrollUp {
     right: 25px; // Правий відступ
     bottom: 25px; // Нижній відступ
     width: 40px; // Ширина
@@ -294,31 +293,31 @@ body.homepage-bg1 { // Стилі для body із класом homepage-bg1
     color: $white; // Колір тексту
     background-color: $primary; // Колір фону
 
-    & i { // Стилі для іконки всередині
+    & i {
         line-height: 40px; // Висота рядка
     }
 }
 
 /* Border Style */
-.border-top-dashed { // Стилі для класу border-top-dashed
+.border-top-dashed {
     border-top: 1px dashed #D2D2D2; // Встановлює пунктирну верхню рамку
 }
 
-.border-bottom-dashed { // Стилі для класу border-bottom-dashed
+.border-bottom-dashed {
     border-bottom: 1px dashed #D2D2D2; // Встановлює пунктирну нижню рамку
 }
 
 /* Image Over Gray Scale */
-.img-hover-color { // Стилі для класу img-hover-color
+.img-hover-color {
     filter: grayscale(100); // Застосовує градацію сірого на 100%
 
-    &:hover { // Стилі при наведенні
+    &:hover {
         filter: grayscale(0); // Повертає кольори
     }
 }
 
 /* Form Styles */
-.form-control { // Стилі для класу form-control
+.form-control {
     border: 2px solid $primary; // Встановлює рамку
     background-color: transparent; // Прозорий фон
     color: $secondary; // Колір тексту
@@ -329,7 +328,7 @@ body.homepage-bg1 { // Стилі для body із класом homepage-bg1
     transition: $transition; // Плавний перехід
     animation: pulseBorder 2s infinite; // Анімація пульсації рамки
 
-    &:focus { // Стилі при фокусі
+    &:focus {
         border-color: color.adjust($primary, $lightness: -30%); // Змінює колір рамки
         box-shadow: 0 0 10px $primary2; // Додає тінь
         transform: scale(1.02); // Збільшує розмір
@@ -338,13 +337,13 @@ body.homepage-bg1 { // Стилі для body із класом homepage-bg1
     }
 }
 
-.title-input { // Стилі для класу title-input
+.title-input {
     @extend .form-control; // Розширює стилі з .form-control
     font-size: 16px; // Змінює розмір шрифту
     font-family: "Times New Roman", Times, serif; // Змінює шрифт
 }
 
-input[type="number"] { // Стилі для полів типу number
+input[type="number"] {
     @extend .form-control; // Розширює стилі з .form-control
     -moz-appearance: textfield; // Прибирає стрілки в Firefox
     appearance: textfield; // Прибирає стрілки в інших браузерах
@@ -356,24 +355,26 @@ input[type="number"] { // Стилі для полів типу number
     }
 }
 
-.form-label { // Стилі для класу form-label
-    font-family: "Arial", sans-serif; // Встановлює шрифт
-    font-size: 14px; // Розмір шрифту
-    color: $secondary; // Колір тексту
-    margin-bottom: 5px; // Нижній відступ
-    display: block; // Відображає як блок
+// Перевизначення для form-label у custom dropdown
+.form-label {
+    font-family: "Arial", sans-serif; // Зберігаємо шрифт
+    font-size: 14px; // Зберігаємо розмір
+    margin-bottom: 5px; // Зберігаємо відступ
+    display: block; // Зберігаємо як блок
+    color: #000; // Встановлюємо чорний колір за замовчуванням
+    transition: color 0.3s ease; // Додаємо перехід для плавної зміни кольору
 }
 
-.form-section { // Стилі для класу form-section
+.form-section {
     margin-bottom: 20px; // Нижній відступ
 }
 
-.additional-info-form textarea { // Стилі для textarea всередині .additional-info-form
+.additional-info-form textarea {
     @extend .form-control; // Розширює стилі з .form-control
     width: 100%; // Ширина 100%
     resize: vertical; // Дозволяє змінювати висоту
 
-    &:focus { // Стилі при фокусі
+    &:focus {
         border-color: color.adjust($primary, $lightness: -30%); // Змінює колір рамки
         box-shadow: 0 0 10px $primary2; // Додає тінь
         transform: scale(1.02); // Збільшує розмір
@@ -382,14 +383,14 @@ input[type="number"] { // Стилі для полів типу number
 }
 
 /* Modal Styles */
-.modal-dialog { // Стилі для класу modal-dialog
+.modal-dialog {
     width: calc(100% - 30px); // Ширина з урахуванням відступу
     max-width: 1200px; // Максимальна ширина
 
-    & .modal-content { // Стилі для .modal-content всередині
+    & .modal-content {
         padding: 30px; // Внутрішні відступи
 
-        & .close { // Стилі для кнопки закриття
+        & .close {
             font-size: 30px; // Розмір шрифту
             font-weight: 300; // Товщина шрифту
             position: absolute; // Абсолютне позиціонування
@@ -405,8 +406,8 @@ input[type="number"] { // Стилі для полів типу number
             background-color: transparent; // Прозорий фон
         }
 
-        @media only screen and (min-width: 992px) { // Медіа-запит для екранів від 992px
-            & .product-summery { // Стилі для .product-summery
+        @media only screen and (min-width: 992px) {
+            & .product-summery {
                 position: absolute; // Абсолютне позиціонування
                 right: 15px; // Правий відступ
                 left: 15px; // Лівий відступ
@@ -417,8 +418,8 @@ input[type="number"] { // Стилі для полів типу number
         }
     }
 
-    @media #{$extra-small-mobile} { // Медіа-запит для дуже маленьких мобільних
-        & .modal-content { // Стилі для .modal-content
+    @media #{$extra-small-mobile} {
+        & .modal-content {
             padding: 20px; // Зменшує внутрішні відступи
         }
     }

@@ -18,16 +18,52 @@ use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
+    public function customBreadcrumbs(string $routeName, array $parameters): array
+    {
+        if ($routeName === 'products.show' && isset($parameters['product'])) {
+            return [
+                [
+                    'title' => ['Товари', 'Деталі'],
+                    'name' => 'Деталі продукту',
+                    'route' => route('products.show', $parameters['product']),
+                ],
+            ];
+        }
+        return [];
+    }
+
+    public function customButtons(string $routeName, $parameter = null): array
+    {
+        if ($routeName === 'products.show' && $parameter) {
+            return [
+                [
+                    'name' => 'Додати до кошика',
+                    'route' => route('carts.add', $parameter),
+                    'icon' => 'fas fa-cart-plus',
+                ],
+            ];
+        }
+        return [];
+    }
+
+    public function index()
+    {
+        return view('products.create');
+    }
     public function create(): View
     {
         $user = Auth::user();
         $brands = Brand::where('creator_id', $user->id);
+        $images = [];
+        $images = $this->getDemoImages();
+//        $this->seedie($images);
 
         return view('products.create', [
             'kindProducts' => KindProduct::all(),
             'subKindProducts' => SubKindProduct::all(),
             'colors' => Color::all(),
             'brands' => $brands,
+            'images' => $images,
             'selected_kind_product_id' => old('kind_product_id'),
             'selected_sub_kind_product_id' => old('sub_kind_product_id'),
             'action_types' => [
@@ -40,6 +76,17 @@ class ProductController extends Controller
             'user' => $user,
             'productImages' => collect(),
         ]);
+    }
+
+    // Допоміжний метод для демо
+    private function getDemoImages()
+    {
+        return [
+            ["src" => asset('images/product/single/1/product-zoom-1.webp'), "w" => 700, "h" => 1100, "main" => asset('images/product/single/1/product-1.webp'), "thumb" => asset('images/product/single/1/product-thumb-1.webp')],
+            ["src" => asset('images/product/single/1/product-zoom-2.webp'), "w" => 700, "h" => 1100, "main" => asset('images/product/single/1/product-2.webp'), "thumb" => asset('images/product/single/1/product-thumb-2.webp')],
+            ["src" => asset('images/product/single/1/product-zoom-3.webp'), "w" => 700, "h" => 1100, "main" => asset('images/product/single/1/product-3.webp'), "thumb" => asset('images/product/single/1/product-thumb-3.webp')],
+            ["src" => asset('images/product/single/1/product-zoom-4.webp'), "w" => 700, "h" => 1100, "main" => asset('images/product/single/1/product-4.webp'), "thumb" => asset('images/product/single/1/product-thumb-4.webp')],
+        ];
     }
 
     public function store(StoreProductRequest $request): RedirectResponse

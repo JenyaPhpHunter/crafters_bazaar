@@ -1,0 +1,20 @@
+/* Визначаємо локальний шрифт Rubik для weight 400 (звичайний) */
+@font-face {
+    font-family: 'Rubik'; // Назва шрифту (використовуємо $futura в змінних)
+    src: url('../fonts/Rubik-Regular.woff2') format('woff2'); // Шлях до файлу (відносно css/)
+    font-weight: 400; // Звичайна вага
+    font-style: normal; // Прямий стиль
+    font-display: swap; // Швидке завантаження (показує fallback, поки шрифт завантажується)
+}
+
+/* Визначаємо локальний шрифт Rubik для weight 500 (середній) */
+@font-face {
+    font-family: 'Rubik'; // Назва шрифту
+    src: url('../fonts/Rubik-Medium.woff2') format('woff2'); // Шлях до файлу
+    font-weight: 500; // Середня вага
+    font-style: normal; // Прямий стиль
+    font-display: swap; // Швидке завантаження
+}
+
+/* Fallback: якщо локальний шрифт не завантажиться, використовуємо системний */
+$futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; // Оновлюємо змінну $futura з fallback
