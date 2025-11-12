@@ -1,17 +1,20 @@
 @use "sass:color";
 @use "../variables" as *;
 
-// Основний контейнер
+/* Основний контейнер */
 .section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn {
     background-color: transparent;
     border-color: $secondary;
     padding: 20px 0;
+    position: relative;
+    z-index: 1; /* Зменшено */
 }
 
-// Зображення та прев'ю
+/* Зображення та прев'ю */
 .product-images {
     position: relative;
     margin-bottom: 48px;
+    z-index: 5; /* Зменшено з потенційного вищого значення */
 
     &.vertical {
         padding-left: 210px;
@@ -711,6 +714,7 @@
 // Product Summery
 .product-summery {
     position: relative;
+    z-index: 1; /* Зменшено */
 
     &-center {
         text-align: center;

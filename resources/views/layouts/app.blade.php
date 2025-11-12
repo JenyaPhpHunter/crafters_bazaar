@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/font-awesome-pro.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/themify-icons.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <!-- Plugins -->
     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
@@ -121,9 +122,9 @@
 <script src="{{ asset('js/modules/utils.js') }}"></script>
 <script src="{{ asset('js/modules/ui.js') }}"></script>
 <script src="{{ asset('js/modules/sliders.js') }}"></script>
-<script src="{{ asset('js/modules/product.js') }}"></script>
-<script src="{{ asset('js/modules/forms.js') }}"></script>
 <script src="{{ asset('js/modules/layout.js') }}"></script>
+<script src="{{ asset('js/modules/forms.js') }}"></script>
+<script src="{{ asset('js/modules/product.js') }}"></script>
 
 <!-- Точка входу -->
 <script src="{{ asset('js/main.js') }}"></script>

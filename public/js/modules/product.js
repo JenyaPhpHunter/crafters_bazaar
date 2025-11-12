@@ -37,11 +37,15 @@
     })();
 
     // === QUANTITY ===
-    $('.qty-btn').on('click', function () {
+    $('.qty-btn').on('click', function (e) {
+        e.preventDefault();
         const $this = $(this);
-        const oldValue = parseFloat($this.siblings('input').val()) || 1;
-        const newVal = $this.hasClass('plus') ? oldValue + 1 : (oldValue > 1 ? oldValue - 1 : 1);
-        $this.siblings('input').val(newVal);
+        const $input = $this.siblings('.qty-input');
+        let oldValue = parseFloat($input.val()) || 0;
+        const delta = $this.hasClass('plus') ? 1 : -1;
+        let newVal = Math.max(0, oldValue + delta);
+        $input.val(newVal).trigger('change');
+        console.log(`Delta: ${delta}, Old value: ${oldValue}, New value: ${newVal}`);
     });
 
     // === QUICK VIEW MODAL ===
@@ -64,6 +68,20 @@
         $('.buy-btn').on('click', function (e) {
             e.preventDefault();
             $(this).siblings('.product-details').slideDown(400);
+        });
+
+        // Обмеження введення лише цифр у поле "Вартість"
+        $('[data-only-numbers="true"]').on('input', function (e) {
+            const $div = $(this);
+            let value = $div.text().replace(/[^0-9]/g, '');
+            $div.text(value);
+            $('#price-hidden').val(value);
+        }).on('paste', function (e) {
+            e.preventDefault();
+            const pastedData = e.originalEvent.clipboardData.getData('text/plain').replace(/[^0-9]/g, '');
+            const $div = $(this);
+            $div.text(pastedData);
+            $('#price-hidden').val(pastedData);
         });
     });
 
@@ -95,34 +113,35 @@
     };
 
     // === КАТЕГОРІЇ ===
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.category-container').forEach(container => {
-            container.addEventListener('click', function () {
-                const categoryId = this.id.split('-')[1];
-                const subcategories = document.getElementById('subcategories-' + categoryId);
-                subcategories.classList.toggle('subcategories-visible');
-                subcategories.style.opacity = subcategories.classList.contains('subcategories-visible') ? '1' : '0';
-            });
+    $(document).ready(function () {
+        $('.category-container').on('click', function () {
+            const categoryId = this.id.split('-')[1];
+            const $subcategories = $('#subcategories-' + categoryId);
+            $subcategories.toggleClass('subcategories-visible');
+            $subcategories.css('opacity', $subcategories.hasClass('subcategories-visible') ? '1' : '0');
         });
+    });
 
-        // === ТЕРМІН ВИГОТОВЛЕННЯ ===
-        const checkbox = document.getElementById('can_produce');
-        const termCreationContainer = document.getElementById('term_creation_container');
-        if (termCreationContainer && checkbox) {
-            const termCreationInput = termCreationContainer.querySelector('input[name="term_creation"]');
-            const toggle = () => {
-                if (checkbox.checked) {
-                    termCreationContainer.style.display = 'block';
-                    termCreationContainer.classList.add('animate__fadeIn');
-                } else {
-                    termCreationContainer.style.display = 'none';
-                    termCreationInput.value = 0;
-                }
-            };
-            if (parseInt(termCreationInput.value) > 0) checkbox.checked = true;
-            toggle();
-            checkbox.addEventListener('change', toggle);
-        }
+    // === ТЕРМІН ВИГОТОВЛЕННЯ ===
+    $(document).ready(function () {
+        const $checkbox = $('#can_produce');
+        const $termContainer = $('#term_creation_container');
+        const $termInput = $termContainer.find('input[name="term_creation"]');
+
+        const toggleTerm = function () {
+            if ($checkbox.is(':checked')) {
+                $termContainer.css('display', 'block').addClass('animate__fadeIn animate__faster');
+                $termInput.val('0');
+            } else {
+                $termContainer.css('display', 'none');
+                $termInput.val('0');
+            }
+        };
+
+        if (parseInt($termInput.val()) > 0) $checkbox.prop('checked', true);
+        toggleTerm();
+
+        $checkbox.on('change', toggleTerm);
     });
 
     // === ІНІЦІАЛІЗАЦІЯ ПРОДУКТІВ ===
@@ -135,5 +154,4 @@
     $(document).ready(function () {
         Learts.product.init();
     });
-
 })(jQuery);

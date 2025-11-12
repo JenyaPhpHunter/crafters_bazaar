@@ -1,44 +1,21 @@
 @use "sass:color";
 @use "../variables" as *;
 
+/* Загальні стилі для форм */
 .form-control {
     border: 2px solid $primary;
     background-color: transparent;
     color: $secondary;
     font-family: "Arial", sans-serif;
     font-size: 14px;
-    border-radius: 5px;
-    padding: 10px 15px;
-    transition: $transition;
-    animation: pulseBorder 2s infinite;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba($black, 0.1);
 
     &:focus {
-        border-color: color.adjust($primary, $lightness: -30%);
-        box-shadow: 0 0 10px $primary2;
-        transform: scale(1.02);
-        animation: none;
-        outline: none;
-    }
-
-    &:not(:focus) {
-        animation: pulseBorder 2s infinite;
-    }
-}
-
-.title-input {
-    @extend .form-control;
-    font-size: 16px;
-    font-family: "Times New Roman", Times, serif;
-}
-
-.additional-info-form textarea {
-    @extend .form-control;
-    width: 100%;
-    resize: vertical;
-
-    &:focus {
-        border-color: color.adjust($primary, $lightness: -30%);
-        box-shadow: 0 0 10px $primary2;
+        border-color: color.adjust($primary, $lightness: -20%);
+        box-shadow: 0 4px 12px rgba($primary, 0.2);
         transform: scale(1.02);
         outline: none;
     }
@@ -56,12 +33,20 @@ input[type="number"] {
     }
 }
 
+/* Стиль для label */
 .form-label {
-    font-family: "Arial", sans-serif;
+    font-family: $heading-font;
     font-size: 14px;
-    color: $secondary;
-    margin-bottom: 5px;
+    color: $heading-color;
+    margin-bottom: 6px;
+    font-weight: 500;
     display: block;
+    transition: color 0.3s ease, transform 0.3s ease;
+
+    &.label-focused {
+        color: #00CED1 !important; /* Бірюзовий колір при фокусі */
+        transform: translateY(-4px); /* Підйом label при фокусі */
+    }
 }
 
 .form-section {
@@ -71,26 +56,419 @@ input[type="number"] {
 .form-field {
     margin-bottom: 2.5rem;
     width: 100%;
+}
 
-    .form-label {
-        display: block;
-        font-family: $heading-font;
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #000;
-        margin-bottom: 0.75rem;
-        text-align: center;
+/* Стиль для "Назва" та "Вартість" */
+.form-group-title-price {
+    @extend .form-field !optional;
+
+    .input-group {
+        position: relative;
+
+        .form-control-wide-center {
+            width: 100%;
+            font-family: $futura;
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center !important;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            color: $heading-color;
+            min-height: 58px;
+            line-height: 1.4;
+            outline: none;
+            cursor: text;
+            position: relative;
+            white-space: normal;
+            padding-right: 5rem !important;
+            animation: fadeInUp 0.6s ease-out;
+            animation-iteration-count: 1;
+
+            &:focus {
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                animation: pulseBorder 1.5s infinite;
+            }
+
+            &:empty::before {
+                content: attr(data-placeholder);
+                color: #aaa;
+                font-style: italic;
+                font-size: 18px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            &:not(:empty)::before {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+        }
+
+        .currency-label {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: $futura;
+            font-size: 18px;
+            font-weight: 500;
+            color: $heading-color;
+            pointer-events: none;
+            z-index: 2;
+            transition: color 0.3s ease;
+
+            &:has(.price-input:focus) & {
+                color: $primary;
+            }
+        }
+    }
+
+    &:has(.form-control-wide-center:focus) .form-label {
+        color: $primary;
+        transform: translateY(-4px);
+    }
+}
+
+/* Стиль для custom dropdown */
+.custom-dropdown-wrapper {
+    @extend .form-field !optional;
+    position: relative; /* Контекст для z-index */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 40px;
+    z-index: 1001; /* Базовий рівень для контейнера */
+
+    &.has-focus {
+        .custom-dropdown .dropdown-selected {
+            border-color: $primary;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        }
+    }
+
+    .custom-dropdown {
+        flex: 1;
+        max-width: 100%;
+        position: relative;
+        border-radius: 8px;
+        background-color: $white;
+        padding: 10px;
         transition: all 0.3s ease;
 
-        span {
-            display: inline-block;
+        &.open {
+            .dropdown-options {
+                display: block; /* Активується через JS .open */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                max-height: 400px;
+                overflow-y: auto;
+                border: 2px solid color.adjust($primary, $lightness: -20%);
+                border-radius: 8px;
+                background-color: $white;
+                box-shadow: 0 4px 12px rgba($black, 0.1);
+                z-index: 10003; /* Вище за інші елементи */
+                animation: fadeInUp 0.3s ease-out;
+            }
+
+            .dropdown-search {
+                display: block; /* Активується через JS .open */
+                width: 100%;
+                padding: 1rem 1.25rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 12px;
+                font-family: $futura;
+                font-size: 20px;
+                background-color: #fafafa;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                margin-bottom: 5px;
+                z-index: 10004; /* Вище за опції */
+                animation: fadeInUp 0.3s ease-out;
+
+                &:focus {
+                    border-color: $primary;
+                    background-color: #fff;
+                    box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                    outline: none;
+                }
+            }
+        }
+
+        .dropdown-selected {
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            font-family: $futura;
+            font-size: 20px;
+            font-weight: 500;
+            color: #aaa;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 58px;
             animation: fadeInUp 0.6s ease-out;
+
+            &.selected-value {
+                color: #000;
+            }
+
+            &:hover {
+                border-color: $primary;
+            }
+
+            &:after {
+                content: '\25BC';
+                font-size: 12px;
+                color: $heading-color;
+                transition: transform 0.3s ease;
+            }
+
+            &:focus {
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
+            }
+        }
+
+        .dropdown-options {
+            display: none; /* Приховуємо за замовчуванням, показуємо через .open */
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0;
+            z-index: 10003;
+
+            li {
+                padding: 1rem 1.25rem;
+                font-family: $futura;
+                font-size: 20px;
+                color: $heading-color;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: fadeInUp 0.3s ease-out;
+
+                i {
+                    color: $primary;
+                }
+
+                &:hover,
+                &.selected {
+                    background-color: rgba($primary, 0.1);
+                    color: $primary;
+                }
+            }
+        }
+
+        &.open .dropdown-selected:after {
+            transform: rotate(180deg);
+        }
+    }
+
+    .btn-add {
+        flex-shrink: 0;
+        padding: 12px 25px;
+        background-color: $primary;
+        color: $white;
+        border-radius: 12px;
+        font-family: $futura;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        animation: scalePulse 1.5s infinite;
+
+        i {
+            font-size: 16px;
+        }
+
+        &:hover {
+            background-color: color.adjust($primary, $lightness: -20%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba($primary, 0.3);
         }
     }
 }
 
-.form-label.label-focused {
-    color: $primary;
+/* Динамічна зміна кольору label при фокусі або відкритті dropdown */
+.custom-dropdown-wrapper.has-focus .form-label,
+.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label {
+    color: #00CED1 !important; /* Бірюзовий колір */
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+}
+
+/* Нові стилі для quantity-produce */
+.quantity-produce-container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border: 1px solid rgba($primary, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 102, 102, 0.08);
+    backdrop-filter: blur(10px);
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+}
+
+.quantity-field,
+.checkbox-field,
+.term-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .form-control.qty-input {
+        width: 100%;
+        height: 58px;
+        padding: 0 46px 0 46px;
+        font-size: 20px;
+        font-weight: 500;
+        text-align: center;
+        background: #ffffff;
+        border: 2px solid #e0e0e0;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 4px rgba($primary, 0.18);
+            background: #fff;
+        }
+    }
+
+    .input-unit {
+        position: absolute;
+        right: 12px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #000;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .qty-btn {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: $primary;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 2;
+
+        &.minus {
+            left: 30%;
+        }
+
+        &.plus {
+            right: 30%;
+        }
+
+        &:hover {
+            background: color.adjust($primary, $lightness: -10%);
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    input[type="checkbox"] {
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border: 2px solid $primary;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+
+        &:checked {
+            background: $primary;
+            border-color: $primary;
+
+            &::after {
+                content: "✓";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+            }
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($primary, 0.3);
+        }
+    }
+
+    .checkbox-label {
+        font-size: 15px;
+        font-weight: 500;
+        color: $heading-color;
+        cursor: pointer;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+
+/* Підсвітка label при фокусі */
+.quantity-field:focus-within > .form-label,
+.term-field:focus-within > .form-label {
+    color: $primary !important;
     transform: translateY(-4px);
     transition: all 0.3s ease;
 }
