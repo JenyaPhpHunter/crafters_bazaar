@@ -38,9 +38,21 @@
             };
 
             selected.addEventListener('click', () => {
+                const isOpen = dropdown.classList.contains('open');
                 dropdown.classList.toggle('open');
-                if (dropdown.classList.contains('open')) {
+                if (dropdown.classList.contains('open') && !isOpen) {
+                    search.classList.add('active'); // Показуємо пошук при відкритті
+                    search.style.display = 'block'; // Примусово показуємо, якщо інлайн-стиль блокує
                     search.focus();
+                    console.log('Dropdown opened, z-index:', window.getComputedStyle(options).zIndex);
+                    // Пошук усіх .custom-dropdown-wrapper на сторінці
+                    const allWrappers = document.querySelectorAll('.custom-dropdown-wrapper');
+                    const currentIndex = Array.from(allWrappers).indexOf(wrapper);
+                    const nextWrapper = allWrappers[currentIndex + 1];
+                    console.log('Next wrapper z-index:', nextWrapper ? window.getComputedStyle(nextWrapper).zIndex : 'No next wrapper');
+                } else {
+                    search.classList.remove('active'); // Приховуємо пошук при закритті
+                    search.style.display = 'none'; // Примусово приховуємо
                 }
             });
 
@@ -63,7 +75,9 @@
                     hiddenInput.value = option.getAttribute('data-value');
                     selected.classList.add('selected-value');
                     dropdown.classList.remove('open');
+                    search.classList.remove('active'); // Приховуємо пошук
                     search.value = '';
+                    search.style.display = 'none'; // Примусово приховуємо
                     selected.focus();
                 });
             });
@@ -72,7 +86,9 @@
             document.addEventListener('click', (e) => {
                 if (!dropdown.contains(e.target)) {
                     dropdown.classList.remove('open');
+                    search.classList.remove('active'); // Приховуємо пошук
                     search.value = '';
+                    search.style.display = 'none'; // Примусово приховуємо
                     wrapper.classList.remove('has-focus');
                     if (section) section.classList.remove('focused');
                 }

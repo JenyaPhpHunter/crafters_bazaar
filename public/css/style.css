@@ -9577,10 +9577,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   transform: translateY(-4px); /* Підйом label при фокусі */
 }
 
-.form-section {
-  margin-bottom: 20px;
-}
-
 .form-field, .custom-dropdown-wrapper, .form-group-title-price {
   margin-bottom: 2.5rem;
   width: 100%;
@@ -9657,6 +9653,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 /* Стиль для custom dropdown */
+.form-section {
+  margin-bottom: 20px;
+  position: relative; /* Стектінговий контекст */
+  z-index: 0; /* Базовий рівень */
+}
+.form-section.focused {
+  z-index: 10000; /* Підвищений рівень для активної секції */
+}
+
 .custom-dropdown-wrapper {
   position: relative; /* Контекст для z-index */
   display: flex;
@@ -9664,12 +9669,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   gap: 15px;
   width: 100%;
   margin-bottom: 40px;
-  z-index: 1001; /* Базовий рівень для контейнера */
+  z-index: 1000; /* Базовий рівень */
 }
 .custom-dropdown-wrapper.has-focus .custom-dropdown .dropdown-selected {
   border-color: #6fc5c5;
   background-color: #fff;
   box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:hover {
+  border-color: #6fc5c5; /* Твій колір при наведенні */
 }
 .custom-dropdown-wrapper .custom-dropdown {
   flex: 1;
@@ -9692,11 +9700,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   border-radius: 8px;
   background-color: #FFFFFF;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10003; /* Вище за інші елементи */
+  z-index: 10060; /* Ще вище, щоб уникнути перекриття */
   animation: fadeInUp 0.3s ease-out;
 }
 .custom-dropdown-wrapper .custom-dropdown.open .dropdown-search {
-  display: block; /* Активується через JS .open */
+  display: none; /* Приховуємо за замовчуванням */
   width: 100%;
   padding: 1rem 1.25rem;
   border: 2px solid #e0e0e0;
@@ -9707,14 +9715,17 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   margin-bottom: 5px;
-  z-index: 10004; /* Вище за опції */
-  animation: fadeInUp 0.3s ease-out;
+  z-index: 10061; /* Вище за опції */
 }
 .custom-dropdown-wrapper .custom-dropdown.open .dropdown-search:focus {
   border-color: #6fc5c5;
   background-color: #fff;
   box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
   outline: none;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search.active { /* Показуємо через JS */
+  display: block;
+  animation: fadeInUp 0.3s ease-out;
 }
 .custom-dropdown-wrapper .custom-dropdown .dropdown-selected {
   padding: 1rem 1.25rem;
@@ -9737,26 +9748,17 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .custom-dropdown-wrapper .custom-dropdown .dropdown-selected.selected-value {
   color: #000;
 }
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:hover {
-  border-color: #6fc5c5;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:after {
-  content: "▼";
-  font-size: 12px;
-  color: #333333;
-  transition: transform 0.3s ease;
-}
 .custom-dropdown-wrapper .custom-dropdown .dropdown-selected:focus {
   border-color: #6fc5c5;
   background-color: #fff;
   box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
 }
 .custom-dropdown-wrapper .custom-dropdown .dropdown-options {
-  display: none; /* Приховуємо за замовчуванням, показуємо через .open */
+  display: none; /* Приховуємо за замовчуванням */
   list-style: none;
   padding: 0;
   margin: 5px 0 0;
-  z-index: 10003;
+  z-index: 10060; /* Узгоджено з .open станом */
 }
 .custom-dropdown-wrapper .custom-dropdown .dropdown-options li {
   padding: 1rem 1.25rem;
