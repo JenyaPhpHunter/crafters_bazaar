@@ -135,7 +135,6 @@ input[type="number"] {
     }
 }
 
-/* Стиль для custom dropdown */
 .form-section {
     margin-bottom: 20px;
     position: relative; /* Стектінговий контекст */
@@ -146,6 +145,7 @@ input[type="number"] {
     }
 }
 
+/* Стиль для custom dropdown */
 .custom-dropdown-wrapper {
     @extend .form-field !optional;
     position: relative; /* Контекст для z-index */

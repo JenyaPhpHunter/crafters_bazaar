@@ -31,7 +31,7 @@
             <div class="dropdown-selected" tabindex="0" id="sub_kind_product_selected" data-value="{{ old('sub_kind_product_id') ?? '' }}">Оберіть підвид товару</div>
             <ul class="dropdown-options">
                 @foreach($subKindProducts as $subkind)
-                    <li data-value="{{ $subkind->id }}" data-title="{{ $subkind->title }}">
+                    <li data-value="{{ $subkind->id }}" data-title="{{ $subkind->title }}" data-kind="{{ $subkind->kind_product_id }}">
                         <i class="fas fa-layer-group"></i> {{ $subkind->title }}
                     </li>
                 @endforeach
