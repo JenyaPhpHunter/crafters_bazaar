@@ -475,3 +475,80 @@ input[type="number"] {
     transform: translateY(-4px);
     transition: all 0.3s ease;
 }
+
+// Стилі для блоку вибору кольорів (бірюзово-бежева тема з анімаціями)
+.product-variations {
+    padding: 15px; // Внутрішні відступи
+    border-radius: 12px; // Закруглені кути
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Легка тінь
+    transition: all 0.3s ease; // Плавний перехід
+}
+
+.color-info-icon {
+    color: #00CED1; // Бірюзовий колір іконки
+    font-size: 0.9rem; // Компактний розмір
+    cursor: pointer; // Курсор "рука"
+    transition: color 0.3s ease, transform 0.3s ease; // Плавна анімація
+}
+
+.color-info-icon:hover {
+    color: #008B8B; // Темніший бірюзовий при hover
+    transform: scale(1.2); // Збільшення іконки
+}
+
+.color-circles {
+    margin-left: 0.5rem; // Відступ зліва
+    margin-top: 0.5rem; // Відступ зверху
+}
+
+.color-circle {
+    width: 32px; // Розмір для видимості
+    height: 32px; // Кругла форма
+    border-radius: 50%; // Кругла форма
+    cursor: pointer; // Курсор "рука"
+    border: 3px solid #00CED1; // Бірюзовий кордон
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; // Плавні анімації
+    position: relative; // Для псевдоелементів
+    outline: none; // Без стандартного outline
+}
+
+.color-circle:hover {
+    transform: scale(1.15); // Збільшення при наведенні
+    box-shadow: 0 0 12px rgba(0, 206, 209, 0.6); // Яскраве сяйво
+    border-color: #D2B48C; // Бежевий кордон
+}
+
+.color-circle.selected {
+    transform: scale(1.25); // Більше збільшення
+    border: 4px solid #008B8B; // Товстий темний бірюзовий кордон
+    box-shadow: 0 0 18px rgba(0, 206, 209, 0.8); // Сильне сяйво
+    animation: glowPulse 1.2s infinite alternate; // Пульсація
+}
+
+.color-circle.selected::after {
+    content: "✓"; // Галочка для позначення вибору
+    position: absolute; // Центрування
+    top: 50%; // По вертикалі
+    left: 50%; // По горизонталі
+    transform: translate(-50%, -50%); // Точне центрування
+    color: #333333; // Темно-сірий для контрасту
+    font-size: 14px; // Розмір галочки
+    font-weight: bold; // Жирна галочка
+    background: rgba(255, 255, 255, 0.7); // Напівпрозорий білий фон
+    border-radius: 50%; // Круглий фон
+    width: 20px; // Розмір фону
+    height: 20px; // Розмір фону
+    display: flex; // Для центрування тексту
+    align-items: center; // Центрування по вертикалі
+    justify-content: center; // Центрування по горизонталі
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3); // Легка тінь для контрасту
+}
+
+.color-circle:focus {
+    box-shadow: 0 0 0 4px rgba(0, 206, 209, 0.4); // Фокус для клавіатури
+}
+
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 6px rgba(0, 206, 209, 0.4); } // Слабке сяйво
+    100% { box-shadow: 0 0 18px rgba(0, 206, 209, 0.8); } // Сильне сяйво
+}

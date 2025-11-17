@@ -1,27 +1,55 @@
 <div class="product-variations mb-4 animate__animated animate__fadeIn">
     <div class="d-flex align-items-center mb-2" style="gap: 0.25rem;">
-        <label for="selectedColor" class="form-label m-0">
-            <strong>Колір</strong>
-        </label>
-        <i class="fas fa-info-circle" style="color: $turquoise; font-size: 0.9rem; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="right" title="До якого кольору ближчий ваш товар?"></i>
+        <label id="color-label" class="form-label">Колір (можна декілька)</label>
+        <i class="fas fa-info-circle color-info-icon" data-bs-toggle="tooltip" data-bs-placement="right"
+           title="Оберіть кольори цього товару"></i>
     </div>
 
-    <input type="hidden" name="color_id" id="selectedColor" value="{{ old('color_id') }}">
+    <input type="hidden" name="color_ids[]" value=""> {{-- пустий, щоб завжди приходив масив --}}
 
-    <div class="d-flex flex-wrap gap-2" style="margin-left: 0.5rem; margin-top: 0.5rem;">
+    <div class="color-circles d-flex flex-wrap gap-3">
         @foreach($colors as $key => $color)
-            <div class="circle" id="circle{{ $key + 1 }}" data-name="Колір {{ $key + 1 }}" data-color="{{ $color->code }}" data-id="{{ $color->id }}" onclick="selectColor(this)" style="background-color: {{ $color->code }}; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid #00CED1; transition: all 0.3s ease;">
+            <div class="color-circle
+                @if(old('color_ids') && in_array($color->id, (array)old('color_ids'))) selected @endif"
+                 data-id="{{ $color->id }}"
+                 style="background-color: {{ $color->code }}"
+                 aria-label="Колір {{ $color->name }}"
+                 role="button"
+                 tabindex="0">
             </div>
         @endforeach
     </div>
 </div>
 
-<script>
-    function selectColor(element) {
-        document.querySelectorAll('.circle').forEach(c => c.classList.remove('selected'));
-        element.classList.add('selected');
-        element.style.transform = 'scale(1.1)';
-        document.getElementById('selectedColor').value = element.dataset.id;
-        setTimeout(() => element.style.transform = 'scale(1)', 200);
-    }
-</script>
+{{--<div class="product-variations mb-4 animate__animated animate__fadeIn">--}}
+{{--    <!-- Контейнер для label та іконки -->--}}
+{{--    <div class="d-flex align-items-center mb-2" style="gap: 0.25rem;">--}}
+{{--        <!-- Label із класом form-label для уніфікації -->--}}
+{{--        <label for="selectedColor" class="form-label">--}}
+{{--            <strong>Колір</strong>--}}
+{{--        </label>--}}
+{{--        <!-- Іконка з бірюзовим кольором -->--}}
+{{--        <i class="fas fa-info-circle color-info-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="До якого кольору ближчий ваш товар?"></i>--}}
+{{--    </div>--}}
+
+{{--    <!-- Hidden input для одного кольору -->--}}
+{{--    <input type="hidden" name="color_id" id="selectedColor" value="{{ old('color_id') }}">--}}
+
+{{--    <!-- Контейнер для кружечків -->--}}
+{{--    <div class="color-circles d-flex flex-wrap gap-2">--}}
+{{--        @foreach($colors as $key => $color)--}}
+{{--            <!-- Кружечок із inline background-color -->--}}
+{{--            <div class="color-circle"--}}
+{{--                 id="circle{{ $key + 1 }}"--}}
+{{--                 data-name="Колір {{ $key + 1 }}"--}}
+{{--                 data-color="{{ $color->code }}"--}}
+{{--                 data-id="{{ $color->id }}"--}}
+{{--                 data-selected="false"--}}
+{{--                 style="background-color: {{ $color->code }}"--}}
+{{--                 aria-label="Оберіть колір {{ $color->name }}"--}}
+{{--                 role="button"--}}
+{{--                 tabindex="0">--}}
+{{--            </div>--}}
+{{--        @endforeach--}}
+{{--    </div>--}}
+{{--</div>--}}

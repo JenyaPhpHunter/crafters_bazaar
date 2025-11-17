@@ -3,18 +3,40 @@
 
     // === УНІФІКОВАНА ПІДСВІТКА LABEL ПРИ ФОКУСІ ===
     document.addEventListener('DOMContentLoaded', () => {
-        const focusableElements = document.querySelectorAll('input, textarea, .dropdown-selected, .dropdown-search, .form-control-wide-center');
+        // Вибираємо всі елементи, які можуть отримувати фокус
+        const focusableElements = document.querySelectorAll('input, textarea, .dropdown-selected, .dropdown-search, .form-control-wide-center, .color-circle');
         focusableElements.forEach(element => {
-            const label = element.closest('.form-group, .form-group-title-price, .custom-dropdown-wrapper')?.previousElementSibling;
+            // Знаходимо найближчий label
+            const label = element.closest('.product-variations, .form-group, .form-group-title-price, .custom-dropdown-wrapper')?.previousElementSibling;
             if (label && label.classList.contains('form-label')) {
+                // Додаємо клас label-focused при фокусі
                 element.addEventListener('focus', () => {
                     label.classList.add('label-focused');
                 });
+                // Знімаємо клас при втраті фокусу
                 element.addEventListener('blur', () => {
                     label.classList.remove('label-focused');
                 });
+                // Для .color-circle додаємо label-focused при кліку
+                if (element.classList.contains('color-circle')) {
+                    element.addEventListener('click', () => {
+                        label.classList.add('label-focused');
+                    });
+                }
             }
         });
+    });
+
+    // === ПІДСВІТКА LABEL ДЛЯ БЛОКУ КОЛЬОРІВ ===
+    $(document).on('focusin click', '.color-circle', function () {
+        $('#color-label').addClass('label-focused');
+    });
+
+    $(document).on('focusout', '.color-circle', function () {
+        // Знімаємо клас тільки якщо жоден кружечок не у фокусі/вибраний
+        if ($('.color-circle:focus').length === 0 && $('.color-circle.selected').length === 0) {
+            $('#color-label').removeClass('label-focused');
+        }
     });
 
     // === CUSTOM DROPDOWN: ФУНКЦІОНАЛ ===

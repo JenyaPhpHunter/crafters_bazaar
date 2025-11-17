@@ -101,16 +101,57 @@
         }
     };
 
-    window.selectColor = function (circle) {
-        document.querySelectorAll('.circle').forEach(c => {
-            c.classList.remove('selected');
-            c.style.transform = 'scale(1)';
+    // === МНОЖИННИЙ ВИБІР КОЛЬОРІВ ===
+    $(document).ready(function () {
+        // Додаємо обробники для всіх кружечків (навіть якщо вони додалися динамічно)
+        $(document).on('click', '.color-circle', function () {
+            const circle = this;
+            const colorId = circle.dataset.id;
+            const isSelected = circle.classList.contains('selected');
+
+            console.log('Color click ID:', colorId, 'Selected:', !isSelected);
+
+            if (isSelected) {
+                // Знімаємо виділення
+                circle.classList.remove('selected');
+                removeColorId(colorId);
+            } else {
+                // Додаємо виділення
+                circle.classList.add('selected');
+                addColorId(colorId);
+
+                // Анімація
+                circle.classList.add('animate__animated', 'animate__bounceIn');
+                setTimeout(() => circle.classList.remove('animate__animated', 'animate__bounceIn'), 600);
+            }
         });
-        circle.classList.add('selected');
-        circle.style.transform = 'scale(1.1)';
-        document.getElementById('selectedColor').value = circle.dataset.id;
-        setTimeout(() => circle.style.transform = 'scale(1)', 200);
-    };
+
+        // Підтримка клавіатури (Enter або Space)
+        $(document).on('keydown', '.color-circle', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                $(this).trigger('click');
+            }
+        });
+    });
+
+// Додає ID кольору в приховані інпути
+    function addColorId(id) {
+        if (!document.querySelector(`input[value="${id}"]`)) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'color_ids[]';
+            input.value = id;
+            input.className = 'color-id-input';
+            document.querySelector('.color-circles').parentNode.appendChild(input);
+        }
+    }
+
+// Видаляє ID кольору з прихованих інпутів
+    function removeColorId(id) {
+        const input = document.querySelector(`input[value="${id}"].color-id-input`);
+        if (input) input.remove();
+    }
 
     // === КАТЕГОРІЇ ===
     $(document).ready(function () {
