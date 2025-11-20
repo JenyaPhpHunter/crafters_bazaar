@@ -68,3 +68,8 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
 @endpush
+
+@push('scripts')
+    <script src="{{ asset('js/modules/dropdown.js') }}"></script>
+    <script src="{{ asset('js/modules/product/create-edit.js') }}"></script>
+@endpush

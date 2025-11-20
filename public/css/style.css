@@ -9577,7 +9577,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   transform: translateY(-4px); /* Підйом label при фокусі */
 }
 
-.form-field, .custom-dropdown-wrapper, .form-group-title-price {
+.form-field, .form-group-title-price {
   margin-bottom: 2.5rem;
   width: 100%;
 }
@@ -9659,159 +9659,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 .form-section.focused {
   z-index: 10000; /* Підвищений рівень для активної секції */
-}
-
-/* Стиль для custom dropdown */
-.custom-dropdown-wrapper {
-  position: relative; /* Контекст для z-index */
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  width: 100%;
-  margin-bottom: 40px;
-  z-index: 1000; /* Базовий рівень */
-}
-.custom-dropdown-wrapper.has-focus .custom-dropdown .dropdown-selected {
-  border-color: #6fc5c5;
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:hover {
-  border-color: #6fc5c5; /* Твій колір при наведенні */
-}
-.custom-dropdown-wrapper .custom-dropdown {
-  flex: 1;
-  max-width: 100%;
-  position: relative;
-  border-radius: 8px;
-  background-color: #FFFFFF;
-  padding: 10px;
-  transition: all 0.3s ease;
-}
-.custom-dropdown-wrapper .custom-dropdown.open .dropdown-options {
-  display: block; /* Активується через JS .open */
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  max-height: 400px;
-  overflow-y: auto;
-  border: 2px solid rgb(59.1485148515, 146.8514851485, 146.8514851485);
-  border-radius: 8px;
-  background-color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10060; /* Ще вище, щоб уникнути перекриття */
-  animation: fadeInUp 0.3s ease-out;
-}
-.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search {
-  display: none; /* Приховуємо за замовчуванням */
-  width: 100%;
-  padding: 1rem 1.25rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 20px;
-  background-color: #fafafa;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  margin-bottom: 5px;
-  z-index: 10061; /* Вище за опції */
-}
-.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search:focus {
-  border-color: #6fc5c5;
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
-  outline: none;
-}
-.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search.active { /* Показуємо через JS */
-  display: block;
-  animation: fadeInUp 0.3s ease-out;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected {
-  padding: 1rem 1.25rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  background-color: #fafafa;
-  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  color: #aaa;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 58px;
-  animation: fadeInUp 0.6s ease-out;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected.selected-value {
-  color: #000;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:focus {
-  border-color: #6fc5c5;
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-options {
-  display: none; /* Приховуємо за замовчуванням */
-  list-style: none;
-  padding: 0;
-  margin: 5px 0 0;
-  z-index: 10060; /* Узгоджено з .open станом */
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-options li {
-  padding: 1rem 1.25rem;
-  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 20px;
-  color: #333333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: fadeInUp 0.3s ease-out;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-options li i {
-  color: #6fc5c5;
-}
-.custom-dropdown-wrapper .custom-dropdown .dropdown-options li:hover, .custom-dropdown-wrapper .custom-dropdown .dropdown-options li.selected {
-  background-color: rgba(111, 197, 197, 0.1);
-  color: #6fc5c5;
-}
-.custom-dropdown-wrapper .custom-dropdown.open .dropdown-selected:after {
-  transform: rotate(180deg);
-}
-.custom-dropdown-wrapper .btn-add {
-  flex-shrink: 0;
-  padding: 12px 25px;
-  background-color: #6fc5c5;
-  color: #FFFFFF;
-  border-radius: 12px;
-  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  animation: scalePulse 1.5s infinite;
-}
-.custom-dropdown-wrapper .btn-add i {
-  font-size: 16px;
-}
-.custom-dropdown-wrapper .btn-add:hover {
-  background-color: rgb(59.1485148515, 146.8514851485, 146.8514851485);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(111, 197, 197, 0.3);
-}
-
-/* Динамічна зміна кольору label при фокусі або відкритті dropdown */
-.custom-dropdown-wrapper.has-focus .form-label,
-.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label {
-  color: #00CED1 !important; /* Бірюзовий колір */
-  transform: translateY(-4px);
-  transition: all 0.3s ease;
 }
 
 /* Нові стилі для quantity-produce */
@@ -10034,6 +9881,265 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     box-shadow: 0 0 18px rgba(0, 206, 209, 0.8);
   }
 }
+/* Стиль для custom dropdown */
+.custom-dropdown-wrapper {
+  position: relative; /* Контекст для z-index */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 40px;
+  z-index: 1000; /* Базовий рівень */
+}
+.custom-dropdown-wrapper.has-focus .custom-dropdown .dropdown-selected {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:hover {
+  border-color: #6fc5c5; /* Твій колір при наведенні */
+}
+.custom-dropdown-wrapper .custom-dropdown {
+  flex: 1;
+  max-width: 100%;
+  position: relative;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-options {
+  display: block; /* Активується через JS .open */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px solid rgb(59.1485148515, 146.8514851485, 146.8514851485);
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10060; /* Ще вище, щоб уникнути перекриття */
+  animation: fadeInUp 0.3s ease-out;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search {
+  display: none; /* Приховуємо за замовчуванням */
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  background-color: #fafafa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+  z-index: 10061; /* Вище за опції */
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search:focus {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+  outline: none;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-search.active { /* Показуємо через JS */
+  display: block;
+  animation: fadeInUp 0.3s ease-out;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected {
+  padding: 1rem 1.25rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fafafa;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #aaa;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  animation: fadeInUp 0.6s ease-out;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected.selected-value {
+  color: #000;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-selected:focus {
+  border-color: #6fc5c5;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(111, 197, 197, 0.15);
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options {
+  display: none; /* Приховуємо за замовчуванням */
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0;
+  z-index: 10060; /* Узгоджено з .open станом */
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li {
+  padding: 1rem 1.25rem;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 20px;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.3s ease-out;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li i {
+  color: #6fc5c5;
+}
+.custom-dropdown-wrapper .custom-dropdown .dropdown-options li:hover, .custom-dropdown-wrapper .custom-dropdown .dropdown-options li.selected {
+  background-color: rgba(111, 197, 197, 0.1);
+  color: #6fc5c5;
+}
+.custom-dropdown-wrapper .custom-dropdown.open .dropdown-selected:after {
+  transform: rotate(180deg);
+}
+.custom-dropdown-wrapper .btn-add {
+  flex-shrink: 0;
+  padding: 12px 25px;
+  background-color: #6fc5c5;
+  color: #FFFFFF;
+  border-radius: 12px;
+  font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: scalePulse 1.5s infinite;
+}
+.custom-dropdown-wrapper .btn-add i {
+  font-size: 16px;
+}
+.custom-dropdown-wrapper .btn-add:hover {
+  background-color: rgb(59.1485148515, 146.8514851485, 146.8514851485);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(111, 197, 197, 0.3);
+}
+
+/* Динамічна зміна кольору label при фокусі або відкритті dropdown */
+.custom-dropdown-wrapper.has-focus .form-label,
+.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label {
+  color: #00CED1 !important; /* Бірюзовий колір */
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+}
+
+/* === ХРЕСТИК ОЧИЩЕННЯ ДЛЯ ВИДУ ТОВАРУ === */
+.custom-dropdown[data-name=kind] .dropdown-selected {
+  position: relative;
+  padding-right: 56px !important;
+}
+.custom-dropdown[data-name=kind] .dropdown-selected .selected-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 40px);
+}
+.custom-dropdown[data-name=kind] .dropdown-selected .clear-selection {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #ff6b6b;
+  border-radius: 50%;
+  color: #ff6b6b;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+.custom-dropdown[data-name=kind] .dropdown-selected .clear-selection:hover {
+  background: #ff6b6b;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+.custom-dropdown[data-name=kind] .dropdown-selected.has-value .clear-selection {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Група кнопок: Додати вид + (майбутній хрестик, якщо захочеш зовнішній) */
+.kind-actions {
+  flex-shrink: 0;
+  width: 190px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1; /* кнопка нижче за dropdown */
+}
+
+.btn-add {
+  width: 100%;
+  justify-content: center;
+  min-height: 58px;
+}
+
+/* Приховуємо поле пошуку за замовчуванням */
+.custom-dropdown .dropdown-search {
+  display: none !important;
+}
+
+/* Показуємо тільки коли dropdown відкритий */
+.custom-dropdown.open .dropdown-search {
+  display: block !important;
+}
+
+/* Хрестик тільки для виду */
+.custom-dropdown[data-name=kind] .dropdown-selected {
+  position: relative;
+  padding-right: 60px !important;
+}
+
+.custom-dropdown[data-name=kind] .clear-selection {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ff6b6b;
+  border-radius: 50%;
+  color: #ff6b6b;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 10;
+}
+
+.custom-dropdown[data-name=kind] .dropdown-selected.has-value .clear-selection {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.custom-dropdown[data-name=kind] .clear-selection:hover {
+  background: #ff6b6b;
+  color: white;
+  transform: translateY(-50%) scale(1.15);
+}
+
 /*----------------------------------------*/
 /*  10. Blog CSS
 /*----------------------------------------*/

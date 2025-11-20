@@ -1,0 +1,291 @@
+@use "sass:color";
+@use "../variables" as *;
+
+/* Стиль для custom dropdown */
+.custom-dropdown-wrapper {
+    @extend .form-field !optional;
+    position: relative; /* Контекст для z-index */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 40px;
+    z-index: 1000; /* Базовий рівень */
+
+    &.has-focus {
+        .custom-dropdown .dropdown-selected {
+            border-color: $primary;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        }
+    }
+
+    .custom-dropdown .dropdown-selected:hover {
+        border-color: #6fc5c5; /* Твій колір при наведенні */
+    }
+
+    .custom-dropdown {
+        flex: 1;
+        max-width: 100%;
+        position: relative;
+        border-radius: 8px;
+        background-color: $white;
+        padding: 10px;
+        transition: all 0.3s ease;
+
+        &.open {
+            .dropdown-options {
+                display: block; /* Активується через JS .open */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                max-height: 400px;
+                overflow-y: auto;
+                border: 2px solid color.adjust($primary, $lightness: -20%);
+                border-radius: 8px;
+                background-color: $white;
+                box-shadow: 0 4px 12px rgba($black, 0.1);
+                z-index: 10060; /* Ще вище, щоб уникнути перекриття */
+                animation: fadeInUp 0.3s ease-out;
+            }
+
+            .dropdown-search {
+                display: none; /* Приховуємо за замовчуванням */
+                width: 100%;
+                padding: 1rem 1.25rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 12px;
+                font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                font-size: 20px;
+                background-color: #fafafa;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                margin-bottom: 5px;
+                z-index: 10061; /* Вище за опції */
+
+                &:focus {
+                    border-color: $primary;
+                    background-color: #fff;
+                    box-shadow: 0 0 0 4px rgba($primary, 0.15);
+                    outline: none;
+                }
+
+                &.active { /* Показуємо через JS */
+                    display: block;
+                    animation: fadeInUp 0.3s ease-out;
+                }
+            }
+        }
+
+        .dropdown-selected {
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #aaa;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 58px;
+            animation: fadeInUp 0.6s ease-out;
+
+            &.selected-value {
+                color: #000;
+            }
+
+            &:focus {
+                border-color: $primary;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary, 0.15);
+            }
+        }
+
+        .dropdown-options {
+            display: none; /* Приховуємо за замовчуванням */
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0;
+            z-index: 10060; /* Узгоджено з .open станом */
+
+            li {
+                padding: 1rem 1.25rem;
+                font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                font-size: 20px;
+                color: $heading-color;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: fadeInUp 0.3s ease-out;
+
+                i {
+                    color: $primary;
+                }
+
+                &:hover,
+                &.selected {
+                    background-color: rgba($primary, 0.1);
+                    color: $primary;
+                }
+            }
+        }
+
+        &.open .dropdown-selected:after {
+            transform: rotate(180deg);
+        }
+    }
+
+    .btn-add {
+        flex-shrink: 0;
+        padding: 12px 25px;
+        background-color: $primary;
+        color: $white;
+        border-radius: 12px;
+        font-family: $futura;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        animation: scalePulse 1.5s infinite;
+
+        i {
+            font-size: 16px;
+        }
+
+        &:hover {
+            background-color: color.adjust($primary, $lightness: -20%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba($primary, 0.3);
+        }
+    }
+}
+
+/* Динамічна зміна кольору label при фокусі або відкритті dropdown */
+.custom-dropdown-wrapper.has-focus .form-label,
+.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label {
+    color: #00CED1 !important; /* Бірюзовий колір */
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+}
+
+/* === ХРЕСТИК ОЧИЩЕННЯ ДЛЯ ВИДУ ТОВАРУ === */
+.custom-dropdown[data-name="kind"] {
+    .dropdown-selected {
+        position: relative;
+        padding-right: 56px !important; // місце під хрестик + відступ
+
+        .selected-text {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 40px);
+        }
+
+        .clear-selection {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #ff6b6b;
+            border-radius: 50%;
+            color: #ff6b6b;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(4px);
+
+            &:hover {
+                background: #ff6b6b;
+                color: white;
+                transform: translateY(-50%) scale(1.1);
+            }
+        }
+
+        &.has-value .clear-selection {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+}
+
+/* Група кнопок: Додати вид + (майбутній хрестик, якщо захочеш зовнішній) */
+.kind-actions {
+    flex-shrink: 0;
+    width: 190px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;                     /* кнопка нижче за dropdown */
+}
+
+.btn-add {
+    width: 100%;
+    justify-content: center;
+    min-height: 58px;
+}
+
+/* Приховуємо поле пошуку за замовчуванням */
+.custom-dropdown .dropdown-search {
+    display: none !important;
+}
+
+/* Показуємо тільки коли dropdown відкритий */
+.custom-dropdown.open .dropdown-search {
+    display: block !important;
+}
+
+/* Хрестик тільки для виду */
+.custom-dropdown[data-name="kind"] .dropdown-selected {
+    position: relative;
+    padding-right: 60px !important;
+}
+
+.custom-dropdown[data-name="kind"] .clear-selection {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    background: rgba(255,255,255,0.9);
+    border: 2px solid #ff6b6b;
+    border-radius: 50%;
+    color: #ff6b6b;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.custom-dropdown[data-name="kind"] .dropdown-selected.has-value .clear-selection {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.custom-dropdown[data-name="kind"] .clear-selection:hover {
+    background: #ff6b6b;
+    color: white;
+    transform: translateY(-50%) scale(1.15);
+}

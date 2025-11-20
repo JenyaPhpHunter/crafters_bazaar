@@ -124,11 +124,9 @@
 <script src="{{ asset('js/modules/sliders.js') }}"></script>
 <script src="{{ asset('js/modules/layout.js') }}"></script>
 <script src="{{ asset('js/modules/forms.js') }}"></script>
-<script src="{{ asset('js/modules/product.js') }}"></script>
 
 <!-- Точка входу -->
 <script src="{{ asset('js/main.js') }}"></script>
-{{--<script src="{{ asset('js/styles.js') }}"></script>--}}
 
 @stack('scripts')
 </body>
