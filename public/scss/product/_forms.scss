@@ -375,3 +375,78 @@ input[type="number"] {
     0% { box-shadow: 0 0 6px rgba(0, 206, 209, 0.4); } // Слабке сяйво
     100% { box-shadow: 0 0 18px rgba(0, 206, 209, 0.8); } // Сильне сяйво
 }
+
+/* ────────────────────────────────
+   КОМПАКТНИЙ ЗАВАНТАЖУВАЧ ФОТО + ЛІЧИЛЬНИК
+   ──────────────────────────────── */
+
+.file-drop-zone-compact {
+    height: 92px;
+    border: 2px dashed rgba($primary2, 0.6);
+    background: linear-gradient(135deg,
+        color.adjust($primary, $lightness: 42%) 0%,
+        color.adjust($primary3, $lightness: 15%) 100%);
+    border-radius: 18px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        border-color: $primary2;
+        background: linear-gradient(135deg,
+            rgba($primary2, 0.14) 0%,
+            rgba($primary3, 0.18) 100%);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba($primary2, 0.22);
+    }
+
+    &.drag-over {
+        border-color: $primary2;
+        background: rgba($primary2, 0.2);
+        transform: scale(1.02);
+    }
+}
+
+.upload-icon-compact i {
+    font-size: 32px;
+    color: $primary2;
+}
+
+.upload-title-compact {
+    font-weight: 600;
+    color: $heading-color;
+    font-size: 17px;
+    margin: 0;
+}
+
+.upload-counter {
+    font-size: 14px;
+    color: $body-color;
+    margin-top: 2px;
+}
+
+.upload-badge {
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    background: $primary2;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba($primary2, 0.4);
+    animation: badgePop 0.4s ease;
+}
+
+@keyframes badgePop {
+    0% { transform: scale(0); }
+    80% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}

@@ -9881,6 +9881,79 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     box-shadow: 0 0 18px rgba(0, 206, 209, 0.8);
   }
 }
+/* ────────────────────────────────
+   КОМПАКТНИЙ ЗАВАНТАЖУВАЧ ФОТО + ЛІЧИЛЬНИК
+   ──────────────────────────────── */
+.file-drop-zone-compact {
+  height: 92px;
+  border: 2px dashed rgba(0, 206, 209, 0.6);
+  background: linear-gradient(135deg, hsl(180, 42.5742574257%, 102.3921568627%) 0%, hsl(60, 55.5555555556%, 106.1764705882%) 100%);
+  border-radius: 18px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.file-drop-zone-compact:hover {
+  border-color: #00CED1;
+  background: linear-gradient(135deg, rgba(0, 206, 209, 0.14) 0%, rgba(245, 245, 220, 0.18) 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 206, 209, 0.22);
+}
+.file-drop-zone-compact.drag-over {
+  border-color: #00CED1;
+  background: rgba(0, 206, 209, 0.2);
+  transform: scale(1.02);
+}
+
+.upload-icon-compact i {
+  font-size: 32px;
+  color: #00CED1;
+}
+
+.upload-title-compact {
+  font-weight: 600;
+  color: #333333;
+  font-size: 17px;
+  margin: 0;
+}
+
+.upload-counter {
+  font-size: 14px;
+  color: #696969;
+  margin-top: 2px;
+}
+
+.upload-badge {
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  background: #00CED1;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 206, 209, 0.4);
+  animation: badgePop 0.4s ease;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 /* Стиль для custom dropdown */
 .custom-dropdown-wrapper {
   position: relative; /* Контекст для z-index */

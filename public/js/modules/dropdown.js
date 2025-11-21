@@ -207,30 +207,35 @@
                 hidden.value = '';
                 selected.classList.remove('has-value', 'selected-value');
 
-                // Скидаємо підвид (опціонально — можеш залишити обраний підвид)
+                // Скидаємо підвид
                 if (subkindDropdown) {
                     const subSelected = subkindDropdown.querySelector('.dropdown-selected');
                     const subText = subSelected.querySelector('.selected-text') || subSelected;
                     const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
 
-                    // Варіант 1: Повне скидання підвиду
                     subText.textContent = 'Оберіть підвид товару';
                     subHidden.value = '';
                     subSelected.classList.remove('selected-value');
 
-                    // КЛЮЧОВЕ: Показуємо ВСІ підвиди
-                    subkindDropdown.querySelectorAll('li').forEach(li => {
+                    // Показуємо всі підвиди
+                    subkindDropdown.querySelectorAll('.dropdown-options li').forEach(li => {
                         li.style.display = 'flex';
                     });
 
-                    // Якщо в підвиду був відкритий пошук — оновлюємо його результати
+                    // Очищаємо пошук у підвиду (якщо був)
                     const subSearch = subkindDropdown.querySelector('.dropdown-search');
-                    if (subSearch && subSearch.value) {
-                        subSearch.dispatchEvent(new Event('input'));
+                    if (subSearch) {
+                        if (subSearch.value) {
+                            subSearch.value = '';
+                            subSearch.dispatchEvent(new Event('input'));
+                        }
+                        subSearch.style.display = 'none';
                     }
+
+                    // КЛЮЧОВЕ: ЗГОРТАЄМО ПІДВИД, ЯКЩО ВІН БУВ ВІДКРИТИЙ
+                    subkindDropdown.classList.remove('open');
                 }
 
-                // Оновлюємо стан хрестика (на всяк випадок)
                 updateKindState();
             });
         });
