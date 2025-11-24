@@ -1,0 +1,260 @@
+@use "sass:color";
+@use "../variables" as *;
+
+/* ─────────────────────────────────────────────────────
+   ГОРИЗОНТАЛЬНА ГАЛЕРЕЯ БРЕНДІВ 2025 — ОСТАТОЧНА ВЕРСІЯ
+   ───────────────────────────────────────────────────── */
+
+.brand-gallery-wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr auto 92px; /* 1.стрілка 2.галерея 3.стрілка 4.кнопка */
+    align-items: center;
+    gap: 16px;
+    height: 92px;
+    margin-bottom: 30px;
+}
+
+.brand-gallery-scroll {
+    flex: 1;
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar { display: none; }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Картка бренду */
+.brand-square-card {
+    flex: 0 0 92px;
+    height: 92px;
+    background: $white;
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 32px rgba($primary2, 0.25);
+    }
+
+    &.selected {
+        outline: 3px solid $primary2;
+        outline-offset: -3px;
+        transform: translateY(-4px);
+
+        .brand-check {
+            opacity: 1;
+            transform: scale(1);
+            animation: checkPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    }
+
+    /* Ripple */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 0; height: 0;
+        border-radius: 50%;
+        background: rgba($primary2, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: 1;
+        pointer-events: none;
+    }
+    &.ripple::before { width: 300px; height: 300px; opacity: 0; }
+
+    /* Tooltip */
+    &::after {
+        content: attr(data-title);
+        position: absolute;
+        bottom: 100%; left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.88);
+        color: white;
+        padding: 8px 14px;
+        border-radius: 12px;
+        font-family: $futura;
+        font-size: 13px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        pointer-events: none;
+        margin-bottom: 10px;
+    }
+    &:hover::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-4px);
+    }
+    &:hover::before {
+        content: '';
+        position: absolute;
+        bottom: 100%; left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0,0,0,0.88);
+        opacity: 1;
+        margin-bottom: 4px;
+    }
+}
+
+.brand-square-image {
+    width: 100%; height: 60px;
+    background: linear-gradient(135deg, #f8fffe, #e6f7f7);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    img { width: 80%; height: 80%; object-fit: contain; }
+    .no-image-placeholder { font-size: 28px; color: #b2d8d8; opacity: 0.7; }
+}
+
+.brand-square-title {
+    flex: 1;
+    padding: 4px 6px;
+    font-family: $futura;
+    font-size: 11px;
+    font-weight: 500;
+    color: $heading-color;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.brand-check {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 24px; height: 24px;
+    background: $primary2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba($primary2, 0.45);
+}
+
+@keyframes checkPulse {
+    0%   { transform: scale(0.3); opacity: 0; }
+    50%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Кнопка "Додати бренд" — тепер ідеально вирівняна з "Додати вид" */
+.brand-add-button-wrapper {
+    width: 92px;
+    height: 92px;
+}
+
+.btn-add-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    background: $primary;                     // було $primary2
+    color: white;
+    border-radius: 18px;
+    font-family: $futura;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.35s ease;
+    box-shadow: 0 6px 16px rgba($primary, 0.38);   // теж на $primary
+    gap: 4px;
+    animation: scalePulse 1.5s infinite;
+
+    i { font-size: 20px; }
+
+    &:hover {
+        background: color.adjust($primary, $lightness: -12%);
+        transform: translateY(-4px) scale(1.04);
+        box-shadow: 0 14px 35px rgba($primary, 0.5);
+        animation: none;
+    }
+}
+
+.btn-add-brand:hover {
+    box-shadow: 0 16px 40px rgba($primary2, 0.6) !important;
+}
+
+/* Пульсація — ідентична до .btn-add у _dropdown.scss */
+@keyframes scalePulse {
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.05); }
+}
+
+/* Стрілки */
+.brand-nav-btn {
+    width: 52px;
+    height: 52px;
+    background: $white;
+    color: $primary2;
+    border: 3px solid $primary2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 8px 25px rgba($primary2,.25);
+
+    &:hover {
+        background: $primary2;
+        color: white;
+        transform: scale(1.15);
+    }
+    &:active { transform: scale(.95); }
+    i { transition: transform .3s; }
+}
+
+.brand-nav-left:hover i  { transform: translateX(-4px); }
+.brand-nav-right:hover i { transform: translateX(4px); }
+.brand-nav-btn i { transition: transform 0.3s ease; }
+
+/* Галерея — займає тільки те, що залишилося */
+#brandGallery {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding: 4px 0;
+    min-width: 0;                     // КРИТИЧНО ВАЖЛИВО!
+
+    &::-webkit-scrollbar { display: none; }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Заглушка */
+.brand-empty-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: $body-color;
+    font-size: 15px;
+    opacity: .6;
+    i { margin-bottom: 8px; }
+}
+

@@ -1,44 +1,62 @@
+// public/js/modules/forms.js
+// ФІНАЛЬНА ВЕРСІЯ — ВСЕ ПРАЦЮЄ: назва, вартість, вид/підвид, кольори, фото, бренд
+
 (function ($) {
     "use strict";
 
-    // УНІФІКОВАНА ПІДСВІТКА LABEL (працює на всіх формах + кольори)
-    document.addEventListener('DOMContentLoaded', () => {
-        const focusable = 'input, textarea, .dropdown-selected, .dropdown-search, ' +
-            '.form-control-wide-center, .color-circle';
+    const updateAllLabels = () => {
+        // 1. НАЗВА ТОВАРУ
+        const titleText = $('#title').text().trim();
+        $('#title').closest('.form-group-title-price').find('.form-label').toggleClass('label-focused', titleText.length > 0);
 
-        document.querySelectorAll(focusable).forEach(el => {
-            // Шукаємо label перед блоком (універсально)
-            const block = el.closest('.form-group, .product-variations, .form-group-title-price, .custom-dropdown-wrapper, .quantity-produce-container');
-            const label = block?.previousElementSibling;
+        // 2. Вартість
+        const priceText = $('#price').text().trim();
+        $('#price').closest('.form-group-title-price').find('.form-label').toggleClass('label-focused', priceText.length > 0);
 
-            if (label && label.classList.contains('form-label')) {
-                const add = () => label.classList.add('label-focused');
-                const remove = () => {
-                    // Для кольорів знімаємо тільки коли нічого не вибрано
-                    if (el.classList.contains('color-circle')) {
-                        if ($('.color-circle.selected').length === 0) {
-                            label.classList.remove('label-focused');
-                        }
-                    } else {
-                        label.classList.remove('label-focused');
-                    }
-                };
+        // 3. Кількість + Термін виготовлення
+        const stock = parseInt($('#stock_balance').val() || 0);
+        const canProduce = $('#can_produce').is(':checked');
+        const term = parseInt($('#term_creation').val() || 0);
+        const hasQuantity = stock > 0 || (canProduce && term > 0);
+        $('.quantity-produce-container').closest('.mb-4').find('.form-label').toggleClass('label-focused', hasQuantity);
 
-                el.addEventListener('focusin', add);
-                el.addEventListener('focusout', remove);
+        // 4. КОЛЬОРИ
+        const hasColors = $('.color-circle.selected').length > 0;
+        $('.product-variations').closest('.mb-4').find('.form-label').toggleClass('label-focused', hasColors);
 
-                // Клік по кольору теж підсвічує label
-                if (el.classList.contains('color-circle')) {
-                    el.addEventListener('click', () => {
-                        label.classList.toggle('label-focused', $('.color-circle.selected').length > 0);
-                    });
-                }
-            }
-        });
+        // 5. ФОТО
+        const photoCount = parseInt($('#photoCount').text() || '0');
+        $('#fileDropZone').closest('.mb-4').find('.form-label').toggleClass('label-focused', photoCount > 0);
+
+        // 6. БРЕНД
+        const hasBrand = $('#selectedBrand').val()?.trim().length > 0;
+        $('#brand-section').find('.form-label').toggleClass('label-focused', hasBrand);
+
+        // 7. ВИД ТОВАРУ
+        const kindValue = $('input[name="kind_product_id"]').val()?.trim();
+        $('.custom-dropdown[data-name="kind"]').closest('.form-section').find('.form-label')
+            .toggleClass('label-focused', kindValue.length > 0);
+
+        // 8. ПІДВИД ТОВАРУ
+        const subkindValue = $('input[name="sub_kind_product_id"]').val()?.trim();
+        $('.custom-dropdown[data-name="subkind"]').closest('.form-section').find('.form-label')
+            .toggleClass('label-focused', subkindValue.length > 0);
+    };
+
+    // === ТРИГЕРИ ===
+    $(document).on('input change keyup paste blur click field-updated', updateAllLabels);
+
+    // Клік по кнопках кількості
+    $(document).on('click', '.qty-btn, #can_produce', updateAllLabels);
+
+    // Drag & drop фото
+    const observer = new MutationObserver(updateAllLabels);
+    const counter = document.getElementById('photoCount');
+    if (counter) observer.observe(counter, { childList: true, characterData: true });
+
+    // Ініціалізація при завантаженні
+    $(document).ready(function () {
+        setTimeout(updateAllLabels, 200);
     });
-
-    // ЕКСПОРТ
-    window.Learts = window.Learts || {};
-    Learts.forms = { init: () => {} };
 
 })(jQuery);

@@ -53,7 +53,7 @@ class ProductController extends Controller
     public function create(): View
     {
         $user = Auth::user();
-        $brands = Brand::where('creator_id', $user->id);
+        $brands = Brand::where('creator_id', $user->id)->get();
         $images = [];
         $images = $this->getDemoImages();
 //        $this->seedie($images);

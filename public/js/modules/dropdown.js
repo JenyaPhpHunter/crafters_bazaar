@@ -5,23 +5,20 @@
         let kindDropdown = null;
         let subkindDropdown = null;
 
-        // === УНІВЕРСАЛЬНА ФУНКЦІЯ — оновлення стану хрестика + тексту виду ===
+        // === Оновлення стану хрестика для виду ===
         const updateKindState = () => {
             const kind = document.querySelector('.custom-dropdown[data-name="kind"]');
             if (!kind) return;
 
-            const selected   = kind.querySelector('.dropdown-selected');
-            const textSpan   = selected.querySelector('.selected-text');
-            const hidden     = kind.querySelector('input[type="hidden"]');
+            const selected = kind.querySelector('.dropdown-selected');
+            const textSpan = selected.querySelector('.selected-text');
+            const hidden   = kind.querySelector('input[type="hidden"]');
 
             if (hidden.value) {
                 selected.classList.add('has-value', 'selected-value');
-                // Якщо текст ще не заповнений — беремо з опції
                 if (!textSpan.textContent.trim() || textSpan.textContent.trim() === 'Оберіть вид товару') {
                     const option = kind.querySelector(`li[data-value="${hidden.value}"]`);
-                    if (option) {
-                        textSpan.textContent = option.textContent.trim();
-                    }
+                    if (option) textSpan.textContent = option.textContent.trim();
                 }
             } else {
                 selected.classList.remove('has-value', 'selected-value');
@@ -30,20 +27,17 @@
         };
 
         document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
-            const wrapper       = dropdown.closest('.custom-dropdown-wrapper');
-            const section       = wrapper.closest('.form-section');
-            const selected      = dropdown.querySelector('.dropdown-selected');
-            const options       = dropdown.querySelector('.dropdown-options');
-            const search        = dropdown.querySelector('.dropdown-search');
-            const hiddenInput   = dropdown.querySelector('input[type="hidden"]');
+            const wrapper     = dropdown.closest('.custom-dropdown-wrapper');
+            const section     = wrapper.closest('.form-section');
+            const selected    = dropdown.querySelector('.dropdown-selected');
+            const options     = dropdown.querySelector('.dropdown-options');
+            const search      = dropdown.querySelector('.dropdown-search');
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
 
-            // Зберігаємо посилання
             if (dropdown.getAttribute('data-name') === 'kind') kindDropdown = dropdown;
             if (dropdown.getAttribute('data-name') === 'subkind') subkindDropdown = dropdown;
 
-            // ФОКУС
-            const handleFocus = () => wrapper.classList.add('has-focus');
-            const handleBlur  = () => wrapper.classList.remove('has-focus');
+            // Фокус
             if (section) {
                 selected.addEventListener('focus', () => section.classList.add('focused'));
                 selected.addEventListener('blur',  () => section.classList.remove('focused'));
@@ -51,31 +45,29 @@
                 search?.addEventListener('blur',  () => section.classList.remove('focused'));
             }
 
-            // ВІДКРИТТЯ / ЗАКРИТТЯ
+            // Відкриття/закриття
             selected.addEventListener('click', () => {
                 const wasOpen = dropdown.classList.contains('open');
                 document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
                 dropdown.classList.toggle('open', !wasOpen);
 
-                if (dropdown.classList.contains('open')) {
-                    if (search) {
-                        search.style.display = 'block';
-                        search.focus();
-                    }
-                } else {
-                    if (search) search.style.display = 'none';
+                if (dropdown.classList.contains('open') && search) {
+                    search.style.display = 'block';
+                    search.focus();
+                } else if (search) {
+                    search.style.display = 'none';
                 }
             });
 
-            // ПОШУК
+            // Пошук
             if (search) {
                 search.addEventListener('input', () => {
                     const query = search.value.toLowerCase();
-                    const kindId = kindDropdown?.querySelector('input[type="hidden"]')?.value;
+                    const kindId = kindDropdown?.querySelector('input[type="hidden"]')?.value || '';
 
                     options.querySelectorAll('li').forEach(li => {
-                        const text = li.getAttribute('data-title')?.toLowerCase() || '';
-                        const liKindId = li.getAttribute('data-kind');
+                        const text = (li.getAttribute('data-title') || '').toLowerCase();
+                        const liKindId = li.getAttribute('data-kind') || '';
                         const matchesSearch = text.includes(query);
                         const matchesKind = !kindId || liKindId === kindId;
                         li.style.display = (matchesSearch && matchesKind) ? 'flex' : 'none';
@@ -83,7 +75,7 @@
                 });
             }
 
-            // КЛІК ПО ОПЦІЯХ
+            // Клік по опціях
             options.querySelectorAll('li').forEach(option => {
                 option.addEventListener('click', () => {
                     const textSpan = selected.querySelector('.selected-text') || selected;
@@ -96,31 +88,31 @@
                         search.style.display = 'none';
                     }
 
-                    // Якщо це ВИД — фільтруємо підвиди + оновлюємо хрестик
-                    if (dropdown === kindDropdown) {
-                        if (subkindDropdown) {
-                            const kindId = hiddenInput.value;
-                            subkindDropdown.querySelectorAll('li').forEach(sub => {
-                                const subKindId = sub.getAttribute('data-kind');
-                                sub.style.display = kindId === subKindId ? 'flex' : 'none';
-                            });
+                    // === ТРИГЕРИМО ОНОВЛЕННЯ LABEL ===
+                    $(hiddenInput).trigger('change');
 
-                            // Скидаємо підвид, якщо він не підходить
-                            const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
-                            const subSelected = subkindDropdown.querySelector('.dropdown-selected');
-                            const subText = subSelected.querySelector('.selected-text') || subSelected;
-                            if (subHidden.value && !Array.from(subkindDropdown.querySelectorAll('li')).some(li =>
-                                li.getAttribute('data-value') === subHidden.value && li.style.display !== 'none'
-                            )) {
-                                subHidden.value = '';
-                                subText.textContent = 'Оберіть підвид товару';
-                                subSelected.classList.remove('selected-value');
-                            }
+                    // Фільтрація підвидів (якщо це вид)
+                    if (dropdown === kindDropdown && subkindDropdown) {
+                        const kindId = hiddenInput.value;
+                        subkindDropdown.querySelectorAll('li').forEach(sub => {
+                            sub.style.display = sub.getAttribute('data-kind') === kindId ? 'flex' : 'none';
+                        });
+
+                        // Скидаємо підвид, якщо не підходить
+                        const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
+                        const subSelected = subkindDropdown.querySelector('.dropdown-selected');
+                        const subText = subSelected.querySelector('.selected-text') || subSelected;
+                        if (subHidden.value && !Array.from(subkindDropdown.querySelectorAll('li')).some(li =>
+                            li.getAttribute('data-value') === subHidden.value && li.style.display !== 'none'
+                        )) {
+                            subHidden.value = '';
+                            subText.textContent = 'Оберіть підвид товару';
+                            subSelected.classList.remove('selected-value');
+                            $(subHidden).trigger('change');
                         }
-                        updateKindState();
                     }
 
-                    // Якщо це ПІДВИД — автопідстановка виду
+                    // Автопідстановка виду при виборі підвиду
                     if (dropdown === subkindDropdown) {
                         const kindIdFromSub = option.getAttribute('data-kind');
                         if (kindIdFromSub && kindDropdown && !kindDropdown.querySelector('input[type="hidden"]').value) {
@@ -131,15 +123,18 @@
                                 kindText.textContent = kindOption.textContent.trim();
                                 kindHidden.value = kindIdFromSub;
                                 kindDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
-                                updateKindState(); // ХРЕСТИК ПОЯВИТЬСЯ!
+                                updateKindState();
+                                $(kindHidden).trigger('change');
                             }
                         }
                     }
+
+                    updateKindState();
                 });
             });
 
-            // ЗАКРИТТЯ ПРИ КЛІКУ ПОЗА
-            document.addEventListener('click', (e) => {
+            // Закриття при кліку поза
+            document.addEventListener('click', e => {
                 if (!dropdown.contains(e.target) && !e.target.closest('.custom-dropdown')) {
                     dropdown.classList.remove('open');
                     if (search) search.style.display = 'none';
@@ -148,7 +143,7 @@
                 }
             });
 
-            // ІНІЦІАЛІЗАЦІЯ old() / edit
+            // Ініціалізація old()/edit
             if (hiddenInput.value) {
                 const opt = options.querySelector(`li[data-value="${hiddenInput.value}"]`);
                 if (opt) {
@@ -174,12 +169,12 @@
                         kindText.textContent = kindLi.textContent.trim();
                         kindHidden.value = kindId;
                         kindDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
-                        updateKindState(); // ХРЕСТИК Є!
+                        updateKindState();
+                        $(kindHidden).trigger('change');
                     }
                 }
             }
 
-            // Фільтрація підвидів при завантаженні
             if (kindHidden.value) {
                 subkindDropdown.querySelectorAll('li').forEach(li => {
                     li.style.display = li.getAttribute('data-kind') === kindHidden.value ? 'flex' : 'none';
@@ -187,61 +182,58 @@
             }
         }
 
-        // Оновлюємо стан хрестика при старті
         updateKindState();
 
-        // === ХРЕСТИК ОЧИЩЕННЯ ВИДУ ===
-        document.querySelectorAll('.custom-dropdown[data-name="kind"]').forEach(dropdown => {
-            const selected = dropdown.querySelector('.dropdown-selected');
-            const textSpan = selected.querySelector('.selected-text');
-            const clearBtn = selected.querySelector('.clear-selection');
-            const hidden   = dropdown.querySelector('input[type="hidden"]');
-
-            if (!clearBtn) return;
-
-            clearBtn.addEventListener('click', e => {
+        // === ХРЕСТИК ОЧИЩЕННЯ (з тригером) ===
+        document.querySelectorAll('.custom-dropdown[data-name="kind"] .clear-selection').forEach(btn => {
+            btn.addEventListener('click', function (e) {
                 e.stopPropagation();
 
-                // Очищаємо вид
+                const dropdown = this.closest('.custom-dropdown');
+                const hidden   = dropdown.querySelector('input[type="hidden"]');
+                const selected = dropdown.querySelector('.dropdown-selected');
+                const textSpan = selected.querySelector('.selected-text');
+
+                // Очищення виду
                 textSpan.textContent = 'Оберіть вид товару';
                 hidden.value = '';
                 selected.classList.remove('has-value', 'selected-value');
 
-                // Скидаємо підвид
+                // Скидання підвиду
                 if (subkindDropdown) {
+                    const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
                     const subSelected = subkindDropdown.querySelector('.dropdown-selected');
                     const subText = subSelected.querySelector('.selected-text') || subSelected;
-                    const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
 
                     subText.textContent = 'Оберіть підвид товару';
                     subHidden.value = '';
                     subSelected.classList.remove('selected-value');
+                    $(subHidden).trigger('change');
 
-                    // Показуємо всі підвиди
                     subkindDropdown.querySelectorAll('.dropdown-options li').forEach(li => {
                         li.style.display = 'flex';
                     });
-
-                    // Очищаємо пошук у підвиду (якщо був)
-                    const subSearch = subkindDropdown.querySelector('.dropdown-search');
-                    if (subSearch) {
-                        if (subSearch.value) {
-                            subSearch.value = '';
-                            subSearch.dispatchEvent(new Event('input'));
-                        }
-                        subSearch.style.display = 'none';
-                    }
-
-                    // КЛЮЧОВЕ: ЗГОРТАЄМО ПІДВИД, ЯКЩО ВІН БУВ ВІДКРИТИЙ
-                    subkindDropdown.classList.remove('open');
                 }
 
+                $(hidden).trigger('change');
                 updateKindState();
             });
         });
     });
 
-    // ЕКСПОРТ (якщо потрібно)
+    // === ГЛОБАЛЬНИЙ ТРИГЕР ДЛЯ label-focused (один раз!) ===
+    $(document).on('change', 'input[name="kind_product_id"], input[name="sub_kind_product_id"]', function () {
+        $(document).trigger('field-updated');
+    });
+
+    // При завантаженні — якщо вже є значення
+    $(document).ready(function () {
+        if ($('input[name="kind_product_id"]').val() || $('input[name="sub_kind_product_id"]').val()) {
+            setTimeout(() => $(document).trigger('field-updated'), 300);
+        }
+    });
+
+    // ЕКСПОРТ
     window.Learts = window.Learts || {};
     Learts.dropdown = { init: () => {} };
 

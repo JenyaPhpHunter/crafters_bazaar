@@ -119,6 +119,11 @@
 <script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
 
 <!-- Модулі (обов'язково в такому порядку!) -->
+<script src="{{ asset('js/modules/product/quantity-term_creation.js') }}"></script>
+<script src="{{ asset('js/modules/product/price-input.js') }}"></script>
+<script src="{{ asset('js/modules/product/colors.js') }}"></script>
+<script src="{{ asset('js/modules/product/photo-upload.js') }}"></script>
+<script src="{{ asset('js/modules/product/brand-gallery.js') }}"></script>
 <script src="{{ asset('js/modules/utils.js') }}"></script>
 <script src="{{ asset('js/modules/ui.js') }}"></script>
 <script src="{{ asset('js/modules/sliders.js') }}"></script>
