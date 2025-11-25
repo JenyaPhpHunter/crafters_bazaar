@@ -127,3 +127,10 @@ $extra-small-mobile: "only screen and (max-width: 479px)";
 $futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; // Rubik з системними fallback
 $body-font: $futura;
 $heading-font: $marcellus;
+// === ШРИФТИ ДЛЯ ФОРМ ===
+// Основний шрифт для всіх лейблів, інпутів і тексту у формах
+$form-font: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+$form-font-weight: 500;
+$form-font-size: 15px;        // трохи більше, ніж зараз
+$form-label-color: #2d3436;   // темніший, сучасніший сірий
+$form-label-focused-color: #00CED1;

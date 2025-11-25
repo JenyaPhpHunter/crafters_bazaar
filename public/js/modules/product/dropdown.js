@@ -184,7 +184,7 @@
 
         updateKindState();
 
-        // === ХРЕСТИК ОЧИЩЕННЯ (з тригером) ===
+        // === ХРЕСТИК ОЧИЩЕННЯ (з тригером + оновленням пошуку!) ===
         document.querySelectorAll('.custom-dropdown[data-name="kind"] .clear-selection').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -193,11 +193,18 @@
                 const hidden   = dropdown.querySelector('input[type="hidden"]');
                 const selected = dropdown.querySelector('.dropdown-selected');
                 const textSpan = selected.querySelector('.selected-text');
+                const search   = dropdown.querySelector('.dropdown-search'); // Додано!
 
                 // Очищення виду
                 textSpan.textContent = 'Оберіть вид товару';
                 hidden.value = '';
                 selected.classList.remove('has-value', 'selected-value');
+
+                // Очищення пошуку + примусове оновлення списку видів
+                if (search) {
+                    search.value = '';
+                    search.dispatchEvent(new Event('input')); // Ключовий рядок!
+                }
 
                 // Скидання підвиду
                 if (subkindDropdown) {
@@ -210,9 +217,17 @@
                     subSelected.classList.remove('selected-value');
                     $(subHidden).trigger('change');
 
+                    // Показуємо всі підвиди (бо вид скинуто)
                     subkindDropdown.querySelectorAll('.dropdown-options li').forEach(li => {
                         li.style.display = 'flex';
                     });
+
+                    // Якщо в підвиді є активний пошук — теж оновлюємо
+                    const subSearch = subkindDropdown.querySelector('.dropdown-search');
+                    if (subSearch) {
+                        subSearch.value = '';
+                        subSearch.dispatchEvent(new Event('input'));
+                    }
                 }
 
                 $(hidden).trigger('change');

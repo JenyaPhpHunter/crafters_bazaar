@@ -1,0 +1,78 @@
+
+
+// Стилі для блоку вибору кольорів (бірюзово-бежева тема з анімаціями)
+.product-variations {
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.color-info-icon {
+    color: #00CED1;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.color-info-icon:hover {
+    color: #008B8B;
+    transform: scale(1.2);
+}
+
+.color-circles {
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.color-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #00CED1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    outline: none;
+}
+
+.color-circle:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(0, 206, 209, 0.6);
+    border-color: #D2B48C;
+}
+
+.color-circle.selected {
+    transform: scale(1.25);
+    border: 4px solid #008B8B;
+    box-shadow: 0 0 18px rgba(0, 206, 209, 0.8);
+    animation: glowPulse 1.2s infinite alternate;
+}
+
+.color-circle.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.color-circle:focus {
+    box-shadow: 0 0 0 4px rgba(0, 206, 209, 0.4);
+}
+
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 6px rgba(0, 206, 209, 0.4); }
+    100% { box-shadow: 0 0 18px rgba(0, 206, 209, 0.8); }
+}

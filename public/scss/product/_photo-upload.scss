@@ -1,0 +1,92 @@
+@use "sass:color";
+@use "../variables" as *;
+
+/* ────────────────────────────────────────────────────────────────
+   КОМПАКТНИЙ ЗАВАНТАЖУВАЧ ФОТО — ФІНАЛЬНА ВЕРСІЯ 2025
+   ──────────────────────────────────────────────────────────────── */
+
+/* Головний контейнер дроп-зони */
+.file-drop-zone-compact {
+    height: 124px;                                    // Фіксована висота — гарантує, що все по центру
+    border: 2px dashed rgba($primary2, 0.6);          // Пунктирна рамка
+    background: linear-gradient(135deg,
+        color.adjust($primary, $lightness: 42%) 0%,
+        color.adjust($primary3, $lightness: 15%) 100%); // Градієнт фону
+    border-radius: 18px;                              // Закруглені кути
+    padding: 0 40px;                                  // Внутрішні відступи
+    cursor: pointer;                                  // Курсор вказує, що можна клікати
+    transition: all 0.4s ease;                        // Плавні переходи
+    position: relative;                               // Для майбутніх absolute-елементів (якщо треба)
+    overflow: hidden;                                 // Щоб градієнт не вилазив
+    display: flex;                                    // ВАЖЛИВО: flex для вирівнювання вмісту по центру
+    align-items: center;                              // Вертикальне вирівнювання по центру
+    justify-content: center;                          // Горизонтальне вирівнювання
+
+    /* Ефект при наведенні */
+    &:hover {
+        border-color: $primary2;                      // Яскравіша рамка
+        background: linear-gradient(135deg,
+            rgba($primary2, 0.14) 0%,
+            rgba($primary3, 0.18) 100%);              // Ледь помітний градієнт
+        transform: translateY(-4px);                  // Піднімається
+        box-shadow: 0 12px 30px rgba($primary2, 0.22); // Тінь
+    }
+
+    /* Ефект при перетягуванні файлів */
+    &.drag-over {
+        border-color: $primary2;
+        background: rgba($primary2, 0.2);
+        transform: scale(1.02);
+    }
+}
+
+/* Іконка зліва (фотоапарат) */
+.upload-icon-compact i {
+    font-size: 34px;                                  // Розмір іконки
+    color: $primary2;                                 // Бірюзовий колір
+}
+
+/* Заголовок "Оберіть фото..." */
+.upload-title-compact {
+    font-weight: 600;                                 // Напівжирний
+    color: $heading-color;                            // Темний текст
+    font-size: 17px;                                  // Читається добре
+    margin: 0;                                        // Без відступів
+}
+
+/* Підпис "Завантажено: 0/10" */
+.upload-counter {
+    font-size: 14px;                                  // Дрібний текст
+    color: $body-color;                               // Сірий
+    margin-top: 4px;                                  // Відступ від заголовка
+}
+
+/* КРУЖЕЧОК З ЛІЧИЛЬНИКОМ — ГОЛОВНИЙ ЕЛЕМЕНТ */
+.upload-badge {
+    background: $primary2;                            // Бірюзовий фон
+    color: white;                                     // Білий текст
+    width: 48px;                                      // Розмір кружечка (менший)
+    height: 48px;                                     // Висота = ширина
+    border-radius: 50%;                               // Ідеальне коло
+    display: flex;                                    // Для центрування цифри
+    align-items: center;                              // По вертикалі
+    justify-content: center;                          // По горизонталі
+    font-weight: 700;                                 // Жирний текст
+    font-size: 17px;                                  // Розмір цифри
+    box-shadow: 0 6px 18px rgba(0, 206, 209, 0.4);     // М'яка тінь
+    flex-shrink: 0;                                   // Не стискається
+    margin-left: 48px;                                // Відступ від тексту праворуч
+    transition: all 0.3s ease;                        // Плавна анімація при зміні кількості
+}
+
+/* Анімація появи кружечка при першому фото */
+@keyframes badgePop {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Додаємо анімацію при появі (якщо хочеш — можна підключити через JS) */
+.upload-badge.show {
+    animation: badgePop 0.5s ease-out;
+}

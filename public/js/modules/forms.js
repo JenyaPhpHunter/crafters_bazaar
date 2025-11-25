@@ -59,4 +59,14 @@
         setTimeout(updateAllLabels, 200);
     });
 
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(trigger => {
+            new bootstrap.Tooltip(trigger, {
+                delay: { show: 100, hide: 100 },
+                trigger: 'hover focus'
+            });
+        });
+    });
 })(jQuery);

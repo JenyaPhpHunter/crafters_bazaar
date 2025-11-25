@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "../variables" as *;
+
+.form-label {
+    font-family: $form-font;
+    font-size: $form-font-size;
+    font-weight: $form-font-weight;
+    color: $form-label-color;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.35s ease, transform 0.35s ease;
+    transform-origin: left center;
+    letter-spacing: 0.2px;           // трохи повітря між літерами
+
+    &.label-focused {
+        color: $form-label-focused-color !important;
+        transform: translateY(-6px) scale(0.94);
+        font-weight: 600;
+    }
+}
+
+.form-field {
+    margin-bottom: 2.8rem;
+    width: 100%;
+    position: relative;
+}

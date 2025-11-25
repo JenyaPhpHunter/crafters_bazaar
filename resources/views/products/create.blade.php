@@ -70,6 +70,6 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/modules/dropdown.js') }}"></script>
-    <script src="{{ asset('js/modules/product/create-edit.js') }}"></script>
+    <script src="{{ asset('js/modules/product/dropdown.js') }}"></script>
+    <script src="{{ asset('js/modules/product/price-input.js') }}" defer></script>
 @endpush

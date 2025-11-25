@@ -69,20 +69,6 @@
             e.preventDefault();
             $(this).siblings('.product-details').slideDown(400);
         });
-
-        // Тільки цифри в полі "Вартість"
-        $('[data-only-numbers="true"]').on('input', function (e) {
-            const $div = $(this);
-            let value = $div.text().replace(/[^0-9]/g, '');
-            $div.text(value);
-            $('#price-hidden').val(value);
-        }).on('paste', function (e) {
-            e.preventDefault();
-            const pastedData = e.originalEvent.clipboardData.getData('text/plain').replace(/[^0-9]/g, '');
-            const $div = $(this);
-            $div.text(pastedData);
-            $('#price-hidden').val(pastedData);
-        });
     });
 
     // === ГЛОБАЛЬНА ФУНКЦІЯ ДЛЯ ФАЙЛІВ ===

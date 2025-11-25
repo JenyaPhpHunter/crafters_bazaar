@@ -19,14 +19,13 @@
         <span class="animate__animated animate__fadeIn">Вартість</span>
     </label>
     <div class="input-group input-group-lg position-relative">
-        <div
-            id="price"
-            class="form-control form-control-wide-center price-input"
-            contenteditable="true"
-            data-placeholder="Введіть вартість товару"
-            spellcheck="false"
-            data-only-numbers="true"
-        >{{ old('price') ? (int)old('price') : '' }}</div>
+        <div id="price"
+             class="form-control form-control-wide-center price-input"
+             contenteditable="true"
+             data-placeholder="Введіть вартість товару"
+             spellcheck="false">
+            {{ old('price') ? number_format((int)old('price'), 0, '', ' ') : '' }}
+        </div>
     <span class="currency-label">грн</span>
     <input type="hidden" name="price" id="price-hidden" value="{{ old('price') ? (int)old('price') : '' }}">
 </div>
