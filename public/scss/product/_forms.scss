@@ -1,7 +1,12 @@
+// public/scss/product/_forms.scss
 @use "sass:color";
 @use "../variables" as *;
 
-/* Загальні стилі для форм */
+/* ────────────────────────────────
+   ЗАГАЛЬНІ СТИЛІ ФОРМ (універсальні для всіх полів)
+   ──────────────────────────────── */
+
+/* Базовий стиль для звичайних інпутів (якщо раптом десь будуть) */
 .form-control {
     border: 2px solid $primary;
     background-color: transparent;
@@ -21,6 +26,7 @@
     }
 }
 
+/* Прибираємо стрілки у number-полів */
 input[type="number"] {
     @extend .form-control;
     -moz-appearance: textfield;
@@ -33,114 +39,13 @@ input[type="number"] {
     }
 }
 
-///* Стиль для label */
-//.form-label {
-//    font-family: $heading-font;
-//    font-size: 14px;
-//    color: $heading-color;
-//    margin-bottom: 6px;
-//    font-weight: 500;
-//    display: block;
-//    transition: color 0.3s ease, transform 0.3s ease;
-//
-//    &.label-focused {
-//        color: #00CED1 !important;
-//        transform: translateY(-4px);
-//    }
-//}
-//
-//.form-field {
-//    margin-bottom: 2.5rem;
-//    width: 100%;
-//}
-
-/* Стиль для "Назва" та "Вартість" */
-.form-group-title-price {
-    @extend .form-field !optional;
-
-    .input-group {
-        position: relative;
-
-        .form-control-wide-center {
-            width: 100%;
-            font-family: $futura;
-            font-size: 20px;
-            font-weight: 500;
-            text-align: center !important;
-            padding: 1rem 1.25rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background-color: #fafafa;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            color: $heading-color;
-            min-height: 58px;
-            line-height: 1.4;
-            outline: none;
-            cursor: text;
-            position: relative;
-            white-space: normal;
-            padding-right: 5rem !important;
-            animation: fadeInUp 0.6s ease-out;
-            animation-iteration-count: 1;
-
-            &:focus {
-                border-color: $primary;
-                background-color: #fff;
-                box-shadow: 0 0 0 4px rgba($primary, 0.15);
-                animation: pulseBorder 1.5s infinite;
-            }
-
-            &:empty::before {
-                content: attr(data-placeholder);
-                color: #aaa;
-                font-style: italic;
-                font-size: 18px;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                pointer-events: none;
-                transition: all 0.3s ease;
-            }
-
-            &:not(:empty)::before {
-                opacity: 0;
-                transform: translate(-50%, -60%);
-            }
-        }
-
-        .currency-label {
-            position: absolute;
-            right: 1.25rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-family: $futura;
-            font-size: 18px;
-            font-weight: 500;
-            color: $heading-color;
-            pointer-events: none;
-            z-index: 2;
-            transition: color 0.3s ease;
-
-            &:has(.price-input:focus) & {
-                color: $primary;
-            }
-        }
-    }
-
-    &:has(.form-control-wide-center:focus) .form-label {
-        color: $primary;
-        transform: translateY(-4px);
-    }
-}
-
+/* Контейнер для секцій форми (наприклад, dropdown, quantity тощо) */
 .form-section {
     margin-bottom: 20px;
     position: relative;
     z-index: 0;
 
     &.focused {
-        z-index: 10000;
+        z-index: 10000; // щоб dropdown не ховався під іншими елементами
     }
 }

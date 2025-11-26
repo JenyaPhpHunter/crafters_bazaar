@@ -1,0 +1,82 @@
+// public/scss/product/_title-price.scss
+@use "../variables" as *;   // ВАЖЛИВО: "../" а не "../variables" — бо в variables.scss вже є @forward
+
+/* ────────────────────────────────
+   КОМПОНЕНТ: НАЗВА ТОВАРУ + ВАРТІСТЬ
+   ──────────────────────────────── */
+
+.form-group-title-price {
+    @extend .form-field !optional;
+
+    .input-group {
+        position: relative;
+
+        .form-control-wide-center {
+            width: 100%;
+            font-family: $futura;                    // ТВІЙ шрифт
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center !important;
+            padding: 1rem 5rem 1rem 1.25rem !important;  // ПРАВИЛЬНИЙ відступ під "грн"
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            color: $heading-color !important;     // ЧОРНИЙ ТЕКСТ — як було
+            min-height: 58px;
+            line-height: 1.4;
+            outline: none;
+            cursor: text;
+            white-space: normal;
+            animation: fadeInUp 0.6s ease-out;
+
+            &:focus {
+                border-color: $primary2;
+                background-color: #fff;
+                box-shadow: 0 0 0 4px rgba($primary2, 0.15);
+            }
+
+            // Плейсхолдер
+            &:empty::before {
+                content: attr(data-placeholder);
+                color: #aaa;
+                font-style: italic;
+                font-size: 18px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            &:not(:empty)::before {
+                opacity: 0;
+            }
+        }
+
+        // "грн" — як було: чорний, той же шрифт, той же розмір
+        .currency-label {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: $futura;
+            font-size: 20px;           // тепер як і текст
+            font-weight: 500;
+            color: $heading-color;     // чорний, як цифри
+            pointer-events: none;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+    }
+
+    // Підсвітка лейбла при фокусі
+    &:has(.form-control-wide-center:focus) .form-label,
+    &.focused .form-label {
+        color: $primary2 !important;
+        transform: translateY(-6px) scale(0.94);
+        font-weight: 600;
+    }
+}
