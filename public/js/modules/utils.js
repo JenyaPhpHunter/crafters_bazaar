@@ -18,12 +18,40 @@
     });
 
     // Header Sticky
+// === СУЧАСНИЙ STICKY HEADER — ФІНАЛЬНА ВЕРСІЯ (працює ідеально) ===
+    let lastScrollTop = 0;
+    const headerHeight = 120; // висота твого основного хедера
+
     $window.on('scroll', function () {
-        if ($window.scrollTop() > 350) {
-            $('.sticky-header').addClass('is-sticky');
-        } else {
-            $('.sticky-header').removeClass('is-sticky');
+        let st = $window.scrollTop();
+
+        if (st > lastScrollTop && st > headerHeight) {
+            // Скрол вниз → ховаємо основний, показуємо sticky
+            $('.header-section').css('transform', 'translateY(-100%)');
+            $('.sticky-header')
+                .removeClass('d-none')
+                .addClass('d-block is-sticky'); // ← ОБОВ’ЯЗКОВО is-sticky!
+        } else if (st < lastScrollTop) {
+            // Скрол вгору → показуємо основний
+            $('.header-section').css('transform', 'translateY(0)');
+
+            if (st <= 80) {
+                // Біля верху — ховаємо sticky повністю
+                $('.sticky-header')
+                    .removeClass('d-block is-sticky')
+                    .addClass('d-none');
+            }
         }
+
+        // На самому верху — гарантовано показуємо основний
+        if (st <= 80) {
+            $('.header-section').css('transform', 'translateY(0)');
+            $('.sticky-header')
+                .removeClass('d-block is-sticky')
+                .addClass('d-none');
+        }
+
+        lastScrollTop = st;
     });
 
     // Sub Menu & Mega Menu Alignment

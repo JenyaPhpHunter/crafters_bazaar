@@ -1,89 +1,63 @@
-@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
-@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
+@use "sass:color";
+@use "../variables" as *;
 
-/* General Animation Styles */
-.animate__animated { // Визначає клас для елементів із загальними анімаційними стилями
-    transition: all 0.5s ease; // Встановлює плавний перехід для всіх властивостей тривалістю 0.5 секунди
+/* ============================================= */
+/*  УСІ АНІМАЦІЇ ПРОЄКТУ — один файл, без дублів  */
+/* ============================================= */
+
+/* ——— Плавна поява знизу ——— */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Fade In Up Animation */
-@keyframes fadeInUp { // Визначає ключові кадри анімації fadeInUp (з’явлення знизу з прозорості)
-    from { // Початковий стан анімації
-        opacity: 0; // Елемент повністю прозорий
-        transform: translateY(20px); // Зсуває елемент униз на 20 пікселів
-    }
-    to { // Кінцевий стан анімації
-        opacity: 1; // Елемент стає повністю видимим
-        transform: translateY(0); // Повертає елемент у початкову позицію
-    }
+/* ——— Плавна поява справа ——— */
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Bounce In Animation */
-@keyframes bounceIn { // Визначає ключові кадри анімації bounceIn (пружне з’явлення)
-    from { // Початковий стан анімації
-        transform: scale(0.8); // Зменшує розмір елемента до 80%
-        opacity: 0; // Елемент повністю прозорий
-    }
-    to { // Кінцевий стан анімації
-        transform: scale(1); // Повертає елемент до нормального розміру
-        opacity: 1; // Елемент стає повністю видимим
-    }
+/* ——— Компактна поява заголовка ——— */
+@keyframes compactBounceIn {
+    from { opacity: 0; transform: scale(0.9) translateY(15px); }
+    to   { opacity: 1; transform: scale(1)   translateY(0); }
 }
 
-/* Slide In Right Animation */
-@keyframes slideInRight { // Визначає ключові кадри анімації slideInRight (з’явлення справа)
-    from { // Початковий стан анімації
-        transform: translateX(100%); // Зсуває елемент праворуч на 100% його ширини
-        opacity: 0; // Елемент повністю прозорий
-    }
-    to { // Кінцевий стан анімації
-        transform: translateX(0); // Повертає елемент у початкову позицію
-        opacity: 1; // Елемент стає повністю видимим
-    }
+/* ——— Пульсація кнопки ——— */
+@keyframes buttonPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
 }
 
-/* Scale Pulse Animation */
-@keyframes scalePulse { // Визначає ключові кадри анімації scalePulse (пульсація розміром і тінню)
-    0% { // Початковий стан анімації
-        transform: scale(1); // Нормальний розмір елемента
-        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Початкова тінь із прозорістю 70%
-    }
-    50% { // Середина анімації
-        transform: scale(1.05); // Збільшує розмір елемента на 5%
-        box-shadow: 0 0 10px 5px rgba($primary, 0.4); // Розширює тінь із меншою прозорістю
-    }
-    100% { // Кінцевий стан анімації
-        transform: scale(1); // Повертає до нормального розміру
-        box-shadow: 0 0 0 0 rgba($primary, 0.7); // Повертає тінь до початкового стану
-    }
+/* ——— Пульсація рамки (для полів форми) ——— */
+@keyframes pulseBorder {
+    0%, 100% { border-color: $primary; }
+    50%      { border-color: color.scale($primary, $lightness: 15%); }
 }
 
-/* Animation for Form Border */
-@keyframes pulseBorder { // Визначає ключові кадри анімації pulseBorder (пульсація рамки)
-    0% { border-color: $primary; } // Початковий колір рамки береться з змінної $primary
-    50% { border-color: color.scale($primary, $lightness: 10%); } // Середина анімації: збільшує світлість на 10%
-    100% { border-color: $primary; } // Кінцевий стан: повертає початковий колір
+/* ——— Дихання (для акцентних елементів) ——— */
+@keyframes breathe {
+    0%, 100% { transform: scale(1);     box-shadow: 0 0 8px rgba($primary, 0.2); }
+    50%      { transform: scale(1.03); box-shadow: 0 0 20px rgba($primary, 0.4); }
 }
 
-/* Breathing Animation */
-@keyframes breathe { // Визначає ключові кадри анімації breathe (дихання елемента)
-    0% { // Початковий стан анімації
-        transform: scale(1); // Нормальний розмір елемента
-        box-shadow: 0 0 5px rgba($primary, 0.2); // Легка тінь із прозорістю 20%
-    }
-    50% { // Середина анімації
-        transform: scale(1.03); // Збільшує розмір на 3%
-        box-shadow: 0 0 10px rgba($primary, 0.4); // Посилює тінь із прозорістю 40%
-    }
-    100% { // Кінцевий стан анімації
-        transform: scale(1); // Повертає до нормального розміру
-        box-shadow: 0 0 5px rgba($primary, 0.2); // Повертає початкову тінь
-    }
+/* ——— Простий пульс ——— */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.04); }
 }
 
-/* Pulse Animation */
-@keyframes pulse { // Визначає анімацію pulse
-    0% { transform: scale(1); } // Початковий стан: нормальний розмір
-    50% { transform: scale(1.03); } // Середина анімації: збільшення на 3%
-    100% { transform: scale(1); } // Кінцевий стан: повернення до початкового розміру
+/* ——— Універсальний клас для будь-якої анімації ——— */
+.animated {
+    animation-fill-mode: both;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-out;
 }
+
+/* Зручні класи для швидкого використання */
+.fadeInUp     { animation-name: fadeInUp; }
+.fadeInRight  { animation-name: fadeInRight; }
+.bounceIn     { animation-name: compactBounceIn; }
+.pulse        { animation-name: pulse; }
+.breathe      { animation-name: breathe; }
+.pulseBorder  { animation-name: pulseBorder; animation-duration: 2s; animation-iteration-count: infinite; }

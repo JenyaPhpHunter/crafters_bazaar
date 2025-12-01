@@ -5,8 +5,15 @@
         <div class="container">
             <div class="row learts-mb-n40">
                 <div class="col-lg-6 col-12 learts-mb-40 animate__animated animate__slideInRight">
-                    @include('products.include.images')
-                    @include('products.include.additional-info')
+                    <div class="mb-4">
+                        @include('products.include.images')
+                    </div>
+                    <div class="mb-4">
+                        @include('products.include.additional-info')
+                    </div>
+                    <div class="mb-4">
+                        @include('products.include.tags_social')
+                    </div>
                 </div>
                 <!-- Product Summery Start -->
                 <div class="col-lg-6 col-12 learts-mb-40">
@@ -36,7 +43,7 @@
                                 @include('products.include.brands')
                             </div>
                             <div class="mb-4">
-                                @include('products.include.tags_social')
+
                             </div>
                         </form>
                         @isset($user)
@@ -65,11 +72,7 @@
 {{--    @include('products.include.product-info-tabs')--}}
 @endsection
 
-@push('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css">
-@endpush
-
 @push('scripts')
-    <script src="{{ asset('js/modules/product/dropdown.js') }}"></script>
-    <script src="{{ asset('js/modules/product/price-input.js') }}" defer></script>
+    @include('products.partials.scripts')
+    @include('products.partials.photoswipe')
 @endpush

@@ -1,5 +1,5 @@
 <!-- Header Section Start -->
-<div class="sticky-header section bg-white section-fluid d-none d-xl-block">
+<div class="sticky-header section bg-white d-none">
     <div class="container">
         <div class="row align-items-center">
 

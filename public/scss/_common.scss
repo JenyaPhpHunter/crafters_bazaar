@@ -1,329 +1,167 @@
-@use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
-@use "variables" as *; // Імпортує файл variables і робить усі його змінні доступними без префікса
+@use "sass:color";
+@use "variables" as *;
 
-/*----------------------------------------*/
-/*  01. Template default CSS
-/*----------------------------------------*/
+/* =================================================== */
+/*  COMMON — ФІНАЛЬНА ВЕРСІЯ 2025                      */
+/*  Хедер + топбар = 1200px                             */
+/*  Основний контент = 1550px                          */
+/*  Усе в Rubik + Inter в хедері                        */
+/* =================================================== */
+
 @mixin placeholder {
-    &::-webkit-input-placeholder {
-        @content
-    }
-    &:-moz-placeholder {
-        @content
-    }
-    &::-moz-placeholder {
-        @content
-    }
-    &:-ms-input-placeholder {
-        @content
-    }
+    &::-webkit-input-placeholder { @content }
+    &:-moz-placeholder           { @content }
+    &::-moz-placeholder          { @content }
+    &:-ms-input-placeholder      { @content }
+    &::placeholder               { @content }
 }
 
-/* Common Style */
-*,
-*::after,
-*::before {
-    box-sizing: border-box;
+/* Глобальне скидання */
+*, *::after, *::before { box-sizing: border-box; }
+
+html, body {
+    margin: 0 !important;
+    padding:0 !important;
+    width:100%;
+    overflow-x:hidden;
+    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size:18px;
+    font-weight:400;
+    line-height:1.75;
+    color:$body-color;
+    background:$white;
 }
 
-html,
-body,
-.site-wrapper {
-    height: 100%;
+/* Заголовки */
+h1,h2,h3,h4,h5,h6 {
+    margin:0 0 15px;
+    font-family:$heading-font, serif;
+    font-weight:600;
+    line-height:1.2;
+    color:$heading-color;
 }
 
-body {
-    font-family: $body-font, Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    font-style: normal;
-    line-height: 1.75;
-    position: relative;
-    visibility: visible;
-    overflow-x: hidden;
-    color: $body-color;
-    background-color: $white;
+a, button {
+    display:inline-block;
+    text-decoration:none;
+    color:inherit;
+    cursor:pointer;
+    transition:$transition;
+}
+a:hover { color:$primary; }
+
+img { max-width:100%; height:auto; }
+
+/* === КОНТЕЙНЕРИ === */
+/* Хедер, топбар, футер — вузькі (1200px) */
+.header-section .container,
+.topbar-section .container,
+.footer-section .container,
+.container,
+.container-fluid {
+    width:100%;
+    max-width:1200px !important;
+    margin:0 auto !important;
+    padding:0 15px !important;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: $heading-font, Arial, Helvetica, sans-serif;
-    font-weight: 600;
-    line-height: 1.2;
-    margin-top: 0;
-    color: $heading-color;
+/* Основний контент сторінок — широкий (1550px) */
+.container-wide,
+.main-wrapper > .container,
+.section-fluid > .container {
+    width:100%;
+    max-width:1550px !important;
+    margin:0 auto !important;
+    padding:0 20px !important;
 }
 
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-    line-height: inherit;
-    margin: 0;
+@media (max-width:1600px) {
+    .container-wide { padding:0 15px !important; }
 }
 
-p:last-child {
-    margin-bottom: 0;
-}
-
-a,
-button {
-    line-height: inherit;
-    display: inline-block;
-    cursor: pointer;
-    text-decoration: none;
-    color: $secondary;
-}
-
-a,
-button,
-img,
-input {
-    transition: $transition;
-}
-
-*:focus {
-    outline: none !important;
-}
-
-a:focus {
-    text-decoration: none;
-    color: inherit;
-    outline: none;
-}
-
-a:hover {
-    text-decoration: none;
-    color: $primary;
-}
-
-button,
-input[type="submit"] {
-    cursor: pointer;
-}
-
-img {
-    max-width: 100%;
-}
-
-ul {
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-hr {
-    border-top-width: 2px;
-}
-
-/* Common Classes */
-.fix {
-    overflow: hidden;
-}
-
-.section,
-.main-wrapper {
-    float: left;
-    width: 100%;
-}
-
-.section-fluid {
-    @media only screen and (min-width: 1500px) {
-        padding-right: 55px;
-        padding-left: 55px;
-        & > .container,
-        & > .container-fluid {
-            max-width: 100%;
-        }
-    }
-    @media #{$laptop-device} {
-        padding-right: 35px;
-        padding-left: 35px;
-        & > .container,
-        & > .container-fluid {
-            max-width: 100%;
-        }
-    }
-    @media #{$desktop-device, $tablet-device} {
-        padding-right: 25px;
-        padding-left: 25px;
-        & > .container,
-        & > .container-fluid {
-            max-width: 100%;
-        }
-    }
-}
-
-/* Bootstrap Override */
+/* Рядки Bootstrap */
 .row {
-    margin-top: 0;
-    margin-right: -15px;
-    margin-left: -15px;
-    & > [class*="col"] {
-        padding-right: 15px;
-        padding-left: 15px;
-        &:not([class*="learts-mt-"]) {
-            margin-top: 0;
-        }
-    }
-    &.g-0 {
-        margin-right: 0;
-        margin-left: 0;
-        & > [class*="col"] {
-            padding-right: 0;
-            padding-left: 0;
-        }
-    }
+    --bs-gutter-x:30px;
+    display:flex;
+    flex-wrap:wrap;
+    margin-right:calc(var(--bs-gutter-x)*-0.5);
+    margin-left:calc(var(--bs-gutter-x)*-0.5);
+}
+.row > * {
+    padding-right:calc(var(--bs-gutter-x)*0.5);
+    padding-left:calc(var(--bs-gutter-x)*0.5);
 }
 
-.container {
-    padding-right: 15px;
-    padding-left: 15px;
-    @media only screen and (min-width: 1200px) {
-        max-width: 1200px;
-    }
-    @media #{$small-mobile} {
-        max-width: 450px;
-    }
-    @media #{$extra-small-mobile} {
-        max-width: 350px;
-    }
+/* Секції */
+.section,
+.section-fluid,
+.main-wrapper {
+    width:100%;
+    padding:60px 0;
+    position:relative;
 }
+.section-fluid { padding-left:0 !important; padding-right:0 !important; }
+
+/* Хлібні крихти — без відступів */
+.page-title-section,
+.breadcrumb-section,
+.breadcrumbs,
+.breadcrumb,
+.breadcrumb-wrapper,
+.page-header {
+    margin:0 !important;
+    padding:0 !important;
+    width:100% !important;
+}
+
+/* Кнопка вгору */
+#scrollUp {
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    width:50px;
+    height:50px;
+    background:$primary;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.15);
+    z-index:1000;
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s;
+}
+#scrollUp.show { opacity:1; visibility:visible; }
+
+/* Утиліти */
+.fix { overflow:hidden; }
+.border-bottom-dashed { border-bottom:1px dashed #d2d2d2; }
+.border-top-dashed    { border-top:1px dashed #d2d2d2; }
 
 @each $name, $color in $templateColors {
-    .bg-#{$name} {
-        background-color: $color !important;
-    }
-    .text-#{$name} {
-        color: $color !important;
-    }
+    .bg-#{$name}   { background-color:$color !important; }
+    .text-#{$name} { color:$color !important; }
 }
-
-/* Font Weight */
 @for $i from 1 through 9 {
-    .fw-#{100 * $i} {
-        font-weight: 100 * $i;
-    }
+    .fw-#{$i*100} { font-weight:$i*100; }
 }
 
 /* Overlay */
 [data-overlay] {
-    position: relative;
-    z-index: 1;
+    position:relative;
+    z-index:1;
     &::before {
-        position: absolute;
-        z-index: -1;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        content: "";
-        background-color: $black;
+        content:"";
+        position:absolute;
+        inset:0;
+        background:$black;
+        z-index:-1;
     }
 }
-
 @for $i from 0 through 20 {
-    [data-overlay="#{$i * 5}"] {
-        &::before {
-            opacity: 0.05 * $i;
-        }
-    }
+    [data-overlay="#{$i*5}"]::before { opacity:0.05*$i; }
 }
-
-/* Background Image */
-[data-bg-image] {
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-}
-
-/* Other */
-body.homepage-bg1 {
-    padding: 0 15px 15px !important;
-    background-color: #F4EDE7;
-    & .topbar-section {
-        background-color: #F4EDE7 !important;
-    }
-    &.offcanvas-open {
-        padding-right: 32px !important;
-        @media #{$tablet-device, $large-mobile} {
-            padding-right: 15px !important;
-        }
-    }
-}
-
-/* Scroll Up */
-#scrollUp {
-    right: 25px;
-    bottom: 25px;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    color: $white;
-    background-color: $primary;
-    & i {
-        line-height: 40px;
-    }
-}
-
-/* Border Style */
-.border-top-dashed {
-    border-top: 1px dashed #D2D2D2;
-}
-
-.border-bottom-dashed {
-    border-bottom: 1px dashed #D2D2D2;
-}
-
-/* Image Over Gray Scale */
-.img-hover-color {
-    filter: grayscale(100);
-    &:hover {
-        filter: grayscale(0);
-    }
-}
-
-/* Modal Styles */
-.modal-dialog {
-    width: calc(100% - 30px);
-    max-width: 1200px;
-    & .modal-content {
-        padding: 30px;
-        & .close {
-            font-size: 30px;
-            font-weight: 300;
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 50%;
-            background-color: transparent;
-        }
-        @media only screen and (min-width: 992px) {
-            & .product-summery {
-                position: absolute;
-                right: 15px;
-                left: 15px;
-                overflow-x: hidden;
-                overflow-y: auto;
-                height: 100%;
-            }
-        }
-    }
-    @media #{$extra-small-mobile} {
-        & .modal-content {
-            padding: 20px;
-        }
-    }
-}
+[data-bg-image] { background:no-repeat center center/cover; }

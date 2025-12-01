@@ -11,6 +11,16 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.webp') }}">
 
+    <!-- Google Fonts: Inter — жіночий, ніжний, сучасний (2025 рік) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@450;500;550;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 (у тебе вже є нижче — залишимо один раз) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendor/font-awesome-pro.min.css') }}">
@@ -74,7 +84,9 @@
 {{--    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')--}}
 {{--@endisset--}}
 @include('components.breadcrumps')
-@yield('content')
+<div class="container-wide">
+    @yield('content')
+</div>
 @include('include.footer')
 
 <!-- Page JS -->
@@ -85,15 +97,6 @@
 <script src="{{ asset('js/vendor/jquery-3.4.1.min.js') }}"></script>
 <script src="{{ asset('js/vendor/jquery-migrate-3.1.0.min.js') }}"></script>
 <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<!-- PhotoSwipe -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js"></script>
 
 <!-- Plugins JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
@@ -119,11 +122,6 @@
 <script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
 
 <!-- Модулі (обов'язково в такому порядку!) -->
-<script src="{{ asset('js/modules/product/quantity-term_creation.js') }}"></script>
-<script src="{{ asset('js/modules/product/price-input.js') }}"></script>
-<script src="{{ asset('js/modules/product/colors.js') }}"></script>
-<script src="{{ asset('js/modules/product/photo-upload.js') }}"></script>
-<script src="{{ asset('js/modules/product/brand-gallery.js') }}"></script>
 <script src="{{ asset('js/modules/utils.js') }}"></script>
 <script src="{{ asset('js/modules/ui.js') }}"></script>
 <script src="{{ asset('js/modules/sliders.js') }}"></script>

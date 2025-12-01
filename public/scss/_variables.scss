@@ -1,10 +1,10 @@
 // Font Family
 $abeezee: 'ABeeZee', sans-serif;
-$futura: 'Rubik', sans-serif;
+$futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 $marcellus: 'Marcellus', serif;
 $modesty: 'Charmonman', cursive;
-$body-font: $futura;
-$heading-font: $marcellus;
+$body-font: $futura;        // ← ТВІЙ УЛЮБЛЕНИЙ ШРИФТ ДЛЯ ТЕКСТУ (точно як було!)
+$heading-font: $marcellus;  // ← Шикарний Marcellus для заголовків (точно як було!)
 
 // Icon Font
 $fontAwesome5Brands: "Font Awesome 5 Brands";
@@ -23,10 +23,10 @@ $body-light: #7E7E7E;
 $heading-color: #333333;
 
 // Template Colors
-$primary: #6fc5c5; // Бірюзовий
-$primary2: #00CED1; // Світлий бірюзовий
-$primary3: #F5F5DC; // Бежевий
-$secondary: #D2B48C; // Темний бежевий
+$primary: #6fc5c5;     // Бірюзовий
+$primary2: #00CED1;    // Світлий бірюзовий
+$primary3: #F5F5DC;
+$secondary: #8B7E6A;
 $success: #4CAF50;
 $danger: #F44336;
 $warning: #FFC107;
@@ -123,14 +123,9 @@ $large-mobile: "only screen and (max-width: 767px)";
 $small-mobile: "only screen and (max-width: 575px)";
 $extra-small-mobile: "only screen and (max-width: 479px)";
 
-// Font Family (оновлюємо $futura з fallback)
-$futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; // Rubik з системними fallback
-$body-font: $futura;
-$heading-font: $marcellus;
-// === ШРИФТИ ДЛЯ ФОРМ ===
-// Основний шрифт для всіх лейблів, інпутів і тексту у формах
+// === ШРИФТИ ДЛЯ ФОРМ (залишаємо, бо вони тобі подобаються) ===
 $form-font: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 $form-font-weight: 500;
-$form-font-size: 15px;        // трохи більше, ніж зараз
-$form-label-color: #2d3436;   // темніший, сучасніший сірий
+$form-font-size: 15px;
+$form-label-color: #2d3436;
 $form-label-focused-color: #00CED1;

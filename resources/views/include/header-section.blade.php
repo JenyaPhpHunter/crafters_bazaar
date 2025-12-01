@@ -57,11 +57,11 @@
                 </div>
                 <br>
                 @isset($user)
-                <div class="header-status">
-                    <a href="{{ route('orders.index') }}">
-                        <i class="fa fa-truck"></i>Статус замовлення
-                    </a>
-                </div>
+                    <div class="header-status">
+                        <a href="{{ route('orders.index') }}">
+                            <i class="fa fa-truck"></i> Статус замовлення
+                        </a>
+                    </div>
                 @endisset
             </div>
             <!-- Header Tools End -->
@@ -263,10 +263,11 @@
 <div class="clearfix">
     @foreach($title_list as $item)
         @isset($item->productphotos[0])
-        <div class="img-container" style="background-color:#bbb">
-            <a href="{{ route('products.show', ['product' => $item->id]) }}"><img
-                    src="{{ asset('photos/' . $item->productphotos[0]->filename) }}" alt="Product Image"></a>
-        </div>
+            <div class="img-container" style="background-color:#bbb">
+                <a href="{{ route('products.show', ['product' => $item->id]) }}">
+                    <img src="{{ asset('photos/' . $item->productphotos[0]->filename) }}" alt="Product Image">
+                </a>
+            </div>
         @endisset
     @endforeach
 </div>

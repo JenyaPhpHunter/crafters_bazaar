@@ -1,135 +1,267 @@
-@use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
-@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
-@use "logo" as *; // Імпортує файл logo з поточної директорії і робить усі його змінні/функції доступними
-@use "lan-curr" as *; // Імпортує файл lan-curr з поточної директорії і робить усі його змінні/функції доступними
-@use "tools" as *; // Імпортує файл tools з поточної директорії і робить усі його змінні/функції доступними
-@use "menu" as *; // Імпортує файл menu з поточної директорії і робить усі його змінні/функції доступними
-@use "offcanvas" as *; // Імпортує файл offcanvas з поточної директорії і робить усі його змінні/функції доступними
-@use "overlay-menu" as *; // Імпортує файл overlay-menu з поточної директорії і робить усі його змінні/функції доступними
-@use "search" as *; // Імпортує файл search з поточної директорії і робить усі його змінні/функції доступними
-@use "category" as *; // Імпортує файл category з поточної директорії і робить усі його змінні/функції доступними
+@use "../variables" as *;
+@use "../components/animations" as *;
+@use "logo" as *;
+@use "lan-curr" as *;
+@use "tools" as *;
+@use "menu" as *;
+@use "offcanvas" as *;
+@use "overlay-menu" as *;
+@use "search" as *;
+@use "category" as *;
 
-/* Main Header CSS with Animations and Color Palette */
-.header-section { // Визначає стилі для секції заголовка
-    position: relative; // Встановлює відносне позиціонування
-    z-index: 98; // Встановлює рівень поверхні
-    background-color: $white; // Колір фону білий
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає тінь
-    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
+/* ====================== HEADER ====================== */
+.header-section {
+    position: relative;
+    z-index: 98;
+    background-color: $white;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    padding: 12px 0; /* Точно як на скріні — компактно! */
+    animation: fadeInUp 0.5s ease-out;
 
-    & .container, // Стилі для контейнера всередині
-    & .container-fluid { // Стилі для контейнера-fluid всередині
-        position: relative; // Встановлює відносне позиціонування
+    & .container { position: relative; }
+}
+
+/* ====================== SITE MENU (меню знизу) ====================== */
+.site-menu-section {
+    padding: 0 !important; /* Прибираємо зайву висоту */
+    border-top: 1px solid #eee;
+    background-color: $white;
+}
+
+.site-main-menu {
+    height: 46px !important; /* Точно як на скріні — низьке меню */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-main-menu ul > li > a {
+    padding: 0 18px !important;
+    line-height: 46px !important;
+    font-size: 15px;
+    color: #8B7E6A !important; /* бежевий колір, як усі написи */
+    font-weight: 500;
+}
+
+/* ====================== Статус замовлення — бежевий колір ====================== */
+.header-status {
+    margin-top: 4px;
+    text-align: right;
+}
+
+.header-status a {
+    color: #8B7E6A !important; /* той самий бежевий колір */
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.header-status a:hover {
+    color: $primary !important;
+}
+
+/* ====================== Sticky header (коли прокручуєш) ====================== */
+.header-section,
+.sticky-header {
+    transition: transform 0.38s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    will-change: transform;
+    backface-visibility: hidden; /* проти тремтіння на мобілці */
+}
+
+.header-section {
+    transform: translateY(0);
+    position: relative;
+    z-index: 98;
+}
+
+.sticky-header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    transform: translateY(-100%); // спочатку прихований зверху
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.sticky-header.is-sticky {
+    transform: translateY(0) !important;     // ← ГОЛОВНЕ!
+    padding: 8px 0 !important;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.sticky-header .site-menu-section {
+    height: 40px;
+}
+
+.sticky-header .site-main-menu {
+    height: 40px !important;
+}
+
+.sticky-header .site-main-menu ul > li > a {
+    line-height: 40px !important;
+}
+
+/* ====================== Пошук — трохи компактніше ====================== */
+.header6-search .form-control {
+    height: 46px;
+    border: 2px solid $primary;
+    border-radius: 50px 0 0 50px;
+    font-size: 15px;
+}
+
+.header6-search button {
+    height: 46px;
+    width: 56px;
+    border-radius: 0 50px 50px 0;
+    background: $primary;
+    color: white;
+    font-size: 18px;
+}
+
+/* ===================================================== */
+/* ФІНАЛЬНИЙ ХЕДЕР 2025 — однаковий колір та шрифт всюди */
+/* Бежевий $header-text + Inter + чіткі бейджи + ідеальне вирівнювання */
+/* ===================================================== */
+
+$header-text: #8B7E6A; // вже є у _variables.scss, тут просто для наочності
+
+.header-section,
+.sticky-header,
+.topbar-section,
+.site-main-menu,
+.mega-menu,
+.sub-menu {
+
+    a,
+    span,
+    .menu-text,
+    .menu-link,
+    .dropdown-toggle,
+    .dropdown-item {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        font-weight: 520 !important;
+        font-size: 15.5px !important;
+        letter-spacing: 0.015em !important;
+        color: $header-text !important;
+        transition: color 0.3s ease;
     }
 
-    & .row { // Стилі для рядка всередині
-        & > [class*="col"] { // Стилі для дочірніх елементів із класами col
-            position: static; // Встановлює статичне позиціонування
-        }
+    /* Ім’я користувача та Статус замовлення — трохи більше */
+    .header-login a,
+    .header-status a {
+        font-size: 17.5px !important;
+        font-weight: 550 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px;
     }
 
-    &.header-menu-center { // Стилі для .header-section із класом header-menu-center
-        & .row { // Стилі для рядка всередині
-            & > [class*="col"] { // Стилі для дочірніх елементів із класами col
-                &:first-child, // Стилі для першого елемента
-                &:last-child { // Стилі для останнього елемента
-                    flex: 1 0 210px; // Гнучкість і мінімальна ширина
-                    max-width: 210px; // Максимальна ширина
-                }
-            }
-        }
-    }
-
-    &.header-transparent { // Стилі для .header-section із класом header-transparent
-        position: absolute; // Встановлює абсолютне позиціонування
-        top: 0; // Прикріплює до верху
-        left: 0; // Прикріплює ліворуч
-        width: 100%; // Ширина 100%
-        background-color: transparent !important; // Прозорий фон
+    /* Ховер — ніжна бірюза */
+    a:hover,
+    .menu-link:hover,
+    .dropdown-item:hover {
+        color: $primary !important;
     }
 }
 
-/* Sticky Header */
-.sticky-header { // Визначає стилі для фіксованого заголовка
-    position: fixed; // Фіксує позицію
-    z-index: 99; // Встановлює рівень поверхні вище
-    top: 0; // Прикріплює до верху
-    left: 0; // Прикріплює ліворуч
-    width: 100%; // Ширина 100%
-    transition: $transition; // Плавний перехід
-    transform: translateY(-100%); // Зсуває вгору за межі екрана
-    background-color: #F4EDE7; // Колір фону
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Додає тінь
-
-    & .container, // Стилі для контейнера всередині
-    & .container-fluid { // Стилі для контейнера-fluid всередині
-        position: relative; // Встановлює відносне позиціонування
-    }
-
-    & .row { // Стилі для рядка всередині
-        & > [class*="col"] { // Стилі для дочірніх елементів із класами col
-            position: static; // Встановлює статичне позиціонування
-        }
-    }
-
-    &.header-menu-center { // Стилі для .sticky-header із класом header-menu-center
-        & .row { // Стилі для рядка всередині
-            @media only screen and (min-width: 1200px) { // Медіа-запит для екранів від 1200px
-                & > [class*="col"] { // Стилі для дочірніх елементів із класами col
-                    &:first-child, // Стилі для першого елемента
-                    &:last-child { // Стилі для останнього елемента
-                        flex: 1 0 210px; // Гнучкість і мінімальна ширина
-                        max-width: 210px; // Максимальна ширина
-                    }
-                }
-            }
-        }
-    }
-
-    &.is-sticky { // Стилі для .sticky-header із класом is-sticky
-        transform: translateY(0); // Повертає в початкову позицію
-        animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
-    }
+/* Топбар — окремо, бо там свої класи */
+.topbar-menu .menu-link,
+.language-currency .dropdown-toggle,
+.language-currency .dropdown-item {
+    color: $header-text !important;
+}
+.topbar-menu .menu-link:hover,
+.language-currency .dropdown-toggle:hover,
+.language-currency .dropdown-item:hover {
+    color: $primary !important;
 }
 
-/* Mobile Header */
-.mobile-header { // Визначає стилі для мобільного заголовка
-    background-color: $white; // Колір фону білий
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає тінь
-    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
-
-    & .header-tools { // Стилі для .header-tools всередині
-        animation: slideInRight 0.6s ease-out; // Застосовує анімацію slideInRight
-    }
+/* Чіткі бейджи (кошик і вподобане) */
+.header-wishlist .wishlist-count,
+.header-cart .cart-count {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    color: #fff !important;
+    background: $primary !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
 }
 
-/* Header Call */
-.header-call { // Визначає стилі для блоку дзвінка в заголовку
-    position: absolute; // Встановлює абсолютне позиціонування
-    top: 0; // Прикріплює до верху
-    right: 15px; // Зсуває праворуч
-    display: flex; // Використовує гнучке вирівнювання
-    align-items: center; // Центрує по вертикалі
-    justify-content: center; // Центрує по горизонталі
-    width: 200px; // Ширина
-    height: 100%; // Висота 100%
-    border-right: 1px solid #DEE2E6; // Права рамка
-    border-left: 1px solid #DEE2E6; // Ліва рамка
+/* ===================================================== */
+/* ПОВЕРТАЄМО ЧІТКІ ЦИФРИ В БЕЙДЖАХ (кошик, вподобане)   */
+/* ===================================================== */
 
-    & p { // Стилі для абзаців всередині
-        font-size: 16px; // Розмір шрифту
-        font-weight: 600; // Товщина шрифту
-        color: $secondary; // Колір тексту
-        transition: all 0.3s ease; // Плавний перехід
+/* Усі бейджи з цифрами — чіткий шрифт і правильний колір */
+.header-wishlist .wishlist-count,
+.header-cart .cart-count,
+.header-tools [class*="count"],
+.cart-count,
+.wishlist-count {
+    /* Повертаємо системний шрифт спеціально для цифр */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    letter-spacing: normal !important;
 
-        & i { // Стилі для іконок всередині
-            margin-right: 10px; // Відступ праворуч
-            color: $primary; // Колір іконки
-        }
+    /* Яскравий білий текст + чіткість */
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 
-        &:hover { // Стилі при наведенні на p
-            color: $primary; // Змінює колір тексту
-            transform: translateY(-2px); // Зсуває вгору
-        }
-    }
+    /* Якщо бейдж червоний — робимо контрастним */
+    background: $primary !important;
+    border-radius: 50% !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    display: inline-block;
+    text-align: center;
+
+    /* Найголовніше — чіткість цифр */
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Якщо у тебе бейджі через ::before — теж виправляємо */
+.header-wishlist a::before,
+.header-cart a::before,
+.wishlist-count::before,
+.cart-count::before {
+    font-family: inherit !important;
+}
+
+/* ===================================================== */
+/* ІМ’Я КОРИСТУВАЧА — точно як ти хочеш: велике, жирне, ідеально вирівняне */
+/* ===================================================== */
+
+.header-login a {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    font-weight: 600 !important;        /* найжирніше і найгарніше */
+    font-size: 18px !important;         /* трохи більше за все інше */
+    color: $header-text !important;      /* точно той самий бежевий */
+    letter-spacing: 0.02em !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 9px;                            /* відстань між іконкою і текстом */
+    line-height: 1.2;
+    transition: all 0.3s ease;
+}
+
+.header-login a:hover {
+    color: $primary !important;          /* при ховері — ніжна бірюза */
+    transform: translateY(-1px);
+}
+
+/* Якщо ім’я дуже довге — не ламаємо верстку */
+.header-login a span,
+.header-login a i {
+    white-space: nowrap;
 }
