@@ -1,5 +1,4 @@
 @use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
-@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
 
 /* Header Logo with Animations */
 .header-logo { // Визначає стилі для блоку логотипу в заголовку

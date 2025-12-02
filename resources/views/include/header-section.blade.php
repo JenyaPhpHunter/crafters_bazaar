@@ -73,6 +73,7 @@
         <div class="container">
             <nav class="site-main-menu justify-content-center menu-height-60">
                 <ul>
+                    {{-- Товари --}}
                     <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Товари</span></a>
                         @if(isset($header_kind_products))
                             <ul class="sub-menu">
@@ -90,6 +91,8 @@
                             </ul>
                         @endif
                     </li>
+
+                    {{-- Мої товари (якщо є) --}}
                     @if(isset($user_products) && $user_products->count() > 0)
                         <li class="has-children"><a href="{{ route('products.index') }}"><span class="menu-text">Мої товари</span></a>
                             <ul class="sub-menu mega-menu">
@@ -117,7 +120,10 @@
                             </ul>
                         </li>
                     @endif
-                    <li class="has-children"><a href="#"><span class="menu-text">Курси</span></a>
+
+                    {{-- Курси --}}
+                    <li class="has-children">
+                        <a href="#"><span class="menu-text">Курси</span></a>
                         <ul class="sub-menu mega-menu">
                             <li>
                                 <a href="#" class="mega-menu-title"><span class="menu-text">SHOP PAGES</span></a>
@@ -239,7 +245,7 @@
                         </ul>
                     </li>
                     @if(isset($user) && $user->role_id != 9)
-                        <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди></span></a>
+                        <li class="has-children"><a href="{{ route('brands.index') }}"><span class="menu-text">Бренди</span></a>
                             <ul class="sub-menu">
                                 <li><a href="{{ route('brands.create') }}"><span class="menu-text">Створити бренд</span></a></li>
                                 <li><a href="{{ route('brands.index') }}"><span class="menu-text">Всі бренди</span></a></li>

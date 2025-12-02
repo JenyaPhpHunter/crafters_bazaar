@@ -1,111 +1,72 @@
 @use "../variables" as *; // Імпортує файл variables з батьківської директорії та робить усі його змінні доступними без префікса
-@use "../components/animations" as *; // Імпортує файл animations з директорії components і робить усі його змінні/функції доступними
 @use "sass:color"; // Імпортує модуль color з бібліотеки Sass для роботи з кольорами
 
 /* Header Tools/Action Buttons */
-.header-tools { // Визначає стилі для блоку інструментів/кнопок у заголовку
-    display: flex; // Використовує гнучке вирівнювання
-    animation: fadeInUp 0.6s ease-out; // Застосовує анімацію fadeInUp
+/* Header Tools — однаковий шрифт скрізь (як у .header-status) */
+.header-tools {
+    display: flex;
+    animation: fadeInUp 0.6s ease-out;
 
-    & > div { // Стилі для дочірніх div всередині
-        margin-left: 25px; // Лівий відступ
+    & > div {
+        margin-left: 25px;
 
-        & a { // Стилі для посилань всередині
-            position: relative; // Відносне позиціонування
-            display: flex; // Використовує гнучке вирівнювання
-            color: $secondary !important; // Колір тексту (темно-бежевий #D2B48C)
-            animation: bounceIn 0.6s ease-out; // Застосовує анімацію bounceIn
-            transition: all 0.3s ease; // Плавний перехід
+        & a {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;                    /* замість &nbsp; — сучасно */
+            color: $secondary !important;
+            font-size: 18px;             /* ← ОДНАКОВИЙ ШРИФТ */
+            font-weight: 500;            /* ← ОДНАКОВИЙ ВАГ */
+            line-height: 1.2;
+            transition: all 0.3s ease;
 
-            & span { // Стилі для span всередині
-                font-size: 13px; // Розмір шрифту
-                font-weight: 700; // Товщина шрифту
-                line-height: 1rem; // Висота рядка
-                position: absolute; // Абсолютне позиціонування
-                z-index: 1; // Встановлює рівень поверхні
-                top: 0; // Прикріплює до верху
-                right: 0; // Прикріплює праворуч
-                min-width: 16px; // Мінімальна ширина
-                height: 16px; // Висота
-                padding: 0 3px; // Внутрішні відступи
-                text-align: center; // Центрує текст
-                color: $white; // Колір тексту
-                border-radius: 14px; // Закруглені кути
-                background-color: $primary; // Колір фону (бірюзовий #6FC5C5)
-                animation: scalePulse 2s infinite; // Застосовує анімацію scalePulse
-                transition: all 0.3s ease; // Плавний перехід
+            & i {
+                font-size: 20px;
+                color: $secondary !important;
+                transition: all 0.3s ease;
             }
 
-            & i { // Стилі для іконок всередині
-                font-size: 20px; // Розмір шрифту
-                line-height: 32px; // Висота рядка
-                display: block; // Відображає як блок
-                color: $secondary !important; // Колір іконки (темно-бежевий #D2B48C)
-                transition: all 0.3s ease; // Плавний перехід
+            & span {
+                font-size: 13px;
+                font-weight: 700;
+                line-height: 1rem;
+                position: absolute;
+                top: -2px;
+                right: -8px;
+                min-width: 16px;
+                height: 16px;
+                padding: 0 4px;
+                text-align: center;
+                color: $white;
+                border-radius: 14px;
+                background-color: $primary;
+                animation: scalePulse 2s infinite;
             }
 
-            &:hover { // Стилі при наведенні на посилання
-                color: $primary !important; // Змінює колір на бірюзовий (#6FC5C5)
-                transform: translateY(-2px); // Зсуває вгору
-                & i { // Змінює іконку
-                    color: color.scale($primary, $lightness: -10%) !important; // Темніший бірюзовий
-                    transform: scale(1.1); // Збільшує розмір
+            &:hover {
+                color: $primary !important;
+                transform: translateY(-2px);
+
+                & i {
+                    color: color.scale($primary, $lightness: -10%) !important;
+                    transform: scale(1.1);
                 }
-                & span { // Змінює span
-                    background-color: color.scale($primary, $lightness: -10%); // Темніший фон
-                }
-            }
-        }
 
-        &.header-wishlist, // Стилі для div з класом header-wishlist
-        &.header-cart { // Стилі для div з класом header-cart
-            & > a { // Стилі для посилання всередині
-                & i { // Змінює іконку
-                    margin-right: 10px; // Правий відступ
+                & span {
+                    background-color: color.scale($primary, $lightness: -10%);
                 }
             }
         }
 
-        &.mobile-menu-toggle { // Стилі для div з класом mobile-menu-toggle
-            & > a { // Стилі для посилання всередині
-                width: 24px; // Ширина
-                height: 32px; // Висота
-            }
-        }
-
-        &:first-child { // Стилі для першого div
-            margin-left: 0; // Прибирає лівий відступ
+        &:first-child {
+            margin-left: 0;
         }
     }
 
-    /* Status Order Link */
-    .header-section .col-auto .header-status a { // Стилі для посилання статусу замовлення
-        color: $secondary !important; // Колір тексту (темно-бежевий #D2B48C)
-        font-size: 14px; // Розмір шрифту
-        font-weight: 500; // Товщина шрифту
-        display: flex; // Використовує гнучке вирівнювання
-        align-items: center; // Центрує по вертикалі
-        transition: all 0.3s ease; // Плавний перехід
-        animation: fadeInUp 0.6s ease-out; // Застосовує анімацію fadeInUp
-
-        & i { // Стилі для іконки всередині
-            margin-right: 5px; // Правий відступ
-            color: $secondary !important; // Колір іконки (темно-бежевий #D2B48C)
-            transition: all 0.3s ease; // Плавний перехід
-        }
-
-        &:hover { // Стилі при наведенні
-            color: $primary !important; // Змінює колір на бірюзовий (#6FC5C5)
-            transform: translateY(-2px); // Зсуває вгору
-            & i { // Змінює іконку
-                color: color.scale($primary, $lightness: -10%) !important; // Темніший бірюзовий
-            }
-        }
-    }
-
-    @media #{$small-mobile} { // Медіа-запит для маленьких мобільних
-        & > div { // Змінює div
-            margin-left: 15px; // Зменшує лівий відступ
+    @media #{$small-mobile} {
+        & > div {
+            margin-left: 15px;
         }
     }
 }

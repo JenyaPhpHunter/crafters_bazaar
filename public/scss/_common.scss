@@ -148,20 +148,3 @@ img { max-width:100%; height:auto; }
 @for $i from 1 through 9 {
     .fw-#{$i*100} { font-weight:$i*100; }
 }
-
-/* Overlay */
-[data-overlay] {
-    position:relative;
-    z-index:1;
-    &::before {
-        content:"";
-        position:absolute;
-        inset:0;
-        background:$black;
-        z-index:-1;
-    }
-}
-@for $i from 0 through 20 {
-    [data-overlay="#{$i*5}"]::before { opacity:0.05*$i; }
-}
-[data-bg-image] { background:no-repeat center center/cover; }

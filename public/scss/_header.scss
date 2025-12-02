@@ -2,6 +2,6 @@
 /*  05. Header CSS
 /*----------------------------------------*/
 
+@use "components/breadcrumbs" as *;
 @use "header/topbar" as *;
 @use "header/header" as *;
-@use "components/breadcrumbs" as *;

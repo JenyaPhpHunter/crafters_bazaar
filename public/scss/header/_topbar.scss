@@ -1,6 +1,6 @@
 @use "../variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
 @use "sass:color"; // Імпортує модуль sass:color для роботи з кольорами (наприклад, функція color.adjust)
-@use "../components/animations" as *;
+@use "lan-curr" as *;
 
 // 05.01 Topbar CSS // Коментар, що позначає початок секції стилів для верхньої панелі (Topbar)
 
@@ -10,7 +10,7 @@
     font-weight: 400; // Встановлює товщину шрифту (нормальна)
     position: relative; // Встановлює відносне позиціонування для блоку
     z-index: 101; // Встановлює високий z-index для відображення поверх інших елементів
-    background-color: $primary3; // Встановлює фоновий колір зі змінної $primary3
+    background-color: $secondary2; // Встановлює фоновий колір зі змінної $secondary2
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); // Додає легку тінь для ефекту глибини
     transition: all 0.3s ease; // Додає плавний перехід для всіх змін стилів за 0.3 секунди
     padding: 5px 0; // Встановлює внутрішні відступи 5px зверху та знизу
@@ -57,7 +57,7 @@
 
         &:hover { // Стилі для стану наведення на .section-fluid
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Збільшує тінь для ефекту підйому
-            background-color: color.adjust($primary3, $lightness: -5%); // Затемнює фоновий колір на 5%
+            background-color: color.adjust($secondary2, $lightness: -5%); // Затемнює фоновий колір на 5%
         }
     }
 }
@@ -103,7 +103,7 @@
                 height: 12px; // Встановлює висоту роздільника 12px
                 content: ""; // Порожній вміст псевдоелемента
                 transform: translateY(-50%); // Центрує псевдоелемент по вертикалі
-                background-color: color.adjust($primary3, $lightness: -20%); // Встановлює колір роздільника
+                background-color: color.adjust($secondary2, $lightness: -20%); // Встановлює колір роздільника
                 transition: all 0.3s ease; // Додає плавний перехід для змін псевдоелемента
             }
 
@@ -195,7 +195,7 @@
             &:hover, // Стилі для стану наведення
             &:focus { // Стилі для стану фокусу
                 color: $primary; // Змінює колір тексту на $primary
-                background-color: color.adjust($primary3, $lightness: -10%); // Затемнює фон на 10%
+                background-color: color.adjust($secondary2, $lightness: -10%); // Затемнює фон на 10%
                 border-radius: 15px; // Закруглює кути кнопки до 15px
             }
 
@@ -216,7 +216,7 @@
             right: 0; // Притискає підменю до правого краю
             min-width: 100px; // Встановлює мінімальну ширину підменю 100px
             background-color: $white; // Встановлює білий фон зі змінної $white
-            border: 1px solid color.adjust($primary3, $lightness: -20%); // Додає рамку з затемненим кольором
+            border: 1px solid color.adjust($secondary2, $lightness: -20%); // Додає рамку з затемненим кольором
             border-radius: 5px; // Закруглює кути підменю до 5px
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); // Додає тінь для ефекту глибини
             padding: 3px 0; // Встановлює внутрішні відступи 3px зверху/знизу
@@ -241,7 +241,7 @@
 
                 &:hover { // Стилі для стану наведення на пункт меню
                     color: $primary; // Змінює колір тексту на $primary
-                    background-color: color.adjust($primary3, $lightness: -5%); // Затемнює фон на 5%
+                    background-color: color.adjust($secondary2, $lightness: -5%); // Затемнює фон на 5%
                 }
             }
         }
