@@ -89,8 +89,10 @@ class ProductController extends Controller
         ];
     }
 
-    public function store(StoreProductRequest $request): RedirectResponse
+//    public function store(StoreProductRequest $request): RedirectResponse
+    public function store(Request $request)
     {
+        var_dump($request->all()); die();
         $request->validate([
             'image' => 'nullable|image|max:2048',
             'brand_id' => 'nullable|exists:brands,id',

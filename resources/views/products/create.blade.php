@@ -45,6 +45,10 @@
                             <div class="mb-4">
 
                             </div>
+                            <!-- Додаємо кнопки після обох колонок, по центру -->
+                            <div class="product-buttons-centered animate__animated animate__fadeInUp">
+                                @include('products.include.buttons')
+                            </div>
                         </form>
                         @isset($user)
                             @if(empty($user->name) || empty($user->surname) || empty($user->email) || empty($user->phone))
@@ -61,10 +65,6 @@
                     </div>
                 </div>
                 <!-- Product Summery End -->
-            </div>
-            <!-- Додаємо кнопки після обох колонок, по центру -->
-            <div class="product-buttons-centered animate__animated animate__fadeInUp">
-                @include('products.include.buttons')
             </div>
         </div>
     </div>

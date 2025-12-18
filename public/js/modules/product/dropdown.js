@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    document.addEventListener('DOMContentLoaded', () => {
+    $(document).ready(function () {
         let kindDropdown = null;
         let subkindDropdown = null;
 
@@ -75,30 +75,45 @@
                 });
             }
 
-            // Клік по опціях
+            // Клік по опціях — ОСТАТОЧНИЙ ФІКС ВІДОбРАЖЕННЯ ТЕКСТУ
             options.querySelectorAll('li').forEach(option => {
                 option.addEventListener('click', () => {
-                    const textSpan = selected.querySelector('.selected-text') || selected;
-                    textSpan.textContent = option.textContent.trim();
-                    hiddenInput.value = option.getAttribute('data-value');
-                    selected.classList.add('selected-value');
-                    dropdown.classList.remove('open');
-                    if (search) {
-                        search.value = '';
-                        search.style.display = 'none';
+                    const value = option.getAttribute('data-value');
+                    const title = option.textContent.trim();
+
+                    // Знаходимо span надійно
+                    const textSpan = dropdown.querySelector('.dropdown-selected .selected-text');
+                    if (textSpan) {
+                        // Оновлюємо текст
+                        textSpan.textContent = title;
+                        textSpan.innerText = title; // Додатково для сумісності
+
+                        // Примусово викликаємо reflow — це ключ!
+                        void textSpan.offsetHeight; // force reflow
+
+                        // Додаткова страховка: маленька затримка перед закриттям
+                        setTimeout(() => {
+                            selected.classList.add('selected-value');
+                            dropdown.classList.remove('open');
+                            if (search) {
+                                search.value = '';
+                                search.style.display = 'none';
+                            }
+                        }, 50); // 50ms достатньо для рендеру
                     }
 
-                    // === ТРИГЕРИМО ОНОВЛЕННЯ LABEL ===
+                    // Записуємо в hidden (вже працює за логами)
+                    hiddenInput.value = value;
+
                     $(hiddenInput).trigger('change');
 
-                    // Фільтрація підвидів (якщо це вид)
+                    // Фільтрація підвидів і автопідстановка — твоя логіка без змін
                     if (dropdown === kindDropdown && subkindDropdown) {
-                        const kindId = hiddenInput.value;
+                        const kindId = value;
                         subkindDropdown.querySelectorAll('li').forEach(sub => {
                             sub.style.display = sub.getAttribute('data-kind') === kindId ? 'flex' : 'none';
                         });
 
-                        // Скидаємо підвид, якщо не підходить
                         const subHidden = subkindDropdown.querySelector('input[type="hidden"]');
                         const subSelected = subkindDropdown.querySelector('.dropdown-selected');
                         const subText = subSelected.querySelector('.selected-text') || subSelected;
@@ -112,7 +127,6 @@
                         }
                     }
 
-                    // Автопідстановка виду при виборі підвиду
                     if (dropdown === subkindDropdown) {
                         const kindIdFromSub = option.getAttribute('data-kind');
                         if (kindIdFromSub && kindDropdown && !kindDropdown.querySelector('input[type="hidden"]').value) {
@@ -247,6 +261,16 @@
             setTimeout(() => $(document).trigger('field-updated'), 300);
         }
     });
+
+    // Повторна ініціалізація через 1 секунду — на випадок дуже повільного завантаження
+    setTimeout(() => {
+        if (!kindDropdown || !subkindDropdown) {
+            console.log('Повторна ініціалізація дропдаунів');
+            // Тут можна повторити частину коду ініціалізації, але зазвичай не потрібно
+            updateKindState();
+            $(document).trigger('field-updated');
+        }
+    }, 1000);
 
     // ЕКСПОРТ
     window.Learts = window.Learts || {};
