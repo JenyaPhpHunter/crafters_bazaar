@@ -1,0 +1,66 @@
+/* ============================================= */
+/* СТИЛІ ДЛЯ ДОДАТКОВОЇ ІНФОРМАЦІЇ (textarea)     */
+/* Без зміни висоти при вводі тексту            */
+/* Виправлено обрізання мітки при анімації       */
+/* ============================================= */
+
+@use "sass:color";
+@use "../variables" as *;
+
+/* Контейнер — додаємо padding-top для мітки, яка підніматиметься */
+.additional-info-wrapper {
+    position: relative;                     // Важливо для правильного позиціонування мітки
+    padding-top: 20px;                      // Місце зверху для піднятої мітки
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.4s ease;
+    background-color: $white;
+}
+
+/* Textarea — фіксована висота, без автоматичного розширення */
+.additional-info-textarea {
+    min-height: 120px;                      // ≈ 4 рядки
+    height: 120px;                          // Фіксована висота — НЕ змінюється!
+    max-height: 320px;                      // Обмеження при ручному розтягуванні
+    resize: vertical;                       // Тільки вниз мишкою
+    padding: 16px 18px 16px 18px;            // Рівномірний відступ
+    font-family: $form-font;
+    font-size: $form-font-size;
+    line-height: 1.65;
+    background-color: $white;
+    border: 2px solid color.adjust($form-label-color, $lightness: 45%);
+    border-radius: 12px;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+    outline: none;
+    display: block;
+    width: 100%;
+
+    // При фокусі — тільки акцент, без зміни висоти
+    &:focus {
+        border-color: $primary2;            // #00CED1
+        box-shadow: 0 8px 25px rgba($primary2, 0.18);
+        transform: translateY(-3px);
+    }
+
+    // Повністю прибираємо будь-яку зміну висоти при наявності тексту
+    &:not(:placeholder-shown),
+    &.has-content {
+        // Нічого не змінюємо по висоті!
+        border-color: $primary;             // Тільки змінюємо колір бордера на основний бірюзовий
+    }
+
+    &::placeholder {
+        color: color.adjust($body-color, $lightness: 20%);
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+
+    &:focus::placeholder {
+        opacity: 0.5;
+    }
+}
+
+/* Тінь при фокусі */
+.additional-info-wrapper:has(.additional-info-textarea:focus) {
+    box-shadow: 0 12px 35px rgba($primary2, 0.22);
+}

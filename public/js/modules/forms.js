@@ -40,6 +40,12 @@
         const subkindValue = $('input[name="sub_kind_product_id"]').val()?.trim();
         $('.custom-dropdown[data-name="subkind"]').closest('.form-section').find('.form-label')
             .toggleClass('label-focused', subkindValue.length > 0);
+
+        // 9. ДОДАТКОВА ІНФОРМАЦІЯ
+        const additionalText = $('#additional_information').val()?.trim();
+        const hasAdditionalInfo = additionalText.length > 0;
+        $('#additional_information').closest('.form-field').find('.form-label')
+            .toggleClass('label-focused', hasAdditionalInfo);
     };
 
     // === ТРИГЕРИ ===
@@ -67,5 +73,17 @@
                 trigger: 'hover focus'
             });
         });
+    });
+
+    // Живе оновлення для textarea додаткової інформації
+    $(document).on('input', '#additional_information', function () {
+        const hasText = $(this).val().trim().length > 0;
+        $(this).closest('.form-field').find('.form-label').toggleClass('label-focused', hasText);
+        $(this).toggleClass('has-content', hasText);
+
+        // Автоматичне розширення при введенні (якщо ще не у фокусі)
+        if (hasText && !$(this).is(':focus')) {
+            $(this).css('height', '200px');
+        }
     });
 })(jQuery);
