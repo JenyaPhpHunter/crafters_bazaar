@@ -12,7 +12,7 @@
                         @include('products.include.additional-info')
                     </div>
                     <div class="mb-4">
-                        @include('products.include.tags_social')
+                        @include('products.include.tags-social')
                     </div>
                 </div>
                 <!-- Product Summery Start -->

@@ -46,6 +46,16 @@
         const hasAdditionalInfo = additionalText.length > 0;
         $('#additional_information').closest('.form-field').find('.form-label')
             .toggleClass('label-focused', hasAdditionalInfo);
+
+        // 10. ТЕГИ
+        const tagsValue = $('#tags').val()?.trim();
+        const hasTags = tagsValue.length > 0;
+        $('#tags').closest('.form-field').find('.form-label').toggleClass('label-focused', hasTags);
+
+        // 11. СОЦМЕРЕЖІ
+        const socialValue = $('#social_links').val()?.trim();
+        const hasSocial = socialValue.length > 0;
+        $('#social_links').closest('.form-field').find('.form-label').toggleClass('label-focused', hasSocial);
     };
 
     // === ТРИГЕРИ ===

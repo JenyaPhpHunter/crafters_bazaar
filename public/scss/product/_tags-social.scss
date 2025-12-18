@@ -1,0 +1,62 @@
+/* ============================================= */
+/* СТИЛІ ДЛЯ ТЕГІВ ТА СОЦМЕРЕЖІ                  */
+/* Інтегровано з системою плаваючих міток       */
+/* Бірюзово-бежева тема                         */
+/* ============================================= */
+
+@use "sass:color";
+@use "../variables" as *;
+
+/* Спільні стилі для обох полів */
+.tags-wrapper,
+.social-links-wrapper {
+    position: relative;
+    padding-top: 18px;                       // Місце для піднятої мітки
+    border-radius: 14px;
+    transition: box-shadow 0.4s ease;
+    background-color: $white;
+}
+
+/* Інпути */
+.tags-input,
+.social-links-input {
+    height: 56px;                            // Комфортна висота, як у сучасних формах
+    padding: 14px 18px;
+    font-family: $form-font;
+    font-size: $form-font-size;
+    background-color: $white;
+    border: 2px solid color.adjust($form-label-color, $lightness: 45%);
+    border-radius: 12px;
+    transition: all 0.35s ease;
+    outline: none;
+
+    &:focus {
+        border-color: $primary2;             // Яскравий бірюзовий #00CED1
+        box-shadow: 0 8px 25px rgba($primary2, 0.18);
+        transform: translateY(-3px);
+    }
+
+    // Якщо поле заповнене — акцент основним бірюзовим
+    &:not(:placeholder-shown) {
+        border-color: $primary;              // #6fc5c5
+    }
+}
+
+/* Тінь при фокусі */
+.tags-wrapper:has(.tags-input:focus),
+.social-links-wrapper:has(.social-links-input:focus) {
+    box-shadow: 0 12px 35px rgba($primary2, 0.22);
+}
+
+/* Плейсхолдер */
+.tags-input::placeholder,
+.social-links-input::placeholder {
+    color: color.adjust($body-color, $lightness: 20%);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.tags-input:focus::placeholder,
+.social-links-input:focus::placeholder {
+    opacity: 0.5;
+}
