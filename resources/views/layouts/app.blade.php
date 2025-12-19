@@ -121,16 +121,14 @@
 <script src="{{ asset('js/plugins/scrollax.min.js') }}"></script>
 <script src="{{ asset('js/plugins/instafeed.min.js') }}"></script>
 
-<!-- Модулі (обов'язково в такому порядку!) -->
 <script src="{{ asset('js/modules/utils.js') }}"></script>
 <script src="{{ asset('js/modules/ui.js') }}"></script>
 <script src="{{ asset('js/modules/sliders.js') }}"></script>
 <script src="{{ asset('js/modules/layout.js') }}"></script>
-<script src="{{ asset('js/modules/forms.js') }}"></script>
-
-<!-- Точка входу -->
+<script src="{{ asset('js/modules/product/dropdown.js') }}"></script>   <!-- Спочатку дропдауни -->
+<script src="{{ asset('js/modules/forms.js') }}"></script>             <!-- Потім forms.js — він слухає події -->
 <script src="{{ asset('js/main.js') }}"></script>
-
+<!-- Сторінкові скрипти (для create.blade.php і т.д.) -->
 @stack('scripts')
 </body>
 </html>

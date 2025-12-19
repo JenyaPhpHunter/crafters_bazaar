@@ -10,8 +10,8 @@
     background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
     border: 1px solid rgba($primary, 0.15);
     border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 102, 102, 0.08);
-    backdrop-filter: blur(10px);
+    //box-shadow: 0 8px 25px rgba(0, 102, 102, 0.08);
+    //backdrop-filter: blur(10px);
 
     @media (max-width: 768px) {
         flex-direction: column;
@@ -153,4 +153,10 @@
     color: $primary !important;
     transform: translateY(-4px);
     transition: all 0.3s ease;
+}
+
+.quantity-produce-container {
+    isolation: auto !important; /* Розриває stacking context */
+    transform: translateZ(0); /* Примусово GPU-шар, але розриває вплив на верхні елементи */
+    z-index: 1 !important;
 }
