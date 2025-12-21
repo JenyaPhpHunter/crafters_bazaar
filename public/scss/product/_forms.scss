@@ -19,11 +19,24 @@
     box-shadow: 0 2px 4px rgba($black, 0.1);
 
     &:focus {
-        border-color: color.adjust($primary, $lightness: -20%);
-        box-shadow: 0 4px 12px rgba($primary, 0.2);
-        transform: scale(1.02);
         outline: none;
     }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        pointer-events: none;
+    }
+
+    //&:focus {
+    //    border-color: color.adjust($primary, $lightness: -20%);
+    //    box-shadow: 0 4px 12px rgba($primary, 0.2);
+        //transform: scale(1.02);
+        //outline: none;
+    //}
 }
 
 /* Прибираємо стрілки у number-полів */
@@ -48,4 +61,8 @@ input[type="number"] {
     &.focused {
         z-index: 10000; // щоб dropdown не ховався під іншими елементами
     }
+}
+
+.form-section.dropdown-open {
+    z-index: 10000;
 }

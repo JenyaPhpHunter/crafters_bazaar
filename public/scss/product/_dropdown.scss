@@ -2,179 +2,118 @@
 @use "../variables" as *;
 
 /* ============================================= */
-/* СТИЛІ ДЛЯ CUSTOM DROPDOWN (Вид та Підвид товару) */
-/* Фікс z-index: список завжди зверху над усіма полями */
+/* CUSTOM DROPDOWN — КРАСИВА ТА СТАБІЛЬНА ВЕРСІЯ  */
 /* ============================================= */
 
 .custom-dropdown-wrapper {
     @extend .form-field !optional;
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 15px;
     width: 100%;
     margin-bottom: 40px;
-    z-index: 1;
+}
 
-    &.has-focus {
-        .custom-dropdown .dropdown-selected {
-            border-color: $primary;
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba($primary, 0.15);
-        }
+/* DROPDOWN */
+.custom-dropdown {
+    flex: 1;
+    position: relative;
+}
+
+/* SELECTED FIELD */
+.dropdown-selected {
+    min-height: 58px;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 20px;
+    font-weight: 500;
+    color: #aaa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    &.selected-value {
+        color: #000;
     }
 
-    .custom-dropdown .dropdown-selected:hover {
+    &:hover {
         border-color: #6fc5c5;
     }
 
-    .custom-dropdown {
-        flex: 1;
-        max-width: 100%;
-        position: relative;
-        border-radius: 8px;
-        background-color: $white;
-        padding: 10px;
-        transition: all 0.3s ease;
-
-        /* КРИТИЧНИЙ ФІКС: коли відкритий — ізолюємо stacking context і максимальний z-index */
-        &.open {
-            position: relative;
-            z-index: 2147483647 !important; /* Максимальний можливий z-index в браузерах */
-            isolation: isolate; /* Ізолюємо від інших stacking context (наприклад, backdrop-filter в quantity) */
-
-            .dropdown-options {
-                display: block;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                max-height: 400px;
-                overflow-y: auto;
-                border: 2px solid color.adjust($primary, $lightness: -20%);
-                border-radius: 8px;
-                background-color: $white;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-                z-index: 2147483647 !important;
-                animation: fadeInUp 0.3s ease-out;
-            }
-
-            .dropdown-search {
-                z-index: 2147483647 !important;
-            }
-        }
-
-        .dropdown-selected {
-            padding: 1rem 1.25rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            background-color: #fafafa;
-            font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 20px;
-            font-weight: 500;
-            color: #aaa;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 58px;
-            animation: fadeInUp 0.6s ease-out;
-
-            &.selected-value {
-                color: #000;
-            }
-
-            &:focus {
-                border-color: $primary;
-                background-color: #fff;
-                box-shadow: 0 0 0 4px rgba($primary, 0.15);
-            }
-
-            .selected-text {
-                display: block;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: calc(100% - 40px);
-                transition: color 0.3s ease;
-            }
-        }
-
-        .dropdown-options {
-            display: none;
-            list-style: none;
-            padding: 0;
-            margin: 5px 0 0;
-
-            li {
-                padding: 1rem 1.25rem;
-                font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                font-size: 20px;
-                color: $heading-color;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                animation: fadeInUp 0.3s ease-out;
-
-                i {
-                    color: $primary;
-                }
-
-                &:hover,
-                &.selected {
-                    background-color: rgba($primary, 0.1);
-                    color: $primary;
-                }
-            }
-        }
-
-        &.open .dropdown-selected:after {
-            transform: rotate(180deg);
-        }
+    &:focus {
+        border-color: $primary;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba($primary, 0.15);
     }
+}
 
-    .btn-add {
-        flex-shrink: 0;
-        padding: 12px 25px;
-        background-color: $primary;
-        color: $white;
-        border-radius: 12px;
-        font-family: $futura;
-        font-size: 16px;
-        font-weight: 500;
-        transition: all 0.3s ease;
+/* TEXT */
+.selected-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 40px);
+}
+
+/* SEARCH INPUT — тепер красивий, коли винесений в body */
+.dropdown-search {
+    padding: 1rem 1.25rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 20px;
+    background: #fafafa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    margin-bottom: 6px;
+
+    &:focus {
+        border-color: $primary;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        outline: none;
+    }
+}
+
+/* OPTIONS LIST — красивий і зверху */
+.dropdown-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 380px;
+    overflow-y: auto;
+    background: #fff;
+    border: 2px solid color.adjust($primary, $lightness: -20%);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+    li {
+        padding: 1rem 1.25rem;
+        font-size: 20px;
         display: flex;
         align-items: center;
-        gap: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        animation: scalePulse 1.5s infinite;
+        gap: 10px;
+        cursor: pointer;
+        transition: background 0.2s ease;
 
         i {
-            font-size: 16px;
+            color: $primary;
         }
 
         &:hover {
-            background-color: color.adjust($primary, $lightness: -20%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba($primary, 0.3);
+            background: rgba($primary, 0.1);
+            color: $primary;
         }
     }
 }
 
-/* Мітка */
-.custom-dropdown-wrapper.has-focus .form-label,
-.custom-dropdown-wrapper:has(.custom-dropdown.open) .form-label {
-    color: #00CED1 !important;
-    transform: translateY(-4px);
-    transition: all 0.3s ease;
-}
-
-/* Хрестик для виду */
+/* CLEAR BUTTON (тільки для виду) */
 .custom-dropdown[data-name="kind"] .dropdown-selected {
-    position: relative;
     padding-right: 60px !important;
 
     .clear-selection {
@@ -195,77 +134,59 @@
         opacity: 0;
         pointer-events: none;
         transition: all 0.25s ease;
-        z-index: 10;
         backdrop-filter: blur(4px);
+
+        &:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: translateY(-50%) scale(1.15);
+        }
     }
 
-    &.has-value .clear-selection,
     &.selected-value .clear-selection {
         opacity: 1;
         pointer-events: all;
     }
-
-    .clear-selection:hover {
-        background: #ff6b6b;
-        color: white;
-        transform: translateY(-50%) scale(1.15);
-    }
 }
 
+/* КНОПКА "ДОДАТИ" — повертаємо красу */
 .kind-actions {
     flex-shrink: 0;
     width: 190px;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
 }
 
 .btn-add {
     width: 100%;
-    justify-content: center;
     min-height: 58px;
-}
-
-/* Пошук */
-.custom-dropdown .dropdown-search {
-    display: none !important;
-}
-
-.custom-dropdown.open .dropdown-search {
-    display: block !important;
-    width: 100%;
-    padding: 1rem 1.25rem;
-    border: 2px solid #e0e0e0;
+    padding: 12px 25px;
+    background-color: $primary;
+    color: $white;
     border-radius: 12px;
-    font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 20px;
-    background-color: #fafafa;
+    font-family: $futura;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
-    margin-bottom: 5px;
-    z-index: 2147483647 !important;
+
+    i {
+        font-size: 16px;
+    }
+
+    &:hover {
+        background-color: color.adjust($primary, $lightness: -20%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba($primary, 0.3);
+    }
 }
 
-/* ГАРАНТІЯ КЛІКАБЕЛЬНОСТІ */
-.custom-dropdown,
-.custom-dropdown * {
-    pointer-events: auto !important;
-}
-
-.mb-4 {
-    position: relative;
-    z-index: 1;
-}
-
-.mb-4.dropdown-open {
-    z-index: 100 !important;
-}
-
-.custom-dropdown.open .dropdown-options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 50;
+/* Мітка — плаваюча */
+.custom-dropdown-wrapper.has-focus .form-label,
+.custom-dropdown-wrapper .dropdown-selected:focus ~ .form-label {
+    color: #00CED1 !important;
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
 }

@@ -13,6 +13,11 @@
     //box-shadow: 0 8px 25px rgba(0, 102, 102, 0.08);
     //backdrop-filter: blur(10px);
 
+    position: relative;
+    z-index: 0;        /* нижче за dropdown */
+    transform: none;  /* ❗ КРИТИЧНО */
+    isolation: auto;
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -153,10 +158,4 @@
     color: $primary !important;
     transform: translateY(-4px);
     transition: all 0.3s ease;
-}
-
-.quantity-produce-container {
-    isolation: auto !important; /* Розриває stacking context */
-    transform: translateZ(0); /* Примусово GPU-шар, але розриває вплив на верхні елементи */
-    z-index: 1 !important;
 }
