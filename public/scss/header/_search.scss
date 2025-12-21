@@ -59,106 +59,106 @@
 }
 
 /* Header Six Search */
-.header6-search { // Визначає стилі для блоку пошуку в заголовку типу 6
-    width: 100%; // Ширина 100%
-    max-width: 650px; // Максимальна ширина
-    margin: auto; // Центрує елемент
-    animation: fadeInUp 0.5s ease-out; // Застосовує анімацію fadeInUp
+.header6-search {
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+    animation: fadeInUp 0.5s ease-out;
 
-    & form { // Стилі для форми всередині
-        position: relative; // Встановлює відносне позиціонування
-        width: 100%; // Ширина 100%
+    & form {
+        position: relative;
+        width: 100%;
 
-        & .input-wrapper { // Стилі для обгортки поля
-            position: relative; // Встановлює відносне позиціонування
-            width: 100%; // Ширина 100%
+        & .input-wrapper {
+            position: relative;
+            width: 100%;
 
-            &::before { // Стилі для псевдоелемента ::before
-                content: "\f002"; // Код іконки пошуку (FontAwesome)
-                font-family: $fontAwesome5Pro; // Шрифт для іконки
-                position: absolute; // Абсолютне позиціонування
-                left: 15px; // Зсуває ліворуч
-                top: 50%; // Центрує по вертикалі
-                transform: translateY(-50%); // Центрує вертикально
-                color: $primary; // Колір
-                font-size: 16px; // Розмір шрифту
-                z-index: 1; // Встановлює рівень поверхні
+            &::before {
+                content: "\f002";
+                font-family: $fontAwesome5Pro;
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $primary;
+                font-size: 16px;
+                z-index: 1;
             }
 
-            & input[type="text"] { // Стилі для текстового поля
-                font-size: 16px; // Розмір шрифту
-                line-height: 26px; // Висота рядка
-                width: 100%; // Ширина 100%
-                padding: 10px 50px 10px 40px; // Внутрішні відступи
-                color: $body-color; // Колір тексту
-                border: 2px solid $primary; // Рамка
-                border-radius: 5px; // Закруглені кути
-                background-color: $white; // Колір фону
-                box-sizing: border-box; // Враховує рамку та відступи
-                transition: all 0.3s ease; // Плавний перехід
-                animation: breathe 2s infinite; // Застосовує анімацію breathe
+            & input[type="text"] {
+                font-size: 16px;
+                line-height: 26px;
+                width: 100%;
+                padding: 10px 50px 10px 40px;
+                color: $body-color;
+                border: 2px solid #e0e0e0; /* Сірий спочатку */
+                border-radius: 30px; /* Закруглені, як у інших полів */
+                background-color: $white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                animation: breathe 2s infinite;
 
-                &:focus { // Стилі при фокусі
-                    border-color: color.scale($primary, $lightness: -10%); // Змінює колір рамки
-                    background-color: color.scale($white, $lightness: -5%); // Змінює колір фону
-                    box-shadow: 0 0 8px rgba($primary, 0.5); // Додає тінь
-                    transform: scale(1.02); // Збільшує розмір
-                    animation: none; // Прибирає анімацію
-                    outline: none; // Прибирає обводку
+                &:focus {
+                    border-color: $primary2 !important; /* Бірюзовий при фокусі */
+                    background-color: #fff;
+                    box-shadow: 0 0 0 4px rgba($primary2, 0.15); /* Підсвітка */
+                    transform: scale(1.02);
+                    animation: none;
+                    outline: none;
                 }
 
-                @include placeholder { // Застосовує міксин placeholder
-                    letter-spacing: 0.5px; // Інтервал між літерами
-                    color: #ABABAB; // Колір плейсхолдера
-                    transition: color 0.3s ease; // Плавна зміна кольору
+                @include placeholder {
+                    letter-spacing: 0.5px;
+                    color: #ABABAB;
+                    transition: color 0.3s ease;
                 }
 
-                &:focus::placeholder { // Стилі для плейсхолдера при фокусі
-                    color: color.scale(#ABABAB, $lightness: -20%); // Змінює колір
+                &:focus::placeholder {
+                    color: color.scale(#ABABAB, $lightness: -20%);
                 }
             }
         }
 
-        & button { // Стилі для кнопки всередині
-            position: absolute; // Абсолютне позиціонування
-            right: 10px; // Зсуває праворуч
-            top: 50%; // Центрує по вертикалі
-            transform: translateY(-50%); // Центрує вертикально
-            width: 30px; // Ширина
-            height: 30px; // Висота
-            padding: 0; // Прибирає внутрішні відступи
-            text-align: center; // Центрує текст
-            color: $primary; // Колір тексту
-            border: none; // Прибирає рамку
-            background-color: transparent; // Прозорий фон
-            transition: all 0.3s ease; // Плавний перехід
+        & button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            text-align: center;
+            color: $primary;
+            border: none;
+            background-color: transparent;
+            transition: all 0.3s ease;
 
-            & i { // Стилі для іконки всередині
-                font-size: 18px; // Розмір шрифту
-                line-height: 30px; // Висота рядка
+            & i {
+                font-size: 18px;
+                line-height: 30px;
             }
 
-            &:hover { // Стилі при наведенні
-                color: color.scale($primary, $lightness: -10%); // Змінює колір
-                transform: translateY(-50%) scale(1.2); // Збільшує розмір
+            &:hover {
+                color: color.scale($primary, $lightness: -10%);
+                transform: translateY(-50%) scale(1.2);
             }
 
-            &:active { // Стилі при натисканні
-                transform: translateY(-50%) scale(0.95); // Зменшує розмір
+            &:active {
+                transform: translateY(-50%) scale(0.95);
             }
         }
     }
 
-    @media #{$laptop-device} { // Медіа-запит для ноутбуків
-        max-width: 500px; // Змінює максимальну ширину
+    @media #{$laptop-device} {
+        max-width: 500px;
     }
 
-    @media #{$tablet-device}, #{$large-mobile} { // Медіа-запит для планшетів і великих мобільних
-        max-width: 400px; // Змінює максимальну ширину
+    @media #{$tablet-device}, #{$large-mobile} {
+        max-width: 400px;
     }
 
-    @media #{$small-mobile}, #{$extra-small-mobile} { // Медіа-запит для маленьких і дуже маленьких мобільних
-        max-width: 100%; // Максимальна ширина 100%
-        padding: 0 10px; // Внутрішні відступи
+    @media #{$small-mobile}, #{$extra-small-mobile} {
+        max-width: 100%;
+        padding: 0 10px;
     }
 }

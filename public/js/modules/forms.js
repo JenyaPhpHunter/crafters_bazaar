@@ -3,14 +3,6 @@
     "use strict";
 
     const updateAllLabels = () => {
-        // Назва товару
-        const titleText = $('#title').val()?.trim() || '';
-        $('#title').closest('.form-field').find('.form-label').toggleClass('label-focused', titleText.length > 0);
-
-        // Вартість
-        const priceText = $('#price').val()?.trim() || '';
-        $('#price').closest('.form-field').find('.form-label').toggleClass('label-focused', priceText.length > 0);
-
         // Кількість та терміни
         const stock = parseInt($('#stock_balance').val() || 0);
         const canProduce = $('#can_produce').is(':checked');
@@ -67,6 +59,31 @@
         // Bootstrap tooltips
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipTriggerList.forEach(trigger => new bootstrap.Tooltip(trigger, { delay: { show: 100, hide: 100 }, trigger: 'hover focus' }));
+    });
+
+    // Автоматичне підсвічування мітки для contenteditable полів (Назва та Вартість)
+    document.querySelectorAll('.title-price-input').forEach(field => {
+        const updateLabel = () => {
+            const hasText = field.textContent.trim().length > 0;
+            field.classList.toggle('has-content', hasText);
+
+            // Підсвічуємо мітку бірюзовим, коли є текст
+            const wrapper = field.closest('.title-price-wrapper');
+            if (wrapper) {
+                const label = wrapper.querySelector('.form-label');
+                if (label) {
+                    label.classList.toggle('label-focused', hasText || field === document.activeElement);
+                }
+            }
+        };
+
+        // При вводі
+        field.addEventListener('input', updateLabel);
+        field.addEventListener('paste', () => setTimeout(updateLabel, 0));
+        field.addEventListener('blur', updateLabel);
+
+        // При завантаженні — перевіряємо old()
+        updateLabel();
     });
 
 })(jQuery);

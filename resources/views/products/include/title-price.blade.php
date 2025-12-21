@@ -10,7 +10,7 @@
         <div class="input-group input-group-lg">
             <div
                 id="title"
-                class="form-control title-price-input"
+                class="form-control title-price-input {{ old('title') ? 'has-content' : '' }}"
                 contenteditable="true"
                 data-placeholder="Введіть назву товару"
                 spellcheck="false"
@@ -30,7 +30,7 @@
         <div class="input-group input-group-lg position-relative">
             <div
                 id="price"
-                class="form-control title-price-input price-input"
+                class="form-control title-price-input price-input {{ old('price') ? 'has-content' : '' }}"
                 contenteditable="true"
                 data-placeholder="Введіть вартість"
                 spellcheck="false"

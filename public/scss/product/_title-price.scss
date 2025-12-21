@@ -80,3 +80,12 @@
 .title-price-wrapper:has(.title-price-input:focus) {
     box-shadow: 0 12px 40px rgba($primary2, 0.22);
 }
+
+/* Підсвічуємо мітку бірюзовим, коли поле заповнене або у фокусі */
+.title-price-wrapper:has(.title-price-input.has-content) .form-label,
+.title-price-wrapper:has(.title-price-input:focus) .form-label {
+    color: #00CED1 !important; /* Бірюзовий */
+    transform: translateY(-6px) scale(0.94);
+    font-weight: 600;
+    transition: all 0.35s ease;
+}
