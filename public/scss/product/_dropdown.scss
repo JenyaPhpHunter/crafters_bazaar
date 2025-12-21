@@ -25,31 +25,32 @@
 .dropdown-selected {
     min-height: 58px;
     padding: 1rem 1.25rem;
-    border: 2px solid #e0e0e0;
+    border: 2px solid color.adjust($form-label-color, $lightness: 45%);
     border-radius: 12px;
-    background: #fafafa;
+    background: $white; // Чистий білий фон — як у інших полів
     font-size: 20px;
     font-weight: 500;
-    color: #aaa;
+    color: $body-light; // Сірий плейсхолдер
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba($black, 0.05);
 
     &.selected-value {
-        color: $black;
+        color: $heading-color; // Чорний текст при виборі
     }
 
     &:hover {
-        border-color: #6fc5c5;
+        border-color: $primary;
     }
 
     &:focus {
-        border-color: $primary;
-        background: #fff;
-        box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        border-color: $primary2;
+        background: $white;
+        box-shadow: 0 0 0 4px rgba($primary2, 0.15);
+        animation: pulseBorder 2s infinite; // Пульсація рамки при фокусі
     }
 }
 
@@ -61,36 +62,39 @@
     max-width: calc(100% - 40px);
 }
 
-/* SEARCH INPUT — тепер красивий, коли винесений в body */
+/* SEARCH INPUT — красивий і анімований */
 .dropdown-search {
     padding: 1rem 1.25rem;
-    border: 2px solid #e0e0e0;
+    border: 2px solid color.adjust($form-label-color, $lightness: 45%);
     border-radius: 12px;
     font-size: 20px;
-    background: #fafafa;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: $white;
+    box-shadow: 0 4px 12px rgba($black, 0.05);
     transition: all 0.3s ease;
     margin-bottom: 6px;
+    animation: fadeInUp 0.4s ease-out; // Плавна поява знизу
 
     &:focus {
-        border-color: $primary;
-        background: #fff;
-        box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        border-color: $primary2;
+        background: $white;
+        box-shadow: 0 0 0 4px rgba($primary2, 0.15);
         outline: none;
+        animation: none;
     }
 }
 
-/* OPTIONS LIST — красивий і зверху */
+/* OPTIONS LIST — красивий з анімацією */
 .dropdown-options {
     list-style: none;
     padding: 0;
     margin: 0;
     max-height: 380px;
     overflow-y: auto;
-    background: #fff;
+    background: $white;
     border: 2px solid color.adjust($primary, $lightness: -20%);
     border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 20px 60px rgba($black, 0.25);
+    animation: fadeInUp 0.5s ease-out; // Плавна поява списку
 
     li {
         padding: 1rem 1.25rem;
@@ -123,10 +127,10 @@
         transform: translateY(-50%);
         width: 34px;
         height: 34px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 2px solid #ff6b6b;
+        background: rgba($white, 0.9);
+        border: 2px solid $danger;
         border-radius: 50%;
-        color: #ff6b6b;
+        color: $danger;
         font-size: 14px;
         display: flex;
         align-items: center;
@@ -137,8 +141,8 @@
         backdrop-filter: blur(4px);
 
         &:hover {
-            background: #ff6b6b;
-            color: white;
+            background: $danger;
+            color: $white;
             transform: translateY(-50%) scale(1.15);
         }
     }
@@ -149,7 +153,7 @@
     }
 }
 
-/* КНОПКА "ДОДАТИ" — повертаємо красу */
+/* КНОПКА "ДОДАТИ" */
 .kind-actions {
     flex-shrink: 0;
     width: 190px;
@@ -169,7 +173,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba($black, 0.05);
     transition: all 0.3s ease;
 
     i {
@@ -184,9 +188,13 @@
 }
 
 /* Мітка — плаваюча */
-.custom-dropdown-wrapper.has-focus .form-label,
-.custom-dropdown-wrapper .dropdown-selected:focus ~ .form-label {
-    color: #00CED1 !important;
+.custom-dropdown-wrapper .form-label {
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+.custom-dropdown-wrapper:has(.dropdown-selected:focus) .form-label,
+.custom-dropdown-wrapper:has(.dropdown-selected.selected-value) .form-label {
+    color: $primary2 !important;
     transform: translateY(-4px);
     transition: all 0.3s ease;
 }
