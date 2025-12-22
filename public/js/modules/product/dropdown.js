@@ -96,8 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Фільтруємо підвиди по обраному виду
             if (dropdown.dataset.name === 'subkind') {
                 const kindValue = document.querySelector('input[name="kind_product_id"]')?.value || '';
+
                 list.querySelectorAll('li').forEach(li => {
-                    li.style.display = li.dataset.kind === kindValue ? 'flex' : 'none';
+                    if (!kindValue) {
+                        // Вид не обраний → показуємо ВСІ підвиди
+                        li.style.display = 'flex';
+                    } else {
+                        // Вид обраний → тільки відповідні
+                        li.style.display = li.dataset.kind === kindValue ? 'flex' : 'none';
+                    }
                 });
             }
         });
