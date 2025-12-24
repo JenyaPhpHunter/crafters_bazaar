@@ -7,13 +7,13 @@
 
 /* Головний контейнер дроп-зони */
 .file-drop-zone-compact {
-    height: 124px;                                    // Фіксована висота — гарантує, що все по центру
+    height: 128px;                                    // Фіксована висота — гарантує, що все по центру
     border: 2px dashed rgba($primary2, 0.6);          // Пунктирна рамка
     background: linear-gradient(135deg,
         color.adjust($primary, $lightness: 42%) 0%,
         color.adjust($primary3, $lightness: 15%) 100%); // Градієнт фону
     border-radius: 18px;                              // Закруглені кути
-    padding: 0 40px;                                  // Внутрішні відступи
+    padding: 0 95px;                                  // Внутрішні відступи
     cursor: pointer;                                  // Курсор вказує, що можна клікати
     transition: all 0.4s ease;                        // Плавні переходи
     position: relative;                               // Для майбутніх absolute-елементів (якщо треба)

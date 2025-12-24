@@ -1,54 +1,79 @@
 /* ============================================= */
 /* СТИЛІ ДЛЯ ТЕГІВ ТА СОЦМЕРЕЖІ                  */
-/* Інтегровано з системою плаваючих міток       */
-/* Бірюзово-бежева тема                         */
+/* Оптимізовані вертикальні відступи             */
+/* Бірюзово-бежева тема                          */
 /* ============================================= */
 
 @use "sass:color";
 @use "../variables" as *;
 
-/* Спільні стилі для обох полів */
-.tags-wrapper,
-.social-links-wrapper {
-    position: relative;
-    padding-top: 18px;                       // Місце для піднятої мітки
-    border-radius: 14px;
-    transition: box-shadow 0.4s ease;
-    background-color: $white;
+/* ---------------------------------------------
+   ЗМЕНШУЄМО ВІДСТУП МІЖ БЛОКАМИ
+--------------------------------------------- */
+
+/* Теги — менший відступ знизу */
+.form-field:has(.tags-wrapper) {
+    margin-bottom: 12px !important; // було ~24–32px → компактніше
 }
 
-/* Інпути */
+/* Соцмережі — трохи більше, бо нижче йде інший ряд */
+.form-field:has(.social-links-wrapper) {
+    margin-bottom: 20px !important;
+}
+
+/* ---------------------------------------------
+   ОБГОРТКИ ПОЛІВ
+--------------------------------------------- */
+
+.tags-wrapper,
+.social-links-wrapper {
+    position: relative;              // для мітки
+    padding-top: 18px;               // місце під label
+    border-radius: 14px;
+    background-color: $white;
+    transition: box-shadow 0.4s ease;
+}
+
+/* ---------------------------------------------
+   ІНПУТИ
+--------------------------------------------- */
+
 .tags-input,
 .social-links-input {
-    height: 56px;                            // Комфортна висота, як у сучасних формах
-    padding: 14px 18px;
+    height: 56px;                    // однакова висота
+    padding: 14px 18px;              // внутрішній відступ
     font-family: $form-font;
     font-size: $form-font-size;
     background-color: $white;
     border: 2px solid color.adjust($form-label-color, $lightness: 45%);
     border-radius: 12px;
-    transition: all 0.35s ease;
     outline: none;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
 
     &:focus {
-        border-color: $primary2;             // Яскравий бірюзовий #00CED1
+        border-color: $primary2;
         box-shadow: 0 8px 25px rgba($primary2, 0.18);
         transform: translateY(-3px);
     }
 
-    // Якщо поле заповнене — акцент основним бірюзовим
     &:not(:placeholder-shown) {
-        border-color: $primary;              // #6fc5c5
+        border-color: $primary;
     }
 }
 
-/* Тінь при фокусі */
+/* ---------------------------------------------
+   ТІНЬ ПРИ ФОКУСІ
+--------------------------------------------- */
+
 .tags-wrapper:has(.tags-input:focus),
 .social-links-wrapper:has(.social-links-input:focus) {
     box-shadow: 0 12px 35px rgba($primary2, 0.22);
 }
 
-/* Плейсхолдер */
+/* ---------------------------------------------
+   PLACEHOLDER
+--------------------------------------------- */
+
 .tags-input::placeholder,
 .social-links-input::placeholder {
     color: color.adjust($body-color, $lightness: 20%);

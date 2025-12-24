@@ -1,117 +1,222 @@
 @use "../variables" as *;
 
+/* =====================================================
+   ОСНОВНІ НАЛАШТУВАННЯ
+===================================================== */
+
+$images-block-height: 700px;        // Єдина висота блоку
+$inner-padding: 40px;               // Padding контейнера
+$thumb-gap: 20px;                   // Відступ між прев’ю
+$images-shift: 16px; // Наскільки зсуваємо блоки назустріч одне одному
+
+/* =====================================================
+   КОНТЕЙНЕР ЗОБРАЖЕНЬ
+===================================================== */
+
 .product-images {
-    position: relative;
     margin-bottom: 48px;
+    position: relative;
 
     &.vertical {
-        padding-left: 210px;
+        display: flex;
+        gap: 28px;                                  // ❗ Менший відступ
+        padding: $inner-padding;
+        height: $images-block-height;
+        background-color: $secondary2;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: $transition;
+    }
+}
 
-        @media #{$laptop-device} { padding-left: 140px; }
-        @media #{$desktop-device} { padding-left: 110px; }
-        @media #{$tablet-device} { padding-left: 155px; }
-        @media #{$large-mobile} { padding-left: 110px; }
-        @media #{$small-mobile} { padding-left: 95px; }
-        @media #{$extra-small-mobile} { padding-left: 75px; }
+/* =====================================================
+   ВЕРТИКАЛЬНІ ПРЕВ’Ю
+===================================================== */
 
-        &.animate__animated.animate__fadeIn {
-            border: none;
-            background-color: transparent;
-            padding: 15px;
-            position: relative;
-            display: flex;
+.product-thumb-slider-vertical {
+    margin-left: $images-shift; // ❗ Рухається ВСЕ: картинки + стрілки
+    width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $thumb-gap;                               // ❗ Явний gap
+    overflow: hidden;
 
-            .product-thumb-slider-vertical {
-                position: relative;
-                width: 200px;
-                min-height: 300px;
-                overflow-y: auto;
-                z-index: 10;
+    .item {
+        height: calc(
+            (100% - (#{$thumb-gap} * 2)) / 3
+        );                                          // ❗ ТОЧНА формула
 
-                .item {
-                    width: 190px;
-                    height: 190px;
-                    margin-bottom: 10px;
-                    overflow: hidden;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid transparent;
+        cursor: pointer;
+        transition: $transition;
 
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                }
-            }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-            .product-gallery-slider {
-                margin-left: 50px;
-                flex: 1;
-                min-height: 100px;
-                position: relative;
-                z-index: 5;
-            }
+        &:hover {
+            border-color: $primary;
+            box-shadow: 0 6px 16px rgba($primary, 0.25);
+        }
+    }
+}
 
-            &:hover {
-                box-shadow: 0 0 15px rgba(0, 108, 102, 0.3);
-            }
+/* =====================================================
+   ГОЛОВНЕ ЗОБРАЖЕННЯ
+===================================================== */
 
-            .preview-item {
-                border: 1px solid $primary2;
-                border-radius: 5px;
-                padding: 5px;
-                margin: 5px;
-                transition: $transition;
+.product-gallery-slider {
+    margin-right: $images-shift; // ❗ Рухається ВСЕ: слайд + стрілки
+    flex: 1;
+    height: 100%;
+    background-color: $white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 
-                &:hover {
-                    transform: scale(1.05);
-                }
+    /* ===== ФІКС SLICK ВИСОТИ ===== */
+
+    .slick-list,
+    .slick-track,
+    .slick-slide {
+        height: 100%;
+    }
+
+    .slick-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-zoom {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: $white;
+            display: block;
+        }
+    }
+}
+
+/* =====================================================
+   КНОПКА ЗУМУ
+===================================================== */
+
+.product-gallery-popup {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba($white, 0.95);
+    border: 2px solid $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.25s ease, background-color 0.25s ease;
+    z-index: 10;
+
+    i {
+        font-size: 20px;
+        color: $primary;
+    }
+
+    &:hover {
+        background-color: $primary;
+
+        i {
+            color: $white;
+        }
+    }
+}
+
+.product-zoom:hover .product-gallery-popup {
+    opacity: 1;
+}
+
+/* =====================================================
+   СТРІЛКИ — СТАБІЛЬНІ (БЕЗ РУХУ!)
+===================================================== */
+
+.product-gallery-slider,
+.product-thumb-slider-vertical {
+
+    .slick-prev,
+    .slick-next {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: rgba($white, 0.95);
+        border: 2px solid $primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        transition: background-color 0.25s ease, box-shadow 0.25s ease;
+        z-index: 20;
+
+        i {
+            font-size: 16px;
+            color: $primary;
+        }
+
+        &:hover {
+            background-color: $primary;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+
+            i {
+                color: $white;
             }
         }
     }
 }
 
-/* === НОВИЙ БЛОК: КНОПКА ЗУМУ === */
-.product-zoom {
-    position: relative;
-    display: block;
-    overflow: hidden;
+/* =====================================================
+   ПОЗИЦІЇ СТРІЛОК (БЛИЖЧЕ ДО ЦЕНТРУ)
+===================================================== */
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+.product-gallery-slider {
+
+    .slick-prev {
+        //left: 28px;                        // ❗ Зсунули до центру
+        top: 50%;
+        transform: translateY(-50%);
     }
 
-    .product-gallery-popup {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid $primary;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: $transition;
-        opacity: 0; // ховаємо за замовчуванням
+    .slick-next {
+        //right: 28px;                       // ❗ Не ховається
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
 
-        &:hover {
-            background: $primary;
-            color: white;
-            transform: scale(1.1);
-            opacity: 1;
-        }
+.product-thumb-slider-vertical {
 
-        i {
-            font-size: 18px;
-        }
+    .slick-prev {
+        left: -42px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
-    &:hover .product-gallery-popup {
-        opacity: 1; // показуємо при наведенні
+    .slick-next {
+        right: -42px;
+        top: 50%;
+        transform: translateY(-50%);
     }
 }

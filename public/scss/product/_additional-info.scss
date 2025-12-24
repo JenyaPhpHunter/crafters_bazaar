@@ -7,32 +7,32 @@
 @use "sass:color";
 @use "../variables" as *;
 
-/* Контейнер — додаємо padding-top для мітки, яка підніматиметься */
+/* Контейнер — БЕЗ padding-top */
 .additional-info-wrapper {
-    position: relative;                     // Важливо для правильного позиціонування мітки
-    padding-top: 20px;                      // Місце зверху для піднятої мітки
+    position: relative;
+    height: 100%;                 // ❗ важливо
     border-radius: 14px;
     overflow: hidden;
     transition: box-shadow 0.4s ease;
     background-color: $white;
+    display: flex;                // ❗
 }
 
 /* Textarea — фіксована висота, без автоматичного розширення */
 .additional-info-textarea {
-    min-height: 120px;                      // ≈ 4 рядки
-    height: 120px;                          // Фіксована висота — НЕ змінюється!
-    max-height: 320px;                      // Обмеження при ручному розтягуванні
-    resize: vertical;                       // Тільки вниз мишкою
-    padding: 16px 18px 16px 18px;            // Рівномірний відступ
+    height: 100% !important;      // ❗ бере висоту від wrapper
+    min-height: unset;            // ❗ ВАЖЛИВО
+    max-height: unset;            // ❗
+    resize: none;
+
+    padding: 16px 18px;
     font-family: $form-font;
     font-size: $form-font-size;
     line-height: 1.65;
+
     background-color: $white;
     border: 2px solid color.adjust($form-label-color, $lightness: 45%);
     border-radius: 12px;
-    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
-    outline: none;
-    display: block;
     width: 100%;
 
     // При фокусі — тільки акцент, без зміни висоти

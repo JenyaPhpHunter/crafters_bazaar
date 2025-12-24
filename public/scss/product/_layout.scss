@@ -1,0 +1,121 @@
+@use "../variables" as *;
+
+/* =====================================================
+   COMPACT MODE ДЛЯ ФОРМИ ПОРУЧ З ФОТО
+===================================================== */
+
+.product-form-main {
+    height: 700px;                     // Як блок фото
+    display: flex;                     // Вертикальний flex
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 0;                   // Легке “повітря”
+}
+
+/* =====================================================
+   ЄДИНЕ ПРАВИЛО ВЕРТИКАЛЬНИХ ВІДСТУПІВ
+   (керується $form-vertical-gap)
+===================================================== */
+
+.product-form-main .form-field,
+.product-form-main .form-section,
+.product-form-main .mb-4,
+.product-form-main .mb-5 {
+    margin-bottom: $form-vertical-gap !important;
+}
+
+/* =====================================================
+   TITLE + PRICE — КОМПАКТНІ
+===================================================== */
+
+.product-form-main .title-price-wrapper {
+    padding-top: 8px;
+}
+
+.product-form-main .title-price-input {
+    min-height: 56px;                  // трохи комфортніше
+    font-size: 20px;
+    padding: 14px 60px 14px 20px;
+}
+
+/* =====================================================
+   DROPDOWN — КОМПАКТНІ
+===================================================== */
+
+.product-form-main .dropdown-selected {
+    min-height: 54px;
+    font-size: 19px;
+    padding: 0.75rem 1rem;
+}
+
+.product-form-main .dropdown-search {
+    font-size: 18px;
+    padding: 0.75rem 1rem;
+}
+
+/* =====================================================
+   QUANTITY — КОМПАКТНІ
+===================================================== */
+
+.product-form-main .quantity-produce-container {
+    padding: 14px;
+    gap: 18px;
+}
+
+.product-form-main .qty-input {
+    height: 52px;
+    font-size: 18px;
+}
+
+/* =====================================================
+   КОЛЬОРИ — КОМПАКТНІ
+===================================================== */
+
+.product-form-main .color-circle {
+    width: 30px;
+    height: 30px;
+}
+
+.product-form-main .color-circles {
+    gap: 14px !important;
+}
+
+/* =====================================================
+   LABELS — МЕНШЕ ПОВІТРЯ
+===================================================== */
+
+.product-form-main .form-label {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+/* =====================================================
+   ЄДИНІ ШАПКИ БЛОКІВ (LABEL + ПІДКАЗКА)
+===================================================== */
+
+.form-block-header {
+    min-height: 56px;                 // ❗ ОДНАКОВА ВИСОТА ШАПОК
+    margin-bottom: 12px;              // Відступ до body
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* =====================================================
+   ЄДИНА ВИСОТА РОБОЧИХ ЗОН
+===================================================== */
+
+.additional-info-wrapper,
+.photo-upload-body {
+    height: 124px;                    // ❗ ТА САМА, ЩО file-drop-zone
+    display: flex;
+    align-items: stretch;
+}
+
+/* textarea займає всю висоту body */
+.additional-info-textarea {
+    height: 100% !important;
+    resize: none;                     // щоб не ламав геометрію
+}
+
+/* drop-zone вже має height: 124px — ідеально */

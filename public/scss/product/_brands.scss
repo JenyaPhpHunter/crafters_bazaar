@@ -1,17 +1,24 @@
 @use "sass:color";
 @use "../variables" as *;
 
+/* ---------------------------------------------
+   СЕКЦІЯ БРЕНДІВ — ДОДАЄМО ПОВІТРЯ ЗНИЗУ
+--------------------------------------------- */
+
+#brand-section {
+    margin-bottom: 45px; // ❗ збільшуємо відступ до кнопок
+}
+
 /* ─────────────────────────────────────────────────────
    ГОРИЗОНТАЛЬНА ГАЛЕРЕЯ БРЕНДІВ 2025 — ОСТАТОЧНА ВЕРСІЯ
    ───────────────────────────────────────────────────── */
 
 .brand-gallery-wrapper {
     display: grid;
-    grid-template-columns: auto 1fr auto 92px; /* 1.стрілка 2.галерея 3.стрілка 4.кнопка */
+    grid-template-columns: auto 1fr auto 92px;
     align-items: center;
     gap: 16px;
     height: 92px;
-    margin-bottom: 30px;
 }
 
 .brand-gallery-scroll {

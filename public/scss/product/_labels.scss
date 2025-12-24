@@ -24,3 +24,19 @@
     width: 100%;
     position: relative;
 }
+
+/* =============================================
+   АКТИВНИЙ LABEL ПРИ ЗНАЧЕННІ > 0
+============================================= */
+
+.form-label.label-active {
+    color: $primary2 !important;          // бірюзовий
+    transform: translateY(-4px);
+    font-weight: 600;
+}
+
+/* Підсвітка label якщо stock_balance > 0 */
+.quantity-field:has(#stock_balance:not([value="0"])) > .form-label {
+    color: $primary !important;
+}
+
