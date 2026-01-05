@@ -1,5 +1,4 @@
-{{-- resources/views/products/include/colors.blade.php --}}
-<div class="mb-5 animate__animated animate__fadeIn">
+<div class="mb-5 animate__animated animate__fadeIn color-block">
     <div class="text-center mb-4">
         <label class="form-label d-block">
             <strong>Колір (можна декілька)</strong>

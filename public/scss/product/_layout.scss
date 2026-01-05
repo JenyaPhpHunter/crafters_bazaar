@@ -5,11 +5,11 @@
 ===================================================== */
 
 .product-form-main {
-    height: 700px;                     // Як блок фото
-    display: flex;                     // Вертикальний flex
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 12px 0;                   // Легке “повітря”
+    padding: 12px 0;
+    height: auto;           // прибираємо фіксовану висоту
+    align-items: stretch;   // щоб дочірні блоки тягнулися природно
 }
 
 /* =====================================================
@@ -33,7 +33,7 @@
 }
 
 .product-form-main .title-price-input {
-    min-height: 56px;                  // трохи комфортніше
+    min-height: 56px;
     font-size: 20px;
     padding: 14px 60px 14px 20px;
 }
@@ -68,19 +68,6 @@
 }
 
 /* =====================================================
-   КОЛЬОРИ — КОМПАКТНІ
-===================================================== */
-
-.product-form-main .color-circle {
-    width: 30px;
-    height: 30px;
-}
-
-.product-form-main .color-circles {
-    gap: 14px !important;
-}
-
-/* =====================================================
    LABELS — МЕНШЕ ПОВІТРЯ
 ===================================================== */
 
@@ -94,8 +81,8 @@
 ===================================================== */
 
 .form-block-header {
-    min-height: 56px;                 // ❗ ОДНАКОВА ВИСОТА ШАПОК
-    margin-bottom: 12px;              // Відступ до body
+    min-height: 56px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -107,15 +94,53 @@
 
 .additional-info-wrapper,
 .photo-upload-body {
-    height: 124px;                    // ❗ ТА САМА, ЩО file-drop-zone
+    height: 124px;
     display: flex;
     align-items: stretch;
 }
 
-/* textarea займає всю висоту body */
 .additional-info-textarea {
     height: 100% !important;
-    resize: none;                     // щоб не ламав геометрію
+    resize: none;
 }
 
-/* drop-zone вже має height: 124px — ідеально */
+/* =====================================================
+   КОЛЬОРИ — ВЕРТИКАЛЬНЕ ПОЗИЦІОНУВАННЯ
+===================================================== */
+
+.product-form-main .color-block {
+    margin-top: 32px; // ← опускає блок кольорів вниз
+
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
+}
+
+/* =====================================================
+   НИЖНІ БЛОКИ — file_upload, brands, кнопки
+===================================================== */
+
+.product-form-secondary {
+    margin-top: 51px;
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+
+    .photo-upload-block {
+        margin-bottom: 170px;
+    }
+
+    .product-buttons-centered {
+        margin-top: 0;
+    }
+
+    @media (max-width: 768px) {
+        .photo-upload-block {
+            margin-bottom: 100px;
+        }
+        .brands-block {
+            margin-bottom: 12px;
+        }
+    }
+}
+

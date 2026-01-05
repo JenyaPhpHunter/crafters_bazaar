@@ -1,4 +1,4 @@
-<div class="mb-5 photo-upload-block">
+<div class="photo-upload-block mb-0">
 
     {{-- HEADER --}}
     <div class="form-block-header text-center">

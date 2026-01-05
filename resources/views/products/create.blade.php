@@ -42,13 +42,13 @@
                             {{-- Кольори --}}
                             @include('products.include.colors')
                             {{-- НИЖНІ БЛОКИ — ПОЗА ВИСОТОЮ ФОТО --}}
-                            <div class="product-form-secondary mt-5">
+                            <div class="product-form-secondary">
 
                                 @include('products.include.file_upload')
 
                                 @include('products.include.brands')
 
-                                <div class="product-buttons-centered mt-4">
+                                <div class="product-buttons-centered">
                                     @include('products.include.buttons')
                                 </div>
 
