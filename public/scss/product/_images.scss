@@ -3,51 +3,85 @@
 /* =====================================================
    ОСНОВНІ НАЛАШТУВАННЯ
 ===================================================== */
+$images-block-height: 700px;
+$inner-padding: 40px;
+$thumb-gap: 20px;
+$images-shift: 16px;
+$thumb-width: 200px;
 
-$images-block-height: 700px;        // Єдина висота блоку
-$inner-padding: 40px;               // Padding контейнера
-$thumb-gap: 20px;                   // Відступ між прев’ю
-$images-shift: 16px; // Наскільки зсуваємо блоки назустріч одне одному
+$arrow-size: 44px;
+$arrow-bg: rgba($white, 0.95);
+$arrow-border: 2px solid $primary;
+$arrow-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+$arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 
 /* =====================================================
-   КОНТЕЙНЕР ЗОБРАЖЕНЬ
+   СПІЛЬНІ СТИЛІ ДЛЯ СТРІЛОК (slick-prev / slick-next)
 ===================================================== */
+%arrow-base {
+    width: $arrow-size;
+    height: $arrow-size;
+    border-radius: 50%;
+    background-color: $arrow-bg;
+    border: $arrow-border;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: $arrow-shadow;
+    cursor: pointer;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    z-index: 20;
 
+    i {
+        font-size: 16px;
+        color: $primary;
+    }
+
+    &:hover {
+        background-color: $primary;
+        box-shadow: $arrow-hover-shadow;
+
+        i {
+            color: $white;
+        }
+    }
+}
+
+/* =====================================================
+   КОНТЕЙНЕР ГАЛЕРЕЇ
+===================================================== */
 .product-images {
     margin-bottom: 48px;
     position: relative;
+    z-index: 5;
 
     &.vertical {
         display: flex;
-        gap: 28px;                                  // ❗ Менший відступ
+        gap: 28px;
         padding: $inner-padding;
         height: $images-block-height;
         background-color: $secondary2;
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: $transition;
+        transition: box-shadow 0.3s ease;
     }
 }
 
 /* =====================================================
    ВЕРТИКАЛЬНІ ПРЕВ’Ю
 ===================================================== */
-
 .product-thumb-slider-vertical {
-    margin-left: $images-shift; // ❗ Рухається ВСЕ: картинки + стрілки
-    width: 200px;
+    margin-left: $images-shift;
+    width: $thumb-width;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: $thumb-gap;                               // ❗ Явний gap
+    gap: $thumb-gap;
     overflow: hidden;
 
     .item {
-        height: calc(
-            (100% - (#{$thumb-gap} * 2)) / 3
-        );                                          // ❗ ТОЧНА формула
-
+        height: calc((100% - (#{$thumb-gap} * 2)) / 3);
         border-radius: 16px;
         overflow: hidden;
         border: 3px solid transparent;
@@ -66,33 +100,47 @@ $images-shift: 16px; // Наскільки зсуваємо блоки назу�
             box-shadow: 0 6px 16px rgba($primary, 0.25);
         }
     }
+
+    .slick-prev,
+    .slick-next {
+        @extend %arrow-base;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .slick-prev {
+        left: -42px;
+    }
+
+    .slick-next {
+        right: -42px;
+    }
 }
 
 /* =====================================================
-   ГОЛОВНЕ ЗОБРАЖЕННЯ
+   ГОЛОВНИЙ СЛАЙДЕР
 ===================================================== */
-
 .product-gallery-slider {
-    margin-right: $images-shift; // ❗ Рухається ВСЕ: слайд + стрілки
     flex: 1;
     height: 100%;
     background-color: $white;
     border-radius: 20px;
     overflow: hidden;
+    position: relative;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-
-    /* ===== ФІКС SLICK ВИСОТИ ===== */
 
     .slick-list,
     .slick-track,
     .slick-slide {
         height: 100%;
+        width: 100%;                    // важливо додати
     }
 
     .slick-slide {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: block !important;      // прибираємо flex → немає центрування з полями
+        padding: 0;
+        margin: 0;
     }
 
     .product-zoom {
@@ -103,9 +151,10 @@ $images-shift: 16px; // Наскільки зсуваємо блоки назу�
         img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            background-color: $white;
+            object-fit: contain;          // зберігає пропорції 3:4 без обрізки
+            object-position: center;
             display: block;
+            background-color: $white;     // або transparent, якщо фон контейнера підходить
         }
     }
 }
@@ -113,7 +162,6 @@ $images-shift: 16px; // Наскільки зсуваємо блоки назу�
 /* =====================================================
    КНОПКА ЗУМУ
 ===================================================== */
-
 .product-gallery-popup {
     position: absolute;
     top: 22px;
@@ -138,10 +186,7 @@ $images-shift: 16px; // Наскільки зсуваємо блоки назу�
 
     &:hover {
         background-color: $primary;
-
-        i {
-            color: $white;
-        }
+        i { color: $white; }
     }
 }
 
@@ -150,73 +195,59 @@ $images-shift: 16px; // Наскільки зсуваємо блоки назу�
 }
 
 /* =====================================================
-   СТРІЛКИ — СТАБІЛЬНІ (БЕЗ РУХУ!)
+   АДАПТИВНІ КОРЕКЦІЇ ТА СТАРІ БЛОКИ (можна видалити, якщо не використовуються)
 ===================================================== */
+.product-images.vertical.animate__animated.animate__fadeIn {
+    border: none;
+    background-color: transparent;
+    padding: 15px;
 
-.product-gallery-slider,
-.product-thumb-slider-vertical {
+    .product-thumb-slider-vertical {
+        position: relative;
+        width: 200px;
+        min-height: 300px;
+        overflow-y: auto;
+        z-index: 10;
 
-    .slick-prev,
-    .slick-next {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background-color: rgba($white, 0.95);
-        border: 2px solid $primary;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        cursor: pointer;
-        transition: background-color 0.25s ease, box-shadow 0.25s ease;
-        z-index: 20;
+        .item {
+            width: 190px;
+            height: 190px;
+            margin-bottom: 10px;
+            overflow: hidden;
 
-        i {
-            font-size: 16px;
-            color: $primary;
-        }
-
-        &:hover {
-            background-color: $primary;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-
-            i {
-                color: $white;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
         }
     }
-}
 
-/* =====================================================
-   ПОЗИЦІЇ СТРІЛОК (БЛИЖЧЕ ДО ЦЕНТРУ)
-===================================================== */
-
-.product-gallery-slider {
-
-    .slick-prev {
-        //left: 28px;                        // ❗ Зсунули до центру
-        top: 50%;
-        transform: translateY(-50%);
+    &:hover {
+        box-shadow: 0 0 15px rgba(0, 108, 102, 0.3);
     }
 
-    .slick-next {
-        //right: 28px;                       // ❗ Не ховається
-        top: 50%;
-        transform: translateY(-50%);
+    .preview-item {
+        border: 1px solid $primary2;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px;
+        transition: $transition;
+
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 }
 
-.product-thumb-slider-vertical {
+/* Адаптивність padding-left (якщо досі використовується) */
+.product-images.vertical {
+    padding-left: 210px;
 
-    .slick-prev {
-        left: -42px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .slick-next {
-        right: -42px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
+    @media #{$laptop-device}    { padding-left: 140px; }
+    @media #{$desktop-device}   { padding-left: 110px; }
+    @media #{$tablet-device}    { padding-left: 155px; }
+    @media #{$large-mobile}     { padding-left: 110px; }
+    @media #{$small-mobile}     { padding-left: 95px;  }
+    @media #{$extra-small-mobile} { padding-left: 75px; }
 }
