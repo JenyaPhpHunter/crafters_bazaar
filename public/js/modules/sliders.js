@@ -35,7 +35,8 @@
                 slidesToScroll: 1,
                 asNavFor: '.product-thumb-slider, .product-thumb-slider-vertical',
                 prevArrow: '<button class="slick-prev"><i class="ti-angle-left"></i></button>',
-                nextArrow: '<button class="slick-next"><i class="ti-angle-right"></i></button>'
+                nextArrow: '<button class="slick-next"><i class="ti-angle-right"></i></button>',
+                appendArrows: '.product-gallery-slider'   // ← це ключовий рядок!
             });
         }
 
@@ -48,7 +49,8 @@
                 focusOnSelect: true,
                 asNavFor: '.product-gallery-slider',
                 prevArrow: '<button class="slick-prev"><i class="ti-angle-up"></i></button>',
-                nextArrow: '<button class="slick-next"><i class="ti-angle-down"></i></button>'
+                nextArrow: '<button class="slick-next"><i class="ti-angle-down"></i></button>',
+                appendArrows: '.product-thumb-slider-vertical'   // ← це ключовий рядок!
             });
         }
 
