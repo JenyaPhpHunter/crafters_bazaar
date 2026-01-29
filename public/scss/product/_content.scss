@@ -8,7 +8,7 @@
 @use "../variables" as *;
 
 /* Контейнер — БЕЗ padding-top */
-.additional-info-wrapper {
+.content-wrapper {
     position: relative;
     height: 100%;                 // ❗ важливо
     border-radius: 14px;
@@ -19,7 +19,7 @@
 }
 
 /* Textarea — фіксована висота, без автоматичного розширення */
-.additional-info-textarea {
+.content-textarea {
     height: 100% !important;      // ❗ бере висоту від wrapper
     min-height: unset;            // ❗ ВАЖЛИВО
     max-height: unset;            // ❗
@@ -61,6 +61,6 @@
 }
 
 /* Тінь при фокусі */
-.additional-info-wrapper:has(.additional-info-textarea:focus) {
+.content-wrapper:has(.content-textarea:focus) {
     box-shadow: 0 12px 35px rgba($primary2, 0.22);
 }

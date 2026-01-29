@@ -8,7 +8,7 @@
                 {{-- ЛІВА КОЛОНКА — ФОТО --}}
                 <div class="col-lg-6 col-12 mb-5">
                     @include('products.include.images')
-                    @include('products.include.additional-info')
+                    @include('products.include.content')
                     @include('products.include.tags-social')
                 </div>
 
@@ -25,10 +25,12 @@
                             @csrf
 
                             {{-- hidden --}}
-                            <input type="hidden" name="color_id" id="selectedColor">
+{{--                            <input type="hidden" name="color_id" id="selectedColor">--}}
                             <input type="hidden" name="brand_id" id="selectedBrand">
                             <input type="hidden" name="action" id="form-action">
-                            <input type="hidden" name="additional_information" id="additional-info-hidden">
+                            <input type="hidden" name="content" id="content-hidden">
+                            <input type="hidden" name="tags" id="tags-hidden">
+                            <input type="hidden" name="social_links" id="social-links-hidden">
 
                             {{-- Назва + ціна --}}
                             @include('products.include.title-price')

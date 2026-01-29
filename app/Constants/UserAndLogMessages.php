@@ -43,11 +43,13 @@ class UserAndLogMessages
     const ERROR_NUMERIC_FIELD = 'Поле повинно бути числом';
     const ERROR_INTEGER_FIELD = 'Поле повинно бути цілим числом';
     const ERROR_STRING_FIELD = 'Поле повинно бути строкою';
+    const ERROR_ARRAY_FIELD = 'Поле повинно бути масивом';
     const ERROR_DATE_FIELD = 'Поле повинно бути датою';
     const ERROR_BOOLEAN_FIELD = 'Поле повинно бути булевим значенням';
     const ERROR_GTE_FIELD = 'Поле з кінцевим значенням має бути більшим або рівним полю з початковим значенням';
     const ERROR_EXISTS_FIELD = 'Поле повинно існувати в таблиці';
     const ERROR_MAX_NUMBER_FIELD = 'Поле не повинно перевищувати дозволене максимальне значення';
+    const ERROR_MIN_STRING_FIELD = 'Поле не повинно бути меншим за дозволену мінімальну кількість символів';
     const ERROR_MAX_STRING_FIELD = 'Поле не повинно перевищувати дозволену максимальну кількість символів';
     const ERROR_AFTER_OR_EQUAL_FIELD = 'Поле яке є датою закінчення не повинно бути раніше ніж дата початку';
 
@@ -56,7 +58,7 @@ class UserAndLogMessages
 
     const ERROR_401 = 'Anauthorized. 401';
     const ERROR_ACTION_NOT_PERMITTED = 'У вас недостатньо прав для цієї операції. 403';
-    const ERROR_404 = 'Endpoint not difined. 404';
+    const ERROR_404 = 'Нічого не знайдено. 404';
     const ERROR_405 = 'Method not allowed. 405';
     const ERROR_403 = 'Ця дія заблокована';
     const ERROR_BETWEEN_FIELD = 'Значення повинно бути в діапазоні від мінімального до максимального дозволеного.';

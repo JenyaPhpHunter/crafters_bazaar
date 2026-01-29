@@ -43,3 +43,5 @@ class CreateRolesTable extends Migration
         Schema::dropIfExists('roles');
     }
 }
+//php artisan db:seed
+

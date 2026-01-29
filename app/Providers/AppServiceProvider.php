@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composers\HeaderComposer;
+use App\View\Composers\ProductFormComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         App::setLocale(Session::get('locale', config('app.locale')));
 
+        // 🔹 Header
         View::composer([
             'include.header-section',
             'admin.include.header-section',
@@ -36,5 +38,14 @@ class AppServiceProvider extends ServiceProvider
             'admin.include.header-sticky-section',
             'include.footer',
         ], HeaderComposer::class);
+
+        // 🔹 Product forms
+        View::composer([
+            'products.create',
+            'products.edit',
+            'products.partials.*',
+        ], ProductFormComposer::class);
+
     }
+
 }

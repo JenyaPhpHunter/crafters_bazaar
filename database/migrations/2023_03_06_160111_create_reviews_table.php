@@ -16,15 +16,34 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->comment("Id товару");
-            $table->unsignedBigInteger('user_id')->comment("Id користувача");
-            $table->enum('rating', array_keys(config('others.rating')))->nullable()->comment("рейтинг товару");
-            $table->text('comment')->comment("Коментар");
-            $table->timestamps();
-            $table->softDeletes();
 
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('user_id')->references('id')->on('users');
+            // 🔗 Товар, який оцінюють
+            $table->foreignId('product_id')
+                ->comment('Товар')
+                ->constrained('products')
+                ->cascadeOnDelete();
+            // ⬆️ якщо товар видалено — відгуки більше не потрібні
+
+            // 👤 Користувач, який поставив оцінку
+            $table->foreignId('user_id')
+                ->comment('Користувач')
+                ->constrained('users')
+                ->cascadeOnDelete();
+            // ⬆️ користувач видалений → його оцінка теж зникає (ЛОГІЧНО)
+
+            // ⭐ Оцінка 1–5
+            $table->unsignedTinyInteger('rating')
+                ->comment('Оцінка (1–5)');
+
+            // 💬 Коментар
+            $table->text('comment')
+                ->nullable()
+                ->comment('Відгук користувача');
+
+            $table->timestamps();
+
+            // 🚫 Один користувач — одна оцінка на товар
+            $table->unique(['product_id', 'user_id']);
         });
     }
 
@@ -35,10 +54,6 @@ class CreateReviewsTable extends Migration
      */
     public function down()
     {
-        Schema::table('reviews', function (Blueprint $table) {
-            $table->dropForeign(['product_id']);
-            $table->dropForeign(['user_id']);
-        });
         Schema::dropIfExists('reviews');
     }
 }

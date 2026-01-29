@@ -92,14 +92,14 @@
    ЄДИНА ВИСОТА РОБОЧИХ ЗОН
 ===================================================== */
 
-.additional-info-wrapper,
+.content-wrapper,
 .photo-upload-body {
     height: 124px;
     display: flex;
     align-items: stretch;
 }
 
-.additional-info-textarea {
+.content-textarea {
     height: 100% !important;
     resize: none;
 }

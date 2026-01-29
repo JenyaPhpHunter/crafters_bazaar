@@ -1,64 +1,66 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const dropZone      = document.getElementById('fileDropZone');
-    const fileInput     = document.getElementById('product_photo');
-    const countSpan     = document.getElementById('photoCount');
-    const badgeSpan     = document.getElementById('photoCountBadge');
-    const badge         = document.getElementById('photoCounterBadge');  // новий ID!
-    const errorBox      = document.getElementById('uploadError');
+    const dropZone  = document.getElementById('fileDropZone');
+    const fileInput = document.getElementById('product_photo');
+    const countSpan = document.getElementById('photoCount');
+    const badgeSpan = document.getElementById('photoCountBadge');
+    const badge     = document.getElementById('photoCounterBadge');
+    const errorBox  = document.getElementById('uploadError');
 
-    if (!dropZone || !fileInput || !countSpan || !badge) return;
+    console.log('[photo-upload] init', { dropZone: !!dropZone, fileInput: !!fileInput });
 
-    let uploadedCount = 0;
+    if (!dropZone || !fileInput) return;
+
     const MAX_FILES = 10;
+    const storedFiles = new DataTransfer(); // 🔑 ЄДИНЕ СХОВИЩЕ
 
-    // Оновлюємо обидва лічильники + анімація бейджа
     function updateCounter() {
-        countSpan.textContent = uploadedCount;
-        badgeSpan.textContent = uploadedCount;
+        const count = storedFiles.files.length;
 
-        if (uploadedCount > 0) {
-            badge.classList.add('show');
-        } else {
-            badge.classList.remove('show');
-        }
+        console.log('[photo-upload] updateCounter ->', count);
+
+        if (countSpan) countSpan.textContent = count;
+        if (badgeSpan) badgeSpan.textContent = count;
+        if (badge) badge.classList.toggle('show', count > 0);
     }
 
     function showError(msg) {
-        if (errorBox) {
-            errorBox.textContent = msg;
-            errorBox.style.display = 'block';
-            setTimeout(() => errorBox.style.display = 'none', 5000);
-        }
+        console.log('[photo-upload] error:', msg);
+
+        if (!errorBox) return;
+        errorBox.textContent = msg;
+        errorBox.style.display = 'block';
+        setTimeout(() => errorBox.style.display = 'none', 5000);
     }
 
-    function handleFiles(files) {
-        if (uploadedCount >= MAX_FILES) {
-            showError('Максимум 10 фото');
-            return;
-        }
+    function addFiles(files) {
+        console.log('[photo-upload] addFiles called, incoming:', files?.length ?? 0);
 
-        const toAdd = files.slice(0, MAX_FILES - uploadedCount);
-        let valid = true;
+        for (const file of files) {
+            if (storedFiles.files.length >= MAX_FILES) {
+                showError('Максимум 10 фото');
+                break;
+            }
 
-        for (const file of toAdd) {
             if (!file.type.startsWith('image/')) {
                 showError('Дозволені тільки зображення');
-                valid = false;
+                continue;
             }
+
             if (file.size > 10 * 1024 * 1024) {
                 showError(`${file.name} — більше 10 МБ`);
-                valid = false;
+                continue;
             }
+
+            storedFiles.items.add(file);
         }
 
-        if (valid) {
-            uploadedCount += toAdd.length;
-            updateCounter();
-            $(document).trigger('field-updated'); // ← ЦЕ ВАЖЛИВО
-        }
+        fileInput.files = storedFiles.files; // 🔗 синхронізація
+        console.log('[photo-upload] stored now:', fileInput.files.length);
+
+        updateCounter();
     }
 
-    // Блокування відкриття файлів у новій вкладці
+    // 🟣 Drag & drop
     ['dragover', 'drop'].forEach(ev => {
         dropZone.addEventListener(ev, e => {
             e.preventDefault();
@@ -66,26 +68,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Ефекти drag & drop
     dropZone.addEventListener('dragenter', () => dropZone.classList.add('drag-over'));
-    dropZone.addEventListener('dragover',  () => dropZone.classList.add('drag-over'));
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
     dropZone.addEventListener('drop', e => {
         dropZone.classList.remove('drag-over');
-        handleFiles(Array.from(e.dataTransfer.files));
+        addFiles(e.dataTransfer.files);
     });
 
-    // Клік по блоку = вибір файлів
-    dropZone.addEventListener('click', () => fileInput.click());
+    // 🟢 Click → file picker
+    dropZone.addEventListener('click', () => {
+        console.log('[photo-upload] click -> open picker');
+        fileInput.value = '';          // дозволяє знову вибрати ті самі файли
+        fileInput.click();
+    });
 
-    // Зміна в input
+    // ✅ ОСЬ ЦЕ ГОЛОВНЕ: picker change
     fileInput.addEventListener('change', () => {
-        if (fileInput.files.length) {
-            handleFiles(Array.from(fileInput.files));
+        console.log('[photo-upload] change fired, files:', fileInput.files.length);
+        if (fileInput.files && fileInput.files.length) {
+            addFiles(fileInput.files);
         }
     });
 
-    // Ініціалізація
     updateCounter();
 });
-

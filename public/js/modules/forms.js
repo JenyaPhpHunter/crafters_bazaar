@@ -25,8 +25,8 @@
             .toggleClass('label-focused', $('input[name="sub_kind_product_id"]').val()?.trim().length > 0);
 
         // Додаткова інформація
-        $('#additional_information').closest('.form-field').find('.form-label')
-            .toggleClass('label-focused', $('#additional_information').val()?.trim().length > 0);
+        $('#content').closest('.form-field').find('.form-label')
+            .toggleClass('label-focused', $('#content').val()?.trim().length > 0);
 
         $('#tags').closest('.form-field').find('.form-label')
             .toggleClass('label-focused', $('#tags').val()?.trim().length > 0);

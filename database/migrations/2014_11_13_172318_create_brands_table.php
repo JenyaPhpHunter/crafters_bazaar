@@ -19,11 +19,9 @@ return new class extends Migration
             $table->string('title', 255)->comment("Назва бренду");
             $table->text('content')->nullable()->default(null)->comment("Коментар до бренду");
             $table->string('image_path')->nullable()->default(null)->comment("Шлях до картинки бренду");
-            $table->enum('rating', array_keys(config('others.rating')))
-                    ->nullable()
-                    ->default(null)
-                    ->comment("рейтинг бренду");
             $table->unsignedBigInteger('creator_id')->comment("Id користувача, який створив запис");
+            $table->unsignedTinyInteger('rating_avg')->default(0);
+            $table->unsignedInteger('rating_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
 

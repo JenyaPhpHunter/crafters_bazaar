@@ -14,12 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(ImportRegionCityData::class);
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        if (app()->isLocal()) {
+            $this->call([UsersSeeder::class,]);
+            $this->call(KindsProductSeeder::class);
+            $this->call(ImportRegionCityData::class);
+        }
     }
 }

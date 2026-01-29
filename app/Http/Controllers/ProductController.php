@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\KindProduct;
 use App\Models\SubKindProduct;
-use App\Models\Color;
-use App\Models\StatusProduct;
-use App\Models\User;
+use App\Services\ProductPhotoService;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -48,7 +47,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        return view('products.create');
+        return view('products.index');
     }
     public function create(): View
     {
@@ -56,12 +55,8 @@ class ProductController extends Controller
         $brands = Brand::where('creator_id', $user->id)->get();
         $images = [];
         $images = $this->getDemoImages();
-//        $this->seedie($images);
 
         return view('products.create', [
-            'kindProducts' => KindProduct::all(),
-            'subKindProducts' => SubKindProduct::all(),
-            'colors' => Color::all(),
             'brands' => $brands,
             'images' => $images,
             'selected_kind_product_id' => old('kind_product_id'),
@@ -89,38 +84,44 @@ class ProductController extends Controller
         ];
     }
 
-//    public function store(StoreProductRequest $request): RedirectResponse
-    public function store(Request $request)
+    public function store(ProductRequest $request, ProductService $service, ProductPhotoService $photoService)
     {
-        var_dump($request->all()); die();
-        $request->validate([
-            'image' => 'nullable|image|max:2048',
-            'brand_id' => 'nullable|exists:brands,id',
-            // Інші правила валідації...
-        ]);
+        $data = $request->validated();
+        createLogArray($data, 'PRODUCT VALIDATED DATA');
+        DB::transaction(function () use ($data, $service, $request, $photoService) {
+            $product = $service->create($data);
+            Log::info('PRODUCT CREATED', [
+                'product_id' => $product->id,
+            ]);
+            Log::debug('FILES CHECK', [
+                'has_files' => $request->hasFile('product_photo'),
+                'files_count' => $request->hasFile('product_photo')
+                    ? count((array) $request->file('product_photo'))
+                    : 0,
+            ]);
 
-        $product = new Product();
-        $brandId = $request->input('brand_id');
+            DB::afterCommit(function () use ($request, $product, $photoService) {
+                Log::info('AFTER COMMIT CALLED', [
+                    'product_id' => $product->id,
+                ]);
+                if (!$request->hasFile('product_photo')) {
+                    Log::warning('NO PRODUCT PHOTOS');
+                    return;
+                }
+                if ($request->hasFile('product_photo')) {
+                    $files = $request->file('product_photo');
+                    $files = is_array($files) ? $files : [$files];
 
-        if ($brandId) {
-            $product->brand_id = $brandId;
-        }
+                    $photoService->storeMany($product, $files);
+                }
+            });
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $path = $image->store('brands', 'public');
+            return $product;
+        });
 
-            // Оптимізація та обрізка до 70x70
-            $img = Image::make(storage_path('app/public/' . $path))->fit(70, 70);
-            $img->save();
-
-            $product->image_path = $path;
-        }
-
-        $product->save();
-
-        return redirect()->back()->with('success', 'Продукт створено!');
+        return redirect()->route('products.index')->with('success', 'Товар успішно створено!');
     }
+
 
     public function edit(Product $product): View
     {
@@ -128,9 +129,6 @@ class ProductController extends Controller
 
         return view('products.edit', [
             'product' => $product,
-            'colors' => Color::all(),
-            'kind_products' => KindProduct::all(),
-            'sub_kind_products' => SubKindProduct::all(),
             'productImages' => $productImages,
         ]);
     }

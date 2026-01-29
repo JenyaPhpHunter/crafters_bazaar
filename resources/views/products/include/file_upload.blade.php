@@ -41,6 +41,7 @@
         </div>
     </div>
 
+    {{-- ВАЖЛИВО: name="product_photo[]" --}}
     <input type="file"
            id="product_photo"
            name="product_photo[]"

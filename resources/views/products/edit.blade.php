@@ -261,23 +261,6 @@
                             @endif
                         </div>
                     </form>
-                    <script>
-                        function deleteProduct() {
-                            if (confirm('Ви впевнені, що хочете видалити цей товар?')) {
-                                fetch('{{ route('products.destroy', $product->id) }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'X-HTTP-Method-Override': 'DELETE'
-                                    }
-                                }).then(response => {
-                                    if (response.redirected) {
-                                        window.location.href = response.url;
-                                    }
-                                });
-                            }
-                        }
-                    </script>
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
                         @isset($user)
                             <div class="col-auto learts-mb-20">
