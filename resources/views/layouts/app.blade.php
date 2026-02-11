@@ -129,6 +129,7 @@
 <script src="{{ asset('js/modules/forms.js') }}"></script>             <!-- Потім forms.js — він слухає події -->
 <script src="{{ asset('js/main.js') }}"></script>
 <!-- Сторінкові скрипти (для create.blade.php і т.д.) -->
+{{--<meta name="csrf-token" content="{{ csrf_token() }}">--}}
 @stack('scripts')
 </body>
 </html>

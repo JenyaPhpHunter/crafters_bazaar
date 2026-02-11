@@ -87,33 +87,21 @@ class ProductController extends Controller
     public function store(ProductRequest $request, ProductService $service, ProductPhotoService $photoService)
     {
         $data = $request->validated();
-        createLogArray($data, 'PRODUCT VALIDATED DATA');
-        DB::transaction(function () use ($data, $service, $request, $photoService) {
-            $product = $service->create($data);
-            Log::info('PRODUCT CREATED', [
-                'product_id' => $product->id,
-            ]);
-            Log::debug('FILES CHECK', [
-                'has_files' => $request->hasFile('product_photo'),
-                'files_count' => $request->hasFile('product_photo')
-                    ? count((array) $request->file('product_photo'))
-                    : 0,
-            ]);
+        $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
-            DB::afterCommit(function () use ($request, $product, $photoService) {
-                Log::info('AFTER COMMIT CALLED', [
-                    'product_id' => $product->id,
-                ]);
+        $product = DB::transaction(function () use ($data, $service, $request, $photoService, $mainPhotoIndex) {
+            $product = $service->create($data);
+
+            DB::afterCommit(function () use ($request, $product, $photoService, $mainPhotoIndex) {
                 if (!$request->hasFile('product_photo')) {
-                    Log::warning('NO PRODUCT PHOTOS');
                     return;
                 }
-                if ($request->hasFile('product_photo')) {
-                    $files = $request->file('product_photo');
-                    $files = is_array($files) ? $files : [$files];
 
-                    $photoService->storeMany($product, $files);
-                }
+                $files = $request->file('product_photo');
+                $files = is_array($files) ? $files : [$files];
+
+                // ✅ ПЕРЕДАЄМО $mainPhotoIndex
+                $photoService->storeMany($product, $files, $mainPhotoIndex);
             });
 
             return $product;
