@@ -26,35 +26,26 @@
     <!-- Галерея -->
     <div class="product-gallery-slider" id="product-gallery">
         @forelse($images ?? [] as $index => $image)
-            <a class="product-zoom"
-               data-pswp-src="{{ $image['src'] }}"
-               data-pswp-width="{{ $image['w'] }}"
-               data-pswp-height="{{ $image['h'] }}"
-               @if(!empty($image['id']))
-                   data-photo-id="{{ $image['id'] }}"
-                @endif
-            >
-                <img src="{{ $image['main'] }}" alt="Product {{ $index + 1 }}">
+            <a class="product-zoom" ... data-index="{{ $index }}">
+                <img src="{{ $image['main'] ?? $image }}" alt="Product {{ $index + 1 }}">
 
                 <button type="button" class="product-gallery-popup">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </button>
 
-                {{-- Кнопка "Зробити головним" для edit/show (тільки для автора id=2) --}}
-                @if($showMakeMainButton)
-                    <button
-                        type="button"
-                        class="make-main-badge"
-                        data-photo-id="{{ $image['id'] }}"
-                        title="Зробити це фото головним"
-                    >
-                        <i class="fa-solid fa-star"></i>
-                        <span>Зробити головним фото</span>
-                    </button>
-                @endif
+                {{-- Кнопка "Зробити головним / Головне фото" --}}
+                <button
+                    type="button"
+                    class="make-main-btn {{ $index === 0 ? 'is-main' : '' }}"
+                    data-index="{{ $index }}"
+                    title="{{ $index === 0 ? 'Це головне фото' : 'Зробити головним' }}"
+                >
+                    <i class="fa-solid fa-star"></i>
+                    <span>{{ $index === 0 ? 'Головне фото' : 'Зробити головним' }}</span>
+                </button>
             </a>
         @empty
-            <p class="no-images-text">Зображень немає.</p>
+            <!-- placeholder або щось для порожньої галереї -->
         @endforelse
     </div>
 </div>

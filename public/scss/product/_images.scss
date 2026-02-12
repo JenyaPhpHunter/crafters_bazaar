@@ -5,9 +5,9 @@
 ===================================================== */
 $images-block-height: 700px;
 $inner-padding: 40px;
-$thumb-gap: 15px;          // ✅ Зменшив з 20px
+$thumb-gap: 15px;
 $images-shift: 16px;
-$thumb-width: 150px;       // ✅ Зменшив з 200px
+$thumb-width: 150px;
 
 $arrow-size: 44px;
 $arrow-bg: rgba($white, 0.95);
@@ -66,7 +66,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   ВЕРТИКАЛЬНІ ПРЕВ'Ю — стрілки
+   ВЕРТИКАЛЬНІ ПРЕВ'Ю
 ===================================================== */
 .product-thumb-slider-vertical {
     margin-left: $images-shift;
@@ -107,7 +107,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   ГОЛОВНИЙ СЛАЙДЕР — стрілки
+   ГОЛОВНИЙ СЛАЙДЕР
 ===================================================== */
 .product-gallery-slider {
     flex: 1;
@@ -148,6 +148,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         height: 100%;
         display: block;
         text-decoration: none;
+        overflow: visible;  // важливо для кнопки, яка виходить за bottom
 
         img {
             width: 100%;
@@ -195,38 +196,33 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" (для create.blade.php)
+   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" — create
 ===================================================== */
 .make-main-btn {
     position: absolute;
     left: 50%;
-    bottom: 22px;
+    bottom: 90px;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 8px;
-
     padding: 10px 18px;
     border-radius: 999px;
-
     background: rgba($white, 0.92);
     border: 2px solid $primary;
     color: $primary;
-
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-
     opacity: 0;
     transition: all 0.25s ease;
-    z-index: 15;
+    z-index: 25;
+    min-width: 180px;
+    white-space: nowrap;
+    box-sizing: border-box;
 
     i {
         font-size: 16px;
-    }
-
-    span {
-        white-space: nowrap;
     }
 
     &:hover {
@@ -239,13 +235,23 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         opacity: 1;
         background: $primary;
         color: $white;
+        border-color: $white;
         cursor: default;
+        pointer-events: none;
 
         &:hover {
+            transform: translateX(-50%);
             background: $primary;
             color: $white;
-            transform: translateX(-50%);
         }
+
+        span {
+            font-weight: 700;
+        }
+    }
+
+    &:not(.is-main) {
+        cursor: pointer;
     }
 }
 
@@ -254,7 +260,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" (для edit/show - make-main-badge)
+   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" — edit/show
 ===================================================== */
 .make-main-badge {
     position: absolute;
@@ -264,18 +270,14 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     display: flex;
     align-items: center;
     gap: 8px;
-
     padding: 10px 18px;
     border-radius: 999px;
-
     background: rgba($white, 0.92);
     border: 2px solid $primary;
     color: $primary;
-
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-
     opacity: 0;
     transition: all 0.25s ease;
     z-index: 15;
@@ -328,7 +330,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   АДАПТИВНІ КОРЕКЦІЇ ТА ЗАЛИШКИ
+   АДАПТИВНІ КОРЕКЦІЇ
 ===================================================== */
 .product-images.vertical {
     padding-left: 210px;
@@ -373,6 +375,9 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     }
 }
 
+/* =====================================================
+   СЛАЙДЕР КОРЕКЦІЇ
+===================================================== */
 .product-images {
     .slick-slider {
         margin: 0 !important;
@@ -403,9 +408,4 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     .slick-next:hover::before {
         color: $white;
     }
-}
-
-.product-zoom .make-main-btn,
-.product-zoom .make-main-badge {
-    bottom: 90px;          /* або 80px, 100px — підбирай візуально */
 }
