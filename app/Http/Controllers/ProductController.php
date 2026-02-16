@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\KindProduct;
 use App\Models\SubKindProduct;
@@ -11,7 +12,6 @@ use App\Services\ProductPhotoService;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -45,10 +45,87 @@ class ProductController extends Controller
         return [];
     }
 
-    public function index()
+    public function index(ProductRequest $request)
     {
-        return view('products.index');
+        // Сортування
+        $sort_by = $request->get('sort_by', 'menu_order');
+
+        $products = Product::query();
+
+        // ФІЛЬТРИ -----------------------------------------------------
+
+        // Пошук
+        if ($request->filled('search')) {
+            $products->where('title', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // Категорії
+        if ($request->filled('categories')) {
+            $products->whereIn('kind_product_id', $request->categories);
+        }
+
+        // Фільтр по ціні
+        if ($request->filled('filter_price')) {
+            foreach ($request->filter_price as $filter) {
+
+                if ($filter == 'all') continue;
+
+                [$min, $max] = explode(';', $filter);
+
+                if ($max === '+') {
+                    $products->where('price', '>=', $min);
+                } else {
+                    $products->whereBetween('price', [$min, $max]);
+                }
+            }
+        }
+
+        // Фільтр по кольору
+        if ($request->filled('filter_color')) {
+            $products->whereHas('productcolors', function ($q) use ($request) {
+                $q->whereIn('php_name', $request->filter_color);
+            });
+        }
+
+        // Сортування ---------------------------------------------------
+
+        switch ($sort_by) {
+            case 'popularity':
+                $products->orderBy('views', 'desc');
+                break;
+            case 'rating':
+                $products->orderBy('rating', 'desc');
+                break;
+            case 'newness':
+                $products->orderBy('created_at', 'desc');
+                break;
+            case 'price_up':
+                $products->orderBy('price', 'asc');
+                break;
+            case 'price_down':
+                $products->orderBy('price', 'desc');
+                break;
+            default:
+                $products->orderBy('id', 'desc');
+        }
+
+        // Виконуємо запит
+        $products = $products->get();
+
+        // Додаткові дані для фільтрів
+        $kind_products = KindProduct::withCount('products')->get();
+        $colors = Color::all();
+        $featured_products = Product::where('featured', 1)->limit(5)->get();
+
+        return view('products.index', compact(
+            'products',
+            'kind_products',
+            'colors',
+            'featured_products',
+            'sort_by'
+        ));
     }
+
     public function create(): View
     {
         $user = Auth::user();
