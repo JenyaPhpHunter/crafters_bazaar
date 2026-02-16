@@ -74,4 +74,37 @@ class ProductPhotoController extends Controller
 
         return response()->json(['ok' => true]);
     }
+
+    public function makeMain(ProductPhoto $photo)
+    {
+        createLogArray('makeMain');
+        abort_unless(auth()->check() && auth()->id() === 1, 403);
+
+        DB::transaction(function () use ($photo) {
+            $productId = $photo->product_id;
+
+            // скидаємо флаг у всіх
+            ProductPhoto::where('product_id', $productId)->update(['is_main' => false]);
+
+            // ставимо обране як main
+            $photo->update(['is_main' => true]);
+
+            // якщо хочеш саме queue=1:
+            // 1) забираємо поточний queue
+            $oldQueue = $photo->queue;
+
+            if ($oldQueue != 1) {
+                // 2) зсуваємо ті, хто був 1..oldQueue-1 вниз на +1
+                ProductPhoto::where('product_id', $productId)
+                    ->where('id', '!=', $photo->id)
+                    ->whereBetween('queue', [1, $oldQueue - 1])
+                    ->increment('queue');
+
+                // 3) обраному ставимо 1
+                $photo->update(['queue' => 1]);
+            }
+        });
+
+        return response()->json(['ok' => true]);
+    }
 }

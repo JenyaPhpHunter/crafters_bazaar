@@ -5,9 +5,9 @@
 ===================================================== */
 $images-block-height: 700px;
 $inner-padding: 40px;
-$thumb-gap: 15px;
+$thumb-gap: 20px;
 $images-shift: 16px;
-$thumb-width: 150px;
+$thumb-width: 200px;
 
 $arrow-size: 44px;
 $arrow-bg: rgba($white, 0.95);
@@ -66,21 +66,19 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   ВЕРТИКАЛЬНІ ПРЕВ'Ю
+   ВЕРТИКАЛЬНІ ПРЕВ'Ю — стрілки
 ===================================================== */
 .product-thumb-slider-vertical {
     margin-left: $images-shift;
     width: $thumb-width;
-    height: calc(#{$images-block-height} - (#{$inner-padding} * 2));
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: $thumb-gap;
     overflow: hidden;
 
     .item {
-        flex: 0 0 auto;
         height: calc((100% - (#{$thumb-gap} * 2)) / 3);
-        aspect-ratio: 3 / 4;
         border-radius: 16px;
         overflow: hidden;
         border: 3px solid transparent;
@@ -99,6 +97,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
             box-shadow: 0 6px 16px rgba($primary, 0.25);
         }
 
+        // Підсвічування головного фото в thumbs
         &.is-main-thumb {
             border-color: $primary;
             box-shadow: 0 6px 16px rgba($primary, 0.35);
@@ -107,7 +106,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   ГОЛОВНИЙ СЛАЙДЕР
+   ГОЛОВНИЙ СЛАЙДЕР — стрілки
 ===================================================== */
 .product-gallery-slider {
     flex: 1;
@@ -142,13 +141,22 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         pointer-events: auto !important;
     }
 
+    /* Ліва стрілка — наполовину на зображенні */
+    .slick-prev {
+        left: 22px !important;
+    }
+
+    /* Права стрілка — симетрично */
+    .slick-next {
+        right: 51px !important;
+    }
+
     .product-zoom {
         position: relative;
         width: 100%;
         height: 100%;
-        display: block;
+        display: block; // важливо для <a>
         text-decoration: none;
-        overflow: visible;  // важливо для кнопки, яка виходить за bottom
 
         img {
             width: 100%;
@@ -196,33 +204,38 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 /* =====================================================
-   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" — create
+   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" (для create.blade.php)
 ===================================================== */
 .make-main-btn {
     position: absolute;
     left: 50%;
-    bottom: 90px;
+    bottom: 22px;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 8px;
+
     padding: 10px 18px;
     border-radius: 999px;
+
     background: rgba($white, 0.92);
     border: 2px solid $primary;
     color: $primary;
+
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    opacity: 0;
+
+    opacity: 0; // ховаємо за замовчуванням
     transition: all 0.25s ease;
-    z-index: 25;
-    min-width: 180px;
-    white-space: nowrap;
-    box-sizing: border-box;
+    z-index: 15;
 
     i {
         font-size: 16px;
+    }
+
+    span {
+        white-space: nowrap;
     }
 
     &:hover {
@@ -231,36 +244,28 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         transform: translateX(-50%) scale(1.05);
     }
 
+    // Коли це головне фото
     &.is-main {
         opacity: 1;
         background: $primary;
         color: $white;
-        border-color: $white;
         cursor: default;
-        pointer-events: none;
 
         &:hover {
-            transform: translateX(-50%);
             background: $primary;
             color: $white;
+            transform: translateX(-50%); // без scale
         }
-
-        span {
-            font-weight: 700;
-        }
-    }
-
-    &:not(.is-main) {
-        cursor: pointer;
     }
 }
 
+// Показуємо кнопку при наведенні на product-zoom
 .product-zoom:hover .make-main-btn {
     opacity: 1;
 }
 
 /* =====================================================
-   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" — edit/show
+   КНОПКА "ЗРОБИТИ ГОЛОВНИМ" (для edit/show - make-main-badge)
 ===================================================== */
 .make-main-badge {
     position: absolute;
@@ -270,14 +275,18 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     display: flex;
     align-items: center;
     gap: 8px;
+
     padding: 10px 18px;
     border-radius: 999px;
+
     background: rgba($white, 0.92);
     border: 2px solid $primary;
     color: $primary;
+
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
+
     opacity: 0;
     transition: all 0.25s ease;
     z-index: 15;
@@ -296,6 +305,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         transform: translateX(-50%) scale(1.05);
     }
 
+    // Коли це головне фото
     &.is-main {
         opacity: 1;
         background: $primary;
@@ -309,6 +319,7 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         }
     }
 
+    // Loading стан
     &.is-loading {
         opacity: 0.6;
         cursor: wait;
@@ -325,12 +336,13 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     to { transform: rotate(360deg); }
 }
 
+// Показуємо badge при наведенні
 .product-zoom:hover .make-main-badge {
     opacity: 1;
 }
 
 /* =====================================================
-   АДАПТИВНІ КОРЕКЦІЇ
+   АДАПТИВНІ КОРЕКЦІЇ ТА ЗАЛИШКИ
 ===================================================== */
 .product-images.vertical {
     padding-left: 210px;
@@ -350,15 +362,15 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 
     .product-thumb-slider-vertical {
         position: relative;
-        width: $thumb-width;
+        width: 200px;
         height: 100%;
         overflow-y: auto;
         z-index: 10;
 
         .item {
             width: 100%;
-            height: auto;
-            aspect-ratio: 3 / 4;
+            height: auto;                 // ✅ прибрали квадрат
+            aspect-ratio: 3 / 4;          // ✅ прямокутник (можеш 2 / 3)
             margin-bottom: 10px;
             overflow: hidden;
 
@@ -375,9 +387,6 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
     }
 }
 
-/* =====================================================
-   СЛАЙДЕР КОРЕКЦІЇ
-===================================================== */
 .product-images {
     .slick-slider {
         margin: 0 !important;
@@ -395,15 +404,17 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 
     .slick-prev,
     .slick-next {
-        font-size: 0 !important;
+        font-size: 0 !important;      // ховає текст
         line-height: 0 !important;
     }
 
+    /* Горизонтальні стрілки */
     .product-gallery-slider {
-        .slick-prev::before { content: "‹"; }
-        .slick-next::before { content: "›"; }
+        .slick-prev::before { content: "‹"; } // або "←"
+        .slick-next::before { content: "›"; } // або "→"
     }
 
+    /* При hover — біла іконка */
     .slick-prev:hover::before,
     .slick-next:hover::before {
         color: $white;

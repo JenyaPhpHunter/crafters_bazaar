@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <body class="{{ auth()->id() === 2 ? 'is-admin' : '' }}">
+
     <div class="section section-fluid section-padding border-bottom animate__animated animate__fadeIn">
         <div class="container">
             <div class="row">
@@ -31,6 +33,7 @@
                             <input type="hidden" name="content" id="content-hidden">
                             <input type="hidden" name="tags" id="tags-hidden">
                             <input type="hidden" name="social_links" id="social-links-hidden">
+                            <input type="hidden" name="main_photo_index" id="main_photo_index" value="0">
 
                             {{-- Назва + ціна --}}
                             @include('products.include.title-price')

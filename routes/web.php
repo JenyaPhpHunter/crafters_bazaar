@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductPhotoController;
 use Illuminate\Support\Facades\Route;
 
 // === ADMIN ===
@@ -73,6 +74,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('products/sendquestion/{product}', [ProductController::class, 'sendquestion'])
         ->name('products.sendquestion');
+
+    Route::post('/product-photos/{photo}/make-main', [ProductPhotoController::class, 'makeMain'])
+        ->name('product-photos.make-main');
 
     // === FORUM ===
     Route::resource('forum_categories', ForumCategoryController::class);

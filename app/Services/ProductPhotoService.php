@@ -9,14 +9,15 @@ use Illuminate\Support\Str;
 
 class ProductPhotoService
 {
-    public function storeMany(Product $product, array $files): void
+    public function storeMany(Product $product, array $files, int $mainIndex = 0): void
     {
         foreach (array_values($files) as $i => $image) {
             if (!$image instanceof UploadedFile) {
                 continue;
             }
 
-            $queue = $i + 1;
+            $isMain = ($i === $mainIndex);
+            $queue = $isMain ? 1 : ($i + 2);
 
             $ext = strtolower($image->getClientOriginalExtension() ?: 'jpg');
             $base = (string) Str::uuid();
@@ -35,7 +36,7 @@ class ProductPhotoService
 
             $product->productphotos()->create([
                 'queue'   => $queue,
-                'is_main' => $queue === 1,
+                'is_main' => $isMain,  // ✅ ВИКОРИСТОВУЄМО $isMain, а не $queue === 1
                 'base'    => $base,
                 'ext'     => $ext,
                 'paths'   => [
