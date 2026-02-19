@@ -83,7 +83,10 @@
 {{--@isset($includeRecommendedProducts)--}}
 {{--    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')--}}
 {{--@endisset--}}
-@include('components.breadcrumps')
+{{--@include('components.breadcrumps')--}}
+<div class="breadcrumbs-container">
+    {!! Breadcrumbs::render() !!}
+</div>
 <div class="container-wide">
     @yield('content')
 </div>
