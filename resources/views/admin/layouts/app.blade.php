@@ -80,9 +80,13 @@
     @include('admin.include.recommended-products')
 @endisset
 
-@include('components.breadcrumps')
+@if (Route::currentRouteName() !== 'dashboard')
+    {!! Breadcrumbs::render() !!}
+@endif
+
 @yield('content')
 @include('admin.include.footer')
+
 
 
 <!-- JS

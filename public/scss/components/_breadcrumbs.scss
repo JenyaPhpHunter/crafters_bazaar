@@ -1,13 +1,30 @@
 @use "sass:color";
 @use "../variables" as *;
-@use "animations" as *;   // ← Підключаємо всі анімації звідси!
+@use "animations" as *;
 
-/* ————— Секція breadcrumbs ————— */
+/* ────────────────────────────────────────────────
+   СЕКЦІЯ З ЗАГОЛОВКОМ + BREADCRUMBS
+   ──────────────────────────────────────────────── */
 .page-title-section {
-    padding: 24px 0;
-    background: linear-gradient(135deg, #f9f7f3 0%, #f0efeb 100%); /* бежевий градієнт */
-    border-bottom: 1px solid rgba($primary, 0.25);
+    padding: 28px 0 20px;
+    background: linear-gradient(135deg, #f9f7f3 0%, #f0efeb 100%);
+    border-bottom: 1px solid rgba($primary, 0.18);
     position: relative;
+    overflow: hidden;
+
+    // Легка анімація появи всієї секції
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 0.1s;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 30% 50%, rgba($primary, 0.08) 0%, transparent 60%);
+        pointer-events: none;
+    }
 }
 
 .page-title {
@@ -15,88 +32,120 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
 }
 
 .title {
     margin: 0;
     font-family: $futura, sans-serif;
-    font-size: clamp(24px, 4vw, 34px);
-    font-weight: 600;
+    font-size: clamp(26px, 4.5vw, 38px);
+    font-weight: 700;
     color: $primary;
-    @extend .animated;
-    @extend .bounceIn;
+    letter-spacing: -0.5px;
+
+    // Анімація заголовка — плавна поява знизу
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 0.2s;
 }
 
-/* ————— Хлібні крихти ————— */
+/* ────────────────────────────────────────────────
+   BREADCRUMBS — СУЧАСНИЙ ВИГЛЯД
+   ──────────────────────────────────────────────── */
+.breadcrumb-nav {
+    margin-top: 12px;
+}
+
 .breadcrumb {
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+    background: transparent;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 0;
-    margin: 6px 0 0;
-    list-style: none;
-    font-size: 15px;
-    font-weight: 400;
+    gap: 8px 16px;
+    align-items: center;
 }
 
 .breadcrumb-item {
-    color: #666;
-    @extend .animated;
-    @extend .fadeInRight;
-    animation-delay: calc(0.08s * var(--i, 0)); /* послідовна поява */
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadeInUp 0.6s ease-out forwards;
+    animation-delay: calc(0.08s * var(--i, 0));
+
+    &:last-child {
+        color: #495057;
+        font-weight: 500;
+    }
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
-    content: "›";
-    margin-right: 10px;
-    color: #999;
-    font-weight: 300;
-}
-
-.breadcrumb-item a {
+.breadcrumb-link {
     color: $primary2;
     text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-    color: $primary;
-}
-
-/* ————— Кнопки праворуч ————— */
-.button-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    justify-content: flex-end;
-}
-
-.btn-primary2 {
-    background: $primary;
-    color: white;
-    padding: 11px 22px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    position: relative;
     transition: all 0.35s ease;
-    box-shadow: 0 5px 18px rgba($primary, 0.3);
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba($primary, 0.05);
+
+    &:hover {
+        color: $primary;
+        background: rgba($primary, 0.12);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($primary, 0.15);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 8px;
+        right: 8px;
+        height: 2px;
+        background: linear-gradient(to right, $primary, $primary2);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
 }
 
-.btn-primary2:hover {
-    background: color.scale($primary, $lightness: -12%);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba($primary, 0.4);
-    animation: buttonPulse 0.9s ease-out;
+.breadcrumb-active {
+    color: #495057;
+    font-weight: 500;
+    background: rgba($primary, 0.08);
+    padding: 4px 10px;
+    border-radius: 6px;
 }
 
-.btn-primary2 i { font-size: 1.15em; }
+/* Роздільник */
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    margin: 0 8px;
+    color: #adb5bd;
+    font-weight: 300;
+    font-size: 1.1rem;
+}
 
-/* ————— Адаптив ————— */
+/* Адаптив */
 @media (max-width: 992px) {
-    .page-title { flex-direction: column; align-items: flex-start; }
-    .button-container { justify-content: flex-start; width: 100%; }
+    .breadcrumb {
+        font-size: 0.9rem;
+        gap: 6px 12px;
+    }
+
+    .page-title {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

@@ -17,20 +17,6 @@ use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
-    public function customBreadcrumbs(string $routeName, array $parameters): array
-    {
-        if ($routeName === 'products.show' && isset($parameters['product'])) {
-            return [
-                [
-                    'title' => ['Товари', 'Деталі'],
-                    'name' => 'Деталі продукту',
-                    'route' => route('products.show', $parameters['product']),
-                ],
-            ];
-        }
-        return [];
-    }
-
     public function customButtons(string $routeName, $parameter = null): array
     {
         if ($routeName === 'products.show' && $parameter) {

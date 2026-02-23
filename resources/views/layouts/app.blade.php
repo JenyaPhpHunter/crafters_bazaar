@@ -83,7 +83,11 @@
 {{--@isset($includeRecommendedProducts)--}}
 {{--    @include($user && $user->role_id < 5 ? 'admin.include.recommended-products' : 'include.recommended-products')--}}
 {{--@endisset--}}
-@include('components.breadcrumps')
+
+@if (Route::currentRouteName() !== 'welcome')
+    {!! Breadcrumbs::render() !!}
+@endif
+
 <div class="container-wide">
     @yield('content')
 </div>
