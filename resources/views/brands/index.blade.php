@@ -21,11 +21,11 @@
                         <div class="col-auto" style="max-width: 180px;">
                             <select name="rating" class="form-select">
                                 <option value="">Всі рейтинги</option>
-                                @foreach($availableRatings as $key => $value)
-                                    <option value="{{ $key }}" {{ $ratingFilter == $key ? 'selected' : '' }}>
-                                        {{ $value }}
-                                    </option>
-                                @endforeach
+{{--                                @foreach($availableRatings as $key => $value)--}}
+{{--                                    <option value="{{ $key }}" {{ $ratingFilter == $key ? 'selected' : '' }}>--}}
+{{--                                        {{ $value }}--}}
+{{--                                    </option>--}}
+{{--                                @endforeach--}}
                             </select>
                         </div>
 
@@ -183,7 +183,7 @@
 
             @if($brands->hasPages())
                 <div class="card-footer d-flex justify-content-center bg-light py-3">
-                    {{ $brands->links('vendor.pagination.bootstrap-5') }}
+                    {{ $brands->links() }}
                 </div>
             @endif
         </div>

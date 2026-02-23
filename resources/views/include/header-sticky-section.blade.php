@@ -74,62 +74,6 @@
                             </li>
                         @endif
 
-                        {{-- Курси --}}
-                        <li class="has-children">
-                            <a href="#"><span class="menu-text">Курси</span></a>
-                            <ul class="sub-menu mega-menu">
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">SHOP PAGES</span></a>
-                                    <ul>
-                                        <li><a href="shop.html"><span class="menu-text">Shop No Sidebar</span></a></li>
-                                        <li><a href="shop-left-sidebar.html"><span class="menu-text">Shop Left Sidebar</span></a></li>
-                                        <li><a href="shop-right-sidebar.html"><span class="menu-text">Shop Right Sidebar</span></a></li>
-                                        <li><a href="shop-fullwidth-no-gutters.html"><span class="menu-text">Shop Fullwidth No Space</span></a></li>
-                                        <li><a href="shop-fullwidth.html"><span class="menu-text">Shop Fullwidth No Sidebar</span></a></li>
-                                        <li><a href="shop-fullwidth-left-sidebar.html"><span class="menu-text">Shop Fullwidth Left Sidebar</span></a></li>
-                                        <li><a href="shop-fullwidth-right-sidebar.html"><span class="menu-text">Shop Fullwidth Right Sidebar</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">PRODUCT PAGES</span></a>
-                                    <ul>
-                                        <li><a href="product-details.html"><span class="menu-text">Basic</span></a></li>
-                                        <li><a href="product-details-fullwidth.html"><span class="menu-text">Fullwidth</span></a></li>
-                                        <li><a href="product-details-sticky.html"><span class="menu-text">Sticky Details</span></a></li>
-                                        <li><a href="product-details-sidebar.html"><span class="menu-text">Width Sidebar</span></a></li>
-                                        <li><a href="product-details-extra-content.html"><span class="menu-text">Extra Content</span></a></li>
-                                        <li><a href="product-details-image-variation.html"><span class="menu-text">Variations Images</span></a></li>
-                                        <li><a href="product-details-group.html"><span class="menu-text">Bought Together</span></a></li>
-                                        <li><a href="product-details-360.html"><span class="menu-text">Product 360</span></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#" class="mega-menu-title"><span class="menu-text">PRODUCT & Other PAGES</span></a>
-                                    <ul>
-                                        <li><a href="product-details-background.html"><span class="menu-text">Product with Background</span></a></li>
-                                        <li><a href="shopping-cart.html"><span class="menu-text">Shopping Cart</span></a></li>
-                                        <li><a href="checkout.html"><span class="menu-text">Checkout</span></a></li>
-                                        <li><a href="order-tracking.html"><span class="menu-text">Order Tracking</span></a></li>
-                                        <li><a href="wishlist.html"><span class="menu-text">Wishlist</span></a></li>
-                                        <li><a href="login-register.html"><span class="menu-text">Customer Login</span></a></li>
-                                        <li><a href="my-account.html"><span class="menu-text">My Account</span></a></li>
-                                        <li><a href="lost-password.html"><span class="menu-text">Lost Password</span></a></li>
-                                    </ul>
-                                </li>
-                                <li class="align-self-center">
-                                    <a href="#" class="menu-banner"><img src="{{ asset('images/banner/menu-banner-2.webp') }}" alt="Shop Menu Banner"></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="has-children"><a href="#"><span class="menu-text">Марафони</span></a>
-                            <ul class="sub-menu">
-                                <li><a href="portfolio-3-columns.html"><span class="menu-text">Portfolio 3 Columns</span></a></li>
-                                <li><a href="portfolio-4-columns.html"><span class="menu-text">Portfolio 4 Columns</span></a></li>
-                                <li><a href="portfolio-5-columns.html"><span class="menu-text">Portfolio 5 Columns</span></a></li>
-                                <li><a href="portfolio-details.html"><span class="menu-text">Portfolio Details</span></a></li>
-                            </ul>
-                        </li>
-
                         <li class="has-children"><a href="{{ route('forum_topics.index') }}"><span class="menu-text">Форум</span></a>
                             <ul class="sub-menu">
                                 <li class="has-children"><a href="{{ route('forum_categories.index') }}"><span class="menu-text">Всі категорії</span></a>
