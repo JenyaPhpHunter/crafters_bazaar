@@ -122,4 +122,5 @@
     <script src="{{ asset('js/modules/product/colors.js') }}"></script>
     <script src="{{ asset('js/modules/product/photo-upload.js') }}"></script>
     <script src="{{ asset('js/modules/product/brand-gallery.js') }}"></script>
+    <script src="{{ asset('js/modules/product/modal-kind-subkind.js') }}"></script>
 @endpush

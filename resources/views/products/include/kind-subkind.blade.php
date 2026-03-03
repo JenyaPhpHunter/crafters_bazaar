@@ -26,9 +26,11 @@
             </div>
 
             <div class="kind-actions">
-                <a href="{{ route('products.createkindsubkind', ['id' => $productId ?? 0]) }}" class="btn btn-add">
+                <button type="button" class="btn btn-add open-kind-modal"
+                        data-bs-toggle="modal" data-bs-target="#kindSubkindModal"
+                        data-mode="kind">
                     <i class="fas fa-plus-circle"></i> Додати вид
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -59,9 +61,11 @@
             </div>
 
             <div class="kind-actions">
-                <a href="{{ route('products.createkindsubkind', ['id' => $productId ?? 0]) }}" class="btn btn-add">
+                <button type="button" class="btn btn-add open-subkind-modal"
+                        data-bs-toggle="modal" data-bs-target="#kindSubkindModal"
+                        data-mode="subkind">
                     <i class="fas fa-plus-circle"></i> Додати підвид
-                </a>
+                </button>
             </div>
         </div>
     </div>

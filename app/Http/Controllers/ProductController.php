@@ -10,6 +10,7 @@ use App\Models\KindProduct;
 use App\Models\SubKindProduct;
 use App\Services\ProductPhotoService;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -116,8 +117,11 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         $brands = Brand::where('creator_id', $user->id)->get();
-        $images = [];
         $images = $this->getDemoImages();
+
+        // Додаємо масиви для швидкого вибору в модалці
+        $arr_kind_products = KindProduct::pluck('title')->toArray();          // ['Електроніка', 'Одяг', ...]
+        $arr_sub_kind_products = SubKindProduct::pluck('title')->toArray();  // ['Смартфони', 'Футболки', ...]
 
         return view('products.create', [
             'brands' => $brands,
@@ -133,6 +137,13 @@ class ProductController extends Controller
             'productId' => 0,
             'user' => $user,
             'productImages' => collect(),
+
+            // Передаємо масиви в view (і в модалку, бо вона include'иться в create.blade.php)
+            'arr_kind_products' => $arr_kind_products,
+            'arr_sub_kind_products' => $arr_sub_kind_products,
+
+            // Також передаємо повні колекції для select у модалці (якщо потрібно)
+            'kindProducts' => KindProduct::all(),  // для <select> з id і title
         ]);
     }
 
@@ -192,16 +203,42 @@ class ProductController extends Controller
             ->with('success', 'Товар оновлено.');
     }
 
-    public function createkindsubkind(int $id): View
+    public function storekindsubkind(Request $request)
     {
-        $allKindProducts = KindProduct::pluck('title');
-        $allSubKindProducts = SubKindProduct::pluck('title');
+        $request->validate([
+            'mode'                    => 'required|in:kind,subkind',
+            'title_sub_kind_product'  => 'required|string|max:255',
+            'kind_product_id'         => 'required', // тепер завжди обов'язкове
+            'title_kind_product'      => 'nullable|string|max:255', // тільки якщо новий
+        ]);
 
-        return view('products.create_kind_subkind', [
-            'product_id' => $id,
-            'arr_kind_products' => $allKindProducts->isNotEmpty() ? $allKindProducts->toArray() : [false],
-            'arr_sub_kind_products' => $allSubKindProducts->isNotEmpty() ? $allSubKindProducts->toArray() : [false],
+        $kindInput = trim($request->kind_product_id);
+        $kindId = null;
+
+        if (is_numeric($kindInput)) {
+            $kindId = $kindInput; // це існуючий id
+        } elseif ($kindInput) {
+            // новий вид — створюємо за назвою
+            $kind = KindProduct::firstOrCreate(
+                ['title' => $kindInput],
+                ['title' => $kindInput]
+            );
+            $kindId = $kind->id;
+        }
+
+        if (!$kindId) {
+            return response()->json(['success' => false, 'message' => 'Вкажіть вид товару'], 422);
+        }
+
+        $subkind = SubKindProduct::create([
+            'title'           => trim($request->title_sub_kind_product),
+            'kind_product_id' => $kindId,
+        ]);
+
+        return response()->json([
+            'success'    => true,
+            'newKind'    => $kindId !== (int)$request->kind_product_id ? $kind : null,
+            'newSubkind' => $subkind,
         ]);
     }
-
 }

@@ -39,6 +39,9 @@
     <!-- Твій скомпільований CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    <!-- Tom Select CSS (Bootstrap 5 тема, щоб виглядало красиво з твоїм Bootstrap) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.0/dist/css/tom-select.bootstrap5.css">
+
     @stack('styles')
 </head>
 <body>
@@ -102,8 +105,11 @@
 <script src="{{ asset('js/vendor/jquery-migrate-3.1.0.min.js') }}"></script>
 <script src="{{ asset('js/vendor/bootstrap.bundle.min.js') }}"></script>
 
-<!-- Plugins JS -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+<!-- Tom Select JS (complete версія з усіма плагінами) -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.0/dist/js/tom-select.complete.min.js"></script>
+<!-- Plugins JS -->
 <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
 <script src="{{ asset('js/plugins/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
@@ -131,9 +137,9 @@
 <script src="{{ asset('js/modules/layout.js') }}"></script>
 <script src="{{ asset('js/modules/product/dropdown.js') }}"></script>   <!-- Спочатку дропдауни -->
 <script src="{{ asset('js/modules/forms.js') }}"></script>             <!-- Потім forms.js — він слухає події -->
+{{--<script type="module" src="{{ asset('js/app.js') }}"></script>--}}
 <script src="{{ asset('js/main.js') }}"></script>
-<!-- Сторінкові скрипти (для create.blade.php і т.д.) -->
-{{--<meta name="csrf-token" content="{{ csrf_token() }}">--}}
+
 @stack('scripts')
 </body>
 </html>

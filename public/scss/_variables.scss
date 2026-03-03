@@ -1,10 +1,18 @@
 // Font Family
 $abeezee: 'ABeeZee', sans-serif;
-$futura: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+$futura: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 $marcellus: 'Marcellus', serif;
 $modesty: 'Charmonman', cursive;
-$body-font: $futura;        // ← ТВІЙ УЛЮБЛЕНИЙ ШРИФТ ДЛЯ ТЕКСТУ (точно як було!)
-$heading-font: $marcellus;  // ← Шикарний Marcellus для заголовків (точно як було!)
+$body-font: $futura;
+$heading-font: $marcellus;
+
+// === ШРИФТИ ДЛЯ ФОРМ (замінюємо Rubik) ===
+$form-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$form-font-weight: 500;
+$form-font-size: 15px;
+$form-label-color: #2d3436;
+$form-label-focused-color: #00CED1;
+$form-vertical-gap: 18px;
 
 // Icon Font
 $fontAwesome5Brands: "Font Awesome 5 Brands";
@@ -123,11 +131,3 @@ $tablet-device: "only screen and (min-width: 768px) and (max-width: 991px)";
 $large-mobile: "only screen and (max-width: 767px)";
 $small-mobile: "only screen and (max-width: 575px)";
 $extra-small-mobile: "only screen and (max-width: 479px)";
-
-// === ШРИФТИ ДЛЯ ФОРМ (залишаємо, бо вони тобі подобаються) ===
-$form-font: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-$form-font-weight: 500;
-$form-font-size: 15px;
-$form-label-color: #2d3436;
-$form-label-focused-color: #00CED1;
-$form-vertical-gap: 18px;

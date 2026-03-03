@@ -64,6 +64,8 @@
             </div>
         </div>
     </div>
+
+    @include('products.include.modal-kind-subkind')
 @endsection
 
 @push('scripts')
