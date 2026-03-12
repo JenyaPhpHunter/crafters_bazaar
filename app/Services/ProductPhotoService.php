@@ -6,9 +6,17 @@ use App\Models\Product;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductPhotoService
 {
+    private ImageManager $imageManager;
+
+    public function __construct()
+    {
+        $this->imageManager = new ImageManager(new Driver());
+    }
     public function storeMany(Product $product, array $files, int $mainIndex = 0): void
     {
         foreach (array_values($files) as $i => $image) {
@@ -55,18 +63,15 @@ class ProductPhotoService
 
     private function saveFit(string $sourceRelative, string $targetRelative, int $w, int $h): void
     {
-        \Image::make($this->absPublicPath($sourceRelative))
-            ->fit($w, $h)
+        $this->imageManager->read($this->absPublicPath($sourceRelative))
+            ->cover($w, $h)
             ->save($this->absPublicPath($targetRelative));
     }
 
     private function saveResizeWidth(string $sourceRelative, string $targetRelative, int $width): void
     {
-        \Image::make($this->absPublicPath($sourceRelative))
-            ->resize($width, null, function ($c) {
-                $c->aspectRatio();
-                $c->upsize();
-            })
+        $this->imageManager->read($this->absPublicPath($sourceRelative))
+            ->scaleDown(width: $width)
             ->save($this->absPublicPath($targetRelative));
     }
 

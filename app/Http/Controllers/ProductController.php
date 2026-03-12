@@ -158,7 +158,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request, ProductService $service, ProductPhotoService $photoService)
     {
         $data = $request->validated();
-        \Log::debug('store validated data', $data);
 
         $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
@@ -176,8 +175,6 @@ class ProductController extends Controller
 
                 return $product;
             });
-
-            \Log::debug('product created', ['id' => $product->id]);
 
         } catch (\Exception $e) {
             \Log::error('store error', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
