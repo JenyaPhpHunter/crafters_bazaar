@@ -29,7 +29,6 @@ class Product extends Model
         'rating_avg',
         'rating_count',
         'featured',
-        // ❌ 'color_ids' прибери — це НЕ колонка таблиці products
     ];
 
     protected $casts = [

@@ -32,7 +32,7 @@ class ProductController extends Controller
         return [];
     }
 
-    public function index(ProductRequest $request)
+    public function index(Request $request)
     {
         // Сортування
         $sort_by = $request->get('sort_by', 'menu_order');
@@ -113,37 +113,34 @@ class ProductController extends Controller
         ));
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
         $user = Auth::user();
         $brands = Brand::where('creator_id', $user->id)->get();
         $images = $this->getDemoImages();
 
-        // Додаємо масиви для швидкого вибору в модалці
-        $arr_kind_products = KindProduct::pluck('title')->toArray();          // ['Електроніка', 'Одяг', ...]
-        $arr_sub_kind_products = SubKindProduct::pluck('title')->toArray();  // ['Смартфони', 'Футболки', ...]
+        $arr_kind_products     = KindProduct::pluck('title')->toArray();
+        $arr_sub_kind_products = SubKindProduct::pluck('title')->toArray();
+
+        $selectedKind    = old('kind_product_id')    ?: $request->input('kind_product_id');
+        $selectedSubKind = old('sub_kind_product_id') ?: $request->input('sub_kind_product_id');
 
         return view('products.create', [
-            'brands' => $brands,
-            'images' => $images,
-            'selected_kind_product_id' => old('kind_product_id'),
-            'selected_sub_kind_product_id' => old('sub_kind_product_id'),
-            'action_types' => [
-                'add_kind' => 'Додати вид',
-                'add_sub_kind' => 'Додати підвид',
+            'brands'                       => $brands,
+            'images'                       => $images,
+            'selected_kind_product_id'     => $selectedKind,
+            'selected_sub_kind_product_id' => $selectedSubKind,
+            'action_types'                 => [
+                'add_kind'        => 'Додати вид',
+                'add_sub_kind'    => 'Додати підвид',
                 'put_up_for_sale' => 'Виставити на продаж',
-                'save' => 'Зберегти як чернетку'
+                'save'            => 'Зберегти як чернетку',
             ],
-            'productId' => 0,
-            'user' => $user,
-            'productImages' => collect(),
-
-            // Передаємо масиви в view (і в модалку, бо вона include'иться в create.blade.php)
-            'arr_kind_products' => $arr_kind_products,
+            'productId'             => 0,
+            'user'                  => $user,
+            'productImages'         => collect(),
+            'arr_kind_products'     => $arr_kind_products,
             'arr_sub_kind_products' => $arr_sub_kind_products,
-
-            // Також передаємо повні колекції для select у модалці (якщо потрібно)
-            'kindProducts' => KindProduct::all(),  // для <select> з id і title
         ]);
     }
 
@@ -161,25 +158,31 @@ class ProductController extends Controller
     public function store(ProductRequest $request, ProductService $service, ProductPhotoService $photoService)
     {
         $data = $request->validated();
+        \Log::debug('store validated data', $data);
+
         $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
-        $product = DB::transaction(function () use ($data, $service, $request, $photoService, $mainPhotoIndex) {
-            $product = $service->create($data);
+        try {
+            $product = DB::transaction(function () use ($data, $service, $request, $photoService, $mainPhotoIndex) {
+                $product = $service->create($data);
 
-            DB::afterCommit(function () use ($request, $product, $photoService, $mainPhotoIndex) {
-                if (!$request->hasFile('product_photo')) {
-                    return;
-                }
+                DB::afterCommit(function () use ($request, $product, $photoService, $mainPhotoIndex) {
+                    if (!$request->hasFile('product_photo')) return;
 
-                $files = $request->file('product_photo');
-                $files = is_array($files) ? $files : [$files];
+                    $files = $request->file('product_photo');
+                    $files = is_array($files) ? $files : [$files];
+                    $photoService->storeMany($product, $files, $mainPhotoIndex);
+                });
 
-                // ✅ ПЕРЕДАЄМО $mainPhotoIndex
-                $photoService->storeMany($product, $files, $mainPhotoIndex);
+                return $product;
             });
 
-            return $product;
-        });
+            \Log::debug('product created', ['id' => $product->id]);
+
+        } catch (\Exception $e) {
+            \Log::error('store error', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            throw $e;
+        }
 
         return redirect()->route('products.index')->with('success', 'Товар успішно створено!');
     }
@@ -206,39 +209,85 @@ class ProductController extends Controller
     public function storekindsubkind(Request $request)
     {
         $request->validate([
-            'mode'                    => 'required|in:kind,subkind',
-            'title_sub_kind_product'  => 'required|string|max:255',
-            'kind_product_id'         => 'required', // тепер завжди обов'язкове
-            'title_kind_product'      => 'nullable|string|max:255', // тільки якщо новий
+            'kind_product_id'    => 'required',
+            'title_kind_product' => 'nullable|string|max:255',
         ]);
 
+        $userId = auth()->id();
+
+        // ── Визначаємо або створюємо вид ──
         $kindInput = trim($request->kind_product_id);
-        $kindId = null;
+        $kind      = null;
+        $kindId    = null;
 
         if (is_numeric($kindInput)) {
-            $kindId = $kindInput; // це існуючий id
-        } elseif ($kindInput) {
-            // новий вид — створюємо за назвою
+            $kindId = (int) $kindInput;
+            $kind   = KindProduct::find($kindId);
+
+            if (!$kind) {
+                return response()->json(['success' => false, 'message' => 'Вид товару не знайдено'], 422);
+            }
+        } else {
+            // kind_product_id прийшов як текст — це нова назва виду
+            $titleKind = trim($request->title_kind_product ?: $kindInput);
+
+            if (!$titleKind) {
+                return response()->json(['success' => false, 'message' => 'Вкажіть назву виду товару'], 422);
+            }
+
             $kind = KindProduct::firstOrCreate(
-                ['title' => $kindInput],
-                ['title' => $kindInput]
+                ['title' => $titleKind],
+                ['user_id' => $userId, 'checked' => true]
             );
             $kindId = $kind->id;
         }
 
-        if (!$kindId) {
-            return response()->json(['success' => false, 'message' => 'Вкажіть вид товару'], 422);
+        // ── Підвид — якщо заповнений ──
+        $subkind      = null;
+        $subInput     = trim($request->sub_kind_product_id ?? '');
+        $titleSubkind = trim($request->title_sub_kind_product ?? '');
+
+        // Tom Select може передати текст нового підвиду в sub_kind_product_id
+        if (!$titleSubkind && $subInput && !is_numeric($subInput)) {
+            $titleSubkind = $subInput;
         }
 
-        $subkind = SubKindProduct::create([
-            'title'           => trim($request->title_sub_kind_product),
-            'kind_product_id' => $kindId,
-        ]);
+        if ($titleSubkind) {
+            // Новий або існуючий підвид за назвою
+            $subkind = SubKindProduct::firstOrCreate(
+                ['title' => $titleSubkind, 'kind_product_id' => $kindId],
+                ['user_id' => $userId, 'checked' => true]
+            );
+        } elseif (is_numeric($subInput) && $subInput) {
+            // Обраний існуючий підвид по числовому id
+            $subkind = SubKindProduct::find((int) $subInput);
+        }
+
+        // ── Відповідь ──
+        if ($subkind) {
+            if ($subkind->wasRecentlyCreated && $kind->wasRecentlyCreated) {
+                $message = 'Вид та підвид успішно створено';
+            } elseif ($subkind->wasRecentlyCreated) {
+                $message = 'Підвид успішно створено';
+            } else {
+                $message = 'Дані заповнено';
+            }
+        } else {
+            $message = $kind->wasRecentlyCreated ? 'Вид успішно створено' : 'Дані заповнено';
+        }
 
         return response()->json([
             'success'    => true,
-            'newKind'    => $kindId !== (int)$request->kind_product_id ? $kind : null,
-            'newSubkind' => $subkind,
+            'message'    => $message,
+            'newKind'    => [
+                'id'    => $kind->id,
+                'title' => $kind->title,
+            ],
+            'newSubkind' => $subkind ? [
+                'id'              => $subkind->id,
+                'title'           => $subkind->title,
+                'kind_product_id' => $kindId,
+            ] : null,
         ]);
     }
 }

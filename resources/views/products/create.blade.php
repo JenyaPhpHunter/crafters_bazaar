@@ -27,7 +27,6 @@
                             @csrf
 
                             {{-- hidden --}}
-{{--                            <input type="hidden" name="color_id" id="selectedColor">--}}
                             <input type="hidden" name="brand_id" id="selectedBrand">
                             <input type="hidden" name="action" id="form-action">
                             <input type="hidden" name="content" id="content-hidden">

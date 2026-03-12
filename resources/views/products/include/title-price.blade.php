@@ -15,7 +15,8 @@
                 data-placeholder="Введіть назву товару"
                 spellcheck="false"
             >{{ old('title') }}</div>
-            <input type="hidden" name="title" id="title-hidden">
+            {{-- hidden синхронізується з contenteditable через JS --}}
+            <input type="hidden" name="title" id="title-hidden" value="{{ old('title') }}">
         </div>
     </div>
 </div>

@@ -50,6 +50,18 @@
     if (counter) observer.observe(counter, { childList: true, characterData: true });
 
     $(document).ready(function () {
+        // Синхронізуємо title hidden input з contenteditable при завантаженні
+        const titleDiv = document.getElementById('title');
+        const titleHidden = document.getElementById('title-hidden');
+        if (titleDiv && titleHidden) {
+            if (titleDiv.textContent.trim()) {
+                titleHidden.value = titleDiv.textContent.trim();
+            }
+            titleDiv.addEventListener('input', () => {
+                titleHidden.value = titleDiv.textContent.trim();
+            });
+        }
+
         setTimeout(() => {
             autoResize(document.getElementById('title'));
             autoResize(document.getElementById('price'));

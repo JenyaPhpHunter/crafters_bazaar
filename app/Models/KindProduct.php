@@ -10,8 +10,9 @@ class KindProduct extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'title',
         'user_id',
+        'checked',
     ];
 
     public function products()

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeDropdown = null;
 
     const closeActive = () => {
+        console.log('[dropdown] closeActive called, activeDropdown:', activeDropdown?.dropdown?.dataset?.name);
         if (!activeDropdown) return;
         const { search, list } = activeDropdown;
 
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const openDropdown = (dropdown) => {
+        console.log('[dropdown] openDropdown called', dropdown.dataset.name);
         if (activeDropdown && activeDropdown.dropdown === dropdown) {
             closeActive();
             return;
@@ -133,55 +135,59 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Вибір опції
-        list.querySelectorAll('li').forEach(li => {
-            li.addEventListener('click', e => {
-                e.stopPropagation();
-
-                hidden.value = li.dataset.value;
-                selected.querySelector('.selected-text').textContent = li.textContent.trim();
-                selected.classList.add('selected-value');
-                selected.closest('.form-section').querySelector('.form-label').classList.add('label-focused');
-
-                // Якщо це вид — фільтруємо підвиди
-                if (dropdown.dataset.name === 'kind') {
-                    const subDropdown = document.querySelector('.custom-dropdown[data-name="subkind"]');
-                    if (subDropdown) {
-                        const subHidden = subDropdown.querySelector('input[type="hidden"]');
-                        const subList = subDropdown.querySelectorAll('li');
-
-                        // Показуємо лише підвиди, які належать обраному виду
-                        subList.forEach(subLi => {
-                            subLi.style.display = subLi.dataset.kind === li.dataset.value ? 'flex' : 'none';
-                        });
-
-                        // Очищуємо підвид, якщо він більше не належить цьому виду
-                        if (subHidden.value && !Array.from(subList).some(subLi => subLi.dataset.value === subHidden.value && subLi.dataset.kind === li.dataset.value)) {
-                            subHidden.value = '';
-                            subDropdown.querySelector('.selected-text').textContent = 'Оберіть підвид товару';
-                            subDropdown.querySelector('.dropdown-selected').classList.remove('selected-value');
-                            subDropdown.closest('.form-section').querySelector('.form-label').classList.remove('label-focused');
-                        }
-                    }
-                }
-
-                // Автопідстановка виду при виборі підвиду
-                if (dropdown.dataset.name === 'subkind') {
-                    const kindDropdown = document.querySelector('.custom-dropdown[data-name="kind"]');
-                    if (kindDropdown && !kindDropdown.querySelector('input[type="hidden"]').value) {
-                        const kindLi = kindDropdown.querySelector(`.dropdown-options li[data-value="${li.dataset.kind}"]`);
-                        if (kindLi) {
-                            kindDropdown.querySelector('input[type="hidden"]').value = kindLi.dataset.value;
-                            kindDropdown.querySelector('.selected-text').textContent = kindLi.textContent.trim();
-                            kindDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
-                            kindDropdown.closest('.form-section').querySelector('.form-label').classList.add('label-focused');
-                        }
-                    }
-                }
-
-                closeActive();
-                document.dispatchEvent(new Event('field-updated'));
+        // Вибір опції — делегування, працює і для динамічно доданих li
+        list.addEventListener('click', e => {
+            const li = e.target.closest('li');
+            console.log('[dropdown] list click', {
+                li,
+                liDataValue: li?.dataset.value,
+                liDataTitle: li?.dataset.title,
+                dropdownName: dropdown.dataset.name,
+                activeDropdown: activeDropdown?.dropdown?.dataset?.name,
             });
+            if (!li) return;
+            const e2 = e;
+            e2.stopPropagation();
+
+            hidden.value = li.dataset.value;
+            selected.querySelector('.selected-text').textContent = li.textContent.trim();
+            selected.classList.add('selected-value');
+            selected.closest('.form-section').querySelector('.form-label').classList.add('label-focused');
+
+            if (dropdown.dataset.name === 'kind') {
+                const subDropdown = document.querySelector('.custom-dropdown[data-name="subkind"]');
+                if (subDropdown) {
+                    const subHidden = subDropdown.querySelector('input[type="hidden"]');
+                    const subList = subDropdown.querySelectorAll('li');
+
+                    subList.forEach(subLi => {
+                        subLi.style.display = subLi.dataset.kind === li.dataset.value ? 'flex' : 'none';
+                    });
+
+                    if (subHidden.value && !Array.from(subList).some(subLi => subLi.dataset.value === subHidden.value && subLi.dataset.kind === li.dataset.value)) {
+                        subHidden.value = '';
+                        subDropdown.querySelector('.selected-text').textContent = 'Оберіть підвид товару';
+                        subDropdown.querySelector('.dropdown-selected').classList.remove('selected-value');
+                        subDropdown.closest('.form-section').querySelector('.form-label').classList.remove('label-focused');
+                    }
+                }
+            }
+
+            if (dropdown.dataset.name === 'subkind') {
+                const kindDropdown = document.querySelector('.custom-dropdown[data-name="kind"]');
+                if (kindDropdown && !kindDropdown.querySelector('input[type="hidden"]').value) {
+                    const kindLi = kindDropdown.querySelector(`.dropdown-options li[data-value="${li.dataset.kind}"]`);
+                    if (kindLi) {
+                        kindDropdown.querySelector('input[type="hidden"]').value = kindLi.dataset.value;
+                        kindDropdown.querySelector('.selected-text').textContent = kindLi.textContent.trim();
+                        kindDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
+                        kindDropdown.closest('.form-section').querySelector('.form-label').classList.add('label-focused');
+                    }
+                }
+            }
+
+            closeActive();
+            document.dispatchEvent(new Event('field-updated'));
         });
     });
 });

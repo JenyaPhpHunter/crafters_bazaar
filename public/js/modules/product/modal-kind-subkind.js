@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const subkindSelect = document.getElementById('subkindSelect');
     const titleKindInput = document.getElementById('title_kind_product');
     const titleSubkindInput = document.getElementById('title_sub_kind_product');
-    const modeInput = document.getElementById('modalMode');
     const modalTitle = document.getElementById('kindSubkindModalLabel');
 
     let kindTs = null;
@@ -19,21 +18,23 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!kindTs) return null;
         const val = kindTs.getValue();
         if (!val) return null;
-        return /^\d+$/.test(val) ? val : null;
+        return /^\d+$/.test(val) ? val : 'new';
     }
 
     function filterSubkinds(keepValue) {
         if (!subkindTs) return;
-
         const kindId = getSelectedKindId();
 
         subkindTs.clearOptions();
 
-        Array.from(subkindSelect.options).forEach(opt => {
-            if (!kindId || opt.dataset.kind === kindId) {
-                subkindTs.addOption({ value: opt.value, text: opt.text });
-            }
-        });
+        // Якщо новий вид — підвидів немає, залишаємо порожньо
+        if (kindId !== 'new') {
+            Array.from(subkindSelect.options).forEach(opt => {
+                if (!kindId || opt.dataset.kind === kindId) {
+                    subkindTs.addOption({ value: opt.value, text: opt.text });
+                }
+            });
+        }
 
         subkindTs.load('');
 
@@ -49,10 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateQuickSubkinds() {
         const kindId = getSelectedKindId();
-        const quickSubkindsEl = document.getElementById('quickSubkinds');
-        if (!quickSubkindsEl) return;
-
-        quickSubkindsEl.querySelectorAll('a.quick-subkind').forEach(link => {
+        const el = document.getElementById('quickSubkinds');
+        if (!el) return;
+        el.querySelectorAll('a.quick-subkind').forEach(link => {
             const opt = Array.from(subkindSelect.options).find(o => o.text === link.dataset.title);
             link.style.display = (!kindId || !opt || opt.dataset.kind === kindId) ? '' : 'none';
         });
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 0);
     }
 
-    // Скидання стану виду і підвидів (викликається при очищенні виду)
     function onKindCleared() {
         titleKindInput.value = '';
         if (subkindTs) {
@@ -77,14 +76,65 @@ document.addEventListener('DOMContentLoaded', function () {
         updateQuickSubkinds();
     }
 
+    function updateDropdowns(newKind, newSubkind) {
+        if (newKind) {
+            const kindDropdown = document.querySelector('.custom-dropdown[data-name="kind"]');
+            if (kindDropdown) {
+                const kindList   = kindDropdown.querySelector('.dropdown-options');
+                const kindHidden = kindDropdown.querySelector('input[type="hidden"]');
+
+                if (!kindList.querySelector(`li[data-value="${newKind.id}"]`)) {
+                    const li = document.createElement('li');
+                    li.dataset.value = String(newKind.id);
+                    li.dataset.title = newKind.title;
+                    li.innerHTML = `<i class="fas fa-box-open"></i> ${newKind.title}`;
+                    kindList.appendChild(li);
+                }
+
+                kindHidden.value = newKind.id;
+                kindDropdown.querySelector('.selected-text').textContent = newKind.title;
+                kindDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
+                kindDropdown.closest('.form-section')?.querySelector('.form-label')?.classList.add('label-focused');
+            }
+        }
+
+        if (newSubkind) {
+            const subDropdown = document.querySelector('.custom-dropdown[data-name="subkind"]');
+            if (subDropdown) {
+                const subList   = subDropdown.querySelector('.dropdown-options');
+                const subHidden = subDropdown.querySelector('input[type="hidden"]');
+
+                if (!subList.querySelector(`li[data-value="${newSubkind.id}"]`)) {
+                    const li = document.createElement('li');
+                    li.dataset.value = String(newSubkind.id);
+                    li.dataset.title = newSubkind.title;
+                    li.dataset.kind  = String(newSubkind.kind_product_id);
+                    li.innerHTML = `<i class="fas fa-layer-group"></i> ${newSubkind.title}`;
+                    subList.appendChild(li);
+                }
+
+                subHidden.value = newSubkind.id;
+                subDropdown.querySelector('.selected-text').textContent = newSubkind.title;
+                subDropdown.querySelector('.dropdown-selected').classList.add('selected-value');
+                subDropdown.closest('.form-section')?.querySelector('.form-label')?.classList.add('label-focused');
+
+                if (newKind) {
+                    subList.querySelectorAll('li').forEach(li => {
+                        li.style.display = li.dataset.kind === String(newKind.id) ? 'flex' : 'none';
+                    });
+                }
+            }
+        }
+    }
+
     modal.addEventListener('shown.bs.modal', function (event) {
         const button = event.relatedTarget;
         if (!button) return;
 
+        // Тільки візуальна зміна заголовка — на логіку не впливає
         const mode = button.getAttribute('data-mode') || 'subkind';
-        modeInput.value = mode;
         modalTitle.textContent = mode === 'kind'
-            ? 'Додати новий вид товару'
+            ? 'Додати вид товару'
             : 'Додати підвид товару';
 
         if (kindSelect && window.TomSelect && !kindTs) {
@@ -104,31 +154,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     option_create: (data, escape) =>
                         '<div class="create">Створити новий вид: <strong>' + escape(data.input) + '</strong></div>'
                 },
-                onItemAdd: function(value) {
+                onItemAdd: function (value) {
                     if (settingKindFromSubkind) return;
-
                     titleKindInput.value = /^\d+$/.test(value) ? '' : value;
-
                     if (subkindTs) {
                         subkindTs.clear(true);
                         titleSubkindInput.value = '';
                     }
-
                     filterSubkinds();
                     updateQuickSubkinds();
                     lockAfterSelect(kindTs);
                 },
-                onDelete: function() {
-                    // onDelete не завжди спрацьовує при Backspace —
-                    // основний обробник на keydown нижче
+                onDelete: function () {
                     setTimeout(() => onKindCleared(), 0);
                 }
             });
 
-            // Слухач Backspace — основний спосіб відловити очищення через клавіатуру
-            kindTs.control_input.addEventListener('keydown', function(e) {
+            kindTs.control_input.addEventListener('keydown', function (e) {
                 if (e.key === 'Backspace' && kindTs.getValue()) {
-                    // Вид зараз обраний і буде видалений — скидаємо все після очищення
                     setTimeout(() => onKindCleared(), 0);
                 }
             });
@@ -151,23 +194,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     option_create: (data, escape) =>
                         '<div class="create">Створити новий підвид: <strong>' + escape(data.input) + '</strong></div>'
                 },
-                onItemAdd: function(value) {
+                onItemAdd: function (value) {
                     titleSubkindInput.value = /^\d+$/.test(value) ? '' : value;
-
                     const selectedOption = subkindSelect.querySelector(`option[value="${value}"]`);
                     if (selectedOption && selectedOption.dataset.kind && kindTs && !getSelectedKindId()) {
                         settingKindFromSubkind = true;
                         kindTs.setValue(selectedOption.dataset.kind, true);
                         titleKindInput.value = '';
                         settingKindFromSubkind = false;
-
                         filterSubkinds(value);
                         updateQuickSubkinds();
                     }
-
                     lockAfterSelect(subkindTs);
                 },
-                onDelete: function() {
+                onDelete: function () {
                     titleSubkindInput.value = '';
                 }
             });
@@ -198,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (response.ok && data.success) {
                     updateDropdowns(data.newKind, data.newSubkind);
                     bootstrap.Modal.getInstance(modal).hide();
-                    alert('Успішно додано!');
+                    alert(data.message);
                 } else {
                     alert(data.message || 'Помилка валідації');
                 }
@@ -233,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             kindTs.close();
             kindTs.control_input.value = '';
-
             filterSubkinds();
             updateQuickSubkinds();
         });
@@ -257,14 +296,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (existingOption) {
                 subkindTs.setValue(existingOption.value, true);
                 titleSubkindInput.value = '';
-
                 if (!selectedKindId && existingOption.dataset.kind && kindTs) {
                     settingKindFromSubkind = true;
                     kindTs.setValue(existingOption.dataset.kind, true);
                     titleKindInput.value = '';
                     kindTs.control_input.value = '';
                     settingKindFromSubkind = false;
-
                     filterSubkinds(existingOption.value);
                     updateQuickSubkinds();
                 }

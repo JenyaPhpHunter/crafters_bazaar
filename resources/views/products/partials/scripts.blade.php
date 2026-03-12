@@ -49,6 +49,7 @@
                         const first = document.querySelector('.color-circle.selected');
                         selectedColorEl.value = first ? (first.dataset.id || '') : '';
                     }
+                    return true;
                 });
 
                 syncExtraFields();

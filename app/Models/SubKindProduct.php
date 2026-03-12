@@ -10,9 +10,10 @@ class SubKindProduct extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'title',
         'kind_product_id',
         'user_id',
+        'checked',
     ];
 
     public function products()

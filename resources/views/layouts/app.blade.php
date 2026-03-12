@@ -49,6 +49,31 @@
 @include('include.header-section')
 @include('include.header-sticky-section')
 @include('include.mobile-header-section')
+
+@if ($errors->any())
+    <div class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px;">
+            <strong><i class="fas fa-exclamation-circle me-2"></i>Заповніть, будь ласка, обов'язкові поля</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
+{{-- Flash повідомлення про успіх --}}
+@if (session('success'))
+    <div class="container mt-3">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px;">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
 @include('include.offcanvas-search-section')
 @include('include.offcanvas-wishlist-section')
 <div class="offcanvas-overlay"></div>

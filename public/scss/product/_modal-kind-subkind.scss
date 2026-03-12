@@ -1,39 +1,31 @@
 @use "sass:color";
 @use "../variables" as *;
 
-/* ============================================= */
-/* MODAL KIND / SUBKIND                          */
-/* ============================================= */
-
 #kindSubkindModal {
 
-    // ── Overlay ──────────────────────────────────
     & + .modal-backdrop {
         backdrop-filter: blur(4px);
     }
 
-    // ── Dialog ───────────────────────────────────
     .modal-dialog {
         max-width: 680px;
     }
 
-    // ── Content ──────────────────────────────────
     .modal-content {
         border: none;
         border-radius: 20px;
-        overflow: hidden;
+        // overflow: hidden  ← ПРИБРАНО — саме воно ховало footer
         box-shadow: 0 24px 80px rgba($black, 0.22);
         background: $white;
     }
 
-    // ── Header ───────────────────────────────────
     .modal-header {
         padding: 1.75rem 2rem 1.5rem;
         border-bottom: 1px solid color.adjust($form-label-color, $lightness: 50%);
         background: $white;
         position: relative;
+        border-radius: 20px 20px 0 0;
 
-        // Декоративна лінія зверху — акцент кольором проекту
         &::before {
             content: '';
             position: absolute;
@@ -68,13 +60,14 @@
         }
     }
 
-    // ── Body ─────────────────────────────────────
     .modal-body {
         padding: 2rem;
         background: color.adjust($white, $lightness: -1%);
+        // max-height щоб body скролився а footer лишався видимим
+        max-height: 65vh;
+        overflow-y: auto;
     }
 
-    // ── Alert / підказка ─────────────────────────
     #modeDescription {
         background: rgba($primary2, 0.08);
         border: 1px solid rgba($primary2, 0.25);
@@ -93,12 +86,14 @@
         }
     }
 
-    // ── Секція виду / підвиду ─────────────────────
-    .mb-5 {
-        margin-bottom: 2rem !important;
+    .kind-section {
+        margin-bottom: 2rem;
     }
 
-    // ── Label ────────────────────────────────────
+    .subkind-section {
+        margin-bottom: 1rem;
+    }
+
     .form-label {
         font-family: $form-font;
         font-size: $form-font-size;
@@ -115,7 +110,6 @@
         }
     }
 
-    // ── Швидкий вибір ────────────────────────────
     .quick-list {
         display: flex;
         flex-wrap: wrap;
@@ -160,7 +154,6 @@
         }
     }
 
-    // ── Tom Select control ────────────────────────
     .ts-wrapper {
         width: 100%;
     }
@@ -188,7 +181,6 @@
             color: $heading-color !important;
         }
 
-        // Обраний елемент
         .item {
             background: rgba($primary, 0.1) !important;
             color: $primary !important;
@@ -200,13 +192,11 @@
         }
     }
 
-    // Фокус на wrapper
     .ts-wrapper.focus .ts-control {
         border-color: $primary2 !important;
         box-shadow: 0 0 0 4px rgba($primary2, 0.15) !important;
     }
 
-    // ── Tom Select dropdown ───────────────────────
     .ts-dropdown {
         border: 2px solid color.adjust($primary, $lightness: -15%) !important;
         border-radius: 12px !important;
@@ -221,9 +211,6 @@
             font-size: 17px;
             color: $heading-color;
             transition: background 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
 
             &:hover,
             &.active {
@@ -238,7 +225,6 @@
             }
         }
 
-        // "Нічого не знайдено"
         .no-results {
             padding: 0.85rem 1.1rem;
             font-size: 15px;
@@ -246,7 +232,6 @@
             font-style: italic;
         }
 
-        // "Створити новий"
         .create {
             padding: 0.85rem 1.1rem;
             font-size: 15px;
@@ -267,11 +252,11 @@
         }
     }
 
-    // ── Footer ───────────────────────────────────
     .modal-footer {
         padding: 1.25rem 2rem;
         border-top: 1px solid color.adjust($form-label-color, $lightness: 50%);
         background: $white;
+        border-radius: 0 0 20px 20px;
         gap: 12px;
 
         .btn {
@@ -322,14 +307,7 @@
     }
 }
 
-// ── Анімація появи dropdown ───────────────────────
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

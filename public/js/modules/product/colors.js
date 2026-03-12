@@ -49,6 +49,18 @@ function updateColorLabelState() {
 $(document).ready(function () {
     updateColorLabelState();
 
+    // Відновлюємо hidden inputs для вже вибраних кольорів (після old())
+    $('.color-circle.selected').each(function () {
+        const id = $(this).data('id');
+        if (!$('input[name="color_ids[]"][value="' + id + '"]').length) {
+            $('<input>', {
+                type: 'hidden',
+                name: 'color_ids[]',
+                value: id
+            }).appendTo($(this).closest('.product-variations'));
+        }
+    });
+
     if ($('.color-circle.selected').length > 0) {
         $(document).trigger('field-updated');
     }
