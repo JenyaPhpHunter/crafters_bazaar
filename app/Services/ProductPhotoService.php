@@ -19,34 +19,35 @@ class ProductPhotoService
     }
     public function storeMany(Product $product, array $files, int $mainIndex = 0): void
     {
+        // Знаходимо максимальний queue серед існуючих фото
+        $maxQueue = $product->productphotos()->max('queue') ?? 0;
+
         foreach (array_values($files) as $i => $image) {
             if (!$image instanceof UploadedFile) {
                 continue;
             }
 
-            $isMain = ($i === $mainIndex);
-            $queue = $isMain ? 1 : ($i + 2);
+            $isMain = ($i === $mainIndex) && ($maxQueue === 0); // головним може бути тільки якщо немає існуючих
+            $queue  = $maxQueue + $i + 1;
 
-            $ext = strtolower($image->getClientOriginalExtension() ?: 'jpg');
-            $base = (string) Str::uuid();
+            $ext      = strtolower($image->getClientOriginalExtension() ?: 'jpg');
+            $base     = (string) Str::uuid();
             $filename = $base . '.' . $ext;
 
-            // ORIGINAL
             $original = $image->storeAs('products/original', $filename, 'public');
 
-            // SMALL
             $small = 'products/small/' . $filename;
             $this->saveFit($original, $small, 300, 400);
 
-            // ZOOM
             $zoom = 'products/zoom/' . $filename;
             $this->saveResizeWidth($original, $zoom, 1200);
 
             $product->productphotos()->create([
                 'queue'   => $queue,
-                'is_main' => $isMain,  // ✅ ВИКОРИСТОВУЄМО $isMain, а не $queue === 1
+                'is_main' => $isMain,
                 'base'    => $base,
                 'ext'     => $ext,
+                'disk'    => 'public',
                 'paths'   => [
                     'original' => $original,
                     'small'    => $small,

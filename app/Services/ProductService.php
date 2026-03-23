@@ -30,4 +30,26 @@ class ProductService
 
         return $product;
     }
+
+    public function update(Product $product, array $data): Product
+    {
+        $product->update([
+            'title'               => $data['title'],
+            'price'               => $data['price'],
+            'sub_kind_product_id' => $data['sub_kind_product_id'],
+            'stock_balance'       => $data['stock_balance'],
+            'term_creation'       => $data['term_creation'] ?? null,
+            'brand_id'            => $data['brand_id'] ?? null,
+            'content'             => $data['content'] ?? null,
+            'tags'                => $data['tags'] ?? null,
+            'social_links'        => $data['social_links'] ?? null,
+            'additional_information' => $data['additional_information'] ?? null,
+        ]);
+
+        if (isset($data['color_ids'])) {
+            $product->colors()->sync($data['color_ids']);
+        }
+
+        return $product;
+    }
 }

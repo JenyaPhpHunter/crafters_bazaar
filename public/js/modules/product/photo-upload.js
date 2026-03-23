@@ -15,11 +15,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const MAX_FILES = 10;
     const storedFiles = new DataTransfer();
 
+    // Існуючі фото з БД (передаються з blade через window.existingPhotos)
+    // Формат: [{ id, src, main, thumb, is_main }]
+    let existingPhotos = (window.existingPhotos || []).map(p => ({ ...p, deleted: false }));
+
     // ────────────────────────────────────────────────
-    // Функції оновлення лічильника та помилок
+    // Лічильник — існуючі (не видалені) + нові
     // ────────────────────────────────────────────────
+    function totalCount() {
+        return existingPhotos.filter(p => !p.deleted).length + storedFiles.files.length;
+    }
+
     function updateCounter() {
-        const count = storedFiles.files.length;
+        const count = totalCount();
         if (countSpan) countSpan.textContent = count;
         if (badgeSpan) badgeSpan.textContent = count;
         if (badge) badge.classList.toggle('show', count > 0);
@@ -33,11 +41,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ────────────────────────────────────────────────
+    // Синхронізація deleted_photo_ids у форму
+    // ────────────────────────────────────────────────
+    function syncDeletedPhotos() {
+        const container = document.getElementById('deleted-photos-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        existingPhotos
+            .filter(p => p.deleted)
+            .forEach(p => {
+                const input = document.createElement('input');
+                input.type  = 'hidden';
+                input.name  = 'deleted_photo_ids[]';
+                input.value = p.id;
+                container.appendChild(input);
+            });
+    }
+
+    // ────────────────────────────────────────────────
     // Оновлення UI головного фото
     // ────────────────────────────────────────────────
     function updateMainPhotoUI(newMainIndex) {
-        // Оновлюємо ТІЛЬКИ оригінальні елементи (без slick-cloned)
-        const currentButtons = gallerySliderEl.querySelectorAll('.make-main-btn:not(.slick-cloned .make-main-btn)');
+        const currentButtons = gallerySliderEl.querySelectorAll('.product-zoom:not(.slick-cloned) .make-main-btn');
         currentButtons.forEach((button, i) => {
             const isMain = (i === newMainIndex);
             const icon = button.querySelector('i');
@@ -50,43 +76,36 @@ document.addEventListener('DOMContentLoaded', function () {
             if (span) span.textContent = isMain ? 'Головне фото' : 'Зробити головним';
         });
 
-        // Оновлюємо thumbs (вони не клонуються Slick)
         const currentThumbs = thumbSliderEl.querySelectorAll('.item');
         currentThumbs.forEach((item, i) => {
             item.classList.toggle('is-main-thumb', i === newMainIndex);
         });
 
-        // Зберігаємо індекс
         const hidden = document.getElementById('main_photo_index');
         if (hidden) hidden.value = String(newMainIndex);
 
-        // Оновлюємо Slick
         if (window.jQuery) {
             const $ = window.jQuery;
-            const $gallery = $('#product-gallery');
-            const $thumbs  = $('#productThumbSlider');
-
-            if ($gallery.hasClass('slick-initialized')) $gallery.slick('refresh');
-            if ($thumbs.hasClass('slick-initialized'))  $thumbs.slick('refresh');
+            if ($('#product-gallery').hasClass('slick-initialized')) $('#product-gallery').slick('refresh');
+            if ($('#productThumbSlider').hasClass('slick-initialized')) $('#productThumbSlider').slick('refresh');
         }
     }
 
     // ────────────────────────────────────────────────
     // Повна перебудова галереї
     // ────────────────────────────────────────────────
-    function renderGalleryFromFiles() {
+    function renderGallery() {
         const mainIdx = Number(document.getElementById('main_photo_index')?.value || 0);
 
-        // 1. Повне знищення Slick
+        // Знищення Slick
         if (window.jQuery) {
             const $ = window.jQuery;
             const $gallery = $('#product-gallery');
             const $thumbs  = $('#productThumbSlider');
 
             if ($gallery.hasClass('slick-initialized')) $gallery.slick('unslick');
-            if ($thumbs.hasClass('slick-initialized')) $thumbs.slick('unslick');
+            if ($thumbs.hasClass('slick-initialized'))  $thumbs.slick('unslick');
 
-            // Очищаємо DOM повністю
             $gallery.empty().removeClass('slick-initialized slick-slider slick-dotted');
             $thumbs.empty().removeClass('slick-initialized slick-slider');
         }
@@ -94,51 +113,90 @@ document.addEventListener('DOMContentLoaded', function () {
         thumbSliderEl.innerHTML = '';
         gallerySliderEl.innerHTML = '';
 
-        // Очищення blob-URL
-        document.querySelectorAll('img[src^="blob:"]').forEach(img => {
-            URL.revokeObjectURL(img.src);
-        });
-
-        // Видалення всіх slick-cloned (на всяк випадок)
+        document.querySelectorAll('img[src^="blob:"]').forEach(img => URL.revokeObjectURL(img.src));
         document.querySelectorAll('.slick-cloned').forEach(el => el.remove());
 
-        // Створюємо нові елементи
-        Array.from(storedFiles.files).forEach((file, idx) => {
-            const url = URL.createObjectURL(file);
-            const isMain = (idx === mainIdx);
+        let globalIdx = 0;
+
+        // 1. Існуючі фото з БД (не видалені)
+        existingPhotos.filter(p => !p.deleted).forEach((photo, i) => {
+            const isMain = (globalIdx === mainIdx);
 
             // Thumb
             const thumbItem = document.createElement('div');
             thumbItem.className = 'item' + (isMain ? ' is-main-thumb' : '');
-            thumbItem.innerHTML = `<img src="${url}" alt="Thumb ${idx + 1}">`;
+            thumbItem.innerHTML = `<img src="${photo.thumb}" alt="Thumb ${globalIdx + 1}">`;
+            thumbSliderEl.appendChild(thumbItem);
+
+            // Gallery
+            const link = document.createElement('a');
+            link.className = 'product-zoom';
+            link.href = photo.src;
+            link.dataset.pswpSrc    = photo.src;
+            link.dataset.pswpWidth  = '1200';
+            link.dataset.pswpHeight = '1600';
+            link.dataset.index      = globalIdx;
+            link.dataset.photoId    = photo.id; // id з БД
+
+            link.innerHTML = `
+                <img src="${photo.main}" alt="Product ${globalIdx + 1}">
+                <button type="button" class="product-gallery-popup">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+                <button type="button" class="make-main-btn ${isMain ? 'is-main' : ''}"
+                    data-index="${globalIdx}"
+                    title="${isMain ? 'Головне фото' : 'Зробити головним'}">
+                    <i class="fa-solid ${isMain ? 'fa-star' : 'fa-star-half-stroke'}"></i>
+                    <span>${isMain ? 'Головне фото' : 'Зробити головним'}</span>
+                </button>
+                <button type="button" class="delete-photo-btn" data-photo-id="${photo.id}" title="Видалити фото">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+
+            gallerySliderEl.appendChild(link);
+            globalIdx++;
+        });
+
+        // 2. Нові файли
+        Array.from(storedFiles.files).forEach((file, i) => {
+            const url    = URL.createObjectURL(file);
+            const isMain = (globalIdx === mainIdx);
+
+            // Thumb
+            const thumbItem = document.createElement('div');
+            thumbItem.className = 'item' + (isMain ? ' is-main-thumb' : '');
+            thumbItem.innerHTML = `<img src="${url}" alt="Thumb ${globalIdx + 1}">`;
             thumbSliderEl.appendChild(thumbItem);
 
             // Gallery
             const link = document.createElement('a');
             link.className = 'product-zoom';
             link.href = url;
-            link.dataset.pswpSrc = url;
-            link.dataset.pswpWidth = '1200';
+            link.dataset.pswpSrc    = url;
+            link.dataset.pswpWidth  = '1200';
             link.dataset.pswpHeight = '1600';
-            link.dataset.index = idx;
+            link.dataset.index      = globalIdx;
+            link.dataset.newFileIdx = i; // індекс в storedFiles
 
             link.innerHTML = `
-                <img src="${url}" alt="Product ${idx + 1}">
+                <img src="${url}" alt="Product ${globalIdx + 1}">
                 <button type="button" class="product-gallery-popup">
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                 </button>
-                <button
-                    type="button"
-                    class="make-main-btn ${isMain ? 'is-main' : ''}"
-                    data-index="${idx}"
-                    title="${isMain ? 'Головне фото' : 'Зробити головним'}"
-                >
+                <button type="button" class="make-main-btn ${isMain ? 'is-main' : ''}"
+                    data-index="${globalIdx}"
+                    title="${isMain ? 'Головне фото' : 'Зробити головним'}">
                     <i class="fa-solid ${isMain ? 'fa-star' : 'fa-star-half-stroke'}"></i>
                     <span>${isMain ? 'Головне фото' : 'Зробити головним'}</span>
+                </button>
+                <button type="button" class="delete-photo-btn" data-new-file-idx="${i}" title="Видалити фото">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             `;
 
             gallerySliderEl.appendChild(link);
+            globalIdx++;
         });
 
         reInitProductSliders();
@@ -147,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
             window.__pswpLightbox.refresh();
         }
 
-        if (storedFiles.files.length > 0) {
+        if (totalCount() > 0) {
             updateMainPhotoUI(mainIdx);
         }
     }
@@ -155,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function reInitProductSliders() {
         if (!window.jQuery) return;
         const $ = window.jQuery;
-
         const $gallery = $('#product-gallery');
         const $thumbs  = $('#productThumbSlider');
 
@@ -169,7 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 prevArrow: '<button type="button" class="slick-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>',
                 nextArrow: '<button type="button" class="slick-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>',
                 appendArrows: '#product-gallery',
-                // Важливо: вимикаємо клонування, щоб не було дублів
                 centerMode: false,
                 variableWidth: false
             });
@@ -191,28 +247,72 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ────────────────────────────────────────────────
-    // Обробник кліку
+    // Обробник кліків — головне фото і видалення
     // ────────────────────────────────────────────────
     document.addEventListener('click', function (e) {
-        const btn = e.target.closest('.make-main-btn');
-        if (!btn) return;
 
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+        // Кнопка "Зробити головним"
+        const mainBtn = e.target.closest('.make-main-btn');
+        if (mainBtn && !mainBtn.classList.contains('is-main')) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
 
-        if (btn.classList.contains('is-main')) return;
+            const parent = mainBtn.closest('.product-zoom');
+            if (!parent) return;
 
-        const parent = btn.closest('.product-zoom');
-        if (!parent) return;
+            const idx = Number(parent.dataset.index);
+            if (!isNaN(idx)) {
+                updateMainPhotoUI(idx);
+                mainBtn.style.transform = 'scale(1.15)';
+                setTimeout(() => mainBtn.style.transform = '', 300);
+            }
+            return;
+        }
 
-        const idx = Number(parent.dataset.index);
-        if (isNaN(idx)) return;
+        // Кнопка видалення
+        const deleteBtn = e.target.closest('.delete-photo-btn');
+        if (deleteBtn) {
+            e.preventDefault();
+            e.stopPropagation();
 
-        updateMainPhotoUI(idx);
+            const photoId    = deleteBtn.dataset.photoId;
+            const newFileIdx = deleteBtn.dataset.newFileIdx;
 
-        btn.style.transform = 'scale(1.15)';
-        setTimeout(() => btn.style.transform = '', 300);
+            if (photoId) {
+                // Видалення існуючого фото з БД — позначаємо як deleted
+                const photo = existingPhotos.find(p => String(p.id) === String(photoId));
+                if (photo) {
+                    photo.deleted = true;
+                    syncDeletedPhotos();
+                }
+            } else if (newFileIdx !== undefined) {
+                // Видалення нового файлу
+                const idx = Number(newFileIdx);
+                const newDt = new DataTransfer();
+                Array.from(storedFiles.files).forEach((f, i) => {
+                    if (i !== idx) newDt.items.add(f);
+                });
+                // Очищаємо і заповнюємо знову
+                while (storedFiles.items.length) storedFiles.items.remove(0);
+                Array.from(newDt.files).forEach(f => storedFiles.items.add(f));
+                fileInput.files = storedFiles.files;
+            }
+
+            // Скидаємо main_photo_index якщо видалили головне
+            const currentMain = Number(document.getElementById('main_photo_index')?.value || 0);
+            const parent = deleteBtn.closest('.product-zoom');
+            if (parent && Number(parent.dataset.index) === currentMain) {
+                const hidden = document.getElementById('main_photo_index');
+                if (hidden) hidden.value = '0';
+            }
+
+            updateCounter();
+            renderGallery();
+
+            if (window.jQuery) window.jQuery(document).trigger('field-updated');
+        }
+
     }, true);
 
     // ────────────────────────────────────────────────
@@ -223,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let added = false;
 
         for (const file of files) {
-            if (storedFiles.files.length >= MAX_FILES) {
+            if (totalCount() >= MAX_FILES) {
                 showError('Максимум 10 фото');
                 break;
             }
@@ -243,22 +343,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (added) {
             fileInput.files = storedFiles.files;
             updateCounter();
-            renderGalleryFromFiles();
-
-            if (storedFiles.files.length === 1) {
-                updateMainPhotoUI(0);
-            }
-
+            renderGallery();
             if (window.jQuery) window.jQuery(document).trigger('field-updated');
         }
     }
 
     // Drag & Drop та клік
     ['dragover', 'drop'].forEach(ev =>
-        dropZone.addEventListener(ev, e => {
-            e.preventDefault();
-            e.stopPropagation();
-        })
+        dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); })
     );
 
     dropZone.addEventListener('dragenter', () => dropZone.classList.add('drag-over'));
@@ -277,6 +369,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (fileInput.files?.length) addFiles(fileInput.files);
     });
 
+    // ────────────────────────────────────────────────
+    // Ініціалізація
+    // ────────────────────────────────────────────────
     updateCounter();
-    renderGalleryFromFiles();
+    if (totalCount() > 0) {
+        renderGallery();
+    }
 });

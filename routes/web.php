@@ -78,6 +78,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/product-photos/{photo}/make-main', [ProductPhotoController::class, 'makeMain'])
         ->name('product-photos.make-main');
 
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+        ->name('products.destroy');
+    Route::patch('/products/{id}/restore', [ProductController::class, 'restore'])
+        ->name('products.restore');
+    Route::delete('/products/{id}/force', [ProductController::class, 'forceDestroy'])
+        ->name('products.forceDestroy');
+
     // === FORUM ===
     Route::resource('forum_categories', ForumCategoryController::class);
     Route::resource('forum_sub_categories', ForumSubCategoryController::class);

@@ -15,6 +15,7 @@ class ProductPhoto extends Model
         'is_main',
         'base',
         'ext',
+        'disk',
         'paths',
     ];
 

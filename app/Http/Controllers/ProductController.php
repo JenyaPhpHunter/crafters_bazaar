@@ -10,11 +10,12 @@ use App\Models\KindProduct;
 use App\Models\SubKindProduct;
 use App\Services\ProductPhotoService;
 use App\Services\ProductService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -115,6 +116,7 @@ class ProductController extends Controller
 
     public function create(Request $request): View
     {
+        $this->authorize('create', Product::class);
         $user = Auth::user();
         $brands = Brand::where('creator_id', $user->id)->get();
         $images = $this->getDemoImages();
@@ -125,7 +127,11 @@ class ProductController extends Controller
         $selectedKind    = old('kind_product_id')    ?: $request->input('kind_product_id');
         $selectedSubKind = old('sub_kind_product_id') ?: $request->input('sub_kind_product_id');
 
-        return view('products.create', [
+        return view('products.form', [
+            'product' => null,
+            'action'  => route('products.store'),
+            'method'  => 'POST',
+            'title'   => 'Додати новий товар',
             'brands'                       => $brands,
             'images'                       => $images,
             'selected_kind_product_id'     => $selectedKind,
@@ -187,20 +193,89 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $productImages = $product?->productphotos ?? collect();
+        $this->authorize('update', $product);
 
-        return view('products.edit', [
-            'product' => $product,
-            'productImages' => $productImages,
+        $user   = Auth::user();
+        $brands = Brand::where('creator_id', $user->id)->get();
+
+        // Формуємо масив $images з реальних фото продукту
+        $images = $product->productphotos
+            ->sortBy('queue')
+            ->map(fn ($photo) => [
+                'id'    => $photo->id,
+                'src'   => Storage::disk('public')->url($photo->paths['zoom']    ?? $photo->paths['original']),
+                'main'  => Storage::disk('public')->url($photo->paths['original'] ?? ''),
+                'thumb' => Storage::disk('public')->url($photo->paths['small']   ?? $photo->paths['original']),
+                'w'     => 1200,
+                'h'     => 1600,
+            ])
+            ->values()
+            ->toArray();
+
+        $arr_kind_products     = KindProduct::pluck('title')->toArray();
+        $arr_sub_kind_products = SubKindProduct::pluck('title')->toArray();
+
+        $selectedKind    = old('kind_product_id')    ?: $product->sub_kind_product?->kind_product_id;
+        $selectedSubKind = old('sub_kind_product_id') ?: $product->sub_kind_product_id;
+
+        return view('products.form', [
+            'product'                      => $product,
+            'action'                       => route('products.update', $product),
+            'method'                       => 'PUT',
+            'title'                        => 'Редагувати товар',
+            'brands'                       => $brands,
+            'images'                       => $images,
+            'selected_kind_product_id'     => $selectedKind,
+            'selected_sub_kind_product_id' => $selectedSubKind,
+            'action_types'                 => [
+                'add_kind'        => 'Додати вид',
+                'add_sub_kind'    => 'Додати підвид',
+                'put_up_for_sale' => 'Виставити на продаж',
+                'save'            => 'Зберегти як чернетку',
+            ],
+            'productId'             => $product->id,
+            'user'                  => $user,
+            'productImages'         => $product->productphotos,
+            'arr_kind_products'     => $arr_kind_products,
+            'arr_sub_kind_products' => $arr_sub_kind_products,
+            'colors'                => Color::all(),
         ]);
     }
-
-    public function update(StoreProductRequest $request, Product $product): RedirectResponse
+    public function update(ProductRequest $request, Product $product, ProductService $service, ProductPhotoService $photoService)
     {
-        ProductService::update($request, $product);
+        $this->authorize('update', $product);
 
-        return redirect()->route('products.edit', $product->id)
-            ->with('success', 'Товар оновлено.');
+        $data = $request->validated();
+        $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
+
+        try {
+            DB::transaction(function () use ($data, $service, $product, $request, $photoService, $mainPhotoIndex) {
+                $service->update($product, $data);
+
+                // Видаляємо позначені фото
+                if (!empty($data['deleted_photo_ids'])) {
+                    foreach ($product->productphotos()->whereIn('id', $data['deleted_photo_ids'])->get() as $photo) {
+                        foreach ($photo->paths as $path) {
+                            \Storage::disk('public')->delete($path);
+                        }
+                        $photo->delete();
+                    }
+                }
+
+                DB::afterCommit(function () use ($request, $product, $photoService, $mainPhotoIndex) {
+                    if (!$request->hasFile('product_photo')) return;
+                    $files = $request->file('product_photo');
+                    $files = is_array($files) ? $files : [$files];
+                    $photoService->storeMany($product, $files, $mainPhotoIndex);
+                });
+            });
+
+        } catch (\Exception $e) {
+            \Log::error('update error', ['message' => $e->getMessage()]);
+            throw $e;
+        }
+
+        return redirect()->route('products.index')->with('success', 'Товар успішно оновлено!');
     }
 
     public function storekindsubkind(Request $request)
@@ -286,5 +361,44 @@ class ProductController extends Controller
                 'kind_product_id' => $kindId,
             ] : null,
         ]);
+    }
+
+    public function destroy(Product $product): RedirectResponse
+    {
+        $this->authorize('delete', $product);
+
+        $product->delete(); // soft delete — просто заповнює deleted_at
+
+        return redirect()->route('products.index')->with('success', 'Товар успішно видалено!');
+    }
+
+    // Відновити після soft delete
+    public function restore(int $id): RedirectResponse
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $product);
+
+        $product->restore();
+
+        return redirect()->route('products.index')->with('success', 'Товар відновлено!');
+    }
+
+// Видалити назавжди
+    public function forceDestroy(int $id): RedirectResponse
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', $product);
+
+        // Видаляємо фото з диску перед видаленням
+        foreach ($product->productphotos as $photo) {
+            foreach ($photo->paths as $path) {
+                \Storage::disk($photo->disk ?? 'public')->delete($path);
+            }
+            $photo->forceDelete();
+        }
+
+        $product->forceDelete();
+
+        return redirect()->route('products.index')->with('success', 'Товар остаточно видалено!');
     }
 }

@@ -16,22 +16,27 @@
 
                 {{-- ПРАВА КОЛОНКА --}}
                 <div class="col-lg-6 col-12">
-
-                    {{-- ВЕРХНІ ПОЛЯ — ВИСОТА = ФОТО --}}
                     <div class="product-form-main">
 
-                        <form method="post"
-                              action="{{ route('products.store') }}"
+                        <form method="POST"
+                              action="{{ $action }}"
                               enctype="multipart/form-data"
                               id="product-form">
                             @csrf
+                            @if($method === 'PUT')
+                                @method('PUT')
+                            @endif
 
                             {{-- hidden --}}
-                            <input type="hidden" name="brand_id" id="selectedBrand">
+                            <input type="hidden" name="brand_id" id="selectedBrand"
+                                   value="{{ old('brand_id') ?? ($product?->brand_id ?? '') }}">
                             <input type="hidden" name="action" id="form-action">
-                            <input type="hidden" name="content" id="content-hidden">
-                            <input type="hidden" name="tags" id="tags-hidden">
-                            <input type="hidden" name="social_links" id="social-links-hidden">
+                            <input type="hidden" name="content" id="content-hidden"
+                                   value="{{ old('content') ?? ($product?->content ?? '') }}">
+                            <input type="hidden" name="tags" id="tags-hidden"
+                                   value="{{ old('tags') ?? ($product?->tags ?? '') }}">
+                            <input type="hidden" name="social_links" id="social-links-hidden"
+                                   value="{{ old('social_links') ?? ($product?->social_links ?? '') }}">
                             <input type="hidden" name="main_photo_index" id="main_photo_index" value="0">
 
                             {{-- Назва + ціна --}}
@@ -45,19 +50,16 @@
 
                             {{-- Кольори --}}
                             @include('products.include.colors')
-                            {{-- НИЖНІ БЛОКИ — ПОЗА ВИСОТОЮ ФОТО --}}
+
                             <div class="product-form-secondary">
-
                                 @include('products.include.file_upload')
-
                                 @include('products.include.brands')
-
                                 <div class="product-buttons-centered">
                                     @include('products.include.buttons')
                                 </div>
-
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>

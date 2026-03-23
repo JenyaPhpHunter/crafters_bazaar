@@ -409,3 +409,72 @@ $arrow-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         color: $white;
     }
 }
+
+.delete-photo-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #e53935;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 30;
+
+    i {
+        font-size: 14px;
+        color: #e53935;
+    }
+
+    &::after {
+        content: 'Видалення фото';
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 8px);
+        transform: translateY(-50%);
+        background: #e53935;
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+
+        // Стрілочка вліво
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-right-color: #e53935;
+        }
+    }
+
+    &:hover {
+        background: #e53935;
+        transform: scale(1.1);
+
+        i {
+            color: white;
+        }
+
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+.product-zoom:hover .delete-photo-btn {
+    opacity: 1;
+}

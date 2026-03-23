@@ -1,5 +1,24 @@
 <div class="photo-upload-block mb-0">
 
+    {{-- Передаємо існуючі фото в JS --}}
+    @php
+        $existingPhotosJson = collect([]);
+        if (isset($product) && $product && $product->productphotos) {
+            $existingPhotosJson = $product->productphotos->sortBy('queue')->map(function ($p) {
+                return [
+                    'id'      => $p->id,
+                    'src'     => \Storage::disk('public')->url($p->paths['zoom']     ?? $p->paths['original']),
+                    'main'    => \Storage::disk('public')->url($p->paths['original'] ?? ''),
+                    'thumb'   => \Storage::disk('public')->url($p->paths['small']    ?? $p->paths['original']),
+                    'is_main' => $p->is_main,
+                ];
+            })->values();
+        }
+    @endphp
+    <script>
+        window.existingPhotos = {!! json_encode($existingPhotosJson) !!};
+    </script>
+
     {{-- HEADER --}}
     <div class="form-block-header text-center">
         <label class="form-label d-block">
@@ -10,7 +29,6 @@
                title="Рекомендований розмір фото: 900×1200 px (3:4)">
             </i>
         </label>
-
         <div class="small text-muted">
             Рекомендований формат: <strong>3:4</strong> — <strong>900×1200 px</strong>
         </div>
@@ -33,7 +51,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="upload-badge" id="photoCounterBadge">
                     <span id="photoCountBadge">0</span>
                 </div>
@@ -41,7 +58,9 @@
         </div>
     </div>
 
-    {{-- ВАЖЛИВО: name="product_photo[]" --}}
+    {{-- hidden inputs для видалених фото --}}
+    <div id="deleted-photos-container"></div>
+
     <input type="file"
            id="product_photo"
            name="product_photo[]"

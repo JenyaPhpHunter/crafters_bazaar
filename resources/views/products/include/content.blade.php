@@ -16,7 +16,7 @@
             class="form-control content-textarea"
             placeholder="Опишіть стан товару, комплектацію, особливості, дефекти (якщо є), або іншу корисну інформацію...
 Ця інформація допоможе покупцям краще зрозуміти товар і швидше прийняти рішення."
-        >{{ old('content') }}</textarea>
+        >{{ old('content') ?? ($product?->content ?? '') }}</textarea>
 
         @error('content')
         <div class="alert alert-danger mt-3 small">

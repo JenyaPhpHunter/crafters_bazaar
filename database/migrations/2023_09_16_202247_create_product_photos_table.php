@@ -32,6 +32,10 @@ return new class extends Migration {
             $table->string('ext', 10)
                 ->comment('Розширення файлу (jpg, png, webp тощо)');
 
+            $table->string('disk', 50)
+                ->default('public')
+                ->comment('Назва файлового диска: public, s3, minio тощо');
+
             $table->json('paths')
                 ->comment('JSON з шляхами до файлів різних розмірів: original'
                     . ' {"original":"...","small":"...","zoom":"..."}');
@@ -47,6 +51,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('product_photos');
+        Schema::dropIfExists('product_photos'); //TODO  Видалити цю строку  перед запуском
     }
 };

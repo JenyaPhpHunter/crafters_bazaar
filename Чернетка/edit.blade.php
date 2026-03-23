@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('resources.views.layouts.app')
 
 @section('content')
 
@@ -25,28 +25,29 @@
                             ];
                         });
                     @endphp
-                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити" data-images='@json($galleryImages)'>
+                    <button class="product-gallery-popup hintT-left" data-hint="Натисніть, щоб збільшити"
+                            data-images='@json($galleryImages)'>
                         <i class="far fa-expand"></i>
                     </button>
                     <a href="https://www.youtube.com/watch?v=1jSsy7DtYgc"
                        class="product-video-popup video-popup hintT-left" data-hint="Натисніть, щоб подивтись відео"><i
-                            class="fal fa-play"></i></a>
+                                class="fal fa-play"></i></a>
                     @if($photos->count() > 0)
-                    <div class="product-gallery-slider">
+                        <div class="product-gallery-slider">
                             @foreach ($photos as $photo)
                                 <div class="product-zoom"
                                      data-image="{{ asset($photo->path . '/' . $photo->filename) }}">
                                     <img src="{{ asset($photo->path.'/'.$photo->filename) }}" alt="">
                                 </div>
                             @endforeach
-                    </div>
-                    <div class="product-thumb-slider">
-                        @foreach ($photos as $photo)
-                            <div class="item">
-                                <img src="{{ asset($photo->small_path . '/' . $photo->small_filename) }}" alt="">
-                            </div>
-                        @endforeach
-                    </div>
+                        </div>
+                        <div class="product-thumb-slider">
+                            @foreach ($photos as $photo)
+                                <div class="item">
+                                    <img src="{{ asset($photo->small_path . '/' . $photo->small_filename) }}" alt="">
+                                </div>
+                            @endforeach
+                        </div>
                     @else
                         <div class="product-gallery-slider">
                             <div class="product-zoom"
@@ -88,7 +89,8 @@
             <!-- Product Summery Start -->
             <div class="col-lg-6 col-12 learts-mb-40">
                 <div class="product-summery">
-                    <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('products.update', ['product' => $product->id]) }}"
+                          enctype="multipart/form-data">
                         @csrf
                         @method('put')
                         <input type="hidden" name="color_id" id="selectedColor" value="{{ $product->color_id }}">
@@ -108,7 +110,8 @@
                                 <label for="price">Вартість, грн</label>
                                 <br>
                                 <input type="number" id="price" name="price" min="0" step="1" class="product-title"
-                                       placeholder="Введіть вартість товару" value="{{ old('price', $product->price) }}">
+                                       placeholder="Введіть вартість товару"
+                                       value="{{ old('price', $product->price) }}">
                                 @error('price')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -117,7 +120,8 @@
                         <div class="row">
                             <div class="col-md-6 col-12 learts-mb-30">
                                 <label for="brand_image">Логотип бренду</label>
-                                <input type="file" name="brand_image" id="brand_image" accept="image/*" class="form-control">
+                                <input type="file" name="brand_image" id="brand_image" accept="image/*"
+                                       class="form-control">
                                 @error('brand_image')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -139,7 +143,8 @@
                                 <br>
                                 <div class="row mb-n3">
                                     <div class="col-lg-4 col-12 mb-3">
-                                        <select class="search-select select2-basic" id="kind_product_id" name="kind_product_id">
+                                        <select class="search-select select2-basic" id="kind_product_id"
+                                                name="kind_product_id">
                                             @foreach($kind_products as $kind_product)
                                                 <option value="{{ $kind_product->id }}" {{ old('kind_product_id', $product->sub_kind_product->kind_product->id ?? null) == $kind_product->id ? 'selected' : '' }}>{{ $kind_product->title }}</option>
                                             @endforeach
@@ -159,7 +164,8 @@
                                 <br>
                                 <div class="row mb-n3">
                                     <div class="col-lg-4 col-12 mb-3">
-                                        <select class="search-select select2-basic" id="sub_kind_product_id" name="sub_kind_product_id">
+                                        <select class="search-select select2-basic" id="sub_kind_product_id"
+                                                name="sub_kind_product_id">
                                             @foreach($sub_kind_products as $sub_kind_product)
                                                 <option value="{{ $sub_kind_product->id }}" {{ old('sub_kind_product_id', optional($product->sub_kind_product)->id) == $sub_kind_product->id ? 'selected' : '' }}>{{ $sub_kind_product->title }}</option>
                                             @endforeach
@@ -197,7 +203,8 @@
                                     <div id="termCreationBlock">
                                         <div class="product-quantity">
                                             <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                            <input type="text" class="input-qty" name="term_creation" value="{{ old('term_creation', $product->term_creation) }}">
+                                            <input type="text" class="input-qty" name="term_creation"
+                                                   value="{{ old('term_creation', $product->term_creation) }}">
                                             <span class="qty-btn plus"><i class="ti-plus"></i></span>
                                         </div>
                                     </div>
@@ -216,14 +223,14 @@
                                                 $isSelected = $product->color_id === $color->id;
                                             @endphp
                                             <div
-                                                class="circle {{ $isSelected ? 'selected' : '' }}"
-                                                id="circle{{ $color->id }}"
-                                                data-name="Circle {{ $key + 1 }}"
-                                                data-color="{{ $color->code }}"
-                                                onclick="selectColor(this)"
+                                                    class="circle {{ $isSelected ? 'selected' : '' }}"
+                                                    id="circle{{ $color->id }}"
+                                                    data-name="Circle {{ $key + 1 }}"
+                                                    data-color="{{ $color->code }}"
+                                                    onclick="selectColor(this)"
                                             ></div>
                                             <style>
-                                                #circle{{ $color->id }} {
+                                                #circle{{ $color->id }}  {
                                                     background-color: {{ $color->code }};
                                                 }
                                             </style>
@@ -239,7 +246,8 @@
                         <label for="product_photo" class="file-input-label">
                             <i class="fas fa-image"></i> <span id="file-label">Виберіть фото</span>
                         </label>
-                        <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;" onchange="updateFileLabel(this);">
+                        <input type="file" id="product_photo" name="product_photo[]" multiple style="display: none;"
+                               onchange="updateFileLabel(this);">
                         <br><br>
                         <div class="product-buttons">
                             @php
@@ -264,9 +272,11 @@
                     <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
                         @isset($user)
                             <div class="col-auto learts-mb-20">
-                                <a href="{{ route('users.show',['user' => $user->id]) }}#account-info" class="btn btn-secondary">Перейти в профіль</a>
+                                <a href="{{ route('users.show',['user' => $user->id]) }}#account-info"
+                                   class="btn btn-secondary">Перейти в профіль</a>
                             </div>
-                            <p>Перед тим як виставити товар на продаж, збережіть цей товар та  заповніть обов'язкові поля у своєму профілі.</p>
+                            <p>Перед тим як виставити товар на продаж, збережіть цей товар та заповніть обов'язкові поля
+                                у своєму профілі.</p>
                         @endisset
                     </div>
                     <div class="product-meta">
@@ -336,7 +346,7 @@
                         <div class="col-12 learts-mb-30">
                             <div class="row learts-mb-n10">
                                 <div class="col-lg-2 col-md-3 col-12 learts-mb-10"><img
-                                        src="{{ asset('images/brands/brand-3.webp') }}" alt=""></div>
+                                            src="{{ asset('images/brands/brand-3.webp') }}" alt=""></div>
                                 <div class="col learts-mb-10">
                                     <p>We’ve worked with numerous industries and famous fashion brands around the world.
                                         We have also created tremendous impacts on fashion manufacturing and online
@@ -349,7 +359,7 @@
                         <div class="col-12 learts-mb-30">
                             <div class="row learts-mb-n10">
                                 <div class="col-lg-2 col-md-3 col-12 learts-mb-10"><img
-                                        src="{{ asset('images/brands/brand-8.webp') }}" alt=""></div>
+                                            src="{{ asset('images/brands/brand-8.webp') }}" alt=""></div>
                                 <div class="col learts-mb-10">
                                     <p>Prior to Houdini, there have been many clothing brands that achieved such a
                                         roaring success. However, there’s no other brand that can obtain such a precious

@@ -41,8 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
         // 🔹 Product forms
         View::composer([
-            'products.create',
-            'products.edit',
+            'products.form',
             'products.partials.*',
         ], ProductFormComposer::class);
 

@@ -14,7 +14,7 @@
             name="tags"
             class="form-control tags-input"
             placeholder="Теги пишіть через кому. Наприклад: handmade, подарунок, літній ..."
-            value="{{ old('tags') }}"
+            value="{{ old('tags') ?? ($product?->tags ?? '') }}"
             autocomplete="off"
         />
 
@@ -40,7 +40,7 @@
             name="social_links"
             class="form-control social-links-input"
             placeholder="https://instagram.com/ваш_профіль, https://tiktok.com/@ваш_нік"
-            value="{{ old('social_links') }}"
+            value="{{ old('social_links') ?? ($product?->social_links ?? '') }}"
             autocomplete="off"
         >
 

@@ -19,7 +19,7 @@ class ProductRequest extends FormRequest
         return [
             'title'               => 'Назва',
             'price'               => 'Вартість',
-            'kind_product_id'     => 'Вид товару',
+//            'kind_product_id'     => 'Вид товару',
             'sub_kind_product_id' => 'Підвид товару',
             'stock_balance'       => 'Кількість',
             'term_creation'       => 'Термін виготовлення',
@@ -45,7 +45,7 @@ class ProductRequest extends FormRequest
 
         $this->merge([
             'price'               => is_numeric($priceRaw) ? (float) $priceRaw : $this->price,
-            'kind_product_id'     => $this->kind_product_id     ? (int) $this->kind_product_id     : null,
+//            'kind_product_id'     => $this->kind_product_id     ? (int) $this->kind_product_id     : null,
             'sub_kind_product_id' => $this->sub_kind_product_id ? (int) $this->sub_kind_product_id : null,
             'stock_balance'       => (int) $this->stock_balance,
             'term_creation'       => (int) $this->term_creation,
@@ -80,6 +80,8 @@ class ProductRequest extends FormRequest
             'content' => 'nullable|string|max:500',
             'tags' => 'nullable|string|max:255',
             'social_links' => 'nullable|string|max:2000',
+            'deleted_photo_ids'   => 'nullable|array',
+            'deleted_photo_ids.*' => 'integer|exists:product_photos,id',
         ];
     }
 

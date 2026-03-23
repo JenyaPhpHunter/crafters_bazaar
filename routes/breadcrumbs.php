@@ -9,6 +9,11 @@ Breadcrumbs::for('welcome', function (BreadcrumbTrail $trail) {
     $trail->push('Головна', route('welcome'));
 });
 
+Breadcrumbs::for('login-register', function (BreadcrumbTrail $trail) {
+    $trail->parent('welcome');
+    $trail->push('Вхід / Реєстрація');
+});
+
 // ────────────────────────────────────────────────
 // Адмін-панель (батьківський для всіх адмінських розділів)
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
@@ -31,6 +36,11 @@ Breadcrumbs::for('products.show', function (BreadcrumbTrail $trail, $product) {
 Breadcrumbs::for('products.create', function (BreadcrumbTrail $trail) {
     $trail->parent('products.index');
     $trail->push('Створення товару');
+});
+
+Breadcrumbs::for('products.edit', function (BreadcrumbTrail $trail, $product) {
+    $trail->parent('products.index');
+    $trail->push('Редагування товару: ' . $product->title, route('products.edit', $product));
 });
 
 // Список брендів
