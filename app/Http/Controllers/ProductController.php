@@ -35,83 +35,67 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        // Сортування
-        $sort_by = $request->get('sort_by', 'menu_order');
+        $query = Product::query()->with(['productphotos']);
 
-        $products = Product::query();
-
-        // ФІЛЬТРИ -----------------------------------------------------
-
-        // Пошук
+        // 🔎 SEARCH
         if ($request->filled('search')) {
-            $products->where('title', 'LIKE', '%' . $request->search . '%');
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // Категорії
+        // 📂 CATEGORIES
         if ($request->filled('categories')) {
-            $products->whereIn('kind_product_id', $request->categories);
+            $query->whereHas('subKindProduct', function ($q) use ($request) {
+                $q->whereIn('kind_product_id', $request->categories);
+            });
         }
 
-        // Фільтр по ціні
-        if ($request->filled('filter_price')) {
-            foreach ($request->filter_price as $filter) {
-
-                if ($filter == 'all') continue;
-
-                [$min, $max] = explode(';', $filter);
-
-                if ($max === '+') {
-                    $products->where('price', '>=', $min);
-                } else {
-                    $products->whereBetween('price', [$min, $max]);
-                }
-            }
-        }
-
-        // Фільтр по кольору
+        // 🎨 COLORS (якщо використовуєш)
         if ($request->filled('filter_color')) {
-            $products->whereHas('productcolors', function ($q) use ($request) {
+            $query->whereHas('colors', function ($q) use ($request) {
                 $q->whereIn('php_name', $request->filter_color);
             });
         }
 
-        // Сортування ---------------------------------------------------
-
-        switch ($sort_by) {
-            case 'popularity':
-                $products->orderBy('views', 'desc');
-                break;
-            case 'rating':
-                $products->orderBy('rating', 'desc');
-                break;
-            case 'newness':
-                $products->orderBy('created_at', 'desc');
-                break;
-            case 'price_up':
-                $products->orderBy('price', 'asc');
-                break;
-            case 'price_down':
-                $products->orderBy('price', 'desc');
-                break;
-            default:
-                $products->orderBy('id', 'desc');
+        // 💰 PRICE
+        if ($request->filled('filter_price')) {
+            foreach ($request->filter_price as $range) {
+                if ($range === 'all') continue;
+                [$min, $max] = explode(';', $range);
+                $query->where(function ($q) use ($min, $max) {
+                    if ($max === '+') {
+                        $q->where('price', '>=', $min);
+                    } else {
+                        $q->whereBetween('price', [$min, $max]);
+                    }
+                });
+            }
         }
 
-        // Виконуємо запит
-        $products = $products->get();
+        // 🔽 SORT
+        switch ($request->get('sort_by')) {
+            case 'price_up':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_down':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newness':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
 
-        // Додаткові дані для фільтрів
-        $kind_products = KindProduct::withCount('products')->get();
-        $colors = Color::all();
-        $featured_products = Product::where('featured', 1)->limit(5)->get();
+        // Кількість товарів на сторінці
+        $perPage = $request->get('per_page', 12);
+        $products = $query->paginate($perPage)->withQueryString();
 
-        return view('products.index', compact(
-            'products',
-            'kind_products',
-            'colors',
-            'featured_products',
-            'sort_by'
-        ));
+        return view('products.index', [
+            'products'        => $products,
+            'kind_products'   => KindProduct::all(),
+            'colors'          => Color::all(),
+            'featured_products' => Product::where('featured', 1)->take(5)->get(),
+        ]);
     }
 
     public function create(Request $request): View
@@ -250,24 +234,50 @@ class ProductController extends Controller
 
         try {
             DB::transaction(function () use ($data, $service, $product, $request, $photoService, $mainPhotoIndex) {
+
                 $service->update($product, $data);
 
-                // Видаляємо позначені фото
+                // === ОБРОБКА ФОТОГРАФІЙ ТОВАРУ ===
+                // 1. Soft-delete фото, які користувач видалив хрестиком
                 if (!empty($data['deleted_photo_ids'])) {
-                    foreach ($product->productphotos()->whereIn('id', $data['deleted_photo_ids'])->get() as $photo) {
+                    foreach ($product->productphotos()
+                                 ->whereIn('id', $data['deleted_photo_ids'])
+                                 ->get() as $photo) {
+
+                        // Видаляємо файли з диска
                         foreach ($photo->paths as $path) {
-                            \Storage::disk('public')->delete($path);
+                            Storage::disk('public')->delete($path);
                         }
-                        $photo->delete();
+                        $photo->delete(); // soft delete
                     }
                 }
 
-                DB::afterCommit(function () use ($request, $product, $photoService, $mainPhotoIndex) {
-                    if (!$request->hasFile('product_photo')) return;
+                // 2. Додаємо нові фото (через сервіс)
+                if ($request->hasFile('product_photo')) {
                     $files = $request->file('product_photo');
                     $files = is_array($files) ? $files : [$files];
                     $photoService->storeMany($product, $files, $mainPhotoIndex);
-                });
+                }
+
+                // 3. Встановлюємо головне фото за індексом з форми
+                $activePhotos = $product->productphotos()
+                    ->whereNull('deleted_at')
+                    ->orderBy('queue')
+                    ->get();
+
+                if ($activePhotos->isNotEmpty()) {
+                    // Скидаємо is_main у всіх активних фото
+                    $product->productphotos()
+                        ->whereNull('deleted_at')
+                        ->update(['is_main' => false]);
+
+                    // Встановлюємо нове головне
+                    if (isset($activePhotos[$mainPhotoIndex])) {
+                        $activePhotos[$mainPhotoIndex]->update(['is_main' => true]);
+                    } else {
+                        $activePhotos[0]->update(['is_main' => true]);
+                    }
+                }
             });
 
         } catch (\Exception $e) {

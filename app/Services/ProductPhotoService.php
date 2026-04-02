@@ -17,18 +17,25 @@ class ProductPhotoService
     {
         $this->imageManager = new ImageManager(new Driver());
     }
+
+    /**
+     * Додає нові фото з урахуванням soft-delete та правильного queue
+     */
     public function storeMany(Product $product, array $files, int $mainIndex = 0): void
     {
-        // Знаходимо максимальний queue серед існуючих фото
-        $maxQueue = $product->productphotos()->max('queue') ?? 0;
+        // 🔥 Найнадійніший спосіб: беремо максимум по ВСІХ записах цього продукту (включаючи soft-deleted)
+        // Це уникає конфліктів навіть якщо транзакція ще не закомічена
+        $maxQueue = $product->productphotos()
+            ->withTrashed()                    // ← важливо!
+            ->max('queue') ?? 0;
 
         foreach (array_values($files) as $i => $image) {
             if (!$image instanceof UploadedFile) {
                 continue;
             }
 
-            $isMain = ($i === $mainIndex) && ($maxQueue === 0); // головним може бути тільки якщо немає існуючих
-            $queue  = $maxQueue + $i + 1;
+            $queue  = $maxQueue + $i + 1;      // завжди унікальний
+            $isMain = false;
 
             $ext      = strtolower($image->getClientOriginalExtension() ?: 'jpg');
             $base     = (string) Str::uuid();
@@ -57,6 +64,7 @@ class ProductPhotoService
         }
     }
 
+    // === допоміжні методи (залишаються без змін) ===
     private function absPublicPath(string $relativePath): string
     {
         return storage_path('app/public/' . ltrim($relativePath, '/'));

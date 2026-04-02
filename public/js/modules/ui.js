@@ -61,24 +61,13 @@
         $this.toggleClass('active').siblings('.header-category-list').slideToggle();
     });
 
-    // Shop Toolbar
+    // Shop Toolbar — тільки фільтр (без колонок)
     $('.product-filter-toggle').on('click', function (e) {
         e.preventDefault();
         var $this = $(this), $target = $this.attr('href');
         $this.toggleClass('active');
         $($target).slideToggle();
         $('.customScroll').perfectScrollbar('update');
-    });
-
-    $('.product-column-toggle').on('click', '.toggle', function (e) {
-        e.preventDefault();
-        var $this = $(this),
-            $column = $this.data('column'),
-            $prevColumn = $this.siblings('.active').data('column');
-        $this.addClass('active').siblings().removeClass('active');
-        $('.products').removeClass('row-cols-xl-' + $prevColumn).addClass('row-cols-xl-' + $column);
-        $.fn.matchHeight._update();
-        $('.isotope-grid').isotope('layout');
     });
 
     // Custom Scroll
@@ -95,9 +84,6 @@
 
     // Nice Select
     $('.nice-select').niceSelect();
-
-    // Match Height
-    $('.isotope-grid .product').matchHeight();
 
     // Range Slider
     $(".range-slider").ionRangeSlider({
