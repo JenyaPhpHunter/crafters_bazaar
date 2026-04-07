@@ -80,8 +80,8 @@
                             @foreach($header_kind_products as $kind_product)
                                 <li class="has-children"><a href="{{ route('products_kind',['kind_products' => $kind_product->id]) }}"><span class="menu-text">{{ $kind_product->title }}</span></a>
                                     <ul class="sub-menu">
-                                        @if(!empty($kind_product->sub_kind_products))
-                                            @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                                        @if(!empty($kind_product->subKindProducts))
+                                            @foreach($kind_product->subKindProducts as $sub_kind_product)
                                                 <li><a href="{{ route('products_kind_subkind',['sub_kind_products' => $sub_kind_product->id]) }}"><span class="menu-text">{{ $sub_kind_product->title }}</span></a></li>
                                             @endforeach
                                         @endif
@@ -226,7 +226,7 @@
                                                 @php
                                                     $counter = 0;
                                                 @endphp
-                                                @forelse ($kind_product->sub_kind_products as $sub_kind_product)
+                                                @forelse ($kind_product->subKindProducts as $sub_kind_product)
                                                     @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                         @php
                                                             $counter++;

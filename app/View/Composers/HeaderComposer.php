@@ -23,12 +23,12 @@ class HeaderComposer
         $user = Auth::user();
 
         // Категорії
-        $baseQuery = KindProduct::whereNull('deleted_at')->with('sub_kind_products');
+        $baseQuery = KindProduct::whereNull('deleted_at')->with('subKindProducts');
         $all_kind_products = $baseQuery->get();
 
-        $header_kind_products = $baseQuery->whereHas('sub_kind_products.products', function ($query) {
+        $header_kind_products = $baseQuery->whereHas('subKindProducts.products', function ($query) {
             $query->where('status_product_id', 3);
-        })->with(['sub_kind_products' => function ($query) {
+        })->with(['subKindProducts' => function ($query) {
             $query->whereHas('products', function ($query) {
                 $query->where('status_product_id', 3);
             });

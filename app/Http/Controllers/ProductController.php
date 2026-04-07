@@ -45,56 +45,88 @@ class ProductController extends Controller
         // 📂 CATEGORIES
         if ($request->filled('categories')) {
             $query->whereHas('subKindProduct', function ($q) use ($request) {
-                $q->whereIn('kind_product_id', $request->categories);
+                $q->whereIn('kind_product_id', (array) $request->categories);
             });
         }
 
-        // 🎨 COLORS (якщо використовуєш)
+        // 🎨 COLORS
         if ($request->filled('filter_color')) {
             $query->whereHas('colors', function ($q) use ($request) {
-                $q->whereIn('php_name', $request->filter_color);
+                $q->whereIn('php_name', (array) $request->filter_color);
             });
         }
 
         // 💰 PRICE
         if ($request->filled('filter_price')) {
-            foreach ($request->filter_price as $range) {
+            foreach ((array) $request->filter_price as $range) {
                 if ($range === 'all') continue;
                 [$min, $max] = explode(';', $range);
-                $query->where(function ($q) use ($min, $max) {
-                    if ($max === '+') {
-                        $q->where('price', '>=', $min);
-                    } else {
-                        $q->whereBetween('price', [$min, $max]);
-                    }
-                });
+                if ($max === '+') {
+                    $query->where('price', '>=', (int)$min * 100);
+                } else {
+                    $query->whereBetween('price', [(int)$min * 100, (int)$max * 100]);
+                }
             }
         }
 
+        // 🏷️ TAB (якщо використовуєш)
+        match ($request->input('tab')) {
+            'featured' => $query->where('featured', 1),
+            'new'      => $query->where('new', 1),
+            'sale'     => $query->where('discount', '>', 0),
+            default    => null,
+        };
+
         // 🔽 SORT
-        switch ($request->get('sort_by')) {
-            case 'price_up':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price_down':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'newness':
-                $query->orderBy('created_at', 'desc');
-                break;
-            default:
-                $query->latest();
+        switch ($request->input('sort_by')) {
+            case 'price_up':   $query->orderBy('price', 'asc');       break;
+            case 'price_down': $query->orderBy('price', 'desc');      break;
+            case 'newness':    $query->orderBy('created_at', 'desc'); break;
+            default:           $query->latest();
         }
 
-        // Кількість товарів на сторінці
-        $perPage = $request->get('per_page', 12);
+        // 📄 Кількість товарів на сторінці
+        $cols    = max(3, min(5, (int) $request->input('cols', 4)));
+        $default = $cols * 3;                    // наприклад 4 колонки × 3 рядки = 12
+        $allowed = [8, 12, 16, 20, 24, 32];
+        $perPage = in_array((int) $request->input('per_page'), $allowed)
+            ? (int) $request->input('per_page')
+            : $default;
+
         $products = $query->paginate($perPage)->withQueryString();
 
+        // === ПІДРАХУНОК ТОВАРІВ У КАТЕГОРІЯХ ===
+        $kind_products = KindProduct::with(['subKindProducts' => function ($q) {
+        $q->withCount('products');
+    }])
+        ->get()
+        ->map(function ($kind) {
+            $kind->subKindProducts = $kind->subKindProducts ?? collect();
+
+            $kind->product_count = $kind->subKindProducts->sum('products_count') ?? 0;
+
+            return $kind;
+        });
+
+        // Підрахунок товарів по ціновим діапазонам
+        $priceCounts = [
+            '0;100'    => Product::whereBetween('price', [0, 10000])->count(),
+            '100;500'  => Product::whereBetween('price', [10000, 50000])->count(),
+            '500;1000' => Product::whereBetween('price', [50000, 100000])->count(),
+            '1000;+'   => Product::where('price', '>=', 100000)->count(),
+        ];
+
         return view('products.index', [
-            'products'        => $products,
-            'kind_products'   => KindProduct::all(),
-            'colors'          => Color::all(),
-            'featured_products' => Product::where('featured', 1)->take(5)->get(),
+            'products'          => $products,
+            'kind_products'     => $kind_products,
+            'price_counts'     => $priceCounts,
+            'colors'            => Color::all(),
+            'featured_products' => Product::where('featured', 1)
+                ->with('productPhotos')
+                ->take(5)
+                ->get(),
+            'current_sort'      => $request->input('sort_by', 'latest'),
+            'current_per_page'  => $perPage,
         ]);
     }
 

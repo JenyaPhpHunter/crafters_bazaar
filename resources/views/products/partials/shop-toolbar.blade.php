@@ -7,7 +7,7 @@
             <div class="col-md col-12 align-self-center learts-mb-20">
                 <div class="isotope-filter shop-product-filter" data-target="#shop-products">
                     <button class="active" data-filter="*">Всі товари</button>
-                    <button data-filter=".hot">Гарячі</button>
+                    <button data-filter=".featured">Рекомендовані</button>
                     <button data-filter=".new">Новинки</button>
                     <button data-filter=".sale">Акції</button>
                 </div>

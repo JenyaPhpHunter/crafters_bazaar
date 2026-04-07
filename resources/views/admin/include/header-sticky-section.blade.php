@@ -149,7 +149,7 @@
                                                     </a>
                                                 </li>
                                                 <hr>
-                                                @forelse ($kind_product->sub_kind_products as $sub_kind_product)
+                                                @forelse ($kind_product->subKindProducts as $sub_kind_product)
                                                     @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                         <li>
                                                             <a href="{{ route('admin_sub_kind_products.show',  ['admin_sub_kind_product' => $sub_kind_product->id]) }}">

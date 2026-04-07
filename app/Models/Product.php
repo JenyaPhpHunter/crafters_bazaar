@@ -54,12 +54,12 @@ class Product extends Model
     ];
 
     // --- Relations ---
-    public function sub_kind_product()
+    public function subKindProduct()
     {
         return $this->belongsTo(SubKindProduct::class, 'sub_kind_product_id');
     }
 
-    public function kind_product()
+    public function kindProduct()
     {
         return $this->hasOneThrough(
             KindProduct::class,
@@ -71,7 +71,7 @@ class Product extends Model
         );
     }
 
-    public function status_product()
+    public function statusProduct()
     {
         return $this->belongsTo(StatusProduct::class);
     }
@@ -91,7 +91,7 @@ class Product extends Model
         return $this->belongsToMany(Color::class); // color_product
     }
 
-    public function productphotos()
+    public function productPhotos()
     {
         return $this->hasMany(ProductPhoto::class);
     }

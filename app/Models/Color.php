@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Color extends Model
 {
     protected $fillable = [
-        'name', 'code'
+        'title', 'php_name', 'code'
     ];
     public function product()
     {

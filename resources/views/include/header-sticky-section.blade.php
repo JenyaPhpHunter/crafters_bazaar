@@ -29,9 +29,9 @@
                                             <a href="{{ route('products_kind', ['kind_products' => $kind_product->id]) }}">
                                                 <span class="menu-text">{{ $kind_product->title }}</span>
                                             </a>
-                                            @if($kind_product->sub_kind_products->isNotEmpty())
+                                            @if($kind_product->subKindProducts->isNotEmpty())
                                                 <ul class="sub-menu">
-                                                    @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                                                    @foreach($kind_product->subKindProducts as $sub_kind_product)
                                                         <li>
                                                             <a href="{{ route('products_kind_subkind', ['sub_kind_products' => $sub_kind_product->id]) }}">
                                                                 <span class="menu-text">{{ $sub_kind_product->title }}</span>
@@ -126,7 +126,7 @@
                                                 @php
                                                     $counter = 0;
                                                 @endphp
-                                                @forelse ($kind_product->sub_kind_products as $sub_kind_product)
+                                                @forelse ($kind_product->subKindProducts as $sub_kind_product)
                                                     @if($kind_product->id == $sub_kind_product->kind_product_id)
                                                         @php
                                                             $counter++;

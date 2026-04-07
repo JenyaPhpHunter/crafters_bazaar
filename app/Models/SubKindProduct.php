@@ -21,7 +21,7 @@ class SubKindProduct extends Model
         return $this->hasMany(Product::class, 'sub_kind_product_id');
     }
 
-    public function kind_product()
+    public function kindProduct()
     {
         return $this->belongsTo(KindProduct::class, 'kind_product_id');
     }

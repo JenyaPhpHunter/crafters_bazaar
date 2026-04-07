@@ -20,9 +20,9 @@ class KindProductController extends Controller
         $user = User::find($user_id);
         $not_checked = $request->input('not_checked');
         if ($not_checked){
-            $kind_products = KindProduct::query()->with('sub_kind_products')->where('checked', 0)->orderBy('id')->get();
+            $kind_products = KindProduct::query()->with('subKindProducts')->where('checked', 0)->orderBy('id')->get();
         } else {
-            $kind_products = KindProduct::query()->with('sub_kind_products')->orderBy('id')->get();
+            $kind_products = KindProduct::query()->with('subKindProducts')->orderBy('id')->get();
         }
         $sub_kind_products = SubKindProduct::all();
 
@@ -57,7 +57,7 @@ class KindProductController extends Controller
     {
         $user_id = $request->input('user_id');
         $user = User::find($user_id);
-        $kind_product= KindProduct::query()->with('sub_kind_products')
+        $kind_product= KindProduct::query()->with('subKindProducts')
             ->where('id',$id)->first();
 
         return view('admin.kind_products.show',[
@@ -68,7 +68,7 @@ class KindProductController extends Controller
 
     public function edit($id)
     {
-        $kind_product = KindProduct::query()->with('sub_kind_products')->where('id',$id)->first();
+        $kind_product = KindProduct::query()->with('subKindProducts')->where('id',$id)->first();
         if(!$kind_product){
             throw new \Exception('User not found');
         }

@@ -18,8 +18,8 @@
                                 @endisset
                             </div>
                         </div>
-                        @isset($kind_product->sub_kind_products)
-                            @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                        @isset($kind_product->subKindProducts)
+                            @foreach($kind_product->subKindProducts as $sub_kind_product)
                                 @if($sub_kind_product->kind_product_id == $kind_product->id)
                                     <div style="margin-left: 20px; display: flex; align-items: center;"> <!-- Контейнер для підкатегорії та карандаша -->
                                         <a href="{{ route('admin_sub_kind_products.show', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">

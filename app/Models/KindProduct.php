@@ -15,11 +15,11 @@ class KindProduct extends Model
         'checked',
     ];
 
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
-    public function sub_kind_products()
+//    public function products()
+//    {
+//        return $this->hasMany(Product::class);
+//    }
+    public function subKindProducts()
     {
         return $this->hasMany(SubKindProduct::class);
     }

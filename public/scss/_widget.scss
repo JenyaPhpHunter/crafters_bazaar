@@ -153,37 +153,6 @@
     }
 }
 
-/* Color Widget */
-.widget-colors {
-    line-height: 1;
-
-    display: flex;
-    flex-wrap: wrap;
-
-    margin: 0 -10px -20px;
-    padding-left: 0;
-
-    list-style: none;
-
-    & li {
-        margin: 0 10px 20px;
-
-        & a {
-            & span {
-                display: block;
-
-                width: 20px;
-                height: 20px;
-
-                text-indent: -9999px;
-
-                border: 1px solid #E6E6E6;
-                border-radius: 50%;
-            }
-        }
-    }
-}
-
 /* Product Widget */
 .widget-products {
     margin: 0;

@@ -20,8 +20,8 @@
                                   @endcan
                               @endisset
                               <div class="subcategories" id="subcategories-{{ $kind_product->id }}">
-                                  @isset($kind_product->sub_kind_products)
-                                      @foreach($kind_product->sub_kind_products as $sub_kind_product)
+                                  @isset($kind_product->subKindProducts)
+                                      @foreach($kind_product->subKindProducts as $sub_kind_product)
                                           <div class="subcategory-item">
                                               <a href="{{ route('admin_sub_kind_products.show', ['admin_sub_kind_product' => $sub_kind_product->id]) }}">
                                                   <span style="{{ $sub_kind_product->checked == 0 ? 'color: red;' : '' }}">{{ $sub_kind_product->title }}</span>
