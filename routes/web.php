@@ -138,8 +138,10 @@ Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 
 // === PRODUCTS (PUBLIC) ===
 Route::get('products', [ProductController::class, 'index'])->name('products.index');
-Route::get('products/filter', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('products/filter', [ProductController::class, 'filter'])->name('products.filter');
+Route::get('/products/tag/{tag}', [ProductController::class, 'byTag'])
+    ->name('products.tag');
 Route::get('products/kind_products/{kind_products}', [ProductController::class, 'productsKind'])
     ->name('products_kind');
 Route::get('products/sub_kind_products/{sub_kind_products}', [ProductController::class, 'productsKindSubkind'])

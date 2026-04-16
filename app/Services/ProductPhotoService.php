@@ -25,7 +25,7 @@ class ProductPhotoService
     {
         // 🔥 Найнадійніший спосіб: беремо максимум по ВСІХ записах цього продукту (включаючи soft-deleted)
         // Це уникає конфліктів навіть якщо транзакція ще не закомічена
-        $maxQueue = $product->productphotos()
+        $maxQueue = $product->productPhotos()
             ->withTrashed()                    // ← важливо!
             ->max('queue') ?? 0;
 
@@ -49,7 +49,7 @@ class ProductPhotoService
             $zoom = 'products/zoom/' . $filename;
             $this->saveResizeWidth($original, $zoom, 1200);
 
-            $product->productphotos()->create([
+            $product->productPhotos()->create([
                 'queue'   => $queue,
                 'is_main' => $isMain,
                 'base'    => $base,

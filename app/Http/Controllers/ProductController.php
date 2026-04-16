@@ -69,7 +69,8 @@ class ProductController extends Controller
             }
         }
 
-        // 🏷️ TAB (якщо використовуєш)
+        // 🏷️ TAB — значення збігаються з data-filter в toolbar БЕЗ крапки
+        // toolbar: data-filter="featured" / "new" / "sale"
         match ($request->input('tab')) {
             'featured' => $query->where('featured', 1),
             'new'      => $query->where('new', 1),
@@ -85,10 +86,10 @@ class ProductController extends Controller
             default:           $query->latest();
         }
 
-        // 📄 Кількість товарів на сторінці
+        // 📄 PER PAGE — cols × 3 рядки
         $cols    = max(3, min(5, (int) $request->input('cols', 4)));
-        $default = $cols * 3;                    // наприклад 4 колонки × 3 рядки = 12
-        $allowed = [8, 12, 16, 20, 24, 32];
+        $default = $cols * 3;
+        $allowed = [8, 9, 12, 15, 16, 20, 24, 32];
         $perPage = in_array((int) $request->input('per_page'), $allowed)
             ? (int) $request->input('per_page')
             : $default;
@@ -97,36 +98,33 @@ class ProductController extends Controller
 
         // === ПІДРАХУНОК ТОВАРІВ У КАТЕГОРІЯХ ===
         $kind_products = KindProduct::with(['subKindProducts' => function ($q) {
-        $q->withCount('products');
-    }])
-        ->get()
-        ->map(function ($kind) {
-            $kind->subKindProducts = $kind->subKindProducts ?? collect();
+            $q->withCount('products');
+        }])
+            ->get()
+            ->map(function ($kind) {
+                $kind->product_count = $kind->subKindProducts->sum('products_count');
+                return $kind;
+            });
 
-            $kind->product_count = $kind->subKindProducts->sum('products_count') ?? 0;
-
-            return $kind;
-        });
-
-        // Підрахунок товарів по ціновим діапазонам
+        // === ПІДРАХУНОК ПО ЦІНІ ===
         $priceCounts = [
-            '0;100'    => Product::whereBetween('price', [0, 10000])->count(),
-            '100;500'  => Product::whereBetween('price', [10000, 50000])->count(),
-            '500;1000' => Product::whereBetween('price', [50000, 100000])->count(),
+            '0;100'    => Product::whereBetween('price', [0,       10000])->count(),
+            '100;500'  => Product::whereBetween('price', [10000,   50000])->count(),
+            '500;1000' => Product::whereBetween('price', [50000,  100000])->count(),
             '1000;+'   => Product::where('price', '>=', 100000)->count(),
         ];
 
+        $featured_products = Product::where('featured', 1)->where('status_product_id', '>' , 2)->with('productphotos')->take(5)->get();
         return view('products.index', [
             'products'          => $products,
             'kind_products'     => $kind_products,
-            'price_counts'     => $priceCounts,
+            'price_counts'      => $priceCounts,
             'colors'            => Color::all(),
-            'featured_products' => Product::where('featured', 1)
-                ->with('productPhotos')
-                ->take(5)
-                ->get(),
-            'current_sort'      => $request->input('sort_by', 'latest'),
+            'featured_products' => $featured_products,
+            'current_sort'      => $request->input('sort_by', 'menu_order'),
             'current_per_page'  => $perPage,
+            'current_cols'      => $cols,
+            'current_tab'       => $request->input('tab', ''),
         ]);
     }
 
@@ -206,6 +204,28 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Товар успішно створено!');
     }
 
+    public function show(Product $product)
+    {
+        $product->load(['brand', 'subKindProduct.kindProduct', 'colors', 'productPhotos']);
+
+        $images = $product->productPhotos
+            ->sortBy('queue')
+            ->map(fn ($photo) => [
+                'id'    => $photo->id,
+                'src'   => Storage::disk('public')->url($photo->paths['zoom'] ?? $photo->paths['original']),
+                'main'  => Storage::disk('public')->url($photo->paths['original'] ?? ''),
+                'thumb' => Storage::disk('public')->url($photo->paths['small'] ?? $photo->paths['original']),
+                'w'     => 1200,
+                'h'     => 1600,
+            ])
+            ->values()
+            ->toArray();
+
+        return view('products.show', [
+            'product' => $product,
+            'images'  => $images,
+        ]);
+    }
 
     public function edit(Product $product): View
     {
@@ -215,7 +235,7 @@ class ProductController extends Controller
         $brands = Brand::where('creator_id', $user->id)->get();
 
         // Формуємо масив $images з реальних фото продукту
-        $images = $product->productphotos
+        $images = $product->productPhotos
             ->sortBy('queue')
             ->map(fn ($photo) => [
                 'id'    => $photo->id,
@@ -231,7 +251,7 @@ class ProductController extends Controller
         $arr_kind_products     = KindProduct::pluck('title')->toArray();
         $arr_sub_kind_products = SubKindProduct::pluck('title')->toArray();
 
-        $selectedKind    = old('kind_product_id')    ?: $product->sub_kind_product?->kind_product_id;
+        $selectedKind    = old('kind_product_id')    ?: $product->subKindProduct?->kind_product_id;
         $selectedSubKind = old('sub_kind_product_id') ?: $product->sub_kind_product_id;
 
         return view('products.form', [
@@ -251,7 +271,7 @@ class ProductController extends Controller
             ],
             'productId'             => $product->id,
             'user'                  => $user,
-            'productImages'         => $product->productphotos,
+            'productImages'         => $product->productPhotos,
             'arr_kind_products'     => $arr_kind_products,
             'arr_sub_kind_products' => $arr_sub_kind_products,
             'colors'                => Color::all(),
@@ -272,7 +292,7 @@ class ProductController extends Controller
                 // === ОБРОБКА ФОТОГРАФІЙ ТОВАРУ ===
                 // 1. Soft-delete фото, які користувач видалив хрестиком
                 if (!empty($data['deleted_photo_ids'])) {
-                    foreach ($product->productphotos()
+                    foreach ($product->productPhotos()
                                  ->whereIn('id', $data['deleted_photo_ids'])
                                  ->get() as $photo) {
 
@@ -292,14 +312,14 @@ class ProductController extends Controller
                 }
 
                 // 3. Встановлюємо головне фото за індексом з форми
-                $activePhotos = $product->productphotos()
+                $activePhotos = $product->productPhotos()
                     ->whereNull('deleted_at')
                     ->orderBy('queue')
                     ->get();
 
                 if ($activePhotos->isNotEmpty()) {
                     // Скидаємо is_main у всіх активних фото
-                    $product->productphotos()
+                    $product->productPhotos()
                         ->whereNull('deleted_at')
                         ->update(['is_main' => false]);
 
@@ -318,6 +338,45 @@ class ProductController extends Controller
         }
 
         return redirect()->route('products.index')->with('success', 'Товар успішно оновлено!');
+    }
+
+    public function destroy(Product $product): RedirectResponse
+    {
+        $this->authorize('delete', $product);
+
+        $product->delete(); // soft delete — просто заповнює deleted_at
+
+        return redirect()->route('products.index')->with('success', 'Товар успішно видалено!');
+    }
+
+    // Відновити після soft delete
+    public function restore(int $id): RedirectResponse
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('restore', $product);
+
+        $product->restore();
+
+        return redirect()->route('products.index')->with('success', 'Товар відновлено!');
+    }
+
+// Видалити назавжди
+    public function forceDestroy(int $id): RedirectResponse
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $this->authorize('forceDelete', $product);
+
+        // Видаляємо фото з диску перед видаленням
+        foreach ($product->productPhotos as $photo) {
+            foreach ($photo->paths as $path) {
+                \Storage::disk($photo->disk ?? 'public')->delete($path);
+            }
+            $photo->forceDelete();
+        }
+
+        $product->forceDelete();
+
+        return redirect()->route('products.index')->with('success', 'Товар остаточно видалено!');
     }
 
     public function storekindsubkind(Request $request)
@@ -405,42 +464,48 @@ class ProductController extends Controller
         ]);
     }
 
-    public function destroy(Product $product): RedirectResponse
+    public function byTag(string $tag)
     {
-        $this->authorize('delete', $product);
+        $products = Product::where('tags', 'LIKE', "%{$tag}%")
+            ->with(['productPhotos', 'brand', 'subKindProduct'])
+            ->latest()
+            ->paginate(12);
 
-        $product->delete(); // soft delete — просто заповнює deleted_at
+        // === ПІДРАХУНОК ТОВАРІВ У КАТЕГОРІЯХ (щоб сайдбар працював) ===
+        $kind_products = KindProduct::with(['subKindProducts' => function ($q) {
+            $q->withCount('products');
+        }])
+            ->get()
+            ->map(function ($kind) {
+                $kind->product_count = $kind->subKindProducts->sum('products_count');
+                return $kind;
+            });
 
-        return redirect()->route('products.index')->with('success', 'Товар успішно видалено!');
-    }
+        // === ПІДРАХУНОК ПО ЦІНІ ===
+        $priceCounts = [
+            '0;100'    => Product::whereBetween('price', [0,       10000])->count(),
+            '100;500'  => Product::whereBetween('price', [10000,   50000])->count(),
+            '500;1000' => Product::whereBetween('price', [50000,  100000])->count(),
+            '1000;+'   => Product::where('price', '>=', 100000)->count(),
+        ];
 
-    // Відновити після soft delete
-    public function restore(int $id): RedirectResponse
-    {
-        $product = Product::withTrashed()->findOrFail($id);
-        $this->authorize('restore', $product);
+        $featured_products = Product::where('featured', 1)
+            ->where('status_product_id', '>' , 2)
+            ->with('productphotos')->take(5)
+            ->get();
 
-        $product->restore();
-
-        return redirect()->route('products.index')->with('success', 'Товар відновлено!');
-    }
-
-// Видалити назавжди
-    public function forceDestroy(int $id): RedirectResponse
-    {
-        $product = Product::withTrashed()->findOrFail($id);
-        $this->authorize('forceDelete', $product);
-
-        // Видаляємо фото з диску перед видаленням
-        foreach ($product->productphotos as $photo) {
-            foreach ($photo->paths as $path) {
-                \Storage::disk($photo->disk ?? 'public')->delete($path);
-            }
-            $photo->forceDelete();
-        }
-
-        $product->forceDelete();
-
-        return redirect()->route('products.index')->with('success', 'Товар остаточно видалено!');
+        return view('products.index', [
+            'products'          => $products,
+            'kind_products'     => $kind_products,
+            'price_counts'      => $priceCounts,
+            'colors'            => Color::all(),
+            'current_tag'       => $tag,           // для відображення активного тегу
+            'title'             => 'Товари з тегом #' . $tag,
+            'current_sort'      => 'newness',
+            'current_per_page'  => 12,
+            'current_cols'      => 4,
+            'current_tab'       => '',
+            'featured_products' => $featured_products,
+        ]);
     }
 }

@@ -43,6 +43,11 @@ Breadcrumbs::for('products.edit', function (BreadcrumbTrail $trail, $product) {
     $trail->push('Редагування товару: ' . $product->title, route('products.edit', $product));
 });
 
+Breadcrumbs::for('products.tag', function (BreadcrumbTrail $trail, $tag) {
+    $trail->parent('products.index');
+    $trail->push('Тег #' . $tag, route('products.tag', $tag));
+});
+
 // Список брендів
 Breadcrumbs::for('brands.index', function (BreadcrumbTrail $trail) {
     $trail->parent('welcome'); // або 'home', якщо головна називається 'home'

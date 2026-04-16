@@ -1,491 +1,618 @@
-@use "../../public/scss/variables" as *; // Імпортує змінні з файлу "../variables" і робить їх доступними під псевдонімом *
+@use "sass:color";
+@use "../../public/scss/variables" as *;
 
-.product { // Визначає стилі для блоку продукту
-    position: relative; // Встановлює відносне позиціонування для дочірніх елементів
+/* Основний контейнер */
+.section.section-fluid.section-padding.border-bottom.animate__animated.animate__fadeIn {
+    background-color: transparent;
+    border-color: $secondary;
+    padding: 20px 0;
+    position: relative;
+    z-index: 1;
+}
 
-    &:hover { // Стилі для стану наведення на елемент .product
-        & .product-thumb { // Стилі для блоку .product-thumb при наведенні
-            & .image { // Стилі для блоку зображення
-                & img { // Стилі для зображень всередині .image
-                    &.image-hover { // Стилі для зображення з класом .image-hover
-                        z-index: 1; // Піднімає зображення над основним
-                        visibility: visible; // Робить зображення видимим
-                        transform: scale(1); // Повертає зображення до нормального розміру
-                        opacity: 1; // Робить зображення повністю непрозорим
-                    }
-                }
-            }
+// Кольори та бренди (старий стиль)
+.product-variations .circle {
+    border: 2px solid $primary;
+    transition: $transition;
 
-            & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань"
-                z-index: 2; // Піднімає кнопку над іншими елементами
-                visibility: visible; // Робить кнопку видимою
-                transform: translateY(0); // Повертає кнопку у вихідну позицію
-                opacity: 1; // Робить кнопку повністю непрозорою
-            }
-
-            & .product-options { // Стилі для блоку опцій продукту
-                visibility: visible; // Робить блок опцій видимим
-                transform: translateY(0); // Повертає блок у вихідну позицію
-                opacity: 1; // Робить блок повністю непрозорим
-            }
-        }
-
-        & .product-info { // Стилі для блоку інформації про продукт
-            & .title, // Стилі для заголовка продукту
-            & .price { // Стилі для ціни продукту
-                visibility: hidden; // Ховає заголовок і ціну
-                transform: translateY(-20px); // Зміщує заголовок і ціну вгору на 20px
-                opacity: 0; // Робить заголовок і ціну прозорими
-            }
-
-            & .product-buttons { // Стилі для блоку кнопок продукту
-                visibility: visible; // Робить кнопки видимими
-                transform: translateY(0); // Повертає кнопки у вихідну позицію
-                opacity: 1; // Робить кнопки повністю непрозорими
-            }
-        }
-
-        & .product2-info { // Стилі для альтернативного блоку інформації про продукт
-            & .title, // Стилі для заголовка
-            & .price { // Стилі для ціни
-                visibility: hidden; // Ховає заголовок і ціну
-                transform: translateY(-20px); // Зміщує заголовок і ціну вгору на 20px
-                opacity: 0; // Робить заголовок і ціну прозорими
-            }
-        }
-
-        & .product2-buttons { // Стилі для альтернативного блоку кнопок
-            visibility: visible; // Робить кнопки видимими
-            transform: translateY(-50%); // Центрує кнопки по вертикалі
-            opacity: 1; // Робить кнопки повністю непрозорими
-        }
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px $primary;
+        transform: scale(1.1);
     }
 }
 
-.product-thumb { // Визначає стилі для блоку зображення продукту
-    position: relative; // Встановлює відносне позиціонування
-    z-index: 2; // Піднімає блок над іншими елементами
-    margin: 0; // Прибирає зовнішні відступи
+.brand-item {
+    border: 1px solid $primary;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    transition: $transition;
 
-    & .image { // Стилі для контейнера зображення
-        position: relative; // Встановлює відносне позиціонування
-        display: block; // Робить контейнер блочним елементом
-        overflow: hidden; // Ховає вміст, що виходить за межі контейнера
-
-        & img { // Стилі для основного зображення
-            z-index: 3; // Піднімає основне зображення над іншими
-            width: 100%; // Встановлює ширину зображення 100%
-
-            &.image-hover { // Стилі для зображення, яке з’являється при наведенні
-                position: absolute; // Абсолютне позиціонування
-                z-index: 4; // Піднімає зображення над основним
-                top: 0; // Розташовує зображення у верхньому лівому куті
-                left: 0; // Розташовує зображення у верхньому лівому куті
-                visibility: hidden; // Ховає зображення за замовчуванням
-                transition-duration: 0.7s; // Встановлює тривалість переходу 0.7 секунди
-                transform: scale(1.1); // Збільшує зображення на 10%
-                opacity: 0; // Робить зображення прозорим
-            }
-        }
+    &.selected {
+        border-color: color.adjust($primary, $lightness: -30%);
+        background-color: $primary3;
+        transform: scale(1.05);
     }
 
-    & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань"
-        position: absolute; // Абсолютне позиціонування
-        z-index: 7; // Піднімає кнопку над іншими елементами
-        top: 15px; // Відступ зверху 15px
-        right: 15px; // Відступ справа 15px
-        visibility: hidden; // Ховає кнопку за замовчуванням
-        width: 48px; // Встановлює ширину кнопки 48px
-        height: 48px; // Встановлює висоту кнопки 48px
-        transition: $transition; // Використовує змінну для плавного переходу
-        transform: translateY(10px); // Зміщує кнопку вниз на 10px
-        text-align: center; // Центрує вміст кнопки
-        opacity: 0; // Робить кнопку прозорою
-        color: $primary; // Встановлює колір зі змінної $primary
-
-        & i { // Стилі для іконки всередині кнопки
-            font-size: 24px; // Встановлює розмір іконки 24px
-            line-height: 48px; // Вирівнює іконку по вертикалі
-        }
-    }
-
-    @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних пристроїв
-        & .add-to-wishlist { // Стилі для кнопки "Додати до списку бажань" на планшетах/мобільних
-            visibility: visible; // Робить кнопку видимою
-            transform: translateY(0); // Повертає кнопку у вихідну позицію
-            opacity: 1; // Робить кнопку повністю непрозорою
-        }
+    &:hover {
+        border-color: color.adjust($primary, $lightness: -30%);
+        box-shadow: 0 0 10px rgba(0, 108, 102, 0.3);
     }
 }
 
-.product-badges { // Визначає стилі для блоку бейджів продукту
-    position: absolute; // Абсолютне позиціонування
-    top: 20px; // Відступ зверху 20px
-    left: 20px; // Відступ зліва 20px
-    display: flex; // Встановлює flex-контейнер
-    flex-direction: column; // Розташовує бейджи вертикально
-    margin-bottom: -12px; // Компенсує відступ між бейджами
+// Кнопки
+.product-buttons-centered .btn {
+    background-color: $primary;
+    color: $primary3;
+    padding: 12px 25px;
+    border-radius: 5px;
+    transition: $transition;
 
-    & span { // Стилі для окремих бейджів
-        font-weight: 400; // Встановлює товщину шрифту (нормальна)
-        line-height: 48px; // Вирівнює текст по вертикалі
-        z-index: 5; // Піднімає бейджі над іншими елементами
-        width: 48px; // Встановлює ширину бейджа 48px
-        height: 48px; // Встановлює висоту бейджа 48px
-        margin-bottom: 12px; // Додає нижній відступ між бейджами
-        text-align: center; // Центрує текст
-        text-transform: lowercase; // Переводить текст у нижній регістр
-        color: $white; // Встановлює білий колір тексту
-        border-radius: 50%; // Робить бейдж круглим
-
-        &.onsale { background-color: #98D8CA; } // Колір фону для бейджа "onsale"
-        &.hot { background-color: #C61932; } // Колір фону для бейджа "hot"
-        &.outofstock { background-color: $heading-color; } // Колір фону для бейджа "outofstock"
-        &.new { background-color: #ef8f8d; } // Колір фону для бейджа "new"
+    &:hover {
+        background-color: color.adjust($primary, $lightness: -30%);
+        transform: translateY(-3px);
     }
 }
 
-.product-options { // Визначає стилі для блоку опцій продукту
-    position: absolute; // Абсолютне позиціонування
-    z-index: 7; // Піднімає блок над іншими елементами
-    bottom: 20px; // Відступ знизу 20px
-    left: 20px; // Відступ зліва 20px
-    visibility: hidden; // Ховає блок за замовчуванням
-    width: calc(100% - 40px); // Встановлює ширину з урахуванням відступів
-    padding: 15px 10px; // Встановлює внутрішні відступи
-    transition: $transition; // Використовує змінну для плавного переходу
-    transform: translateY(50%); // Зміщує блок вниз на 50%
-    opacity: 0; // Робить блок прозорим
-    background-color: $white; // Встановлює білий фон
-
-    & ul { // Стилі для списків у блоці опцій
-        display: flex; // Встановлює flex-контейнер
-        align-items: center; // Вирівнює елементи по вертикалі
-        flex-wrap: wrap; // Дозволяє переносити елементи на новий рядок
-        justify-content: center; // Центрує елементи
-        margin: 0; // Прибирає зовнішні відступи
-        padding: 0; // Прибирає внутрішні відступи
-        list-style: none; // Прибирає маркери списку
-        color: $heading-color; // Встановлює колір тексту
-
-        &:not(:last-child) { margin-bottom: 10px; } // Додає нижній відступ для всіх списків, крім останнього
-
-        & li { // Стилі для елементів списку
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            line-height: 1; // Встановлює висоту рядка
-            margin: 0 4px; // Додає горизонтальні відступи 4px
-            padding: 0; // Прибирає внутрішні відступи
-            cursor: pointer; // Змінює курсор на вказівник
-            transition: $transition; // Використовує змінну для плавного переходу
-        }
-
-        &.colors { // Стилі для списку кольорів
-            & li { // Стилі для елементів кольорів
-                width: 18px; // Встановлює ширину 18px
-                height: 18px; // Встановлює висоту 18px
-                text-indent: -9999px; // Ховає текст, залишаючи місце для зображення
-                border: 1px solid #DDDDDD; // Додає рамку
-                border-radius: 50%; // Робить елемент круглим
-
-                & img { // Стилі для зображень у кольорах
-                    display: block; // Робить зображення блочним
-                    width: 100%; // Встановлює ширину 100%
-                    border-radius: 50%; // Робить зображення круглим
-                }
-
-                &.active { // Стилі для активного кольору
-                    border: 2px solid $primary; // Додає товщу рамку кольору $primary
-                }
-            }
-        }
-
-        &.sizes { // Стилі для списку розмірів
-            & li { // Стилі для елементів розмірів
-                padding-bottom: 3px; // Додає нижній відступ 3px
-                opacity: 0.5; // Робить елемент напівпрозорим
-
-                &:hover, // Стилі при наведенні
-                &.active { // Стилі для активного розміру
-                    opacity: 1; // Робить елемент повністю непрозорим
-                }
-            }
-        }
-    }
-
-    @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних
-        display: none; // Ховає блок опцій
-    }
-}
-
-.product-info { // Визначає стилі для блоку інформації про продукт
-    position: relative; // Встановлює відносне позиціонування
-    z-index: 3; // Піднімає блок над іншими елементами
-    text-align: center; // Центрує текст
-
-    &:not(:first-child) { margin-top: 28px; } // Додає верхній відступ для всіх, крім першого блоку
-
-    & .title { // Стилі для заголовка продукту
-        font-family: $futura; // Встановлює шрифт зі змінної $futura
-        font-size: 18px; // Встановлює розмір шрифту 18px
-        font-weight: 400; // Встановлює товщину шрифту (нормальна)
-        margin-bottom: 12px; // Додає нижній відступ 12px
-        transition: $transition; // Використовує змінну для плавного переходу
-
-        & a { // Стилі для посилання в заголовку
-            color: $body-light; // Встановлює колір тексту
-
-            &:hover { color: $heading-color; } // Змінює колір при наведенні
-        }
-    }
-
-    & .price { // Стилі для ціни продукту
-        font-size: 16px; // Встановлює розмір шрифту 16px
-        font-weight: 600; // Встановлює товщину шрифту (жирний)
-        line-height: 1; // Встановлює висоту рядка
-        display: flex; // Встановлює flex-контейнер
-        align-items: center; // Вирівнює елементи по вертикалі
-        justify-content: center; // Центрує елементи
-        transition: $transition; // Використовує змінну для плавного переходу
-        color: $heading-color; // Встановлює колір тексту
-
-        & span { // Стилі для елементів ціни
-            &.old { text-decoration: line-through; color: #AAAAAA; } // Стилі для старої ціни
-            &.new { margin-left: 10px; color: $primary; } // Стилі для нової ціни
-        }
-    }
-
-    & .product-buttons { // Стилі для блоку кнопок продукту
-        position: absolute; // Абсолютне позиціонування
-        z-index: 5; // Піднімає блок над іншими елементами
-        top: 0; // Розташовує зверху
-        right: 0; // Притискає до правого краю
-        left: 0; // Притискає до лівого краю
-        display: flex; // Встановлює flex-контейнер
-        visibility: hidden; // Ховає кнопки за замовчуванням
-        align-items: center; // Вирівнює кнопки по вертикалі
-        flex-wrap: wrap; // Дозволяє переносити кнопки
-        justify-content: center; // Центрує кнопки
-        transition: $transition; // Використовує змінну для плавного переходу
-        transform: translateY(50%); // Зміщує кнопки вниз на 50%
-        opacity: 0; // Робить кнопки прозорими
-
-        & .product-button { // Стилі для окремих кнопок
-            width: 48px; // Встановлює ширину 48px
-            height: 48px; // Встановлює висоту 48px
-            margin: 0 5px; // Додає горизонтальні відступи 5px
-            text-align: center; // Центрує вміст
-            color: $white; // Встановлює білий колір тексту
-            border-radius: 50%; // Робить кнопку круглою
-            background-color: $heading-color; // Встановлює фоновий колір
-
-            & i { // Стилі для іконки в кнопці
-                font-size: 16px; // Встановлює розмір іконки 16px
-                line-height: 48px; // Вирівнює іконку по вертикалі
-            }
-
-            &:hover { background-color: $primary; } // Змінює фон при наведенні
-        }
-    }
-
-    & .product-rating { // Стилі для блоку рейтингу продукту
-        line-height: 1; // Встановлює висоту рядка
-        display: flex; // Встановлює flex-контейнер
-        justify-content: center; // Центрує рейтинг
-        margin-top: 20px; // Додає верхній відступ 20px
-
-        & .rating { // Стилі для контейнера рейтингу
-            font-size: 12px; // Встановлює розмір шрифту 12px
-            position: relative; // Встановлює відносне позиціонування
-            display: block; // Робить контейнер блочним
-
-            &::before { // Псевдоелемент для порожніх зірок
-                font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                font-size: 12px; // Встановлює розмір зірок 12px
-                font-weight: 300; // Встановлює товщину (світлі зірки)
-                line-height: 1; // Встановлює висоту рядка
-                content: "    "; // Відображає п’ять порожніх зірок
-                color: #ABABAB; // Встановлює сірий колір
-            }
-
-            & .rating-active { // Стилі для активних зірок
-                font-size: 0; // Ховає текст
-                position: absolute; // Абсолютне позиціонування
-                top: 0; // Розташовує зверху
-                left: 0; // Притискає до лівого краю
-                display: block; // Робить блочним
-                overflow: hidden; // Ховає зайвий вміст
-                height: 100%; // Встановлює висоту 100%
-
-                &::before { // Псевдоелемент для заповнених зірок
-                    font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                    font-size: 12px; // Встановлює розмір зірок 12px
-                    font-weight: 900; // Встановлює товщину (жирні зірки)
-                    line-height: 1; // Встановлює висоту рядка
-                    content: "    "; // Відображає п’ять заповнених зірок
-                    white-space: nowrap; // Запобігає перенесенню
-                    color: #F5CC26; // Встановлює жовтий колір
-                }
-            }
-        }
-    }
-
-    & .product-stock-status { // Стилі для блоку статусу запасів
-        margin-top: 15px; // Додає верхній відступ 15px
-
-        & .bar { // Стилі для прогрес-бару
-            display: block; // Робить прогрес-бар блочним
-            float: left; // Вирівнює ліворуч
-            width: 100%; // Встановлює ширину 100%
-            height: 7px; // Встановлює висоту 7px
-            border-radius: 50px; // Закруглює кути
-            background-color: #EDEDED; // Встановлює сірий фон
-
-            & .progress { // Стилі для заповненої частини прогрес-бару
-                display: block; // Робить елемент блочним
-                height: 100%; // Встановлює висоту 100%
-                border-radius: 50px; // Закруглює кути
-                background-color: #F8796C; // Встановлює червоний колір
-            }
-        }
-
-        & > span { // Стилі для текстових елементів статусу
-            font-size: 16px; // Встановлює розмір шрифту 16px
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            line-height: 1; // Встановлює висоту рядка
-            display: block; // Робить елемент блочним
-            margin-top: 12px; // Додає верхній відступ 12px
-            color: $body-light; // Встановлює колір тексту
-
-            & span { // Стилі для вкладених елементів span
-                font-weight: 600; // Встановлює товщину шрифту (жирний)
-                color: $heading-color; // Встановлює колір тексту
-            }
-
-            &.sold { float: left; } // Вирівнює елемент "продано" ліворуч
-            &.available { float: right; } // Вирівнює елемент "доступно" праворуч
-        }
-    }
-
-    @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних
-        & .title, // Стилі для заголовка
-        & .price, // Стилі для ціни
-        & .product-buttons { // Стилі для кнопок
-            visibility: visible !important; // Примусово показує елементи
-            transform: translateY(0) !important; // Повертає у вихідну позицію
-            opacity: 1 !important; // Робить елементи повністю непрозорими
-        }
-    }
-
-    @media #{$tablet-device, $large-mobile} { // Медіа-запит для планшетів і великих мобільних
-        & .product-buttons { // Стилі для блоку кнопок
-            position: static; // Знімає абсолютне позиціонування
-            margin-top: 15px; // Додає верхній відступ 15px
-        }
-    }
-}
-
-.list-product { // Визначає стилі для продукту у вигляді списку
-    display: flex !important; // Встановлює flex-контейнер
-    flex-wrap: wrap; // Дозволяє переносити елементи
-
-    & .thumbnail { // Стилі для блоку зображення у списку
-        flex: 0 0 140px; // Фіксує ширину 140px
-        padding-right: 20px; // Додає правий відступ 20px
-
-        & a { // Стилі для посилання в зображенні
-            display: block; // Робить посилання блочним
-
-            & img { // Стилі для зображення
-                width: 100%; // Встановлює ширину 100%
-            }
-        }
-    }
-
-    & .content { // Стилі для блоку контенту у списку
-        flex: 1 0 calc(100% - 140px); // Займає залишковий простір
-
-        & .title { // Стилі для заголовка
-            font-family: $futura; // Використовує шрифт зі змінної $futura
-            font-size: 18px; // Встановлює розмір шрифту 18px
-            font-weight: 400; // Встановлює товщину шрифту (нормальна)
-            margin-bottom: 12px; // Додає нижній відступ 12px
-            transition: $transition; // Використовує змінну для плавного переходу
-
-            & a { // Стилі для посилання в заголовку
-                color: $body-light; // Встановлює колір тексту
-                &:hover { color: $heading-color; } // Змінює колір при наведенні
-            }
-        }
-
-        & .price { // Стилі для ціни
-            font-size: 14px; // Встановлює розмір шрифту 14px
-            font-weight: 600; // Встановлює товщину шрифту (жирний)
-            line-height: 1; // Встановлює висоту рядка
-            display: flex; // Встановлює flex-контейнер
-            align-items: center; // Вирівнює елементи по вертикалі
-            margin-bottom: 8px; // Додає нижній відступ 8px
-            transition: $transition; // Використовує змінну для плавного переходу
-            color: $heading-color; // Встановлює колір тексту
-
-            &:last-child { margin-bottom: 0; } // Прибирає нижній відступ для останнього елемента
-
-            & span { // Стилі для елементів ціни
-                &.old { text-decoration: line-through; color: #AAAAAA; } // Стилі для старої ціни
-                &.new { margin-left: 10px; color: $primary; } // Стилі для нової ціни
-            }
-        }
-
-        & .ratting { // Стилі для рейтингу
-            line-height: 1; // Встановлює висоту рядка
-            position: relative; // Встановлює відносне позиціонування
-            display: inline-flex; // Встановлює inline-flex контейнер
-
-            &::before { // Псевдоелемент для порожніх зірок
-                font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                font-size: 11px; // Встановлює розмір зірок 11px
-                font-weight: 300; // Встановлює товщину (світлі зірки)
-                line-height: 1; // Встановлює висоту рядка
-                content: "    "; // Відображає п’ять порожніх зірок
-                color: #AAAAAA; // Встановлює сірий колір
-            }
-
-            & .rate { // Стилі для активних зірок
-                position: absolute; // Абсолютне позиціонування
-                top: 0; // Розташовує зверху
-                left: 0; // Притискає до лівого краю
-                display: inline-flex; // Встановлює inline-flex контейнер
-                overflow: hidden; // Ховає зайвий вміст
-                white-space: nowrap; // Запобігає перенесенню
-                color: #F5CC26; // Встановлює жовтий колір
-
-                &::before { // Псевдоелемент для заповнених зірок
-                    font-family: $fontAwesome5Pro; // Використовує шрифт FontAwesome
-                    font-size: 11px; // Встановлює розмір зірок 11px
-                    font-weight: 700; // Встановлює товщину (жирні зірки)
-                    line-height: 1; // Встановлює висоту рядка
-                    content: "    "; // Відображає п’ять заповнених зірок
-                }
-            }
-        }
-    }
-}
-
-.product-summery { // Визначає стилі для блоку підсумкової інформації
-    position: relative; // Встановлює відносне позиціонування
-
-    &-center { // Стилі для центрального вирівнювання підсумкової інформації
-        text-align: center; // Центрує текст
-
-        & .product-ratings { justify-content: center; } // Центрує рейтинги
-        & .product-variations { justify-content: center; // Центрує варіації продукту
-            & table tbody tr td.label { text-align: right; } // Вирівнює мітки таблиці праворуч
-            & table tbody tr td.value { text-align: left; } // Вирівнює значення таблиці ліворуч
-        }
-        & .product-buttons { justify-content: center; } // Центрує кнопки
-        & .product-brands .brands { justify-content: center; } // Центрує бренди
-        & .product-meta { justify-content: center; // Центрує метадані
-            & table tbody tr td.label { text-align: right; } // Вирівнює мітки таблиці праворуч
-            & table tbody tr td.value { text-align: left; } // Вирівнює значення таблиці ліворуч
-        }
-    }
-}
+/* Product CSS */
+//.product {
+//    position: relative;
+//
+//    &:hover {
+//        .product-thumb {
+//            .image img.image-hover {
+//                z-index: 1;
+//                visibility: visible;
+//                transform: scale(1);
+//                opacity: 1;
+//            }
+//
+//            .add-to-wishlist {
+//                z-index: 2;
+//                visibility: visible;
+//                transform: translateY(0);
+//                opacity: 1;
+//            }
+//
+//            .product-options {
+//                visibility: visible;
+//                transform: translateY(0);
+//                opacity: 1;
+//            }
+//        }
+//
+//        .product-info {
+//            .title,
+//            .price {
+//                visibility: hidden;
+//                transform: translateY(-20px);
+//                opacity: 0;
+//            }
+//
+//            .product-buttons {
+//                visibility: visible;
+//                transform: translateY(0);
+//                opacity: 1;
+//            }
+//        }
+//
+//        .product2-info {
+//            .title,
+//            .price {
+//                visibility: hidden;
+//                transform: translateY(-20px);
+//                opacity: 0;
+//            }
+//        }
+//
+//        .product2-buttons {
+//            visibility: visible;
+//            transform: translateY(-50%);
+//            opacity: 1;
+//        }
+//    }
+//}
+//
+///* Product Thumbnail */
+//.product-thumb {
+//    position: relative;
+//    z-index: 2;
+//    margin: 0;
+//
+//    .image {
+//        position: relative;
+//        display: block;
+//        overflow: hidden;
+//
+//        img {
+//            z-index: 3;
+//            width: 100%;
+//
+//            &.image-hover {
+//                position: absolute;
+//                z-index: 4;
+//                top: 0;
+//                left: 0;
+//                visibility: hidden;
+//                transition-duration: 0.7s;
+//                transform: scale(1.1);
+//                opacity: 0;
+//            }
+//        }
+//    }
+//
+//    .add-to-wishlist {
+//        position: absolute;
+//        z-index: 7;
+//        top: 15px;
+//        right: 15px;
+//        visibility: hidden;
+//        width: 48px;
+//        height: 48px;
+//        transition: $transition;
+//        transform: translateY(10px);
+//        text-align: center;
+//        opacity: 0;
+//        color: $primary;
+//
+//        i {
+//            font-size: 24px;
+//            line-height: 48px;
+//        }
+//    }
+//
+//    @media #{$tablet-device, $large-mobile} {
+//        .add-to-wishlist {
+//            visibility: visible;
+//            transform: translateY(0);
+//            opacity: 1;
+//        }
+//    }
+//}
+//
+///* Product Badges */
+//.product-badges {
+//    position: absolute;
+//    top: 20px;
+//    left: 20px;
+//    display: flex;
+//    flex-direction: column;
+//    margin-bottom: -12px;
+//
+//    span {
+//        font-weight: 400;
+//        line-height: 48px;
+//        z-index: 5;
+//        width: 48px;
+//        height: 48px;
+//        margin-bottom: 12px;
+//        text-align: center;
+//        text-transform: lowercase;
+//        color: $white;
+//        border-radius: 50%;
+//
+//        &.onsale   { background-color: #98D8CA; }
+//        &.hot      { background-color: #C61932; }
+//        &.outofstock { background-color: $heading-color; }
+//        &.new      { background-color: #ef8f8d; }
+//    }
+//}
+//
+///* Product Extra Options */
+//.product-options {
+//    position: absolute;
+//    z-index: 7;
+//    bottom: 20px;
+//    left: 20px;
+//    visibility: hidden;
+//    width: calc(100% - 40px);
+//    padding: 15px 10px;
+//    transition: $transition;
+//    transform: translateY(50%);
+//    opacity: 0;
+//    background-color: $white;
+//
+//    ul {
+//        display: flex;
+//        align-items: center;
+//        flex-wrap: wrap;
+//        justify-content: center;
+//        margin: 0;
+//        padding: 0;
+//        list-style: none;
+//        color: $heading-color;
+//
+//        &:not(:last-child) { margin-bottom: 10px; }
+//
+//        li {
+//            font-weight: 400;
+//            line-height: 1;
+//            margin: 0 4px;
+//            padding: 0;
+//            cursor: pointer;
+//            transition: $transition;
+//        }
+//
+//        &.colors li {
+//            width: 18px;
+//            height: 18px;
+//            text-indent: -9999px;
+//            border: 1px solid #DDDDDD;
+//            border-radius: 50%;
+//
+//            img { display: block; width: 100%; border-radius: 50%; }
+//
+//            &.active { border: 2px solid $primary; }
+//        }
+//
+//        &.sizes li {
+//            padding-bottom: 3px;
+//            opacity: 0.5;
+//
+//            &:hover,
+//            &.active { opacity: 1; }
+//        }
+//    }
+//
+//    @media #{$tablet-device, $large-mobile} { display: none; }
+//}
+//
+///* Product Information */
+//.product-info {
+//    position: relative;
+//    z-index: 3;
+//    text-align: center;
+//
+//    &:not(:first-child) { margin-top: 28px; }
+//
+//    .title {
+//        font-family: $futura;
+//        font-size: 18px;
+//        font-weight: 400;
+//        margin-bottom: 12px;
+//        transition: $transition;
+//
+//        a {
+//            color: $body-light;
+//            &:hover { color: $heading-color; }
+//        }
+//    }
+//
+//    .price {
+//        font-size: 16px;
+//        font-weight: 600;
+//        line-height: 1;
+//        display: flex;
+//        align-items: center;
+//        justify-content: center;
+//        transition: $transition;
+//        color: $heading-color;
+//
+//        span {
+//            &.old { text-decoration: line-through; color: #AAAAAA; }
+//            &.new { margin-left: 10px; color: $primary; }
+//        }
+//    }
+//
+//    .product-buttons {
+//        position: absolute;
+//        z-index: 5;
+//        top: 0;
+//        right: 0;
+//        left: 0;
+//        display: flex;
+//        visibility: hidden;
+//        align-items: center;
+//        flex-wrap: wrap;
+//        justify-content: center;
+//        transition: $transition;
+//        transform: translateY(50%);
+//        opacity: 0;
+//
+//        .product-button {
+//            width: 48px;
+//            height: 48px;
+//            margin: 0 5px;
+//            text-align: center;
+//            color: $white;
+//            border-radius: 50%;
+//            background-color: $heading-color;
+//
+//            i { font-size: 16px; line-height: 48px; }
+//
+//            &:hover { background-color: $primary; }
+//        }
+//    }
+//
+//    .product-rating {
+//        line-height: 1;
+//        display: flex;
+//        justify-content: center;
+//        margin-top: 20px;
+//
+//        .rating {
+//            font-size: 12px;
+//            position: relative;
+//            display: block;
+//
+//            &::before {
+//                font-family: $fontAwesome5Pro;
+//                font-size: 12px;
+//                font-weight: 300;
+//                line-height: 1;
+//                content: "    ";
+//                color: #ABABAB;
+//            }
+//
+//            .rating-active {
+//                font-size: 0;
+//                position: absolute;
+//                top: 0;
+//                left: 0;
+//                display: block;
+//                overflow: hidden;
+//                height: 100%;
+//
+//                &::before {
+//                    font-family: $fontAwesome5Pro;
+//                    font-size: 12px;
+//                    font-weight: 900;
+//                    line-height: 1;
+//                    content: "    ";
+//                    white-space: nowrap;
+//                    color: #F5CC26;
+//                }
+//            }
+//        }
+//    }
+//
+//    .product-stock-status {
+//        margin-top: 15px;
+//
+//        .bar {
+//            display: block;
+//            float: left;
+//            width: 100%;
+//            height: 7px;
+//            border-radius: 50px;
+//            background-color: #EDEDED;
+//
+//            .progress {
+//                display: block;
+//                height: 100%;
+//                border-radius: 50px;
+//                background-color: #F8796C;
+//            }
+//        }
+//
+//        > span {
+//            font-size: 16px;
+//            font-weight: 400;
+//            line-height: 1;
+//            display: block;
+//            margin-top: 12px;
+//            color: $body-light;
+//
+//            span { font-weight: 600; color: $heading-color; }
+//
+//            &.sold      { float: left; }
+//            &.available { float: right; }
+//        }
+//    }
+//
+//    @media #{$tablet-device, $large-mobile} {
+//        .title,
+//        .price,
+//        .product-buttons {
+//            visibility: visible !important;
+//            transform: translateY(0) !important;
+//            opacity: 1 !important;
+//        }
+//
+//        .product-buttons { position: static; margin-top: 15px; }
+//    }
+//}
+//
+///* Product2 Information */
+//.product2-info {
+//    position: absolute;
+//    z-index: 3;
+//    bottom: 0;
+//    left: 0;
+//    padding: 0 25px 25px;
+//    text-align: left;
+//
+//    .title {
+//        font-family: $futura;
+//        font-size: 18px;
+//        font-weight: 400;
+//        margin-bottom: 12px;
+//        transition: $transition;
+//
+//        a {
+//            color: $body-light;
+//            &:hover { color: $heading-color; }
+//        }
+//    }
+//
+//    .price {
+//        font-size: 16px;
+//        font-weight: 600;
+//        line-height: 1;
+//        display: flex;
+//        align-items: center;
+//        justify-content: flex-start;
+//        transition: $transition;
+//        color: $heading-color;
+//
+//        span {
+//            &.old { text-decoration: line-through; color: #AAAAAA; }
+//            &.new { margin-left: 10px; color: $primary; }
+//        }
+//    }
+//
+//    @media #{$tablet-device, $large-mobile} {
+//        position: static;
+//        margin-top: 28px;
+//        padding: 0;
+//        text-align: center;
+//
+//        .title,
+//        .price {
+//            visibility: visible !important;
+//            justify-content: center;
+//            transform: translateY(0) !important;
+//            opacity: 1 !important;
+//        }
+//    }
+//}
+//
+///* Product2 Action Buttons */
+//.product2-buttons {
+//    position: absolute;
+//    z-index: 5;
+//    top: 50%;
+//    left: 0;
+//    display: flex;
+//    visibility: hidden;
+//    align-items: center;
+//    flex-wrap: wrap;
+//    justify-content: center;
+//    width: 100%;
+//    transition: $transition;
+//    opacity: 0;
+//
+//    .product-button {
+//        width: 48px;
+//        height: 48px;
+//        margin: 0 5px;
+//        text-align: center;
+//        color: $white;
+//        border-radius: 50%;
+//        background-color: $heading-color;
+//
+//        i { font-size: 16px; line-height: 48px; }
+//
+//        &:hover { background-color: $primary; }
+//    }
+//
+//    @media #{$tablet-device, $large-mobile} {
+//        position: static;
+//        visibility: visible !important;
+//        margin-top: 15px;
+//        transform: translateY(0) !important;
+//        opacity: 1 !important;
+//    }
+//}
+//
+///* List Product */
+//.list-product {
+//    display: flex !important;
+//    flex-wrap: wrap;
+//
+//    .thumbnail {
+//        flex: 0 0 140px;
+//        padding-right: 20px;
+//
+//        a {
+//            display: block;
+//
+//            img { width: 100%; }
+//        }
+//    }
+//
+//    .content {
+//        flex: 1 0 calc(100% - 140px);
+//
+//        .title {
+//            font-family: $futura;
+//            font-size: 18px;
+//            font-weight: 400;
+//            margin-bottom: 12px;
+//            transition: $transition;
+//
+//            a {
+//                color: $body-light;
+//                &:hover { color: $heading-color; }
+//            }
+//        }
+//
+//        .price {
+//            font-size: 14px;
+//            font-weight: 600;
+//            line-height: 1;
+//            display: flex;
+//            align-items: center;
+//            margin-bottom: 8px;
+//            transition: $transition;
+//            color: $heading-color;
+//
+//            &:last-child { margin-bottom: 0; }
+//
+//            span {
+//                &.old { text-decoration: line-through; color: #AAAAAA; }
+//                &.new { margin-left: 10px; color: $primary; }
+//            }
+//        }
+//
+//        .ratting {
+//            line-height: 1;
+//            position: relative;
+//            display: inline-flex;
+//
+//            &::before {
+//                font-family: $fontAwesome5Pro;
+//                font-size: 11px;
+//                font-weight: 300;
+//                line-height: 1;
+//                content: "    ";
+//                color: #AAAAAA;
+//            }
+//
+//            .rate {
+//                position: absolute;
+//                top: 0;
+//                left: 0;
+//                display: inline-flex;
+//                overflow: hidden;
+//                white-space: nowrap;
+//                color: #F5CC26;
+//
+//                &::before {
+//                    font-family: $fontAwesome5Pro;
+//                    font-size: 11px;
+//                    font-weight: 700;
+//                    line-height: 1;
+//                    content: "    ";
+//                }
+//            }
+//        }
+//    }
+//}
+//
+///* Product Wishlist Button Animation */
+//[data-name="mojs-shape"] {
+//    z-index: 99;
+//}
+//
+///* Product Summery */
+//.product-summery {
+//    position: relative;
+//    z-index: 1;
+//
+//    &-center {
+//        text-align: center;
+//
+//        .product-ratings     { justify-content: center; }
+//        .product-variations  { justify-content: center; }
+//        .product-buttons     { justify-content: center; }
+//        .product-brands .brands { justify-content: center; }
+//        .product-meta        { justify-content: center; }
+//
+//        .product-variations table tbody tr td.label  { text-align: right; }
+//        .product-variations table tbody tr td.value  { text-align: left; }
+//        .product-meta       table tbody tr td.label  { text-align: right; }
+//        .product-meta       table tbody tr td.value  { text-align: left; }
+//    }
+//}

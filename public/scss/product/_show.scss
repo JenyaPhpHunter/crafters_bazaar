@@ -1,0 +1,81 @@
+@use "sass:color";
+@use "../variables" as *;
+
+.product-view-main {
+    .product-title {
+        font-size: 2.45rem;
+        font-weight: 700;
+        line-height: 1.15;
+        margin-bottom: 0.3rem;
+    }
+
+    .product-price {
+        font-size: 2.05rem;
+        color: #222;           /* чорний, як просив */
+        font-weight: 500;      /* не жирний */
+    }
+
+    .meta-label {
+        display: block;
+        font-size: 1.3rem;
+        color: $primary2;           /* бірюзовий для ВСІХ лейблів */
+        font-weight: 600;
+        margin-bottom: 6px;
+        letter-spacing: 0.4px;
+    }
+
+    .meta-value {
+        font-weight: 500;
+        font-size: 1.12rem;
+        color: #333;
+    }
+
+    .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 32px 45px;
+    }
+
+    .description-text {
+        background: #f8f9fa;
+        padding: 28px 32px;
+        border-radius: 16px;
+        line-height: 1.75;
+    }
+
+    .product-tags {
+        .tag {
+            display: inline-block;
+            background: rgba($primary, 0.08);
+            color: $primary;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            margin: 4px 6px 4px 0;
+            text-decoration: none;
+            transition: all 0.25s ease;
+
+            &:hover {
+                background: $primary;
+                color: white;
+                transform: translateY(-1px);
+            }
+        }
+    }
+    .product-social-links {
+        .social-link-item {
+            margin-bottom: 8px;
+
+            a {
+                color: $primary;
+                text-decoration: none;
+                word-break: break-all;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

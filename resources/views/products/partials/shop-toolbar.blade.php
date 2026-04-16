@@ -6,10 +6,11 @@
             <!-- Таб-фільтри -->
             <div class="col-md col-12 align-self-center learts-mb-20">
                 <div class="isotope-filter shop-product-filter" data-target="#shop-products">
-                    <button class="active" data-filter="*">Всі товари</button>
-                    <button data-filter=".featured">Рекомендовані</button>
-                    <button data-filter=".new">Новинки</button>
-                    <button data-filter=".sale">Акції</button>
+                    {{-- data-filter БЕЗ крапки — це значення tab= в URL --}}
+                    <button class="{{ !request('tab') ? 'active' : '' }}"          data-filter="">Всі товари</button>
+                    <button class="{{ request('tab') === 'featured' ? 'active' : '' }}" data-filter="featured">Рекомендовані</button>
+                    <button class="{{ request('tab') === 'new'      ? 'active' : '' }}" data-filter="new">Новинки</button>
+                    <button class="{{ request('tab') === 'sale'     ? 'active' : '' }}" data-filter="sale">Акції</button>
                 </div>
             </div>
 
@@ -17,15 +18,16 @@
             <div class="col-md-auto col-12 learts-mb-20">
                 <ul class="shop-toolbar-controls d-flex flex-wrap justify-content-end align-items-center gap-4">
 
-                    <!-- Сортування зліва -->
+                    <!-- Сортування -->
                     <li class="d-flex align-items-center gap-2">
                         <span class="text-muted small fw-medium">Сортування:</span>
                         <div class="product-sorting">
-                            <select id="sortProducts" class="nice-select">
-                                <option value="menu_order">За замовчуванням</option>
-                                <option value="price_up">Ціна: від низької</option>
-                                <option value="price_down">Ціна: від високої</option>
-                                <option value="newness">Найновіші</option>
+                            {{-- nice-select замінює select на div, тому використовуємо звичайний select --}}
+                            <select id="sortProducts">
+                                <option value="menu_order"  {{ request('sort_by','menu_order') === 'menu_order'  ? 'selected' : '' }}>За замовчуванням</option>
+                                <option value="price_up"    {{ request('sort_by') === 'price_up'    ? 'selected' : '' }}>Ціна: від низької</option>
+                                <option value="price_down"  {{ request('sort_by') === 'price_down'  ? 'selected' : '' }}>Ціна: від високої</option>
+                                <option value="newness"     {{ request('sort_by') === 'newness'     ? 'selected' : '' }}>Найновіші</option>
                             </select>
                         </div>
                     </li>

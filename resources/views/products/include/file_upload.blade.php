@@ -3,8 +3,8 @@
     {{-- Передаємо існуючі фото в JS --}}
     @php
         $existingPhotosJson = collect([]);
-        if (isset($product) && $product && $product->productphotos) {
-            $existingPhotosJson = $product->productphotos->sortBy('queue')->map(function ($p) {
+        if (isset($product) && $product && $product->productPhotos) {
+            $existingPhotosJson = $product->productPhotos->sortBy('queue')->map(function ($p) {
                 return [
                     'id'      => $p->id,
                     'src'     => \Storage::disk('public')->url($p->paths['zoom']     ?? $p->paths['original']),

@@ -3,17 +3,17 @@
     <div id="shop-products" class="row gx-3 gy-4 row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4">
 
         @forelse($products as $product)
-            @php $photo = $product->productphotos->first(); @endphp
+            @php $photo = $product->productPhotos->first(); @endphp
 
-            <div class="grid-item {{ $product->featured ? 'hot' : '' }} {{ $product->new ? 'new' : '' }} {{ $product->discount ? 'sale' : '' }}">
+            <div class="grid-item {{ $product->featured ? 'featured' : '' }} {{ $product->new ? 'new' : '' }} {{ $product->discount ? 'sale' : '' }}">
                 <div class="product-card-modern h-100 position-relative">
 
                     {{-- Бейджі --}}
                     @if($product->new || $product->featured || $product->discount || $product->stock_balance == 0)
                         <div class="product-badges">
-                            @if($product->new)       <span class="new">new</span>               @endif
-                            @if($product->featured)  <span class="hot">hot</span>               @endif
-                            @if($product->discount)  <span class="onsale">-{{ $product->discount }}%</span> @endif
+                            @if($product->new)      <span class="new">new</span>                           @endif
+                            @if($product->featured) <span class="hot">hot</span>                           @endif
+                            @if($product->discount) <span class="onsale">-{{ $product->discount }}%</span> @endif
                             @if($product->stock_balance == 0) <span class="outofstock"><i class="fal fa-frown"></i></span> @endif
                         </div>
                     @endif
@@ -26,14 +26,11 @@
                                 alt="{{ $product->title }}"
                                 class="img-fluid w-100">
                         </a>
-                        <a href="#" class="add-to-wishlist hintT-left" data-hint="Додати до улюблених" data-product-id="{{ $product->id }}">
-                            <i class="far fa-heart"></i>
-                        </a>
                     </div>
 
                     {{-- Інфо --}}
                     <div class="product-info p-3">
-                        <h6 class="title mb-2">
+                        <h6 class="title mb-1">
                             <a href="{{ route('products.show', $product->id) }}">{{ $product->title }}</a>
                         </h6>
 
@@ -53,16 +50,38 @@
                             </small>
                         @endif
 
-                        <div class="product-buttons">
-                            <a href="#quickViewModal" data-bs-toggle="modal" class="product-button hintT-top" data-hint="Швидкий перегляд" data-product-id="{{ $product->id }}">
-                                <i class="fal fa-search"></i>
-                            </a>
-                            <a href="{{ route('carts.addToCart', ['product' => $product->id]) }}" class="product-button hintT-top" data-hint="Додати до кошика">
+                        {{-- Кнопки дій — один рядок, tooltip через data-tooltip --}}
+                        <div class="product-action-row">
+
+                            {{-- Перегляд --}}
+                            <button class="product-action-btn js-quick-view"
+                                    data-tooltip="Швидкий перегляд"
+                                    data-product-id="{{ $product->id }}">
+                                <i class="fal fa-eye"></i>
+                            </button>
+
+                            {{-- Додати до кошика --}}
+                            <a href="{{ route('carts.addToCart', ['product' => $product->id]) }}"
+                               class="product-action-btn"
+                               data-tooltip="Додати в корзину">
                                 <i class="fal fa-shopping-cart"></i>
                             </a>
-                            <a href="#" class="product-button hintT-top" data-hint="Поділитися">
-                                <i class="fal fa-random"></i>
-                            </a>
+
+                            {{-- Додати до улюблених --}}
+                            <button class="product-action-btn js-wishlist"
+                                    data-tooltip="Додати до улюблених"
+                                    data-product-id="{{ $product->id }}">
+                                <i class="far fa-heart"></i>
+                            </button>
+
+                            {{-- Поширити --}}
+                            <button class="product-action-btn js-share"
+                                    data-tooltip="Поширити"
+                                    data-url="{{ route('products.show', $product->id) }}"
+                                    data-title="{{ $product->title }}">
+                                <i class="fal fa-share-alt"></i>
+                            </button>
+
                         </div>
                     </div>
 
@@ -71,12 +90,13 @@
 
         @empty
             <div class="col-12 text-center py-5">
-                <p class="text-muted fs-5">Нічого не знайдено</p>
+                <p class="text-muted fs-5">Нічого не знайдено за вашими фільтрами</p>
             </div>
         @endforelse
 
     </div>
 
+    {{-- Показати ще --}}
     @if($products->hasMorePages())
         <div class="text-center learts-mt-70" id="load-more-wrap">
             <button id="load-more-btn"
@@ -85,6 +105,13 @@
                     data-last-page="{{ $products->lastPage() }}">
                 <i class="ti-plus me-2"></i> Показати ще
             </button>
+        </div>
+    @endif
+
+    {{-- Пагінація --}}
+    @if($products->hasPages())
+        <div class="learts-mt-50">
+            {{ $products->links('vendor.pagination.bootstrap-5') }}
         </div>
     @endif
 

@@ -1,28 +1,31 @@
+@php
+    $mode = $mode ?? 'view';
+@endphp
+
 <div class="form-field mb-5 content-block">
 
-    {{-- HEADER --}}
     <div class="form-block-header">
-        <label for="content" class="form-label">
-            Опис товару
-        </label>
+        <label class="form-label">Опис товару</label>
     </div>
 
-    {{-- BODY --}}
     <div class="content-wrapper">
-        <textarea
-            id="content"
-            name="content_temp"
-            rows="4"
-            class="form-control content-textarea"
-            placeholder="Опишіть стан товару, комплектацію, особливості, дефекти (якщо є), або іншу корисну інформацію...
-Ця інформація допоможе покупцям краще зрозуміти товар і швидше прийняти рішення."
-        >{{ old('content') ?? ($product?->content ?? '') }}</textarea>
+        @if($mode === 'view')
+            <div class="product-description-content">
+                {!! $product->content ?? '<p class="text-muted">Опис відсутній.</p>' !!}
+            </div>
+        @else
+            {{-- Режим редагування --}}
+            <textarea
+                id="content"
+                name="content_temp"
+                rows="6"
+                class="form-control content-textarea"
+                placeholder="Опишіть стан товару, комплектацію, особливості..."
+            >{{ old('content') ?? ($product?->content ?? '') }}</textarea>
 
-        @error('content')
-        <div class="alert alert-danger mt-3 small">
-            {{ $message }}
-        </div>
-        @enderror
+            @error('content')
+            <div class="alert alert-danger mt-3 small">{{ $message }}</div>
+            @enderror
+        @endif
     </div>
-
 </div>

@@ -53,7 +53,6 @@ class Product extends Model
         'deleted_at' => 'datetime',
     ];
 
-    // --- Relations ---
     public function subKindProduct()
     {
         return $this->belongsTo(SubKindProduct::class, 'sub_kind_product_id');
@@ -64,10 +63,10 @@ class Product extends Model
         return $this->hasOneThrough(
             KindProduct::class,
             SubKindProduct::class,
-            'id',                 // sub_kind_products.id
-            'id',                 // kind_products.id
-            'sub_kind_product_id',// products.sub_kind_product_id
-            'kind_product_id'     // sub_kind_products.kind_product_id
+            'id',
+            'id',
+            'sub_kind_product_id',
+            'kind_product_id'
         );
     }
 
@@ -88,12 +87,17 @@ class Product extends Model
 
     public function colors()
     {
-        return $this->belongsToMany(Color::class); // color_product
+        return $this->belongsToMany(Color::class);
     }
 
     public function productPhotos()
     {
         return $this->hasMany(ProductPhoto::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     // --- Price accessor/mutator ---
