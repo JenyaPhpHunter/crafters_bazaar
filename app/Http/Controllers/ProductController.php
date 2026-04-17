@@ -202,7 +202,7 @@ class ProductController extends Controller
             throw $e;
         }
 
-        return redirect()->route('products.index')->with('success', 'Товар успішно створено!');
+        return redirect()->route('products.show', $product->id)->with('success', 'Товар успішно створено!');
     }
 
     public function show(Product $product)

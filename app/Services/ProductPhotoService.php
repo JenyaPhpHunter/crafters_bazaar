@@ -35,7 +35,7 @@ class ProductPhotoService
             }
 
             $queue  = $maxQueue + $i + 1;      // завжди унікальний
-            $isMain = false;
+            $isMain = ($i === $mainIndex);
 
             $ext      = strtolower($image->getClientOriginalExtension() ?: 'jpg');
             $base     = (string) Str::uuid();
