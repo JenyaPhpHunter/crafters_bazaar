@@ -146,7 +146,7 @@ Route::get('products/kind_products/{kind_products}', [ProductController::class, 
     ->name('products_kind');
 Route::get('products/sub_kind_products/{sub_kind_products}', [ProductController::class, 'productsKindSubkind'])
     ->name('products_kind_subkind');
-
+Route::get('/search/suggest', [ProductController::class, 'suggest'])->name('products.suggest');
 // === CART ===
 Route::get('carts/index', [CartController::class, 'index'])->name('carts.index');
 Route::get('carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');

@@ -162,6 +162,7 @@
 <script src="{{ asset('js/modules/layout.js') }}"></script>
 <script src="{{ asset('js/modules/product/dropdown.js') }}"></script>   <!-- Спочатку дропдауни -->
 <script src="{{ asset('js/modules/forms.js') }}"></script>             <!-- Потім forms.js — він слухає події -->
+<script src="{{ asset('js/modules/search.js') }}"></script>
 {{--<script type="module" src="{{ asset('js/app.js') }}"></script>--}}
 <script src="{{ asset('js/main.js') }}"></script>
 

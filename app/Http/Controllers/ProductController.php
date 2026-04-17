@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\KindProduct;
+use App\Models\ProductPhoto;
 use App\Models\SubKindProduct;
 use App\Services\ProductPhotoService;
 use App\Services\ProductService;
@@ -507,5 +508,33 @@ class ProductController extends Controller
             'current_tab'       => '',
             'featured_products' => $featured_products,
         ]);
+    }
+
+    public function suggest(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $q = trim($request->input('q', ''));
+
+        if (mb_strlen($q) < 2) {
+            return response()->json([]);
+        }
+        $products = Product::query()
+            ->with(['productphotos' => fn($q) => $q->where('is_main', true)->limit(1)])
+            ->where('title', 'like', '%' . $q . '%')
+            ->where('status_product_id', '>', 2)
+            ->orderBy('title')
+            ->limit(6)
+            ->get(['id', 'title', 'price']);
+
+        return response()->json(
+            $products->map(fn($p) => [
+                'id'    => $p->id,
+                'title' => $p->title,
+                'price' => number_format($p->price / 100, 2, '.', ' '),
+                'photo' => $p->productphotos->first()?->paths['small']
+                    ? asset('storage/' . $p->productphotos->first()->paths['small'])
+                    : null,
+                'url'   => route('products.show', $p->id),
+            ])
+        );
     }
 }

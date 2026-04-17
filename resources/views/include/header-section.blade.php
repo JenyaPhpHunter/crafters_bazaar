@@ -20,16 +20,34 @@
             <!-- Header Search Start -->
             <div class="col">
                 <div class="header6-search">
-                    <form action="{{ route('products.filter') }}" method="GET">
+                    <form action="{{ route('products.index') }}" method="GET">
                         <div class="row g-0">
                             <div class="col">
-                                <div class="input-wrapper">
-                                    <input type="text" name="search" class="form-control" placeholder="Пошук товарів...">
+                                <div class="input-wrapper" style="position: relative;">
+                                    <input
+                                        type="text"
+                                        name="search"
+                                        class="form-control"
+                                        placeholder="Пошук товарів..."
+                                        value="{{ request('search') }}"
+                                        autocomplete="off"
+                                        data-suggest="true"
+                                    >
                                 </div>
                             </div>
                             <button type="submit"><i class="fal fa-search"></i></button>
                         </div>
                     </form>
+{{--                    <form action="{{ route('products.filter') }}" method="GET">--}}
+{{--                        <div class="row g-0">--}}
+{{--                            <div class="col">--}}
+{{--                                <div class="input-wrapper">--}}
+{{--                                    <input type="text" name="search" class="form-control" placeholder="Пошук товарів...">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <button type="submit"><i class="fal fa-search"></i></button>--}}
+{{--                        </div>--}}
+{{--                    </form>--}}
                 </div>
             </div>
             <!-- Header Search End -->
