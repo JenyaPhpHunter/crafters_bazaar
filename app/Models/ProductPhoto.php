@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class ProductPhoto extends Model
 {
@@ -28,5 +29,10 @@ class ProductPhoto extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function getSmallUrlAttribute(): string
+    {
+        return Storage::disk('public')->url($this->paths['small'] ?? $this->paths['original']);
     }
 }

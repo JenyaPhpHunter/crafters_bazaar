@@ -26,4 +26,8 @@ class SubKindProduct extends Model
         return $this->belongsTo(KindProduct::class, 'kind_product_id');
     }
 
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
 }

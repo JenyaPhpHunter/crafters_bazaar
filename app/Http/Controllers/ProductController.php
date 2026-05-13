@@ -36,7 +36,11 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::query()->with(['productphotos']);
+        $query = Product::query()->with([
+            'productPhotos',
+            'discounts'                  => fn($q) => $q->active()->where('type', 'product'),
+            'subKindProduct.discounts'   => fn($q) => $q->active()->where('type', 'category'),
+        ]);
 
         // 🔎 SEARCH
         if ($request->filled('search')) {
@@ -70,12 +74,16 @@ class ProductController extends Controller
             }
         }
 
-        // 🏷️ TAB — значення збігаються з data-filter в toolbar БЕЗ крапки
-        // toolbar: data-filter="featured" / "new" / "sale"
         match ($request->input('tab')) {
             'featured' => $query->where('featured', 1),
-            'new'      => $query->where('new', 1),
-            'sale'     => $query->where('discount', '>', 0),
+            'new' => $query->whereNotNull('date_approve_sale')
+                ->where('date_approve_sale', '>=', now()->subDays(Product::NEW_DAYS)),
+            'sale' => $query->where(function ($q) {
+                // знижка на конкретний товар
+                $q->whereHas('discounts', fn($sub) => $sub->active()->where('type', 'product'))
+                    // АБО знижка на категорію до якої належить товар
+                    ->orWhereHas('subKindProduct.discounts', fn($sub) => $sub->active()->where('type', 'category'));
+            }),
             default    => null,
         };
 
@@ -115,7 +123,7 @@ class ProductController extends Controller
             '1000;+'   => Product::where('price', '>=', 100000)->count(),
         ];
 
-        $featured_products = Product::where('featured', 1)->where('status_product_id', '>' , 2)->with('productphotos')->take(5)->get();
+        $featured_products = Product::where('featured', 1)->where('status_product_id', '>' , 2)->with('productPhotos')->take(5)->get();
         return view('products.index', [
             'products'          => $products,
             'kind_products'     => $kind_products,
@@ -518,7 +526,7 @@ class ProductController extends Controller
             return response()->json([]);
         }
         $products = Product::query()
-            ->with(['productphotos' => fn($q) => $q->where('is_main', true)->limit(1)])
+            ->with(['productPhotos' => fn($q) => $q->where('is_main', true)->limit(1)])
             ->where('title', 'like', '%' . $q . '%')
             ->where('status_product_id', '>', 2)
             ->orderBy('title')
@@ -530,8 +538,8 @@ class ProductController extends Controller
                 'id'    => $p->id,
                 'title' => $p->title,
                 'price' => number_format($p->price / 100, 2, '.', ' '),
-                'photo' => $p->productphotos->first()?->paths['small']
-                    ? asset('storage/' . $p->productphotos->first()->paths['small'])
+                'photo' => $p->productPhotos->first()?->paths['small']
+                    ? asset('storage/' . $p->productPhotos->first()->paths['small'])
                     : null,
                 'url'   => route('products.show', $p->id),
             ])

@@ -32,26 +32,25 @@ class Product extends Model
     ];
 
     protected $casts = [
-        // числа
-        'price' => 'integer',          // в БД копійки
-        'stock_balance' => 'integer',
-        'term_creation' => 'integer',
-        'brand_id' => 'integer',
-        'sub_kind_product_id' => 'integer',
-        'status_product_id' => 'integer',
-        'creator_id' => 'integer',
-        'admin_id' => 'integer',
-        'rating_avg' => 'integer',
-        'rating_count' => 'integer',
-
-        // булеве
-        'featured' => 'boolean',
-
-        // дати (включно з soft delete)
+        'price'              => 'integer',
+        'stock_balance'      => 'integer',
+        'term_creation'      => 'integer',
+        'brand_id'           => 'integer',
+        'sub_kind_product_id'=> 'integer',
+        'status_product_id'  => 'integer',
+        'creator_id'         => 'integer',
+        'admin_id'           => 'integer',
+        'rating_avg'         => 'integer',
+        'rating_count'       => 'integer',
+        'featured'           => 'boolean',
         'date_put_up_for_sale' => 'datetime',
-        'date_approve_sale' => 'datetime',
-        'deleted_at' => 'datetime',
+        'date_approve_sale'  => 'datetime',
+        'deleted_at'         => 'datetime',
     ];
+
+    const NEW_DAYS = 15;
+
+    // ===== Відносини =====
 
     public function subKindProduct()
     {
@@ -63,10 +62,8 @@ class Product extends Model
         return $this->hasOneThrough(
             KindProduct::class,
             SubKindProduct::class,
-            'id',
-            'id',
-            'sub_kind_product_id',
-            'kind_product_id'
+            'id', 'id',
+            'sub_kind_product_id', 'kind_product_id'
         );
     }
 
@@ -100,25 +97,46 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    // --- Price accessor/mutator ---
-    // у БД: копійки (int)
-    // у коді: гривні (float)
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    // ===== Accessors =====
+
+    // Ціна: БД зберігає копійки, accessor віддає гривні
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => (int) round(((float) $value) * 100),
+            get: fn($value) => $value / 100,
+            set: fn($value) => (int) round((float) $value * 100),
         );
     }
 
-    // (опціонально) Зручні "віртуальні" поля
-    // 1) ціна в копійках, якщо десь треба напряму без accessor
+    // Відсоток знижки або null
+    protected function discount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->activeDiscount()?->percent,
+        )->shouldCache();
+    }
+
+    // Чи є товар новим (протягом NEW_DAYS після затвердження)
+    protected function isNew(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->date_approve_sale !== null
+                && $this->date_approve_sale->gte(now()->subDays(self::NEW_DAYS)),
+        )->shouldCache();
+    }
+
+    // ===== Віртуальні поля (старий синтаксис — залишаємо де потрібна сумісність) =====
+
     public function getPriceCentsAttribute(): int
     {
         return (int) ($this->attributes['price'] ?? 0);
     }
 
-    // 2) tags як масив (бо у БД string "a, b, c")
     public function getTagsArrayAttribute(): array
     {
         $raw = (string) ($this->attributes['tags'] ?? '');
@@ -126,11 +144,47 @@ class Product extends Model
         return array_values(array_filter(array_map('trim', explode(',', $raw))));
     }
 
-    // 3) social_links як масив (розділення комами)
     public function getSocialLinksArrayAttribute(): array
     {
         $raw = (string) ($this->attributes['social_links'] ?? '');
         if (trim($raw) === '') return [];
         return array_values(array_filter(array_map('trim', explode(',', $raw))));
+    }
+
+    // ===== Хелпери =====
+
+    // Активна знижка: спочатку з eager-loaded relation, потім DB-запит
+    public function activeDiscount(): ?Discount
+    {
+        if ($this->relationLoaded('discounts')) {
+            // relation вже завантажений контролером з фільтром active()
+            $discount = $this->discounts->first();
+
+            if (!$discount && $this->relationLoaded('subKindProduct')) {
+                $discount = $this->subKindProduct?->discounts->first();
+            }
+
+            return $discount;
+        }
+
+        // Fallback — прямий запит (сторінка одного товару тощо)
+        $discount = Discount::active()->forProduct($this->id)->first();
+
+        if (!$discount && $this->sub_kind_product_id) {
+            $discount = Discount::active()->forCategory($this->sub_kind_product_id)->first();
+        }
+
+        return $discount;
+    }
+
+    // Фінальна ціна в гривнях після знижки
+    public function getFinalPriceAttribute(): float
+    {
+        $discount   = $this->activeDiscount();
+        $priceCents = $this->attributes['price'];
+
+        return $discount
+            ? $discount->applyTo($priceCents) / 100
+            : $this->price;
     }
 }

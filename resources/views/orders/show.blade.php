@@ -41,7 +41,7 @@
                         @endphp
                         <tr>
                             <td> {{ $counter }} </td>
-                            @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
+                            @if(!empty($cartItem->product) && !empty($cartItem->product->productPhotos) && count($cartItem->product->productphotos) > 0)
                                 <td class="thumbnail"><a href="product-details.html"><img src="{{asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
                             @else
                                 <td></td>

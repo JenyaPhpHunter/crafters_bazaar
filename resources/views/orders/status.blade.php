@@ -44,8 +44,8 @@
                                 @if($cartItemIndex === 0)
                                     <td class="order" rowspan="{{ count($cartItems) }}" style="text-align: center;">№ {{ $order->id }}</td>
                                 @endif
-                                @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
-                                    <td class="thumbnail"><a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}"><img src="{{ asset($cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
+                                @if(!empty($cartItem->product) && !empty($cartItem->product->productPhotos) && count($cartItem->product->productphotos) > 0)
+                                    <td class="thumbnail"><a href="{{ route('products.show', ['product' => $cartItem->product->id]) }}"><img src="{{ asset($cartItem->product->productPhotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
                                 @else
                                     <td></td>
                                 @endif

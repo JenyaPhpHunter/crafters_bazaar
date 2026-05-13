@@ -94,7 +94,7 @@
         <div class="single-widget mt-4">
             <h3 class="widget-title product-filter-widget-title">Рекомендовані товари</h3>
             @foreach($featured_products as $feat)
-                @php $fPhoto = $feat->productphotos->first(); @endphp
+                @php $fPhoto = $feat->productPhotos->first(); @endphp
                 <div class="featured-item d-flex mb-3 gap-3">
                     <a href="{{ route('products.show', $feat->id) }}" class="flex-shrink-0">
                         <img src="{{ $fPhoto

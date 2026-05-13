@@ -50,7 +50,7 @@
                                         <div class="product-thumb">
                                             <a href="{{ route('products.show',['product' => $wishitem->product->id]) }}" class="image">
                                                 @php
-                                                    $selectedPhoto = $wishitem->product->productphotos->where('queue', 1)->first();
+                                                    $selectedPhoto = $wishitem->product->productPhotos->where('queue', 1)->first();
                                                 @endphp
                                                 @isset($selectedPhoto)
                                                     <img src="{{ asset($selectedPhoto->small_path . '/' . $selectedPhoto->small_filename) }}" alt="Product Image">

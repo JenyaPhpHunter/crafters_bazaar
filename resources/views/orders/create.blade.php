@@ -20,9 +20,9 @@
                         @endphp
                         @foreach($cartItems as $cartItem)
                             <tr>
-                                @if(!empty($cartItem->product) && !empty($cartItem->product->productphotos) && count($cartItem->product->productphotos) > 0)
+                                @if(!empty($cartItem->product) && !empty($cartItem->product->productPhotos) && count($cartItem->product->productphotos) > 0)
                                     <td width="150"><img
-                                            src="{{ asset( $cartItem->product->productphotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}"
+                                            src="{{ asset( $cartItem->product->productPhotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}"
                                             alt="Product Image"></td>
                                 @else
                                     <td></td>

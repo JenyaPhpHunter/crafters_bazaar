@@ -22,7 +22,7 @@ class WishController extends Controller
         }
         $wishitems = WishItems::query()
             ->where('user_id', $user_id)
-            ->with('product.productphotos')
+            ->with('product.productPhotos')
             ->get();
 
         return view('wishlist.index', ['wishitems' => $wishitems]);

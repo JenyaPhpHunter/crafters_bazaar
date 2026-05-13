@@ -8,23 +8,45 @@
             <div class="grid-item {{ $product->featured ? 'featured' : '' }} {{ $product->new ? 'new' : '' }} {{ $product->discount ? 'sale' : '' }}">
                 <div class="product-card-modern h-100 position-relative">
 
-                    {{-- Бейджі --}}
-                    @if($product->new || $product->featured || $product->discount || $product->stock_balance == 0)
-                        <div class="product-badges">
-                            @if($product->new)      <span class="new">new</span>                           @endif
-                            @if($product->featured) <span class="hot">hot</span>                           @endif
-                            @if($product->discount) <span class="onsale">-{{ $product->discount }}%</span> @endif
-                            @if($product->stock_balance == 0) <span class="outofstock"><i class="fal fa-frown"></i></span> @endif
-                        </div>
-                    @endif
-
-                    {{-- Фото --}}
+                    {{-- Фото з бейджами всередині --}}
                     <div class="product-thumb">
-                        <a href="{{ route('products.show', $product->id) }}" class="image d-block overflow-hidden">
+                        <a href="{{ route('products.show', $product->id) }}" class="image d-block overflow-hidden position-relative">
                             <img
                                 src="{{ $photo ? Storage::url($photo->paths['small'] ?? $photo->paths['original']) : asset('images/no-image.jpg') }}"
                                 alt="{{ $product->title }}"
                                 class="img-fluid w-100">
+
+                            {{-- Бейджі поверх зображення --}}
+                            @if($product->is_new || $product->featured || $product->discount || $product->stock_balance == 0)
+                                <div class="product-badges">
+                                    @if($product->is_new)
+                                        <span class="badge-pill new">
+                                            <i class="fal fa-star"></i> New
+                                        </span>
+                                    @endif
+                                    @if($product->featured)
+                                        <span class="badge-pill hot">
+                                            <i class="fal fa-fire"></i> Hot
+                                        </span>
+                                    @endif
+                                    @if($product->discount)
+                                        <span class="badge-pill sale">
+                                            <i class="fal fa-tag"></i> -{{ $product->discount }}%
+                                        </span>
+                                    @endif
+                                    @if($product->stock_balance == 0)
+                                        <span class="badge-pill outofstock">
+                                            @if($product->term_creation > 0)
+                                                <i class="fal fa-clock"></i> Виготовлення
+                                                {{ $product->term_creation }}
+                                                {{ $product->term_creation == 1 ? 'день' : ($product->term_creation < 5 ? 'дні' : 'днів') }}
+                                            @else
+                                                <i class="fal fa-times-circle"></i> Немає в наявності
+                                            @endif
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
                         </a>
                     </div>
 
@@ -43,38 +65,27 @@
                             @endif
                         </div>
 
-                        @if($product->term_creation)
-                            <small class="text-muted d-block mb-2">
-                                Виготовлення {{ $product->term_creation }}
-                                {{ $product->term_creation == 1 ? 'день' : ($product->term_creation < 5 ? 'дні' : 'днів') }}
-                            </small>
-                        @endif
-
-                        {{-- Кнопки дій — один рядок, tooltip через data-tooltip --}}
+                        {{-- Кнопки дій --}}
                         <div class="product-action-row">
 
-                            {{-- Перегляд --}}
                             <button class="product-action-btn js-quick-view"
                                     data-tooltip="Швидкий перегляд"
                                     data-product-id="{{ $product->id }}">
                                 <i class="fal fa-eye"></i>
                             </button>
 
-                            {{-- Додати до кошика --}}
                             <a href="{{ route('carts.addToCart', ['product' => $product->id]) }}"
                                class="product-action-btn"
                                data-tooltip="Додати в корзину">
                                 <i class="fal fa-shopping-cart"></i>
                             </a>
 
-                            {{-- Додати до улюблених --}}
                             <button class="product-action-btn js-wishlist"
                                     data-tooltip="Додати до улюблених"
                                     data-product-id="{{ $product->id }}">
                                 <i class="far fa-heart"></i>
                             </button>
 
-                            {{-- Поширити --}}
                             <button class="product-action-btn js-share"
                                     data-tooltip="Поширити"
                                     data-url="{{ route('products.show', $product->id) }}"

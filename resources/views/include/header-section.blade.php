@@ -122,7 +122,7 @@
                                                 @foreach($user_products as $user_product)
                                                     @if($status_product->id == $user_product->status_product_id)
                                                         @php
-                                                            $selectedPhoto = $user_product->productphotos->where('queue', 1)->first();
+                                                            $selectedPhoto = $user_product->productPhotos->where('queue', 1)->first();
                                                         @endphp
                                                         @isset($selectedPhoto)
                                                             <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $user_product->id]) }}"><span class="menu-text">{{ $user_product->title }}</span></a></li>
@@ -284,14 +284,41 @@
 </div>
 <!-- Header Section End -->
 
-<div class="clearfix">
-    @foreach($title_list as $item)
-        @isset($item->productphotos[0])
-            <div class="img-container" style="background-color:#bbb">
-                <a href="{{ route('products.show', ['product' => $item->id]) }}">
-                    <img src="{{ asset('photos/' . $item->productphotos[0]->filename) }}" alt="Product Image">
+<div class="mini-thumbs-row">
+    @foreach($header_products as $item)
+        @if($item->productPhotos->first())
+            @php $photo = $item->productPhotos->first(); $discount = $item->activeDiscount(); @endphp
+            <div class="mini-thumb">
+                <a href="{{ route('products.show', $item) }}" style="position:relative; display:block;">
+                    <img src="{{ $photo->small_url }}" alt="{{ $item->title }}" loading="lazy">
+
+                    @if($discount)
+                        <span class="badge badge-sale">-{{ $discount->percent }}%</span>
+                    @elseif($item->is_new)
+                        <span class="badge badge-new">new</span>
+                    @endif
                 </a>
             </div>
-        @endisset
+        @endif
     @endforeach
 </div>
+
+{{--<div class="mini-thumbs-row">--}}
+{{--    @foreach($title_list as $item)--}}
+{{--        @if($item->productPhotos && $item->productPhotos->isNotEmpty())--}}
+{{--            <div class="mini-thumb">--}}
+{{--                <a href="{{ route('products.show', $item) }}">--}}
+{{--                    <img src="{{--}}
+{{--                        Storage::disk('public')->url(--}}
+{{--                            $item->productPhotos->first()->paths['small']--}}
+{{--                            ?? $item->productPhotos->first()->paths['original']--}}
+{{--                            ?? $item->productPhotos->first()->filename--}}
+{{--                        )--}}
+{{--                    }}"--}}
+{{--                         alt="{{ $item->title ?? 'Товар' }}"--}}
+{{--                         loading="lazy">--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        @endif--}}
+{{--    @endforeach--}}
+{{--</div>--}}

@@ -85,7 +85,7 @@
                                                 @foreach($products as $product)
                                                     @if($status_product->id == $product->status_product_id)
                                                         @php
-                                                            $selectedPhoto = $product->productphotos->where('queue', 1)->first();
+                                                            $selectedPhoto = $product->productPhotos->where('queue', 1)->first();
                                                         @endphp
                                                         @isset($selectedPhoto)
                                                             <li> <img class="mmh_img " src="{{ asset($selectedPhoto->path . '/' . $selectedPhoto->filename) }}" alt="home-01"> <a href="{{ route('products.show',['product' => $product->id]) }}"><span class="menu-text">{{ $product->title }}</span></a></li>
