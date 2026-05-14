@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Формат: [{ id, src, main, thumb, is_main }]
     let existingPhotos = (window.existingPhotos || []).map(p => ({ ...p, deleted: false }));
 
+    const mainHidden = document.getElementById('main_photo_index');
+    const initialMainIndex = existingPhotos.findIndex(p => {
+        return p.is_main === true || p.is_main === 1 || p.is_main === '1';
+    });
+
+    if (mainHidden && initialMainIndex >= 0 && mainHidden.value === '0') {
+        mainHidden.value = String(initialMainIndex);
+    }
+
     // ────────────────────────────────────────────────
     // Лічильник — існуючі (не видалені) + нові
     // ────────────────────────────────────────────────
@@ -95,7 +104,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Повна перебудова галереї
     // ────────────────────────────────────────────────
     function renderGallery() {
-        const mainIdx = Number(document.getElementById('main_photo_index')?.value || 0);
+        let mainIdx = Number(document.getElementById('main_photo_index')?.value || 0);
+        const count = totalCount();
+
+        if (count > 0 && mainIdx >= count) {
+            mainIdx = 0;
+            const hidden = document.getElementById('main_photo_index');
+            if (hidden) hidden.value = '0';
+        }
 
         // Знищення Slick
         if (window.jQuery) {
@@ -299,12 +315,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 fileInput.files = storedFiles.files;
             }
 
-            // Скидаємо main_photo_index якщо видалили головне
+            // Коригуємо main_photo_index після видалення
             const currentMain = Number(document.getElementById('main_photo_index')?.value || 0);
             const parent = deleteBtn.closest('.product-zoom');
-            if (parent && Number(parent.dataset.index) === currentMain) {
+
+            if (parent) {
+                const deletedIndex = Number(parent.dataset.index);
                 const hidden = document.getElementById('main_photo_index');
-                if (hidden) hidden.value = '0';
+
+                if (hidden && deletedIndex === currentMain) {
+                    hidden.value = '0';
+                } else if (hidden && deletedIndex < currentMain) {
+                    hidden.value = String(currentMain - 1);
+                }
             }
 
             updateCounter();

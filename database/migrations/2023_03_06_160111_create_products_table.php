@@ -48,7 +48,6 @@ return new class extends Migration {
                 ->default(0)
                 ->comment('Кількість оцінок');
             $table->boolean('featured')->default(false);
-//            $table->unsignedInteger('discount')->default(0)->comment('Знижка');
             $table->timestamps();
             $table->softDeletes();
         });

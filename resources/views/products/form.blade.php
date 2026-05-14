@@ -45,7 +45,19 @@
                                    value="{{ old('tags') ?? ($product?->tags ?? '') }}">
                             <input type="hidden" name="social_links" id="social-links-hidden"
                                    value="{{ old('social_links') ?? ($product?->social_links ?? '') }}">
-                            <input type="hidden" name="main_photo_index" id="main_photo_index" value="0">
+                            @php
+                                $mainPhotoIndex = collect($images ?? [])->values()->search(function ($image) {
+                                    return !empty($image['is_main']) || !empty($image['main']);
+                                });
+
+                                $mainPhotoIndex = $mainPhotoIndex === false ? 0 : $mainPhotoIndex;
+                            @endphp
+
+                            <input type="hidden"
+                                   name="main_photo_index"
+                                   id="main_photo_index"
+                                   value="{{ old('main_photo_index', $mainPhotoIndex) }}">
+
 
                             {{-- Назва + ціна --}}
                             @include('products.include.title-price', ['mode' => 'edit'])

@@ -291,6 +291,7 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $data = $request->validated();
+        createLogArray($request->all(), '$request->all');
         $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
         try {
@@ -317,9 +318,16 @@ class ProductController extends Controller
                 if ($request->hasFile('product_photo')) {
                     $files = $request->file('product_photo');
                     $files = is_array($files) ? $files : [$files];
-                    $photoService->storeMany($product, $files, $mainPhotoIndex);
+
+                    // Скільки існуючих фото залишилось після видалень
+                    $offset = $product->productPhotos()
+                        ->whereNull('deleted_at')
+                        ->count();
+
+                    $photoService->storeMany($product, $files, $mainPhotoIndex, $offset);
                 }
 
+                // 3. Встановлюємо головне фото за індексом з форми
                 // 3. Встановлюємо головне фото за індексом з форми
                 $activePhotos = $product->productPhotos()
                     ->whereNull('deleted_at')
@@ -327,17 +335,15 @@ class ProductController extends Controller
                     ->get();
 
                 if ($activePhotos->isNotEmpty()) {
-                    // Скидаємо is_main у всіх активних фото
+                    $mainPhoto = $activePhotos->get($mainPhotoIndex) ?? $activePhotos->first();
+
                     $product->productPhotos()
                         ->whereNull('deleted_at')
                         ->update(['is_main' => false]);
 
-                    // Встановлюємо нове головне
-                    if (isset($activePhotos[$mainPhotoIndex])) {
-                        $activePhotos[$mainPhotoIndex]->update(['is_main' => true]);
-                    } else {
-                        $activePhotos[0]->update(['is_main' => true]);
-                    }
+                    $product->productPhotos()
+                        ->whereKey($mainPhoto->id)
+                        ->update(['is_main' => true]);
                 }
             });
 

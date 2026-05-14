@@ -21,21 +21,19 @@ class ProductPhotoService
     /**
      * Додає нові фото з урахуванням soft-delete та правильного queue
      */
-    public function storeMany(Product $product, array $files, int $mainIndex = 0): void
+    public function storeMany(Product $product, array $files, int $mainIndex = 0, int $offset = 0): void
     {
-        // 🔥 Найнадійніший спосіб: беремо максимум по ВСІХ записах цього продукту (включаючи soft-deleted)
-        // Це уникає конфліктів навіть якщо транзакція ще не закомічена
+        createLogArray($mainIndex, '$mainIndex');
+        createLogArray($offset, '$offset');
         $maxQueue = $product->productPhotos()
-            ->withTrashed()                    // ← важливо!
+            ->withTrashed()
             ->max('queue') ?? 0;
-
+        createLogArray($maxQueue, '$maxQueue');
         foreach (array_values($files) as $i => $image) {
-            if (!$image instanceof UploadedFile) {
-                continue;
-            }
+            if (!$image instanceof UploadedFile) continue;
 
-            $queue  = $maxQueue + $i + 1;      // завжди унікальний
-            $isMain = ($i === $mainIndex);
+            $queue  = $maxQueue + $i + 1;
+            $isMain = ($offset + $i === $mainIndex); // ← враховуємо зсув
 
             $ext      = strtolower($image->getClientOriginalExtension() ?: 'jpg');
             $base     = (string) Str::uuid();

@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         // 🔹 Header
         View::composer([
             'include.header-section',
+            'include.mini-thumb',
             'admin.include.header-section',
             'include.header-sticky-section',
             'admin.include.header-sticky-section',

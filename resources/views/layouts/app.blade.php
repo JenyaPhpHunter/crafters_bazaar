@@ -47,9 +47,9 @@
 <body>
 @include('include.topbar-section')
 @include('include.header-section')
+@include('include.mini-thumb')
 @include('include.header-sticky-section')
 @include('include.mobile-header-section')
-
 @if ($errors->any())
     <div class="container mt-3">
         <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px;">
@@ -73,9 +73,8 @@
         </div>
     </div>
 @endif
-
-@include('include.offcanvas-search-section')
-@include('include.offcanvas-wishlist-section')
+{{--@include('include.offcanvas-search-section')--}}
+{{--@include('include.offcanvas-wishlist-section')--}}
 <div class="offcanvas-overlay"></div>
 {{--@include('include.slider-main')--}}
 {{--@include('include.feature-section')--}}

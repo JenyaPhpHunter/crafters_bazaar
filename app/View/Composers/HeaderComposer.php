@@ -67,13 +67,16 @@ class HeaderComposer
         // Інше
         $forum_categories = ForumCategory::with('forum_sub_categories')->get();
         $header_products = Product::query()
-            ->with(['productPhotos' => fn($q) => $q->where('is_main', true)->limit(1)])
+            ->with([
+                'productPhotos'             => fn($q) => $q->where('is_main', true),
+                'discounts'                 => fn($q) => $q->active()->where('type', 'product'),
+                'subKindProduct.discounts'  => fn($q) => $q->active()->where('type', 'category'),
+            ])
             ->where('status_product_id', '>', 2)
             ->whereNotNull('date_approve_sale')
             ->orderBy('date_approve_sale', 'desc')
             ->limit(12)
             ->get();
-//        $title_list = Product::where('status_product_id', 3)->latest()->limit(16)->get();
 
         $view->with(compact(
             'header_kind_products',
@@ -86,7 +89,6 @@ class HeaderComposer
             'forum_categories',
             'products',
             'header_products',
-//            'title_list'
         ));
 
         $view->with('orders', AdminOrder::all());
