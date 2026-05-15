@@ -23,12 +23,9 @@ class ProductPhotoService
      */
     public function storeMany(Product $product, array $files, int $mainIndex = 0, int $offset = 0): void
     {
-        createLogArray($mainIndex, '$mainIndex');
-        createLogArray($offset, '$offset');
         $maxQueue = $product->productPhotos()
             ->withTrashed()
             ->max('queue') ?? 0;
-        createLogArray($maxQueue, '$maxQueue');
         foreach (array_values($files) as $i => $image) {
             if (!$image instanceof UploadedFile) continue;
 

@@ -291,7 +291,6 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $data = $request->validated();
-        createLogArray($request->all(), '$request->all');
         $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
         try {
