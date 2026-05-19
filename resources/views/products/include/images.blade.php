@@ -2,7 +2,7 @@
     $mode = $mode ?? 'view'; // за замовчуванням — режим перегляду
 
     $isEditOrCreate = in_array($mode, ['edit', 'create']);
-    $isAdmin = auth()->check() && auth()->id() === 2;
+    $isAdmin = auth()->check() && auth()->id() === 1;
 
     // Показуємо кнопки редагування тільки адміну в режимі edit/create
     $showMakeMainButton = $isEditOrCreate && $isAdmin;

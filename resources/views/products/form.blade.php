@@ -3,7 +3,7 @@
 @section('title', ($product ? 'Редагувати товар' : 'Додати новий товар') . ' — ' . config('app.name'))
 
 @section('content')
-    <body class="{{ auth()->id() === 2 ? 'is-admin' : '' }}">
+    <body class="{{ auth()->id() === 1 ? 'is-admin' : '' }}">
 
     <div class="section section-fluid section-padding border-bottom animate__animated animate__fadeIn">
         <div class="container">
