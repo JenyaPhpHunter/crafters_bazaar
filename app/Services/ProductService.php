@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\StatusProduct;
 
 class ProductService
 {
@@ -51,5 +52,14 @@ class ProductService
         }
 
         return $product;
+    }
+
+    public function putUpForSale(Product $product)
+    {
+        $product->update([
+            'status_product_id'    => StatusProduct::APPROVED,
+            'date_put_up_for_sale' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

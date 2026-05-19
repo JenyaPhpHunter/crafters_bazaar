@@ -11,6 +11,7 @@ use App\Models\ProductPhoto;
 use App\Models\SubKindProduct;
 use App\Services\ProductPhotoService;
 use App\Services\ProductService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -159,12 +160,12 @@ class ProductController extends Controller
             'images'                       => $images,
             'selected_kind_product_id'     => $selectedKind,
             'selected_sub_kind_product_id' => $selectedSubKind,
-            'action_types'                 => [
-                'add_kind'        => 'Додати вид',
-                'add_sub_kind'    => 'Додати підвид',
-                'put_up_for_sale' => 'Виставити на продаж',
-                'save'            => 'Зберегти як чернетку',
-            ],
+//            'action_types'                 => [
+//                'add_kind'        => 'Додати вид',
+//                'add_sub_kind'    => 'Додати підвид',
+//                'put_up_for_sale' => 'Виставити на продаж',
+//                'save'            => 'Зберегти як чернетку',
+//            ],
             'productId'             => 0,
             'user'                  => $user,
             'productImages'         => collect(),
@@ -272,12 +273,12 @@ class ProductController extends Controller
             'images'                       => $images,
             'selected_kind_product_id'     => $selectedKind,
             'selected_sub_kind_product_id' => $selectedSubKind,
-            'action_types'                 => [
-                'add_kind'        => 'Додати вид',
-                'add_sub_kind'    => 'Додати підвид',
-                'put_up_for_sale' => 'Виставити на продаж',
-                'save'            => 'Зберегти як чернетку',
-            ],
+//            'action_types'                 => [
+//                'add_kind'        => 'Додати вид',
+//                'add_sub_kind'    => 'Додати підвид',
+//                'put_up_for_sale' => 'Виставити на продаж',
+//                'save'            => 'Зберегти як чернетку',
+//            ],
             'productId'             => $product->id,
             'user'                  => $user,
             'productImages'         => $product->productPhotos,
@@ -291,6 +292,7 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $data = $request->validated();
+
         $mainPhotoIndex = (int) $request->input('main_photo_index', 0);
 
         try {
@@ -326,7 +328,6 @@ class ProductController extends Controller
                     $photoService->storeMany($product, $files, $mainPhotoIndex, $offset);
                 }
 
-                // 3. Встановлюємо головне фото за індексом з форми
                 // 3. Встановлюємо головне фото за індексом з форми
                 $activePhotos = $product->productPhotos()
                     ->whereNull('deleted_at')
@@ -549,5 +550,17 @@ class ProductController extends Controller
                 'url'   => route('products.show', $p->id),
             ])
         );
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function putUpForSale(Product $product, ProductService $service): RedirectResponse
+    {
+        $this->authorize('putUpForSale', $product);
+
+        $service->putUpForSale($product);
+
+        return back()->with('success', 'Товар виставлено на продаж!');
     }
 }

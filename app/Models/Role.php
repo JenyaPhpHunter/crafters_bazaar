@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
+    public const SUPER_ADMIN = 1;
+    public const ADMIN = 2;
+
     use SoftDeletes;
 
     protected $fillable = [

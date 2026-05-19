@@ -7,12 +7,11 @@ class ProductsConstants
     const ACTION_TYPES = [
         'save' => 'Зберегти',
         'put_up_for_sale' => 'Виставити на продаж',
-//        'Put_up_for_sale_in_show' => 'Виставити на продаж з перегляду',
+        'Put_up_for_sale_in_show' => 'Виставити на продаж з перегляду',
         'publish_product' => 'Опублікувати товар',
         'add_kind' => 'Додати вид товару',
         'add_sub_kind' => 'Додати підвид товару',
         'delete' => 'Видалити',
-
     ];
 }
 

@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Models\Product;
+use App\Models\Role;
+use App\Models\StatusProduct;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -53,5 +55,18 @@ class ProductPolicy
     public function forceDelete(User $user, Product $product): bool
     {
         return $user->role_id === 1; // тільки головний адмін
+    }
+
+    // app/Policies/ProductPolicy.php
+    public function putUpForSale(User $user, Product $product): bool
+    {
+        return $user->id === $product->creator_id
+            && ($product->status_product_id === StatusProduct::NEW);
+    }
+
+    public function publish(User $user, Product $product): bool
+    {
+        return $user->role_id <= Role::ADMIN
+            && $product->status_product_id === StatusProduct::APPROVED;
     }
 }

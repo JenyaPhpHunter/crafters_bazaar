@@ -3,7 +3,7 @@
 @section('title', $product->title . ' — ' . config('app.name'))
 
 @section('content')
-    <body class="{{ auth()->id() === 2 ? 'is-admin' : '' }}">
+    <body class="{{ auth()->id() === 1 ? 'is-admin' : '' }}">
 
     <div class="section section-fluid section-padding">
         <div class="container">
@@ -17,24 +17,32 @@
                     ])
                     <!-- Кнопки -->
                     <div class="product-view-actions mt-5">
-                        <div class="d-flex flex-column flex-sm-row gap-3">
-                            <button onclick="addToCart({{ $product->id }})" class="btn btn-primary btn-lg flex-fill">
-                                <i class="fa-solid fa-cart-plus"></i> Додати в кошик
-                            </button>
-                            <button onclick="addToWishlist({{ $product->id }})" class="btn btn-outline-danger btn-lg flex-fill">
-                                <i class="fa-solid fa-heart"></i> В улюблені
-                            </button>
-                        </div>
-
+                        @if(auth()->check() && (auth()->id() === $product->creator_id || auth()->id() === 1))
+                            @can('putUpForSale', $product)
+                                <a href="{{ route('products.edit', $product) }}" class="btn btn-warning w-100 mt-3">
+                                    <i class="fa-solid fa-pen"></i> Редагувати товар
+                                </a>
+                            @endcan
+                            @can('putUpForSale', $product)
+                                <a href="{{ route('products.putUpForSale', $product) }}"
+                                   class="btn btn-turquoise w-100 mt-2"
+                                   onclick="return confirm('Виставити товар на продаж?')">
+                                    <i class="fas fa-check-circle"></i> Виставити на продаж
+                                </a>
+                            @endcan
+                        @else
+                            <div class="d-flex flex-column flex-sm-row gap-3">
+                                <button onclick="addToCart({{ $product->id }})" class="btn btn-primary btn-lg flex-fill">
+                                    <i class="fa-solid fa-cart-plus"></i> Додати в кошик
+                                </button>
+                                <button onclick="addToWishlist({{ $product->id }})" class="btn btn-outline-danger btn-lg flex-fill">
+                                    <i class="fa-solid fa-heart"></i> В улюблені
+                                </button>
+                            </div>
+                        @endif
                         <button onclick="shareProduct()" class="btn btn-outline-secondary w-100 mt-3">
                             <i class="fa-solid fa-share-alt"></i> Поширити товар
                         </button>
-
-                        @if(auth()->check() && (auth()->id() === $product->user_id || auth()->id() === 2))
-                            <a href="{{ route('products.edit', $product) }}" class="btn btn-warning w-100 mt-3">
-                                <i class="fa-solid fa-pen"></i> Редагувати товар
-                            </a>
-                        @endif
                     </div>
                 </div>
 
