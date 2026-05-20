@@ -15,7 +15,8 @@ class Brand extends Model
         'title',
         'content',
         'image_path',
-        'rating',
+        'rating_avg',
+        'rating_count',
         'creator_id'
     ];
 

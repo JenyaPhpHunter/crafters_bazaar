@@ -35,8 +35,8 @@ class BrandInvitationService
 
             if ($invitation->exists) {
                 // Наприклад, обмеження по кількості повторних відправок, щоб не спамити
-                if ($invitation->resent_count >= 5) {
-                    continue; // Пропускаємо, більше 5 разів не відсилаємо
+                if ($invitation->resent_count >= 30) {
+                    continue; // Пропускаємо, більше 30 разів не відсилаємо
                 }
                 $invitation->resent_count++;
             } else {

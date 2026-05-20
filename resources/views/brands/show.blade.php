@@ -1,147 +1,151 @@
 @extends('layouts.app')
 
+@php
+    $brandImageUrl = $brand->image_path
+        ? asset('storage/' . $brand->image_path)
+        : asset('images/brands/brand-1.webp');
+@endphp
+
+@section('title', $brand->title . ' - ' . config('app.name'))
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/brand.css') }}">
+@endpush
+
 @section('content')
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h1>{{ $brand->title }}</h1>
-            </div>
+    <div class="brand-workspace brand-show-workspace section section-fluid section-padding border-bottom animate__animated animate__fadeIn"
+         data-brand-id="{{ $brand->id }}">
+        <div class="container">
             @if($isInvited)
-                <div class="alert alert-info mt-3">
-                    <strong>
-                        Вас запрошено до цього бренду.
-                        Ви ще не приєдналися. Перевірте свою пошту або натисніть кнопку нижче, щоб приєднатися.
-                    </strong>
+                <div class="brand-invite-banner">
+                    <div>
+                        <strong>Вас запрошено до цього бренду.</strong>
+                        <span>Після приєднання ви зможете продавати вироби під цим брендом.</span>
+                    </div>
+                    <form action="{{ route('brands.join', $brand) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i>
+                            Доєднатися
+                        </button>
+                    </form>
                 </div>
             @endif
-            <br>
-            <div class="card-body">
-                <div class="form-group mb-3">
-                    <label for="content">Опис</label>
 
-                    <div class="form-control bg-light" readonly style="border: 1px solid #ced4da;">
-                        <div>
-                            {{ $brand->content ?? 'Опис відсутній' }}
+            <div class="row align-items-start">
+                <div class="col-lg-6 col-12 mb-5 mb-lg-0">
+                    <div class="brand-visual-panel">
+                        <div class="brand-visual-stage">
+                            <img src="{{ $brandImageUrl }}"
+                                 alt="{{ $brand->title }}"
+                                 class="brand-logo-preview"
+                                 @if($brand->image_path)
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#imageModal"
+                                     onclick="showImageModal('{{ $brandImageUrl }}')"
+                                 @endif>
+                        </div>
+
+                        <div class="brand-visual-caption">
+                            <span class="brand-kicker">Бренд</span>
+                            <h1>{{ $brand->title }}</h1>
+                            <p>{{ $brand->content ?: 'Опис відсутній' }}</p>
                         </div>
                     </div>
                 </div>
-                @if($brand->image_path)
-                    <img src="{{ asset('storage/' . $brand->image_path) }}"
-                         alt="{{ $brand->title }}"
-                         class="img-fluid mb-4"
-                         style="max-height: 300px; cursor: pointer;"
-                         data-bs-toggle="modal"
-                         data-bs-target="#imageModal"
-                         onclick="showImageModal('{{ asset('storage/' . $brand->image_path) }}')">
-                @endif
 
-                @include('brands.include.brand-rating', ['ratingValue' => $brand->rating, 'ratings' => config('others.rating')])
-
-                @include('brands.include.brand-users-and-invitations')
-
-                @can('update', $brand)
-                    <div class="mt-5">
-                        <form action="{{ route('brands.invite', $brand->id) }}" method="POST">
-                            @csrf
-
-                            @include('brands.include.invite-form')
-
-                            <button type="submit" class="btn btn-outline-primary">Надіслати запрошення</button>
-                        </form>
-                    </div>
-                @endcan
-                <br>
-                @if(request()->has('email') && auth()->check() && auth()->user()->email === request()->query('email') && !$brand->users->contains(auth()->id()))
-                    <form action="{{ route('brands.join', $brand) }}" method="POST" class="mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-success">Приєднатися до бренду</button>
-                    </form>
-                @endif
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('brands.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left"></i> До списку
-                    </a>
-                    @if(auth()->check() && $brand->users->contains(auth()->id()) && $brand->invitations->count() && auth()->id() !== $brand->creator_id))
-                        <form action="{{ route('brands.leave', $brand) }}" method="POST" class="mt-3">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Покинути бренд</button>
-                        </form>
-                    @endif
-                @if($isInvited)
-                    <form action="{{ route('brands.join', $brand) }}" method="POST" class="mt-3">
-                        @csrf
-                        <div class="alert alert-info d-flex justify-content-between align-items-center py-2 px-3">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-user-plus me-1"></i> Доєднатися до бренду
-                            </button>
-                            <small class="text-dark ms-3">
-                                Ви зможете продавати вироби під цим брендом
-                            </small>
+                <div class="col-lg-6 col-12">
+                    <div class="brand-form-main brand-view-main">
+                        <div class="brand-form-header">
+                            <span class="brand-kicker">Профіль бренду</span>
+                            <h2>{{ $brand->title }}</h2>
                         </div>
-                    </form>
-                @endif
 
-                @can('delete', $brand)
-                        <!-- Кнопка відкриття модалки -->
-                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                            <i class="fas fa-trash-alt"></i> Видалити
-                        </button>
-                    @endcan
+                        <div class="brand-description-panel">
+                            <span class="brand-panel-label">Опис</span>
+                            <p>{{ $brand->content ?: 'Опис відсутній' }}</p>
+                        </div>
 
-                    @can('update', $brand)
-                        <a href="{{ route('brands.edit', $brand->id) }}" class="btn btn-outline-primary">
-                            <i class="fas fa-edit"></i> Редагувати
-                        </a>
-                    @endcan
+                        <div class="brand-side-panel">
+                            @include('brands.include.brand-rating', ['ratingValue' => $brand->rating, 'ratings' => config('others.rating')])
+                            @include('brands.include.brand-users-and-invitations')
+                        </div>
+
+                        @can('update', $brand)
+                            <form action="{{ route('brands.invite', $brand->id) }}" method="POST" class="brand-invite-panel">
+                                @csrf
+                                @include('brands.include.invite-form')
+                                <button type="submit" class="btn btn-outline-primary brand-outline-action">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Надіслати запрошення
+                                </button>
+                            </form>
+                        @endcan
+
+                        @if(request()->has('email') && auth()->check() && auth()->user()->email === request()->query('email') && !$brand->users->contains(auth()->id()))
+                            <form action="{{ route('brands.join', $brand) }}" method="POST" class="brand-join-panel">
+                                @csrf
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-user-plus"></i>
+                                    Приєднатися до бренду
+                                </button>
+                            </form>
+                        @endif
+
+                        <div class="brand-actions brand-view-actions">
+                            <a href="{{ route('brands.index') }}" class="btn btn-secondary brand-secondary-action">
+                                <i class="fas fa-arrow-left"></i>
+                                До списку
+                            </a>
+
+                            @can('update', $brand)
+                                <a href="{{ route('brands.edit', $brand->id) }}" class="btn btn-primary brand-primary-action">
+                                    <i class="fas fa-edit"></i>
+                                    Редагувати
+                                </a>
+                            @endcan
+
+                            @if(auth()->check() && $brand->users->contains(auth()->id()) && $brand->invitations->count() && auth()->id() !== $brand->creator_id)
+                                <form action="{{ route('brands.leave', $brand) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger brand-danger-action">
+                                        Покинути бренд
+                                    </button>
+                                </form>
+                            @endif
+
+                            @can('delete', $brand)
+                                <button class="btn btn-outline-danger brand-danger-action"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal">
+                                    <i class="fas fa-trash-alt"></i>
+                                    Видалити
+                                </button>
+                            @endcan
+                        </div>
+                    </div>
                 </div>
             </div>
+
             @include('include.prefooter', ['object' => $brand])
         </div>
+
+        <form id="remove-user-form" method="POST" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
+
+        <form id="cancel-invitation-form" method="POST" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
     </div>
-    <form id="remove-user-form" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-    </form>
-
-    <form id="cancel-invitation-form" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-    </form>
-
-    @foreach($brand->invitations as $invitation)
-        @if($invitation->accepted_at === null && auth()->user()?->id === $brand->creator_id)
-            <form id="cancel-invitation-{{ $invitation->id }}"
-                  action="{{ route('brands.cancelInvitation', [$brand, $invitation]) }}"
-                  method="POST" style="display: none;">
-                @csrf
-                @method('DELETE')
-            </form>
-        @endif
-    @endforeach
 
     @include('brands.include.image_modal')
     @include('brands.include.confirm_delete_modal')
 @endsection
 
 @push('scripts')
-    <script>
-        function submitRemoveUser(userId) {
-            if (!confirm('Ви впевнені, що хочете видалити цього користувача з бренду?')) return;
-
-            const form = document.getElementById('remove-user-form');
-            form.action = `/brands/{{ $brand->id }}/users/${userId}`;
-            form.submit();
-        }
-
-        function submitCancelInvitation(invitationId) {
-            if (!confirm('Скасувати запрошення?')) return;
-
-            const form = document.getElementById('cancel-invitation-form');
-            form.action = `/brands/{{ $brand->id }}/invitations/${invitationId}`;
-            form.submit();
-        }
-    </script>
+    <script src="{{ asset('js/modules/brand/form.js') }}"></script>
 @endpush
-

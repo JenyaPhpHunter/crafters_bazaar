@@ -54,18 +54,23 @@ Breadcrumbs::for('brands.index', function (BreadcrumbTrail $trail) {
     $trail->push('Бренди', route('brands.index'));
 });
 
-// Детальна сторінка бренду (якщо є)
+// Детальна сторінка бренду
 Breadcrumbs::for('brands.show', function (BreadcrumbTrail $trail, $brand) {
     $trail->parent('brands.index');
     $trail->push($brand->name ?? 'Бренд', route('brands.show', $brand));
 });
 
-// Створення бренду (якщо є)
+// Створення бренду
 Breadcrumbs::for('brands.create', function (BreadcrumbTrail $trail) {
     $trail->parent('brands.index');
     $trail->push('Додати бренд');
 });
 
+// Редагування бренду
+Breadcrumbs::for('brands.edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('brands.index');
+    $trail->push('Редагувати бренд');
+});
 // ────────────────────────────────────────────────
 // Кошик
 Breadcrumbs::for('cart.index', function (BreadcrumbTrail $trail) {

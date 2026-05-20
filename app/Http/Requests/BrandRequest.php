@@ -21,14 +21,14 @@ class BrandRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('brands', 'title')->ignore($brandId)
+                Rule::unique('brands', 'title')->ignore($brandId),
             ],
-            'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'remove_image' => 'sometimes|boolean',
-            'rating' => 'nullable|in:' . implode(',', array_keys(config('others.rating'))),
-            'user_ids' => 'nullable|array',
-            'user_ids.*' => 'integer|exists:users,id',
+            'content'        => 'nullable|string',
+            'image'          => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'remove_image'   => 'sometimes|boolean',
+            'invited_emails' => 'nullable|string',
+            'user_ids'       => 'nullable|array',
+            'user_ids.*'     => 'integer|exists:users,id',
         ];
     }
 
@@ -37,29 +37,5 @@ class BrandRequest extends FormRequest
         if ($this->boolean('remove_image')) {
             $this->merge(['image_path' => null]);
         }
-        // Тут тільки підготовка даних, без валідації
-        // Наприклад:
-        //Наприклад, перетворення рядка на число або видалення зайвих пробілів:
-        //$this->merge([
-        //    'user_id' => auth()->id(), // Додаємо ID поточного користувача
-        //    'ip_address' => request()->ip(),
-        //]);
-        //$this->merge([
-        //    'meta' => json_decode($this->meta_json, true),
-        //]);
-        //$this->merge([
-        //    'phone' => preg_replace('/[^0-9]/', '', $this->phone),
-        //]);
-    }
-
-    private function prepareEmails(?string $emails): ?string
-    {
-        if (!$emails) return null;
-
-        return collect(explode(',', $emails))
-            ->map(fn($e) => trim($e))
-            ->filter()
-            ->unique()
-            ->implode(',');
     }
 }
