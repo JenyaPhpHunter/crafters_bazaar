@@ -221,6 +221,7 @@ class ProductController extends Controller
             'colors',
             'productPhotos',
             'discounts'                => fn($q) => $q->active()->where('type', 'product'),
+            'subKindProduct.kindProduct',
             'subKindProduct.discounts' => fn($q) => $q->active()->where('type', 'category'),
         ]);
 
