@@ -1,0 +1,326 @@
+@use "sass:color";
+@use "variables" as *;
+
+.brand-workspace {
+    .brand-kicker {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        margin-bottom: 12px;
+        color: $primary2;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    .brand-visual-panel,
+    .brand-form-main {
+        border-radius: 20px;
+        background: $secondary2;
+        box-shadow: 0 12px 34px rgba($black, 0.08);
+    }
+
+    .brand-visual-panel {
+        min-height: 700px;
+        padding: 40px;
+        overflow: hidden;
+    }
+
+    .brand-visual-stage {
+        height: 430px;
+        border-radius: 20px;
+        background: $white;
+        box-shadow: 0 8px 25px rgba($black, 0.08);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .brand-logo-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        cursor: pointer;
+        transition: transform 0.35s ease, opacity 0.35s ease;
+
+        &:hover {
+            transform: scale(1.025);
+        }
+    }
+
+    .brand-visual-caption {
+        padding-top: 34px;
+
+        h1 {
+            margin-bottom: 12px;
+            color: $heading-color;
+            font-size: 42px;
+            line-height: 1.1;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        p {
+            max-width: 520px;
+            margin-bottom: 0;
+            color: $body-color;
+            font-size: 16px;
+            line-height: 1.75;
+        }
+    }
+
+    .brand-form-main {
+        padding: 38px;
+        background: $white;
+    }
+
+    .brand-form-header {
+        margin-bottom: 28px;
+
+        h2 {
+            margin-bottom: 0;
+            color: $heading-color;
+            font-size: 34px;
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: 0;
+        }
+    }
+
+    .brand-field {
+        margin-bottom: 22px;
+    }
+
+    .form-label {
+        margin-bottom: 8px;
+        color: $form-label-color;
+        font-size: 14px;
+        font-weight: 650;
+    }
+
+    .brand-input,
+    .brand-textarea,
+    .brand-invite-panel textarea {
+        border: 2px solid color.adjust($form-label-color, $lightness: 45%);
+        border-radius: 12px;
+        background: $white;
+        font-family: $form-font;
+        font-size: 15px;
+        line-height: 1.65;
+        box-shadow: 0 4px 12px rgba($black, 0.05);
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+
+        &:focus {
+            border-color: $primary2;
+            box-shadow: 0 8px 25px rgba($primary2, 0.18);
+            transform: translateY(-2px);
+        }
+    }
+
+    .brand-textarea-wrap {
+        border-radius: 14px;
+        background: $white;
+    }
+
+    .brand-textarea {
+        min-height: 190px;
+        resize: vertical;
+    }
+
+    .brand-logo-upload {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        small {
+            color: $body-light;
+            font-size: 13px;
+        }
+    }
+
+    .brand-logo-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .brand-logo-upload-label {
+        min-height: 58px;
+        border: 2px dashed $primary;
+        border-radius: 14px;
+        background: rgba($primary, 0.08);
+        color: color.adjust($primary, $lightness: -18%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+
+        &:hover {
+            background: $primary;
+            color: $white;
+            transform: translateY(-2px);
+        }
+    }
+
+    .brand-side-panel,
+    .brand-invite-panel,
+    .brand-description-panel,
+    .brand-join-panel {
+        margin-top: 28px;
+        padding: 24px;
+        border-radius: 16px;
+        background: #f8f9fa;
+        border: 1px solid rgba($primary, 0.2);
+    }
+
+    .brand-side-panel {
+        .form-group {
+            margin-bottom: 22px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .form-control.bg-light {
+            min-height: auto;
+            border: 0 !important;
+            padding: 0;
+            background: transparent !important;
+            box-shadow: none;
+        }
+
+        li {
+            list-style: none;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba($black, 0.08);
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    .brand-description-panel {
+        margin-top: 0;
+
+        p {
+            margin-bottom: 0;
+            color: $body-color;
+            font-size: 16px;
+            line-height: 1.75;
+        }
+    }
+
+    .brand-panel-label {
+        display: block;
+        margin-bottom: 8px;
+        color: $primary2;
+        font-weight: 700;
+    }
+
+    .brand-actions {
+        margin-top: 34px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+
+        .btn {
+            min-height: 48px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 22px;
+            font-weight: 700;
+        }
+    }
+
+    .brand-primary-action {
+        border-color: $primary;
+        background: $primary;
+        color: $white;
+
+        &:hover {
+            border-color: color.adjust($primary, $lightness: -10%);
+            background: color.adjust($primary, $lightness: -10%);
+            color: $white;
+        }
+    }
+
+    .brand-secondary-action {
+        border-color: rgba($black, 0.08);
+        background: $secondary2;
+        color: $heading-color;
+    }
+
+    .brand-outline-action,
+    .brand-danger-action {
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .brand-invite-banner {
+        margin-bottom: 30px;
+        padding: 18px 22px;
+        border-radius: 16px;
+        background: rgba($primary, 0.12);
+        border: 1px solid rgba($primary, 0.26);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+
+        strong,
+        span {
+            display: block;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .brand-visual-panel {
+            min-height: auto;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .brand-visual-panel,
+        .brand-form-main {
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        .brand-visual-stage {
+            height: 320px;
+        }
+
+        .brand-visual-caption h1,
+        .brand-form-header h2 {
+            font-size: 30px;
+        }
+
+        .brand-invite-banner,
+        .brand-actions {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .brand-actions .btn,
+        .brand-actions form,
+        .brand-actions form .btn,
+        .brand-invite-banner form,
+        .brand-invite-banner .btn {
+            width: 100%;
+        }
+    }
+}
