@@ -214,6 +214,30 @@ class ProductController extends Controller
         return redirect()->route('products.show', $product->id)->with('success', 'Товар успішно створено!');
     }
 
+    public function quickView(Product $product): View
+    {
+        $product->load([
+            'brand',
+            'colors',
+            'productPhotos',
+            'discounts'                => fn($q) => $q->active()->where('type', 'product'),
+            'subKindProduct.discounts' => fn($q) => $q->active()->where('type', 'category'),
+        ]);
+
+        $mainPhoto = $product->productPhotos
+            ->sortBy([
+                ['is_main', 'desc'],
+                ['queue', 'asc'],
+            ])
+            ->first();
+
+        $photoUrl = $mainPhoto
+            ? Storage::disk('public')->url($mainPhoto->paths['original'] ?? $mainPhoto->paths['small'])
+            : asset('images/no-image.jpg');
+
+        return view('products.partials.quick-view', compact('product', 'photoUrl'));
+    }
+
     public function show(Product $product)
     {
         $product->load(['brand', 'subKindProduct.kindProduct', 'colors', 'productPhotos']);

@@ -187,24 +187,41 @@
 
             const productId = btn.dataset.productId;
             const modal     = document.getElementById('quickViewModal');
-            if (!modal) return;
+            const body      = modal?.querySelector('.modal-body');
+            if (!productId || !modal || !body) return;
 
-            // Завантажуємо контент модалки через AJAX
+            body.innerHTML = `
+                <div class="quick-view-loading">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span>Завантаження...</span>
+                </div>
+            `;
+
+            if (typeof jQuery !== 'undefined') {
+                jQuery(modal).modal('show');
+            } else if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                new bootstrap.Modal(modal).show();
+            }
+
             fetch(`/products/${productId}/quick-view`, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
             })
-                .then(r => r.text())
-                .then(html => {
-                    const body = modal.querySelector('.modal-body');
-                    if (body) body.innerHTML = html;
-
-                    if (typeof bootstrap !== 'undefined') {
-                        bootstrap.Modal.getOrCreateInstance(modal).show();
-                    } else if (typeof jQuery !== 'undefined') {
-                        jQuery(modal).modal('show');
-                    }
+                .then(response => {
+                    if (!response.ok) throw new Error('Quick view request failed');
+                    return response.text();
                 })
-                .catch(() => {});
+                .then(html => {
+                    body.innerHTML = html;
+                })
+                .catch(() => {
+                    body.innerHTML = `
+                        <div class="quick-view-error">
+                            <i class="fal fa-exclamation-circle"></i>
+                            <strong>Не вдалося завантажити товар.</strong>
+                            <span>Спробуйте ще раз або відкрийте сторінку товару.</span>
+                        </div>
+                    `;
+                });
         });
 
     });

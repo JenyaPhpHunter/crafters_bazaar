@@ -22,6 +22,8 @@
             </div>
         </div>
     </div>
+
+    @include('products.partials.quick-view-modal')
 @endsection
 
 @section('page-script')
