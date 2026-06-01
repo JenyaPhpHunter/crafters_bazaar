@@ -3,39 +3,53 @@
 @section('title', ($product ? 'Редагувати товар' : 'Додати новий товар') . ' — ' . config('app.name'))
 
 @section('content')
-    <body class="{{ auth()->id() === 1 ? 'is-admin' : '' }}">
+    <div class="product-form-page {{ auth()->id() === 1 ? 'is-admin' : '' }}">
+        <div class="section section-fluid section-padding product-form-section">
+            <div class="container">
+                <div class="product-form-layout">
+                    <div class="product-form-left">
+                        <div class="product-form-card product-form-media-card">
+                            <div class="product-form-card-header">
+                                <span class="product-form-kicker">Фото товару</span>
+                            </div>
+                            @include('products.include.images', [
+                                'images' => $images ?? [],
+                                'mode'   => 'edit'
+                            ])
+                        </div>
 
-    <div class="section section-fluid section-padding border-bottom animate__animated animate__fadeIn">
-        <div class="container">
-            <div class="row">
+                        <div class="product-form-card product-form-content-card">
+                            <div class="product-form-card-header">
+                                <span class="product-form-kicker">Опис</span>
+                            </div>
+                            @include('products.include.content', ['mode' => 'edit'])
+                        </div>
 
-                {{-- ЛІВА КОЛОНКА — ФОТО + ОПИС + ТЕГИ --}}
-                <div class="col-lg-6 col-12 mb-5">
-                    @include('products.include.images', [
-                        'images' => $images ?? [],
-                        'mode'   => 'edit'
-                    ])
+                        <div class="product-form-card product-form-content-card">
+                            <div class="product-form-card-header">
+                                <span class="product-form-kicker">Теги та соцмережі</span>
+                            </div>
+                            @include('products.include.tags-social', ['mode' => 'edit'])
+                        </div>
+                    </div>
 
-                    @include('products.include.content', ['mode' => 'edit'])
-                    @include('products.include.tags-social', ['mode' => 'edit'])
-                </div>
-
-                {{-- ПРАВА КОЛОНКА --}}
-                <div class="col-lg-6 col-12">
-
-                    <div class="product-form-main">
+                    <div class="product-form-main product-form-card">
+                        <div class="product-form-heading">
+                            <span class="product-form-kicker">{{ $product ? 'Редагування товару' : 'Новий товар' }}</span>
+                            <h1>{{ $product ? 'Редагувати товар' : 'Додати новий товар' }}</h1>
+                        </div>
 
                         <form method="POST"
                               action="{{ $action }}"
                               enctype="multipart/form-data"
-                              id="product-form">
+                              id="product-form"
+                              class="product-form-stack">
                             @csrf
 
                             @if($method === 'PUT')
                                 @method('PUT')
                             @endif
 
-                            {{-- hidden fields --}}
                             <input type="hidden" name="brand_id" id="selectedBrand"
                                    value="{{ old('brand_id') ?? ($product?->brand_id ?? '') }}">
                             <input type="hidden" name="action" id="form-action">
@@ -58,30 +72,46 @@
                                    id="main_photo_index"
                                    value="{{ old('main_photo_index', $mainPhotoIndex) }}">
 
+                            <section class="product-form-panel">
+                                <div class="product-form-panel-header">
+                                    <span class="product-form-kicker">Основне</span>
+                                </div>
+                                @include('products.include.title-price', ['mode' => 'edit'])
+                            </section>
 
-                            {{-- Назва + ціна --}}
-                            @include('products.include.title-price', ['mode' => 'edit'])
+                            <section class="product-form-panel">
+                                <div class="product-form-panel-header">
+                                    <span class="product-form-kicker">Категорія</span>
+                                </div>
+                                @include('products.include.kind-subkind', ['mode' => 'edit'])
+                            </section>
 
-                            {{-- Вид / підвид --}}
-                            @include('products.include.kind-subkind', ['mode' => 'edit'])
+                            <section class="product-form-panel">
+                                <div class="product-form-panel-header">
+                                    <span class="product-form-kicker">Виробництво</span>
+                                </div>
+                                @include('products.include.quantity-produce', ['mode' => 'edit'])
+                            </section>
 
-                            {{-- Кількість --}}
-                            @include('products.include.quantity-produce', ['mode' => 'edit'])
+                            <section class="product-form-panel">
+                                <div class="product-form-panel-header">
+                                    <span class="product-form-kicker">Кольори</span>
+                                </div>
+                                @include('products.include.colors', ['mode' => 'edit'])
+                            </section>
 
-                            {{-- Кольори --}}
-                            @include('products.include.colors', ['mode' => 'edit'])
-
-                            {{-- Нижня частина --}}
-                            <div class="product-form-secondary">
+                            <section class="product-form-panel">
+                                <div class="product-form-panel-header">
+                                    <span class="product-form-kicker">Медіа та бренд</span>
+                                </div>
                                 @include('products.include.file_upload')
                                 @include('products.include.brands', ['mode' => 'edit'])
+                            </section>
 
-                                <div class="product-buttons-centered">
-                                    @include('products.include.buttons')
-                                </div>
-                            </div>
+                            <section class="product-form-actions-panel">
+                                @include('products.include.buttons')
+                            </section>
                         </form>
-
                     </div>
                 </div>
             </div>

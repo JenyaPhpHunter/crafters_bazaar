@@ -6,6 +6,8 @@
 }
 
 .product-show-section {
+    padding-top: 34px;
+    padding-bottom: 34px;
     background:
         linear-gradient(135deg, rgba($primary, 0.14) 0%, rgba($white, 0) 36%),
         #f8f0e9;
@@ -14,18 +16,18 @@
 .product-show-layout {
     display: grid;
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 34px;
+    gap: 22px;
     align-items: stretch;
 }
 
 .product-show-left {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
     height: 100%;
     align-self: stretch;
     position: sticky;
-    top: 110px;
+    top: 92px;
 }
 
 .product-show-card {
@@ -36,7 +38,7 @@
 }
 
 .product-media-card {
-    padding: 24px;
+    padding: 18px;
     overflow: hidden;
     flex: 1 1 auto;
     display: flex;
@@ -49,17 +51,17 @@
 }
 
 .product-view-main {
-    padding: 34px;
+    padding: 22px;
     height: 100%;
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
 
     .product-title {
         margin: 0;
         color: $heading-color;
-        font-size: 2.45rem;
+        font-size: 2.18rem;
         font-weight: 700;
         line-height: 1.12;
         letter-spacing: 0;
@@ -76,19 +78,19 @@
 }
 
 .product-title-block {
-    padding: 26px 28px;
+    padding: 18px 20px;
 }
 
 .product-price-card {
-    padding: 22px 28px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 18px;
+    gap: 14px;
 
     strong {
         color: #111;
-        font-size: 2rem;
+        font-size: 1.85rem;
         font-weight: 650;
         line-height: 1;
         white-space: nowrap;
@@ -96,11 +98,11 @@
 }
 
 .product-info-section {
-    padding: 26px 28px;
+    padding: 18px 20px;
 }
 
 .product-section-header {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 }
 
 .product-block-label,
@@ -117,12 +119,12 @@
 .meta-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 10px;
 }
 
 .product-view-main .meta-item {
-    min-height: 92px;
-    padding: 18px;
+    min-height: 68px;
+    padding: 12px 14px;
     border: 1px solid rgba($black, 0.06);
     border-radius: 14px;
     background: #fbfaf7;
@@ -131,9 +133,9 @@
 .product-view-main .meta-value {
     display: block;
     color: $heading-color;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 650;
-    line-height: 1.45;
+    line-height: 1.35;
 }
 
 .meta-item-colors {
@@ -147,17 +149,17 @@
 }
 
 .description-text {
-    padding: 22px 24px;
+    padding: 14px 16px;
     border-radius: 14px;
     background: #fbfaf7;
     color: $body-color;
-    line-height: 1.75;
+    line-height: 1.55;
 }
 
 .product-links-section {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 10px;
 }
 
 .product-tags {
@@ -168,8 +170,8 @@
     .tag {
         display: inline-flex;
         align-items: center;
-        min-height: 34px;
-        padding: 7px 13px;
+        min-height: 30px;
+        padding: 5px 11px;
         border-radius: 999px;
         background: rgba($primary, 0.12);
         color: #3e9a9a;
@@ -207,10 +209,10 @@
 }
 
 .product-view-actions {
-    padding: 24px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 
     .product-block-label {
         margin-bottom: 4px;
@@ -223,14 +225,14 @@
 .product-cart-action,
 .product-wishlist-action {
     width: 100%;
-    min-height: 54px;
+    min-height: 48px;
     border: 0 !important;
     border-radius: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 14px 24px;
+    padding: 12px 18px;
     font-size: 15px;
     font-weight: 800;
     line-height: 1.25;
@@ -287,7 +289,7 @@
 .product-customer-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
 }
 
 @media (max-width: 1199px) {
@@ -302,7 +304,7 @@
     }
 
     .product-view-main {
-        padding: 26px;
+        padding: 20px;
     }
 }
 
@@ -313,7 +315,7 @@
     .product-title-block,
     .product-price-card,
     .product-info-section {
-        padding: 20px;
+        padding: 16px;
         border-radius: 14px;
     }
 
@@ -330,6 +332,6 @@
     }
 
     .product-view-main .product-title {
-        font-size: 2rem;
+        font-size: 1.85rem;
     }
 }
