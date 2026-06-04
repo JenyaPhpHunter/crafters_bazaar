@@ -73,9 +73,9 @@ Breadcrumbs::for('brands.edit', function (BreadcrumbTrail $trail) {
 });
 // ────────────────────────────────────────────────
 // Кошик
-Breadcrumbs::for('cart.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('home');
-    $trail->push('Кошик', route('cart.index'));
+Breadcrumbs::for('carts.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('welcome');
+    $trail->push('Кошик', route('carts.index'));
 });
 
 // ────────────────────────────────────────────────

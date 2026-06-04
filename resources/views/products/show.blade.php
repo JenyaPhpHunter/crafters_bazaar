@@ -37,10 +37,10 @@
                                 @endcan
                             @else
                                 <div class="product-customer-actions">
-                                    <button onclick="addToCart({{ $product->id }})" class="product-cart-action">
+                                    <a href="{{ route('carts.addToCart', ['product' => $product->id]) }}" class="product-cart-action">
                                         <i class="fa-solid fa-cart-plus"></i>
                                         Додати в кошик
-                                    </button>
+                                    </a>
                                     <button onclick="addToWishlist({{ $product->id }})" class="product-wishlist-action">
                                         <i class="fa-solid fa-heart"></i>
                                         В улюблені
@@ -170,7 +170,6 @@
     @include('products.partials.photoswipe')
 
     <script>
-        window.addToCart = function(id) { alert('Додано в кошик #' + id); };
         window.addToWishlist = function(id) { alert('Додано в улюблені #' + id); };
         window.shareProduct = function() {
             navigator.clipboard.writeText(location.href);

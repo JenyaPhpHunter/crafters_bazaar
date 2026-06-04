@@ -16,145 +16,137 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
-        // Перевірка чи користувач авторизований
         if (auth()->check()) {
-            // Якщо користувач авторизований, то використовуємо його id
-            $user_id = auth()->id();
-
-            // Отримуємо товари з бази даних для авторизованого користувача
             $cartItems = CartItems::query()
+                ->with(['product.productPhotos', 'product.brand', 'product.discounts', 'product.subKindProduct.discounts'])
                 ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
-                ->with('product')
-                ->where('carts.user_id', $user_id)
+                ->select('cart_items.*')
+                ->where('carts.user_id', auth()->id())
                 ->where('carts.active', 1)
                 ->get();
         } else {
-            // Якщо користувач неавторизований, використовуємо сесію для отримання товарів
-            $cart = session()->get('cart', []);
-            $cartItems = [];
+            $cartItems = collect(session()->get('cart', []))
+                ->map(function ($details, $productId) {
+                    $product = Product::with(['productPhotos', 'brand', 'discounts', 'subKindProduct.discounts'])->find($productId);
 
-            // Перебираємо товари з сесії
-            foreach ($cart as $productId => $details) {
-                $product = Product::find($productId);
-                if ($product) {
-                    $cartItems[] = (object)[
+                    if (!$product) {
+                        return null;
+                    }
+
+                    return (object) [
                         'product' => $product,
-                        'quantity' => $details['quantity'],
-                        'price' => $product->price,
+                        'quantity' => $details['quantity'] ?? 1,
+                        'price' => $product->final_price,
                     ];
-                }
-            }
+                })
+                ->filter()
+                ->values();
         }
 
-        // Повертаємо вигляд з товарами
         return view('cart.index', ['cartItems' => $cartItems]);
     }
 
-    public function addToCart(Request $request, $productId)
+    public function addToCart(Request $request, Product $product)
     {
-        $product = Product::find($productId);
-        if ($request->input('user_id')) {
-            $user_id = $request->input('user_id');
-            // Отримуємо або створюємо кошик користувача
-            $cart = Cart::firstOrNew(['user_id' => $user_id, 'active' => 1]);
-            $cart->user_id = $user_id;
+        if (auth()->check()) {
+            $cart = Cart::firstOrCreate(
+                ['user_id' => auth()->id(), 'active' => 1],
+                ['sum' => 0, 'pricediscount' => 0, 'total' => 0]
+            );
 
-            $cart->save();
-
-// Перевірка, чи товар вже є в кошику
             $cartItem = CartItems::where('cart_id', $cart->id)
-                ->where('product_id', $productId)
+                ->where('product_id', $product->id)
                 ->first();
 
             if ($cartItem) {
-                // Якщо товар вже є в кошику, збільшуємо кількість
-                $cartItem->quantity ++;
-                $cartItem->save();
+                $cartItem->increment('quantity');
             } else {
-                // Якщо товару немає в кошику, додаємо його
-                $cartItem = new CartItems([
+                CartItems::create([
                     'cart_id' => $cart->id,
-                    'product_id' => $productId,
-                    'price' => $product->price,
+                    'product_id' => $product->id,
+                    'price' => $product->final_price,
+                    'pricediscount' => max($product->price - $product->final_price, 0),
                     'quantity' => 1,
                 ]);
-                $cartItem->save();
             }
-            $cartItems = CartItems::query()->where('cart_id', $cart->id)->get();
-            $sum = 0;
-            $pricediscount = 0;
-            foreach ($cartItems as $item){
-                $sum += $item->price * $item->quantity;
-                $pricediscount += $item->pricediscount;
-            }
-            $cart->sum = $sum;
-            $cart->pricediscount = $pricediscount;
-            $cart->total = $sum - $pricediscount;
-            $cart->save();
+
+            $this->refreshCartTotals($cart);
         } else {
             $cart = session()->get('cart', []);
-            // Перевірка чи товар вже є в кошику
-            if(isset($cart[$productId])) {
-                $cart[$productId]['quantity']++;
+
+            if (isset($cart[$product->id])) {
+                $cart[$product->id]['quantity']++;
             } else {
-                $cart[$productId] = [
-                    "quantity" => 1,
-                ];
+                $cart[$product->id] = ['quantity' => 1];
             }
+
             session()->put('cart', $cart);
         }
 
-        return redirect()->route('carts.index')
-            ->with([
-            'success' => 'Товар додано до кошика',
-        ]);
-//        ->withCookie(cookie('user_id', $user_id));
+        return redirect()->route('carts.index')->with('success', 'Товар додано до кошика');
     }
 
     public function clearCart(Request $request)
     {
-        // Отримуємо user_id або з request, або з cookie
-        $user_id = $request->input('user_id') ?? $request->cookie('user_id');
+        if (auth()->check()) {
+            $cart = Cart::where('user_id', auth()->id())
+                ->where('active', 1)
+                ->first();
 
-        if ($user_id) {
-            // Якщо user_id існує, видаляємо товари з корзини користувача
-            CartItems::query()
-                ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
-                ->where('carts.user_id', $user_id)
-                ->delete();
+            if ($cart) {
+                CartItems::where('cart_id', $cart->id)->delete();
+                $this->refreshCartTotals($cart);
+            }
         } else {
-            // Якщо user_id немає, видаляємо товари з сесії
-            session()->forget('cart'); // Видаляє лише ключ 'cart'
+            session()->forget('cart');
         }
 
-        return redirect()->route('carts.index');
+        return redirect()->route('carts.index')->with('success', 'Кошик очищено');
     }
+
     public function removeItem(Request $request)
     {
-        echo "<pre>";
-        print_r($request->all());
-        echo "</pre>";
-        die();
-        if (array_key_exists($productId, $cartItems)) {
-            unset($cartItems[$productId]);
-            session(['cart' => $cartItems]);
+        if (!auth()->check()) {
+            return redirect()->route('carts.index');
         }
 
-        return redirect()->route('cart.index')->with('success', 'Товар видалено з корзини');
+        $cart = Cart::where('user_id', auth()->id())
+            ->where('active', 1)
+            ->first();
+
+        if ($cart && $request->filled('cart_item_id')) {
+            CartItems::where('cart_id', $cart->id)
+                ->where('id', $request->input('cart_item_id'))
+                ->delete();
+
+            $this->refreshCartTotals($cart);
+        }
+
+        return redirect()->route('carts.index')->with('success', 'Товар видалено з кошика');
     }
 
     public function removeItemGuest($productId)
     {
         $cart = session()->get('cart', []);
 
-        // Якщо товар є в кошику, видаляємо його
-        if(isset($cart[$productId])) {
+        if (isset($cart[$productId])) {
             unset($cart[$productId]);
             session()->put('cart', $cart);
         }
 
-        return redirect()->back()->with('success', 'Товар був видалений з кошика!');
+        return redirect()->route('carts.index')->with('success', 'Товар видалено з кошика');
     }
 
+    private function refreshCartTotals(Cart $cart): void
+    {
+        $items = CartItems::where('cart_id', $cart->id)->get();
+        $sum = $items->sum(fn ($item) => $item->price * $item->quantity);
+        $discount = $items->sum(fn ($item) => $item->pricediscount * $item->quantity);
+
+        $cart->sum = $sum;
+        $cart->pricediscount = $discount;
+        $cart->total = max($sum - $discount, 0);
+        $cart->save();
+    }
 }
 

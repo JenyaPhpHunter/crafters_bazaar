@@ -153,7 +153,8 @@ Route::get('products/{product}/put-up-for-sale', [ProductController::class, 'put
 Route::get('/search/suggest', [ProductController::class, 'suggest'])->name('products.suggest');
 // === CART ===
 Route::get('carts/index', [CartController::class, 'index'])->name('carts.index');
-Route::get('carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
+Route::get('cart/add/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart');
+Route::get('carts/index/{product}', [CartController::class, 'addToCart'])->name('carts.addToCart.legacy');
 Route::delete('carts/clear', [CartController::class, 'clearCart'])->name('carts.clearCart');
 Route::delete('carts', [CartController::class, 'removeItem'])->name('carts.remove_item');
 Route::get('cart/remove-item-guest/{product}', [CartController::class, 'removeItemGuest'])

@@ -1,93 +1,164 @@
 @extends('layouts.app')
 
+@section('title', 'Кошик — ' . config('app.name'))
+
 @section('content')
-<!-- Shopping Cart Section Start -->
-<div class="section section-padding">
-    <div class="container">
-        <form class="cart-form" action="{{ route('carts.clearСart') }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <table class="cart-wishlist-table table">
-                <thead>
-                <tr>
-                    <th class="name" colspan="2" style="text-align: center;">Товар</th>
-                    <th class="price">Назва</th>
-                    <th class="price">Вартість</th>
-                    <th class="quantity">Кількість</th>
-                    <th class="subtotal">Загалом</th>
-                    <th class="remove">&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                @php
-                    $cost_paid = 0;
-                @endphp
-                    @foreach($cartItems as $cartItem)
-                        @php
-                            $cost_paid += $cartItem->price*$cartItem->quantity;
-                        @endphp
-                        <tr>
-                            @if(!empty($cartItem->product) && !empty($cartItem->product->productPhotos) && count($cartItem->product->productphotos) > 0)
-                                <td class="thumbnail"><a href="{{ route('products.show',['product' => $cartItem->product->id]) }}"><img src="{{asset( $cartItem->product->productPhotos[0]->path . '/' . $cartItem->product->productphotos[0]->filename) }}" alt="cart-product-1"></a></td>
-                                <td></td>
-                            @else
-                                <td></td><td></td>
-                            @endif
-                            <td class="name"> <a href="{{route('products.show', ['product' => $cartItem->product->id]) }}">{{ $cartItem->product->title }}</a></td>
-                            <td class="price"><span>{{ $cartItem->price }}</span></td>
-                            <td class="quantity">
-                                <div class="product-quantity">
-                                    <span class="qty-btn minus"><i class="ti-minus"></i></span>
-                                    <input type="text" class="input-qty" value={{ $cartItem->quantity }}>
-                                    <span class="qty-btn plus"><i class="ti-plus"></i></span>
-                                </div>
-                            </td>
-                            <td class="subtotal"><span>{{ $cartItem->price * $cartItem->quantity }}грн</span></td>
-                            <td class="remove">
-                                @if (auth()->check())
-                                    <!-- Видалення для авторизованого користувача -->
-                                    <a href="{{ route('carts.remove_item',['cart_item' => $cartItem->id]) }}" class="btn">×</a>
-                                @else
-                                    <!-- Видалення для неавторизованого користувача (видаляємо за productId) -->
-                                    <a href="{{ route('carts.remove_item_guest', ['product_id' => $cartItem->product->id]) }}" class="btn">×</a>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="row justify-content-between mb-n3">
-                <div class="col-auto mb-3">
-                    <div class="cart-coupon">
-                        <input type="text" placeholder="Введіть код знижки">
-                        <button class="btn"><i class="fal fa-gift"></i></button>
+    @php
+        $items = collect($cartItems);
+        $subtotal = $items->sum(fn($cartItem) => ($cartItem->price ?? $cartItem->product?->final_price ?? 0) * ($cartItem->quantity ?? 1));
+        $itemsCount = $items->sum(fn($cartItem) => $cartItem->quantity ?? 1);
+    @endphp
+
+    <div class="cart-page">
+        <div class="section section-fluid cart-section">
+            <div class="container">
+                <div class="cart-heading-card">
+                    <span class="cart-kicker">Ваш кошик</span>
+                    <div class="cart-heading-row">
+                        <h1>Кошик</h1>
+                        <span class="cart-count">{{ $itemsCount }} {{ trans_choice('товар|товари|товарів', $itemsCount) }}</span>
                     </div>
                 </div>
-                <div class="col-auto">
-                    <a class="btn btn-light btn-hover-dark mr-3 mb-3" href="{{ route('products.index') }}">Продовжити покупки</a>
-                    <button class="btn btn-dark btn-outline-hover-dark mb-3" type="submit">Очистити корзину</button>
-                </div>
+
+                @if(session('success'))
+                    <div class="cart-alert">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
+
+                @if($items->isEmpty())
+                    <div class="cart-empty-card">
+                        <span class="cart-empty-icon"><i class="fa-solid fa-basket-shopping"></i></span>
+                        <h2>Кошик поки порожній</h2>
+                        <p>Додайте товари, які сподобались, і вони зʼявляться тут для оформлення замовлення.</p>
+                        <a href="{{ route('products.index') }}" class="cart-primary-action">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Перейти до покупок
+                        </a>
+                    </div>
+                @else
+                    <div class="cart-layout">
+                        <div class="cart-items-card">
+                            <div class="cart-card-header">
+                                <span class="cart-kicker">Товари до замовлення</span>
+                            </div>
+
+                            <div class="cart-items-list">
+                                @foreach($items as $cartItem)
+                                    @php
+                                        $product = $cartItem->product;
+                                        $quantity = $cartItem->quantity ?? 1;
+                                        $unitPrice = $cartItem->price ?? $product?->final_price ?? 0;
+                                        $lineTotal = $unitPrice * $quantity;
+                                        $photo = $product?->productPhotos?->first();
+                                    @endphp
+
+                                    @if($product)
+                                        <article class="cart-item-row">
+                                            <a href="{{ route('products.show', ['product' => $product->id]) }}" class="cart-item-photo">
+                                                @if($photo)
+                                                    <img src="{{ asset($photo->path . '/' . $photo->filename) }}" alt="{{ $product->title }}">
+                                                @else
+                                                    <span><i class="fa-regular fa-image"></i></span>
+                                                @endif
+                                            </a>
+
+                                            <div class="cart-item-info">
+                                                <a href="{{ route('products.show', ['product' => $product->id]) }}" class="cart-item-title">
+                                                    {{ $product->title }}
+                                                </a>
+
+                                                <div class="cart-item-meta">
+                                                    @if($product->brand)
+                                                        <span>{{ $product->brand->title }}</span>
+                                                    @endif
+                                                    @if($product->subKindProduct)
+                                                        <span>{{ $product->subKindProduct->title }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="cart-item-numbers">
+                                                <div>
+                                                    <span class="cart-item-label">Ціна</span>
+                                                    <strong>{{ number_format($unitPrice, 0, ',', ' ') }} грн</strong>
+                                                </div>
+                                                <div>
+                                                    <span class="cart-item-label">Кількість</span>
+                                                    <strong>{{ $quantity }}</strong>
+                                                </div>
+                                                <div>
+                                                    <span class="cart-item-label">Разом</span>
+                                                    <strong>{{ number_format($lineTotal, 0, ',', ' ') }} грн</strong>
+                                                </div>
+                                            </div>
+
+                                            <div class="cart-item-remove">
+                                                @if(auth()->check())
+                                                    <form action="{{ route('carts.remove_item') }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="cart_item_id" value="{{ $cartItem->id }}">
+                                                        <button type="submit" aria-label="Видалити {{ $product->title }}">
+                                                            <i class="fa-solid fa-xmark"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <a href="{{ route('carts.remove_item_guest', ['product' => $product->id]) }}" aria-label="Видалити {{ $product->title }}">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </article>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <aside class="cart-summary-card">
+                            <div class="cart-card-header">
+                                <span class="cart-kicker">Підсумок</span>
+                            </div>
+
+                            <div class="cart-summary-lines">
+                                <div class="cart-summary-line">
+                                    <span>Товарів</span>
+                                    <strong>{{ $itemsCount }}</strong>
+                                </div>
+                                <div class="cart-summary-line">
+                                    <span>Вартість</span>
+                                    <strong>{{ number_format($subtotal, 0, ',', ' ') }} грн</strong>
+                                </div>
+                                <div class="cart-summary-total">
+                                    <span>До оплати</span>
+                                    <strong>{{ number_format($subtotal, 0, ',', ' ') }} грн</strong>
+                                </div>
+                            </div>
+
+                            <div class="cart-actions">
+                                <a href="{{ route('orders.create') }}" class="cart-primary-action">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                    Оформити замовлення
+                                </a>
+                                <a href="{{ route('products.index') }}" class="cart-secondary-action">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                    Продовжити покупки
+                                </a>
+
+                                <form action="{{ route('carts.clearCart') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="cart-clear-action">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                        Очистити кошик
+                                    </button>
+                                </form>
+                            </div>
+                        </aside>
+                    </div>
+                @endif
             </div>
-        </form>
-        <div class="cart-totals mt-5">
-            <h2 class="title">Загальна вартість</h2>
-            <table>
-                <tbody>
-                <tr class="subtotal">
-                    <th>Вартість без знижки</th>
-                    <td><span class="amount">{{ $cost_paid }}грн</span></td>
-                </tr>
-                <tr class="total">
-                    <th>Вартість до оплати</th>
-                    <td><strong><span class="amount">{{ $cost_paid }}грн</span></strong></td>
-                </tr>
-                </tbody>
-            </table>
-            <a href="{{ route('orders.create') }}" class="btn btn-dark btn-outline-hover-dark">Перейти до оформлення замовлення</a>
         </div>
     </div>
-
-</div>
-<!-- Shopping Cart Section End -->
-
 @endsection
